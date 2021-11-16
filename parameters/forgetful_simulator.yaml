@@ -1,0 +1,50 @@
+# Race track generic
+gate_waypoint_height_above_base: 0.8                  # [m] Base is the origin of gate mesh, waypoint is where drone should fly through
+gate_base_min_altitude: 1.8                           # [m] Min Altitude of gate base
+
+# Random Figure 8 Race Specific Paramters
+randomized_figure8_max_axial_shift: 0.8                              # [m] Max axial shift applied to each gate 
+randomized_figure8_min_scale: 0.8                                # Min Scaling factor for the whole track
+randomized_figure8_max_scale: 1.2                                # Max Scaling factor for the whole track
+
+# Parameters to spawn gates of a randomimzed sprint (from A to B, no circuit) race track.
+randomized_sprint_number_of_gates: 0                                           # Number of gates of race track.
+randomized_sprint_min_number_of_gates: 10                                       # Limits of uniform int distribution. Uses only, if above set to zero
+randomized_sprint_max_number_of_gates: 40                                       # Limits of uniform int distribution. Uses only, if above set to zero
+randomized_sprint_min_number_of_gates_in_section: 2                                 # Limits of uniform int distribution: Number of gates of race track section (a section has the same yaw and pitch between its gates and brings structure into the randomness)
+randomized_sprint_max_number_of_gates_in_section: 4                                 # Limits of uniform int distribution: Number of gates of race track section (a section has the same yaw and pitch between its gates and brings structure into the randomness)
+
+randomized_sprint_min_gate_spacing: 20.0                               # [m], Minimum distance between gates.
+randomized_sprint_unidirectional_standard_deviation_of_gate_spacing: 6.0                     # [m], Standard deviation of one-sided normal distribution for distance between gates.
+randomized_sprint_left_right_mean_yaw_between_gates: deg(20.0)                           # [degree], randomly chosen if +/- used as mean in normal distribution.
+randomized_sprint_left_right_standard_deviation_yaw_between_gates: deg(3.0)                          # [degree], Standard deviation in normal distribution.
+randomized_sprint_mean_pitch_between_gates: deg(-0.5)                           # [degree], Mean in normal distribution. Negative value to offset effect of ´p_Test_SprintRace_Gates_MinZ´.
+randomized_sprint_standard_deviation_pitch_between_gates: deg(2.0)                          # [degree], Standard deviation in normal distribution.
+
+# Dynamic Gate Specific
+dynamic_gates_max_axial_amplitude: 0.8                                 # Max axial amplitude of moving gates
+dynamic_gates_max_axial_frequency: 0.2                                # Max axial frequency of moving gates
+        
+# Environment Specific (until now only ground and walls)
+wall_buffer_distance_to_gate: 20.0                                # Distance guarenteed from gates to walls
+wall_height: 30.0                                  # Height of Walls
+wall_thickness: 1.0                                # Thickness of Walls
+
+
+
+
+
+
+drone_initial_position_x: 3.0 
+drone_initial_position_y: 1.0
+drone_initial_position_z: 0.2
+drone_initial_position_yaw: deg(77.0)
+
+
+drone_marker_number_of_rotors: 4
+drone_marker_arm_length: 0.2
+drone_marker_body_width: 0.15
+drone_marker_body_height: 0.1
+drone_marker_scale: 0.5
+
+simulator_loop_nominal_period_time: 0.01

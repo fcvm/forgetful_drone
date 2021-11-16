@@ -1,0 +1,69 @@
+# --- ORCHESTRATOR (ORC) ---
+# Enable one from:
+  #ORC_flight_mission: "test_navigator_with_expert"
+  ORC_flight_mission: "test_navigator_with_brain"
+  #ORC_flight_mission: "generate_training_data"
+  #ORC_flight_mission: "test_simulation_with_autopilot"
+ORC_nominal_period_duration_of_main_loop: 0.02
+ORC_number_of_runs: 100
+ORC_number_of_laps_per_run: 1
+ORC_duration_without_reaching_waypoint_to_abort_run: 20.0
+
+
+# --- SIMULATOR (SIM) ---
+# Enable one from
+  #SIM_race_track_type: "deterministic_figure8"
+  SIM_race_track_type: "randomized_figure8"
+  #SIM_race_track_type: "randomized_circuit"
+  #SIM_race_track_type: "randomized_sprint"
+SIM_dynamic_gates_enabled: false
+
+# --- DRONE ---
+DRONE_half_yaw_angle_of_view_of_onboard_camera: deg(50.0)
+DRONE_half_pitch_angle_of_view_of_onboard_camera: deg(35.0)
+
+# --- GLOBAL TRAJECTORY (GT) ---
+GT_polynomial_order: 11
+GT_continuous_order: 4
+GT_velocity_minimization_weight: 1.0 #0.1 
+GT_acceleration_minimization_weight: 10.0
+GT_jerk_minimization_weight: 100.0
+GT_snap_minimization_weight: 1000.0
+GT_max_normalized_thrust: 18.0
+GT_max_roll_pitch_rate: 1.5
+GT_max_speed: 10.0
+
+# --- WAYPOINT UPDATER (WU) ---
+WU_initial_waypoint_index_for_figure8_race_tracks: 13
+WU_threshold_distance_to_detect_arrival_at_waypoint: 1.0
+
+# --- EXPERT (EXP) ---
+EXP_min_horizon: 3.0
+EXP_speed_horizon: 0.5
+EXP_max_divergence_from_GT_to_use_projection: 1.0
+
+# --- NAVIGATOR (NAV) ---
+NAV_number_of_loop_iterations_per_local_trajectory_replanning: 3
+NAV_max_number_of_subsequently_failed_local_trajectory_replannings: 5
+NAV_max_divergence_from_reference_state: 1.2
+NAV_axial_amplitude_of_input_perturbation: 0.05 # 0.01 is a good value
+
+  # --- LOCAL TRAJECTORY (LT) ---
+  LT_min_speed: 2.0
+  LT_max_speed: 4.0
+  LT_max_speed_increment: 0.5
+  LT_duration: 1.5
+  LT_min_distance: 3.0
+  LT_max_distance: 6.0
+  LT_max_altitude: 10.0
+  LT_min_altitude: 0.2
+  LT_min_normalized_thrust: 0.0
+  LT_max_normalized_thrust: 50.0
+  LT_max_body_rates: 30.0
+  LT_min_sampling_time_at_input_feasibility_check: 0.05
+
+# --- RVIZ ---
+RVIZ_elapsed_LTs_enabled: true
+RVIZ_duration_of_LTs: 0.0 # 0.0 means display full traj
+RVIZ_sampling_frequency_of_LTs: 10.0
+

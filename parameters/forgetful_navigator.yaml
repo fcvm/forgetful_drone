@@ -1,0 +1,21 @@
+Nav_LoopIters2LTCompsRatio: 3
+Nav_SubseqFailedLTComps_MaxN: 5
+Nav_NominalLoopTime: 0.02
+
+Cam_HalfYawAOV: deg(50.0)
+Cam_HalfPitchAOV: deg(35.0)
+
+LT_MinSpeed: 2.0
+LT_MaxSpeed: 4.0
+LT_MaxSpeedIncrement: 0.5
+LT_Duration: 1.5
+LT_MinDist: 3.0
+LT_MaxDist: 6.0
+LT_MaxZ: 10.0
+LT_MinZ: 0.0
+LT_MinNormThrust: 0.0
+LT_MaxNormThrust: 50.0
+LT_MaxBodyRates: 30.0
+LT_InputFeasibilityCheck_MinSamplingTime: 0.05
+
+NavigatorInputPerturbationAmplitude: 0.05 # 0.01 is a good value

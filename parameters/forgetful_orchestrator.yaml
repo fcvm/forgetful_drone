@@ -1,0 +1,31 @@
+# Choose from:
+#   test_navigator_with_expert 
+#   test_navigator_with_brain
+#   generate_training_data
+#   test_simulation_with_autopilot
+flight_mission: "test_navigator_with_expert"
+
+
+"number_of_training_data_generation_runs": 100
+"max_duration_of_training_data_generation_run": 40.0
+
+
+# Choose from
+#   deterministic_figure8
+#   randomized_figure8 
+#   randomized_circuit
+#   randomized_sprint
+race_track_type: "deterministic_figure8"
+
+
+
+dynamic_gates_activated: false
+
+
+
+Cam_HalfYawAOV: deg(50.0)
+Cam_HalfPitchAOV: deg(35.0)
+
+
+
+LT_MaxSpeed: 4.0

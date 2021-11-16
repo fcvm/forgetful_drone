@@ -1,0 +1,22 @@
+GlobalTraj_PolyOrder: 11
+GlobalTraj_ContiOrder: 4
+GlobalTraj_MinimizationWeight_Vel: 0.1  
+GlobalTraj_MinimizationWeight_Acc: 10.0
+GlobalTraj_MinimizationWeight_Jerk: 100.0
+GlobalTraj_MinimizationWeight_Snap: 100.0
+GlobalTraj_MaxNormThrust: 18.0
+GlobalTraj_MaxRollPitchRate: 1.5
+GlobalTraj_MaxSpeed: 10.0
+
+
+
+WaypointIdx_StartVal: 12
+WaypointIdx_DistanceThreshold2Increment: 1.5
+MinHorizon: 3.0 # was 2.0
+SpeedHorizon: 0.5 # make dynamic around constant value
+Cam_HalfYawAOV: deg(50.0) # in degree
+Cam_HalfPitchAOV: deg(35.0)
+#PredictionPerturbationIsActive: true # level of perturbation
+NominalLoopTime: 0.02
+MaxDivergence: 1.2
+MaxDivergenceAfterProjection: 1.0

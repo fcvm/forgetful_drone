@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+    <model name='wall'>
+        <pose frame='world'>0 0 0 0 0 0</pose>
+        <static>1</static>
+        <link name='link'>
+            <inertial>
+                <mass>1</mass>
+            </inertial>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>0.1 90 70</size>
+                    </box>
+                </geometry>
+                <max_contacts>10</max_contacts>
+                <surface>
+                    <contact>
+                        <ode/>
+                    </contact>
+                    <bounce/>
+                    <friction>
+                        <torsional>
+                            <ode/>
+                        </torsional>
+                        <ode/>
+                    </friction>
+                </surface>
+            </collision>
+            <visual name='visual'>
+                <geometry>
+                    <box>
+                        <size>0.1 90 70</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                    <uri>model://wall/materials/scripts/wall.material</uri>
+                    <name>wall</name>
+                    </script>
+                </material>
+            </visual>
+            <self_collide>false</self_collide>
+            <enable_wind>false</enable_wind>
+            <kinematic>false</kinematic>
+        </link>
+    </model>
+</sdf>
