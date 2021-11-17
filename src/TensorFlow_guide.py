@@ -1065,11 +1065,6 @@ def data_input_pipelines_guide():
 
 
 
-
-
-
-
-
     basic_mechanics()
     reading_input_data()
     batching_dataset_elements()

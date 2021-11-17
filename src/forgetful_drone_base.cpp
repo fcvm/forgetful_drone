@@ -565,8 +565,10 @@ void ForgetfulDrone::resetRVIZ()
 
 void ForgetfulDrone::launchDroneOffGround()
 {
-    ROS_INFO( "[%s]\n >>  Launching drone off ground", 
+    ROS_INFO( "[%s]\n >>  Launching drone off ground.", 
                     ros::this_node::getName().c_str() );
+
+    //ros::Duration( 5.0 ).sleep();
 
     m_ROSPub_AutopilotOff.publish( std_msgs::Empty() );
 
@@ -809,7 +811,7 @@ void ForgetfulDrone::generateTrainingData()
         std::thread t1(runMultiThreadedSpinner);
 
 
-        
+        m_LastWaypointArrivalTime = ros::Time::now();
         ros::Rate Rate( 10.0 );
         do
         {

@@ -1,9 +1,10 @@
 # --- ORCHESTRATOR (ORC) ---
 # Enable one from:
-  #ORC_flight_mission: "test_navigator_with_expert"
-  ORC_flight_mission: "test_navigator_with_brain"
-  #ORC_flight_mission: "generate_training_data"
-  #ORC_flight_mission: "test_simulation_with_autopilot"
+#ORC_flight_mission: "test_navigator_with_expert"
+#ORC_flight_mission: "test_navigator_with_brain"
+ORC_flight_mission: "generate_training_data"
+#ORC_flight_mission: "test_simulation_with_autopilot"
+###
 ORC_nominal_period_duration_of_main_loop: 0.02
 ORC_number_of_runs: 100
 ORC_number_of_laps_per_run: 1
@@ -12,10 +13,11 @@ ORC_duration_without_reaching_waypoint_to_abort_run: 20.0
 
 # --- SIMULATOR (SIM) ---
 # Enable one from
-  #SIM_race_track_type: "deterministic_figure8"
-  SIM_race_track_type: "randomized_figure8"
-  #SIM_race_track_type: "randomized_circuit"
-  #SIM_race_track_type: "randomized_sprint"
+#SIM_race_track_type: "deterministic_figure8"
+SIM_race_track_type: "randomized_figure8"
+#SIM_race_track_type: "randomized_circuit"
+#SIM_race_track_type: "randomized_sprint"
+###
 SIM_dynamic_gates_enabled: false
 
 # --- DRONE ---
@@ -48,19 +50,19 @@ NAV_max_number_of_subsequently_failed_local_trajectory_replannings: 5
 NAV_max_divergence_from_reference_state: 1.2
 NAV_axial_amplitude_of_input_perturbation: 0.05 # 0.01 is a good value
 
-  # --- LOCAL TRAJECTORY (LT) ---
-  LT_min_speed: 2.0
-  LT_max_speed: 4.0
-  LT_max_speed_increment: 0.5
-  LT_duration: 1.5
-  LT_min_distance: 3.0
-  LT_max_distance: 6.0
-  LT_max_altitude: 10.0
-  LT_min_altitude: 0.2
-  LT_min_normalized_thrust: 0.0
-  LT_max_normalized_thrust: 50.0
-  LT_max_body_rates: 30.0
-  LT_min_sampling_time_at_input_feasibility_check: 0.05
+# --- LOCAL TRAJECTORY (LT) ---
+LT_min_speed: 2.0
+LT_max_speed: 4.0
+LT_max_speed_increment: 0.5
+LT_duration: 1.5
+LT_min_distance: 3.0
+LT_max_distance: 6.0
+LT_max_altitude: 10.0
+LT_min_altitude: 0.2
+LT_min_normalized_thrust: 0.0
+LT_max_normalized_thrust: 50.0
+LT_max_body_rates: 30.0
+LT_min_sampling_time_at_input_feasibility_check: 0.05
 
 # --- RVIZ ---
 RVIZ_elapsed_LTs_enabled: true
