@@ -1,0 +1,1330 @@
+%----------------------------------------------------------------------------------------
+%	CHAPTER 2 - LITERATURE REVIEW
+%----------------------------------------------------------------------------------------
+%========================================================================================
+
+\chapter{Literature Review} \label{Chapter2}
+
+This chapter provides a comprehensive background for the the research of this master thesis.
+Section \ref{sec:introduction_to_MAVs} introduces the aircraft class of UAVs.
+Section \ref{sec:autonomous_navigation_of_MAVs} reviews the research on autonomous navigation for MAVs.
+
+
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\section{Introduction to Unmanned Aerial Vehicles}       \label{sec:introduction_to_MAVs}%\label{sec:introduction_to_unmanned_aerial_systems}
+%///////////////////////////////////////////////////
+
+This section, first, introduces the aircraft class of UAVs
+by presenting a definition, related concepts and further sub-classification of the UAV aircraft class.
+Secondly, commercial applications that integrate UAVs are discussed
+in order to show the actual benefits as well as the future potential of UAV technologies.
+Thirdly, the concept of autonomy in the context of UAVs is examined.
+Therewith, this section provides a comprehensive background for the topic of section \ref{sec:autonomous_navigation_of_MAVs},
+i.e., the autonomous navigation of MAVs.
+
+%----------------------------------------------------------------------------------------
+\subsection{Basics and Classification} \label{sub:basics_n_classification}%\label{sub:UAV_basics_and_related_concepts}
+%----------------------------------------------------------------------------------------
+The International Civil Aviation Organization (ICAO) \cite{ICAO2005} defines unmanned aerial vehicles (UAVs) as aircrafts without a human pilot onboard,
+which are either remote-controlled by a human operator or "preprogrammed and fully autonomous".
+It should be noted that in science, autonomy is viewed more differentiated.
+In this sense recent developments of UAVs may incorporate individual, autonomous functions, 
+however, fully autonomous UAVs have not been realized yet (see subsection \ref{sub:UAVs_with_autonomous_functions}).
+An UAV is a component of an unmanned aerial system (UAS), which in addition consist of a ground control stations (GCS), communication link and payload.
+Fahlstrom and Gleason \cite{Fahlstrom2012} introduce UASs as follows.
+
+The GCS is the "operational control center" and accomodates
+human operators, computers, control and display consoles as well as a ground data terminal.
+At the GCS, the human operators plan and monitor missions of the UAV. 
+Via the control consoles, they issue operational commands 
+(e.g, switching the UAV on/off, setting the flight control mode to remote-controlled or preprogrammed, uploading preprogrammed flight missions) 
+and, if necessary, manually remote-control the UAV and the payload.
+The ground data terminal forwards these operational and control commands to the UAV and
+receives video and telemetry data as well as command responses and status information from the UAV.
+The computer units process these data and show the results to the human operators via the display consoles.
+For small UAS, the GCS may require only a single human operator and be portable consisting only of a laptop, a wireless LAN router and a radio control (RC) controller,
+whereas for advanced systems, the GCS may require a fixed building for an entire team of operators and a satellite system.
+
+The communication link establishes a realiable connection between the GCS and the UAV. 
+It consists of the air data terminal mounted onboard the UAV, the ground data terminal located at the GCS and 
+optionally satellite relays for communication over long distances. 
+The air and ground data terminal may incorporate an RC receiver/controller and wireless LAN and satellite antennas. 
+
+The payload is mounted onboard the UAV.
+However, it is considered as an independent component of the UAS since payloads are interchangeable systems 
+that are directly related to the individual mission of the UAV.
+For example, the payload for agricultural crop monitoring may be a thermal sensor,
+while for UAV-based delivery it may be a parcel loading-and-unloading system (see subsection \ref{sub:two_exemplary_commercial_applications_of_UAVs}).
+A video camera, in case of a surveillance mission, is payload, 
+while for some autonomous UAVs, the camera may be a sensor which is part of the navigation control system.
+
+Basic components of UAVs are the airframe, the electric power system, the flight control system and the air data terminal.
+For UAVs with autonomous functions, the necessary computation power is realized with additional onboard computers.
+The airframe, which can be of different type (see the following paragraph),
+constitutes the mechanical structure, on which the other components are mounted,
+and incorporates airframe type specific elements, such as control surfaces, propulsion units and rotors.
+The flight control system consists of the flight controller, actuators and sensors,
+and either supports human operators, executes preprogrammed missions or is a subsystem of an autonomous control structure.
+The flight controller is a circuit board with processors and
+is the central unit of the UAV in terms of state estimation and control as well as data and power distribution.
+Driven by the battery, it monitors the battery status and distributes power to the other electronic elements onboard.
+Through the air data terminal, the flight controller relays data, commands and status information between the sensors, the payload and the GCS.
+Moreover, it communicates with the GCS for control mode switch and status information of the UAV.
+In the remote-controlled flight mode, the flight controller translates human flight commands,
+such as ac-/decelerate, turning left/right and maintaining pose, 
+into individual commands and sends them to the individual actuators which finally realize the motion of the UAV.
+Thereby, the flight controller assists the human in close-loop control by stabilizing the UAV based on input from the sensors.
+In the autopilot flight mode, the flight controller tracks trajectories and waypoints,
+which are either defined in a preprogrammed mission or generated from a superior autonomous control unit.
+Advanced control algorithms (i.e., PID, neural network, fuzzy logic, sliding mode and H$\infty$  control)
+are applied for a smooth flight in face of the strong non-linearities in the dynamics of UAVs. \cite{Chao2010}
+Used sensors differ depending on the specific design of the flight control system.
+However, typical sensors are inertial measurement units (IMU), satellite-based navigation sensors, 
+video cameras, light detection and ranging (LIDAR) sensors, barometers, compasses, sonar sensors.
+
+Various classification systems for UAVs exist.
+The following introduces the classification by the means of the airframe type and flight key characteristics.
+
+
+\paragraph{Classification by airframe type}
+%------------------------------------------
+
+Kong and Mettler \cite{Kong2010} conclude that the airframe type determines the suitability of an UAV for certain applications and environments.
+Austin \cite{Austin2011} lists three main categories of airframe types
+(i.e., horizontal take-off and landing (HTOL), vertical take-off and landing (VTOL) and hybrid)
+and describes them as follows.
+
+The HTOL airframe type is foremost represented by airplanes.
+Basic, airplanes are composed of two fixed wings and a propulsion unit.
+During forward motion, the wings generate lift, which compensates for gravitational force, by downward accelerating the air that flows in horizontally from the front.
+The wings also have stabilizing effects on the aircraft and hold control surfaces that enable navigation.
+This airframe type is highly aerodynamically efficient and therefore, exceptionally suitable for missions including high speed as well as long flight range and time.
+On the downside, because the lift generation depends on forward motion, UAVs of this aircraft type first, are inable to maintain their position in the air 
+and second, require infrastructure for launching and landing, either a runway or a launch and recovery system. \cite{Gleason2010}
+Thus, HTOLs cannot be deployed on missions which include hovering (e.g., stop-and-go in densely populated areas) 
+or lack launching and landing infrastructure (e.g., urban delivery).
+
+The VTOL airframe type is foremost represented by copters wich are composed of a single or multiple rotors.
+A copter generates lift by rotating its rotor(s) and accelerating air downwards.
+Since the air is drawn in from above the rotor(s), a copter is able to hover as well as launch and land vertically.
+Besides vertical force, a running rotor induces also torque on the aircraft.
+In case of a helicopter (single rotor copter), an additional, small tail rotor cancels the torque of the main rotor and stabilizes the yaw motion of the aircraft,
+whereas in case of a multicopter, the torques induced by the individual rotors cancel themselves since the individual rotors are arranged in opposite directions of rotation.
+Depending on the particular aircraft design, the flight is controlled by adjusting either rotational speed or tilt of the constituent rotors.
+This generates differential thrusts and torques accelerating the aircraft in the desired direction.
+At the prize of lower flight speed, range and time, UAVs of this aircraft type are suitable for missions which
+require hovering as well as launching and landing on small areas without previously installed infrastructure.
+
+The hybrid airframe type combines the benefits of the HTOL and VTOL aircraft type
+which is usually realized with an aircraft of two fixed wings with a 90 degree tiltable propulsion unit,
+e.g., rotors mounted on the fixed wings, an array of jets mounted on the wings and the fuselage.
+UAVs of this aircraft type are able to hover as well as to take off and land vertically 
+while they still provide the speed that is necessary for long range and high altitude flights.
+ 
+\paragraph{Classification by flight key characteristics}
+%-------------------------------------------------------
+
+Various official authorities have published different classification systems that often classify UAVs by their flight key characteristics.
+Most of these classification systems were formulated in the military context, 
+such as the UAS groups of the United States Department of Defense \cite{USDOD2011} 
+which are based on maximum gross takeoff weight, normal operating altitude and airspeed.
+There also exist classification systems for UAVs in the civil realm,
+such as the seven classes of the China Civil Aviation Administration \cite{Wei2016}
+which are based on empty weight, take-off weight and usage.
+Besides Watts, Ambrosia and Hinkley \cite{Watts2012} classify UAVs for scientific usage.
+Table \ref{tab:UAV_classification_system_by_Watts_Ambrosia_and_Hinkley}
+shows a selection of the UAV classes they mentioned, 
+i.e., micro air vehicles (MAV), low altitude, short endurance (LASE), low altitude, long endurance (LALE),
+medium altitude, long endurance (MALE) and high altitude, long endurance (HALE).
+\begin{table}
+    \caption[Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley]{Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley. \textit{Source: assembled from \cite{Watts2012}.}}
+    \label{tab:UAV_classification_system_by_Watts_Ambrosia_and_Hinkley}
+    \centering
+    \begin{tabular}{r l l l L{0.3\textwidth}}
+    \toprule
+    \tabhead{Class} & \tabhead{Altitude} & \tabhead{Endurance} & \tabhead{Range} & \tabhead{Takeoff/Landing} \\
+    \midrule
+    MAV     & < 330 m       & < 30 min  & < 1 km        & Any small area \\
+    LASE    & < 450 m       & < 2 h     & < 10 km       & Human hand, catapult system or runway \\
+    LALE    & < 5,000 m     & < 20 h    & < 100 km      & Runway \\
+    MALE    & < 9,000 m     & < 40 h    & < 1,000 km    & Runway \\
+    HALE    & < 25,000 m    & < 30 h    & < 10,000 km   & Runway \\
+    \bottomrule\\
+    \end{tabular}
+\end{table}
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+\subsection{Commercial Applications} \label{sub:two_exemplary_commercial_applications_of_UAVs}
+%----------------------------------------------------------------------------------------
+
+%"J. M. Sullivan, ‘‘Evolution or revolution? The rise of UAVs,” IEEE Technology and Society Magazine, vol. 25, no. 3, pp. 43-49, 2006."
+
+%"Many UAVs serving in the military weigh hundreds or even thousands of pounds and can fly as high as 6000 feet.  
+%The  military  also  uses  small  or  micro  UAVs  like  Dragon Eye, FPASS, Pointer and Raven [5]. 
+%These small UAVs use electric batteries for power, weigh less than 10 pounds and fly usually as 1,000 feet or lower.
+%Autopilots for Small Unmanned Aerial Vehicles: 
+%A Survey 37The first UAV was the Q-2 made by Ryan Aeronautic-al  
+%flown  in  the  1950’s  for  military  reconnaissance  [3].  T
+%he  US  military  uses  many  UAVs  nowadays  to  spare  human pilots from operating dull, dirty or dangerous jobs [1]. 
+%Many UAVs serving in the military weigh hundreds or even thousands of pounds and can fly as high as 6000 feet.  
+%The  military  also  uses  small  or  micro  UAVs  like  Dragon Eye, FPASS, Pointer and Raven [5]. 
+%These small UAVs use electric batteries for power, weigh less than 10 pounds and fly usually as 1,000 feet or lower.  
+% As  mentioned  above,  most  early  UAVs  were  developed for military applications. 
+% They are expensive to develop and maintain, which makes it hard for civilian uses. 
+% Since 1990s, the emergence of high power density batteries  (Lithium-Ion  and  Lithium-Polymer),  
+% miniatur-ized  equipments,  and  wireless  network  devices  makes  the  small  UAVs  affordable  to  researchers  and  even  hobbyists."
+% \cite{Chao2010}
+%
+%"With  the  emergence  of  high  power  density  batteries,  
+%long  range  and low-power micro radio devices, cheap airframes, and powerful  micro-processors  and  motors,  
+%small/micro  UAVs have become applicable in civilian circumstances 
+%like remote sensing, mapping, traffic monitoring, search and  rescue,  etc"\cite{Chao2010}
+
+
+The emergence of air warefare in the early 20th century is also the begin of UAV technology.
+Over the last 100 years, it has been mainly the military research that has driven the development of UAVs. \cite{Sifton2012}
+The significant increase in performance and reduction of the acquisition costs of electronic components around the turn of the millennium,
+made UAVs attractive for the civilian sector as well. \cite{Garcia2019} \cite{Chao2010}
+First, private persons explored UAVs as a hobby. 
+A global market for consumer UAVs, with the quadcopter MAV class at the forefront, 
+has established itself with projected revenues of 17 US dollars from 2016 to 2020. \cite{Goldman}
+Many companies emerged that manufacture UAVs. 
+Most notable is the China-based UAV manufacturer DJI, which in 2014 accounted for around 70 percent of global consumer UAV sales. \cite{Weinswig2015}
+UAV technology has became a hot topic in industrial and public research
+resulting in numerous innovative UAV designs, new concepts and advanced control algorithms. \cite{Desjardins2016}
+Around the year of 2015, this opened the door for UAVs to commercial applications in industry and civil applications in projects of public interest.
+Right now, the commercial and the civil applications of UAVs are evolving rapidly 
+into a prognosticated commercial/civil UAV market size of 13 billion U.S. dollars in revenue from 2016 to 2020. \cite{Goldman}
+Present commercial areas of application for UAVs are
+infrastructure, transport, insurance, media and entertainment, telecommunication, agriculture, security and mining. \cite{PwC2016}
+Present civil areas are, among others, environmental protection \cite{Lei2019}, pollution monitoring \cite{Xiang2019}, 
+search and rescue \cite{McCarthy2018} as well as healthcare \cite{PeoplesDaily2019}.
+UAVs are exspecially useful on missions characterized as either dangerous or inefficient, 
+i.e., "human pilot operations would be at a disadvantage or at high risk" \cite{Watts2012}.
+In connection with currently evolving technologies such as big data, cloud computing and machine learning,
+the ability of UAV technologies to precisely gather data at low costs is a key to significantly increase efficiency and productivity. \cite{Garcia2019}
+
+This subsection presents two examples of commercial application areas of UAV technologies, i.e., agriculture and urban delivery.
+%This subsection presents three commercial application areas of UAV technologies, i.e., agriculture, urban delivery and drone racing sports.
+While a large number of UAV-based solutions are already being offered in the agricultural sector,
+UAV-based/integrated delivery remains a future technology, especially in urban areas.
+In the application of delivery, the benefits of UAV technologies come into full effect if they operate autonomously.
+In contrast to extensive farmland, urban areas represent a major technical obstacle, also for state-of-the-art UAV technologies.
+Companies and research institutions worldwide are conducting research in this field.
+An important critical point is the low robustness of autonomous navigation in uncontrolled environments.
+The research within this master thesis should make a contribution here as presented in chapter \ref{cha:research_project}.
+%The application of drone racing sports represents a feasible test environment for autonomous navigation methods.
+%Obstacles are known, yet they the may dynamically move.
+
+
+\paragraph{Agriculture}
+%----------------------
+
+The United Nations \cite{UN2019} estimate that the world population will increase sharply 
+from 7.8 billion people in 2019 to 10.9 billion in the year of 2100.
+At the same time, extreme weather conditions are becoming much more frequent due to climate change. \cite{NationalAcademies2016}
+Both pose great challenges for agriculture.
+Ahirwar, Swarnkar, Bhukya and Namwade \cite{Ahirwar2019} point out that 
+UAV technologies can be a solution to meet increasing agricultural consumption in the face of deteriorating weather conditions
+and provide an overview of UAV applications in agriculture as follows.
+
+For some years now, farmers have been integrating UAVs into their work to overcome the "largest obstacle" in agriculture, 
+i.e., the inefficiency caused by the expanse of farmlands.
+UAVs can navigate freely across the wide fields, with different types of sensors (e.g. spectral, thermal, visual) as payloads.
+From a bird's eye view, the sensors are able to collect extensive data covering the entire farmland.
+The data can be used to apply in powerful analytical methods.
+These methods offer great economic potential for farmers, i.e., productivity increase, cost reduction.
+In addition, they offer solutions to ecological (e.g., fewer chemicals contaminating groundwater through precise calculation) and 
+social (e.g., higher protection against crop failures through preventive measures) aspects.
+Various start-ups have developed UAV technologies that together cover almost the whole crop lifecycle:
+soil analysis for the development of planting patterns as well as irrigation and nitrogen management systems \cite{DeveronUAS},
+seed planting with precise, individual nutrient supply \cite{DroneSeed}, 
+crop spraying with the precise, necessary amount of chemicals \cite{HSE} and
+crop monitoring for health and economic assessments, the determination of the harvest date
+as well as the documentation for potential insurance cases \cite{PrecisionHawk}.
+JD.com, which is the second biggest Chinese online retailer and a pioneer in UAV and smart technology,
+launched the initiative, "JD Smart Agriculture Development Community" \cite{JD.com2018} 
+aiming at increased efficiency of the agriculture industry and improved quality and safety of foods in China.
+Thereby, the UAV technologies developed by the researchers of JD-X, the logistics innovation lab belonging to the firm, 
+are deployed to "monitor and analyze water, soil, pesticides, fertilizer, weather, diseases and pests".
+
+The largely undisturbed airspace over the wide areas of arable land is structured and essentially predictable.
+Thus, state-of-the-art, autonomous systems are already robust enough for use in agricultural environments.
+Mazur \cite{Mazur2016} declares that the quality of the collected data is the essential criterion
+for the actual breakthrough of UAV technologies in agriculture 
+which therefore depends on the development of more sophisticated sensors.
+A higher agree of autonomy, however, would also drive deployment 
+by allowing more and more tasks to be transferred from human workers to UAVs and other robots.
+
+
+
+\paragraph{Urban Delivery}
+%http://droneanalyst.com/category/drone-delivery
+
+
+%UAV based B2C Delivery Service is probably the commercial application of UAV technologies that is most revolutionary to the public life.
+%Autonomously flying UAVs would bear company to the birds in rural areas and would integrate into cityscapes as common transport users.
+%In case of delivery, the benefits of UAV technologies only come into full effect if they operate autonomously.
+%In vast, rural areas autonomous flying UAVs are already deployed, whereas dynamic, unstructured environments like urban areas remain highly challenging.
+%Thus, from a technical perspective, the broad realization of B2C Delivery Service by UAVs depends foremost 
+%on the robustness of autonomous flight in dynamic, unstructured environments.
+%Big companies and start ups as well as public research institutes are working on this topic. 
+%My master thesis is going to contribute here.
+
+
+Retail, i.e., the selling of consumer goods and services, has been changing. 
+Instead of visiting physical retail stores, consumers are shopping more and more online.
+An eMarketer \cite{eMarketer2019} statistics projects the e-commerce share of total global retail sales 
+to grow from 10.4\% in 2017 to 22\% in 2023.
+Increasing e-commerce entails a transition in road transportation from people driving their cars to physical retail stores
+to single parcels being transported to customers's addresses or returned to retailers by delivery vehicles. \cite{Weideli2013}
+As a result, exspecially last mile delivery (i.e., the last step of the supply chain from the final warehouse to the customer) 
+is gaining even more importance
+- economically for the suppliers, ecologically in face of the climate change and air pollution.
+With the widespread use of new, more environmentally friendly delivery technologies, 
+the shift from private transport to product delivery is an opportunity 
+to enormously reduce global greenhouse gas emissions and local particulate pollution.
+So that this opportunity can be seized, new technologies must also be economical in comparison with existing delivery systems.
+At present, last mile delivery is inefficient, costly, and detrimental to the environment 
+- exspecially in urban areas that are prone to traffic jams.
+Delivery systems based on or integrating UAVs that have autonomous functions could revolutionize the delivery on the last mile.
+Instead of or in addition to truck drivers transporting the parcels on urban roads that are congested by people and vehicles, 
+autonomous, electronically driven UAVs could make use of the wide and undisturbed airspace above the cities.
+
+The concept of commercial UAV delivery was first brought to the public by Jeff Bezos, the founder of Amazon, 
+who announced the initiative "Amazon Prime Air" \cite{AmazonPrimeAir} in December 2013
+and prognosted that UAV delivery could become common within 5 years. \cite{Manjoo2016}
+Across the globe, Major retailers and postal services are conducting tests.
+Until now, major companies launched test programs around the world to prove 
+that delivery by UAVs can be safe, efficient and environmentally friendly.
+In some rural areas, UAV delivery already deployed and reduce extensive delivery times 
+due to bad accessibility and poor infrastructure. \cite{McKinsey}
+See Apendix \ref{AppendixC} for a summary of UAV delivery history.
+%However urban areas are still unoccupied by autonomous UAVs.
+However, until today widespread urban delivery by UAVs has not yet been realized due to 
+"regulatory thickets, technical complexity and the public’s skittishness" \cite{Rosen2019}.
+The following identifies the potential, economic and environmental benefits of the use of UAVs for last mile delivery in urban areas 
+and analyzes the reasons why UAVs are not yet part of the urban landscape.
+
+Suppliers can profit from the use of UAVs in urban delivery by reducing costs and offering more profitable delivery services.
+According to a statistics by Capgemini \cite{Jacobs2019}, last mile delivery accounts for 41\% of the costs of the supply chain, 
+followed by sorting (20\%), parceling (16\%), warehousing (13\%) and remaining costs (11\%).
+It is not only the most expensive part of the shipping process but also consumes the most time. \cite{Dolan2018}
+Multiple stops combined with low drop sizes cause high inefficiency which is refered to as last mile problem. \cite{Dolan2018}
+In rural areas long distances between delivery points, in urban areas congestion in between are the main issue. \cite{Dolan2018}
+Deutsche Bank estimated that a delivery system integrating UAVs and robots could reduce last mile costs by 80\%
+and delivery time to 30 min. \cite{Kim2016}
+In an A.T. Kearney \cite{Kearney2018} report, the costs, that emerge on the last mile of e-commerce routes through high-density urban areas,
+are estimated to consist of labor (72\%), maintainace and other (14\%), vehicle cost (7\%) and fuel (7\%).
+All of the above partial costs could be reduced due to the integration of UAVs into delivery.
+First, autonomy can essentially reduce labor cost. 
+The higher the level of autonomy, the more functions and tasks can be transferred from humans to the UAVs.
+While traditional last mile delivery requires one driver per vehicle, 
+in future, a small team of humans may supervise a whole fleet of largely autonomously operating UAVs.
+Second, the overall acquisition and maintenance costs of a UAV based delivery system can be expected to be reduced.
+One traditional delivery vehicle, indeed, would have to be replaced by many UAVs to remain the same capacity.
+However, UAVs and their individual components are way cheaper than traditional delivery vehicles and related spare parts.
+Third, UAV delivery systems can save delivery time and reduce energy consumption 
+since they can fly on linear distances through airspace thereby omitting detours and congestion on the road. 
+Chiang, Li, Shang and Urban \cite{Chiang2019} conclude that the joint operation of UAVs and traditional delivery vehicles can save 
+"fixed costs by reducing the total delivery time and the number of vehicles required"
+as well as "variable costs, which is primarily the expenditure on fuel".
+A delivery truck follows its route for a whole day reaching many destinations to unload the parcels,
+whereas the route of UAVs, due to a lower capacity, would only cover one or several addresses. 
+However, Lee \cite{Lee2017}'s results show that a whole fleet of UAVs embedded in a modular supply structure provide a high flexibility 
+that allows much space for the optimization of the delivery process.
+A delivery system of autonomously operating UAVs may have the capabilities to satisfy specific, individual customer requests.
+For their profit, suppliers could efficiently offer right away/same day deliveries to individually set, specific locations, e.g., balcony, backyard, garage.
+Real time, precise parcel tracking together with dynamic adjustments of delivery time and location could be possible.
+
+Besides profiting suppliers,
+the use of UAVs in urban delivery can be benefitial to both globally the climate and locally the air quality.
+Lower fuel consumption reduces not only the costs for the suppliers but also the amount of exhaust gases.
+Conventional delivery trucks with cobustion engines emit exhaust gases that drive the greenhouse effect and cause fine dust pollution,
+whereas UAVs are usually electrically powered by batteries.
+Thus, if the batteries are recharged with power from renewable energy resources, the operation of UAVs is even emission-free.
+Exhaust gases contain carbon monoxide ($\text{CO}$), carbon dioxide ($\text{CO}_2$), nitric oxide ($\text{NO}$), nitrogen dioxide ($\text{NO}_2$), etc.\cite{Deutschlandfunk2017}
+$\text{CO}_2$ mainly damages the climate by driving the greenhouse effect.
+Currently, road transportation accounts for a large proportion of anthropogenic greenhouse gas (GHG) emissions
+(e.g., 24\% of the United States \cite{EPA2019} and 20.5\% of the EU-28+ISL \cite{EEA2019} total GHG emissions in 2017).
+Stolarof et al. \cite{Stolaroff2018} propose that "drone-based delivery could reduce greenhouse gas emissions and energy use".
+Goodchild and Toy \cite{Goodchild2018} conclude that a delivery system integrating UAVs into the traditional delivery process 
+would emit the least carbon dioxide ($\text{CO}_2$).
+Nitric oxide ($\text{NO}$) and nitrogen dioxide ($\text{NO}_2$) are part of the fine dust pollution
+which also contains stirred up conventional dust as well as particles from abrasion of tyres and brake linings.
+Outdoor air pollution seriously threatens the health of people worldwide.
+The World Health Organization (WHO) \cite{WHO2018} points out that in 2016, 
+91\% of the world's population were affected by air pollution above WHO air quality guidelines. 
+In urban areas, road transport is a major source of air pollution
+with commercial vehicles often with diesel engines contributing overproportionally much. \cite{Bouton2017} 
+An examples is the $\text{NO}_2$ emmisions in German cities that exceed the limit adopted by the European Union \cite{Wehrmann2019}.
+Transfering urban delivery from vehicles with combustion engines to emissions-free, electrically driven UAVs could, thus, 
+be an effective measure against fine dust pollution in cities.
+%FURTHER INFORMATION: http://theconversation.com/delivery-drones-will-cut-carbon-emissions-on-short-trips-say-scientists-91807
+%WORLDCO2: https://edgar.jrc.ec.europa.eu/overview.php?v=booklet2018
+
+While in rural areas, UAV delivery is already deployed in sporadic pioneer projects, 
+the use of autonomous UAVs in urban areas is "unlikely in the near-to midterm". \cite{Bouton2017}
+UAVs have not yet established themselves in the supply industry 
+due to strict regulations, technical problems and sceptical public attitudes. \cite{Rosen2019}
+Hereby, the development of advanced technical solutions that increase the safety is the major key
+to convince administrations to losen regulations and the public to accept the technology. \cite{Intech2009}
+The following lists several of many concerns dealing with accidental damage and injuries, 
+privacy, security, vandalism and stealth of the parcel as well as disturbance.
+First, the probability and impact of accidents involving UAVs is difficult to assess.
+There is little experience of UAVs participating in urban traffic.
+A lot of accidents and injuries by UAVs have been reported. \cite{Forrest2018}
+However, in 2015 Susini \cite{Susini2015} pointed out that not any fatal commercial UAV crash had been taken place.
+Mejias, Fitzgerald, Eng and Liu \cite{Intech2009} identify
+advanced technologies for sense-and-avoid and force landings to be critical for the integration of UAVs in the civil environment.
+In an emergency case (e.g., power loss, engine failure), 
+force landing technologies should be able to safely land the UAV preventing damage and injury.
+Currently, autonomous flight of UAVs is not robust enough for the safe operation in uncontrolled urban environments. \cite{loquercio2018learning}
+Second, UAVs can be easily misused to violate other people's privacy.
+UAVs with autonomous functions are often equipped with visual and range sensors (i.e., cameras, LiDAR).
+Researchers even work on UAVs that can look through walls. \cite{Biggs2017}
+During flight, these sensors reach heights and areas that have not yet been monitored.
+Already a single UAV can collect data that violate privacy, for example by looking through windows on higher floors.
+An entire fleet of delivery UAVs, on the other hand, could produce so much data that their misuse could have enormous consequences for
+entire sections of the population.
+State regulation and control could ensure the security of people's privacy.
+Third, UAVs can easily threat critical infrastructure.
+The fences of restricted areas of critical infrastructure (e.g., nuclear power plants, military bases) are not an obstacle for UAVs.
+Autonomously flying UAVs could unauthorizedly enter these areas either accidentally due to navigation failures
+or in the intention of hackers that have taken control of the UAV.
+This means heavy punishments (e.g., fines, imprisonment) for the suppliers or threats to public security.
+Fourth, delivered products could be damaged or stolen.
+During transport the parcel must be protected against rain and outer forces.
+The load and unload mechanism must be gentle so the product keeps undamaged.
+Criminals could easily down delivery UAVs in an act of vandalism or in order to steal the parcel.
+To equip UAVs with video surveillance technology could reduce criminal actions.
+But at the same time would intensify the privacy concern.
+Fiveth, UAVs emit a buzzing noise during flight.
+An extensive application of UAV delivery would lead to a new, dominant source of noise pollution in traffic.
+This could affect the quality of life in urban areas.
+New, bladeless UAV designs that fly in silence may be a solution in future. \cite{Holt2017}
+Above concerns reflect in strict regulations of local administrations and sceptical public attitudes hindering autonomous UAVs in cities.
+For example, the United States Federal Aviation Administration (FAA) forbids the flight of UAVs over people,
+out-of-sight and to be autonomous. \cite{DailyCaller2017}
+An eMarketer statistics \cite{eMarketer2016} shows the share of internet users in the United States in 2016 
+that would not trust UAV delivery because of concerns related to damage (72\%), theft (72\%), safety (68\%), privacy concerns (72\%).
+Advanced technical developments that increase the safety of autonomous UAV operation could face a majority of the sorrows.
+Autonomous navigation methods are not yet robust enough which threats the safety of citizens.
+The objective of this work is to develope an autonomous navigation method
+that has the power of recall and due to that ability is more robust.
+%Consumers acceptance 
+%https://www.pewresearch.org/fact-tank/2017/12/19/8-of-americans-say-they-own-a-drone-while-more-than-half-have-seen-one-in-operation/
+%Safety
+%https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8695695
+
+
+
+
+%\paragraph{Drone Racing Sport}
+%%-----------------------------
+%
+%
+%In drone racing sport, human pilots remote-control a MAV (typically, a quadcopter) through a drone race track
+%with the goal to complete the race track in shortest possible time.
+%Thereby, they wear a head-mounted display (HMD) that shows a first-person view (FPV) live stream from an forward-facing onboard camera.
+%Today, there are local and global drone racing championships organized by 
+%competitive racing leagues, such as MultiGP\cite{MultiGP} and Drone Racing League\cite{DRL}.
+%
+%Racing MAVs are designed to maneuver with high speed and agility.
+%For the competitions, racing pilots have to train for years to be able to 
+%control this sensitive UAVs. A quick reaction time is essential.
+%
+%This human navigation abilities are also desireable in autonomous MAVs that
+%should find application in future fields like B2C delivery.
+%Thus, the environment of drone racing is good for 
+%a fundamental research of autonomous navigation methods.
+
+
+
+
+
+
+\subsection{Autonomous Functions} \label{sub:UAVs_with_autonomous_functions}
+
+This subsection recaps the general concept of autonomy in relation to human operation and automation
+and successively presents autonomy in the context of UAV.
+
+
+\paragraph{Human Operation, Automation and Autonomy}
+%---------------------------------------------------
+
+Human operation, automation and autonomy are concepts related to technologies by which tasks are executed.
+Various, currently existing definitions and understandings of autonomous systems cause conceptual confusion. \cite{Williams}
+Caterpillar Inc. \cite{Caterpillar}, the world's largest manufacturer for heavy machinery \cite{Yang2009}, 
+proposes a simple, terminological distinction by the degree of human control during the completion of the task,
+whereas Chen, Wang and Li \cite{Chen2009} foremost differentiate automation and autonomy 
+by means of the ability of self-governance in substantial uncertainty.
+The following paragraph refers to both resources in order to provide a overview of the three concepts
+and provides an examplary task of \textit{domestic floor cleaning} for a better illustration.
+
+A task is executed by human operation, if during its completition a human controls the machine at any time. 
+\textit{A person living in the house monitors the floor from time to time. 
+If the person feels that the floor is dirty he or she decides to start cleaning.
+The person actively moves a conventional vaccum cleaner over the floor. At all times the person is in control of the vaccum cleaner.
+By the time the person adjudges that the floor is clean, he or she decides to stop cleaning.}
+
+Automation replaces human action by a machine integrating 
+control systems for a previously defined task in an assessable environment.
+The machine has only limited, functional control, whereas the human operator remains the overall control of the machine.
+\textit{The person utilizes a robotic vaccum cleaner that cleans the floor in a self-drive mode.
+During the cleaning process, the robot is not actively guided by the person. 
+Still, the person is responsible for the monitoring of the floor and for the decision to start and stop the cleaning process.}
+In the majority of cases, automation considerably outperforms human operation with respect to precision, speed, costs, etc.
+Machines can work non-stop, faster and more precise than the replaced humans that in addition cause labor costs.
+Due to their rational, numerical nature, machines can apply complex, mathematical optimization that is beyond the linear thinking of humans.
+On the other hand, an automated system is doomed to fail if it exceeds its design purpose since
+it was engineered to consider only a limited amount of parameters, variations and disturbances.
+In contrast to humans an automated system by itself is not able to properly cope with substantial uncertainty in the form
+of situational changes and unexpected events.
+\textit{On the one hand, the robotic vacuum cleaner cleans the whole floor in less time than the person using a vacuum cleaner 
+who also leaves out small areas of the floor. 
+On the other hand, the robot is stopped by an unexpected blockage or is unexpectedly knocked over by a pet.
+In order to continue the work, the person has to clear the blockage or set the robot upright again.
+A coin that unexpectedly lies on the floor is sucked up by the robot, whereas the person would rather put it into his wallet.
+In case of the situational change
+that the person spontaneously decides to watch a movie while the robot is in cleaning process,
+the robot by itself does not realize and continues the noisy cleaning.
+In order to not be disturbed by the cleaning noise, the person has to actively turn off the robot.}
+
+Autonomy is the conceptual extension of automation to substantial uncertainty.
+An autonomous system is not only able to perform previously defined tasks in assessable environments
+but also able to re-define tasks to react to situational changes and operate successfully in uncontrolled environments
+without the interaction of a human operator which however, may has the option to intervene into the system at a supervisor level.
+An autonomous system combines the benefits of automation and human operation by extending conventional control systems with intelligent components.
+Exspecially, methods of machine learning deepen the perception and reasoning of autonomous systems and 
+integrate capabilities that have been associated with the intelligence and flexibility of human behaviour.
+Machines learn to anticipate upcoming events, to react to unexpected events,
+to re-define tasks to react to situational change, to be able to perform new tasks,
+to operate in unknown and uncontrolled environments, to estimate uncertainty, to learn from failures, etc.
+\textit{The robotic vaccum cleaner non-stop monitors the floor and is able to detect if the floor is dirty.
+The robot by itself decides to start cleaning and, when sensing that the floor has become clean enough, decides to stop cleaning.
+Defined tasks for blockage clearing and upright setting are integrated.
+The robot does not have the ability to pick up and preserve the coin so it re-defines the task to clean the floor
+by avoiding the close area around the coin.
+In order to spare the person watching a movie from cleaning noise, 
+the robot creates a cleaning schedule based on the regular daily routine of the person.
+Through the feedback from the person whether he or she is satisfied with the level of cleanliness,
+the robot tunes itself to the person's sense of cleanliness and adjusts the cleaning plan and the individual cleaning programs.}
+Human operation, automation and autonomy are fluent concepts that are rather merging than mutually exclusive.
+Whether a technology with a high degree of automation, i.e., the system automatically performs the majority of its tasks,
+is an autonomous system, depends on the contextual view, e.g., the tasks and processes that are taken into consideration.
+Thus, Williams \cite{Williams} prefers "system with autonomous functions" over the term "autonomous system" that often causes ambiguity.
+\textit{The autonomous robotic vacuum cleaner from above has the abilities to autonomously perform the cleaning process 
+over an extended period of time.
+It is able to throw a full vacuum cleaner bag into the garbage can and put in a new, empty vacuum cleaner bag. 
+However, this period of autonomous work is bounded since the robot cannot order by itself and has to rely on the person 
+to supply vacuum cleaner bags.
+If one considers not only the cleaning process but also the sourcing process, the robot is not an autonomous system 
+since it relies on human operation. 
+But with respect to the cleaning process the system indeed integrates autonomous functions.}
+
+
+Various scales exist that categorize generic as well as specific, technical systems into levels of autonomy. \cite{Williams}
+The first scale was presented in 1978 by Sheridan and Verplank \cite{Sheridan1978} 
+(see figure \ref{fig:levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step})
+in the context of their research on underwater teleoperators.
+The scale, formulated for generic "computers", constructs ten levels of automation (including autonomy) for an "elemental decisive step".
+A single dimension entails two successive metrics to measure autonomy, i.e., levels 2 to 4 and 5 to 10 
+mostly consider decision making and execution, respectively.
+Human operation (level 1) and full autonomy of the computer (level 10) bound the dimension.
+Considering that both underwater teleoperators and UAVs are technical systems 
+in which humans are physically separated from unmanned operators or vehicles, but still issue commands to some extent,
+this relatively simple scale also provides an initial understanding of human interaction with autonomous UAVs.
+More recent scales accomplish an increased comparability between autonomous control systems by taking multiple metrics parallally into account.
+Such a multi-dimensional scale is introduced in the following paragraph that deals with autonomy in the explicit context of UAVs.
+
+
+An autonomous system successfully integrates a variety of controllers that solve specific problems.
+The design of these controllers as well as their synthesis require competences from various technical fields,
+i.e., control theory, system identification and estimation, communication theory,
+computer science (in particular artificial intelligence) and operations research.
+Furthermore, expertise from non-technical fields must be involved, i.e., ethics, philosophy and law,
+in order to address issues that arise with machines that make decisions on their own.
+%The black-and-white legal classification of UAVs, either in fully remote-controlled or fully autonomous, 
+%by the International Civil Aviation Organization (ICAO)\cite{ICAO2011} examplarily shows that not all issues have yet been conclusively clarified.
+
+
+
+
+
+
+\paragraph{Autonomous Control for UAVs}
+%---------------------------------------------
+
+Autonomous navigation is an important key to establish UAV solutions in various commercial application areas, 
+as previously stated in subsection \ref{sub:basics_n_classification} using urban delivery as an example.
+In order to provide a background for section \ref{sec:autonomous_navigation_of_MAVs},
+which deals with autonomous navigation of MAVs,
+this paragraph introduces first, the autonomous control levels for UAVs by Clough \cite{Clough2002},
+and, second, the hierarchical control architecture of autonomous control for UAV by Chen, Wang and Li \cite{Chen2009}.
+
+
+
+During his work at the US Air Force Research Laboratory, Clough \cite{Clough2002} 
+proposed a sophisticated, multi-dimensional scale of autonomous control levels for UAVs in a military context (see table \ref{tab:chart_of_autonomous_control_levels_by_Clough}).
+Eleven levels of autonomy, from remote-controlled (level 0) to preprogrammed (level 1-2) to fault/event reaction (level 3-4) to multi-vehicle interaction (level 5-6) to battlespace abilities (level 7-9) to full autonomy (level 10), 
+are constructed with respect to four, parallel metrics, i.e., observe, orient, decide and act. 
+These metrics are oriented towards the OODA (observe, orient, decide and act) loop
+which was originally developed by Boyd to analyze the decision making process of military enemies but has been also adopted in the context of business management. \cite{Angerman2014}
+Figure \ref{fig:underlying_concept_of_the_OODA_loop_by_Boyd} shows the underlying concept of the loop. 
+A cycle through four, serial processes (i.e., observe, orient, decide and act) represents rational behavior of humans, as individuals or integrated into organizations. 
+For simplicity, feedback mechanisms (e.g., the decision to further observe) and implicit control mechanisms
+(control that continually run in background) are not graphed.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd}
+    \decoRule
+    \caption[Underlying Concept of the OODA Loop by Boyd]{Underlying Concept of the OODA Loop by Boyd.
+    \textit{Source: figure 1 from \cite{Angerman2014} (edited), created with \href{https://www.draw.io/}{draw.io}}} 
+    \label{fig:underlying_concept_of_the_OODA_loop_by_Boyd}
+\end{figure}
+
+
+
+
+%The functions of an autonomous UAV are:
+%\begin{itemize}
+%    \item "
+%    \item Flight mission planning
+%    \item Health condition monitoring
+%    \item Fault detection, diagnosis, isolation and toleration
+%    \item Missions and trajectories replanning which is according to insufficient battle information from sensors and data link
+%    \item Autonomous take-off and landing
+%    \item Flight attitude control, track following, payloads management and so on
+%    \item Communication with ground station and other UAVs
+%    \item The ability of dealing with unexpected situations
+%    \item The ability of learning
+%    \item "
+%    \item application specific: surveillance, reconnaissance, remote sensing, target acquisition, border patrol, infrastructure monitoring, aerial imaging, industrial inspection, and emergency medical aid
+%\end{itemize}
+%
+
+
+The hierarchical, autonomous control architecture for UAVs by Chen, Wang and Li \cite{Chen2009} (see figure \ref{fig:hierarchical_control_architecture_for_autonomous_UAV})
+disaggregates the complex, autonomous control system of a generic UAV into three control levels (i.e., organization, coordination and execution level)
+as well as a supervisor level for human intervention and an overlapping module for system monitoring.
+By means of the IPDI (increasing precision with decreasing intelligence) concept, authority and tasks are distributed downwards.
+In general, downstream from higher to lower levels, commands are distributed and system parameters are modified,
+whereas command responses and preprocessed data are passed upstream from lower to higher level.
+According to the outer/inner loop principle, higher control levels require longer intervals of planning and execution than lower control levels.
+
+The most intelligent, least precise organization level implements artificially intelligent methods
+that assess the situation and manage the mission, on the basis of the multi-sensor data from the coordination level,
+and eventually, make decisions which are sent downstream to the coordination level.
+
+The medium intelligent, medium precise coordination level runs conventional and artificially intelligent methods that, 
+in accordance with the decisions from the organization level,
+navigate and generate trajectories on the basis of multi-sensor data which is fusioned from preprocessed information sent by the execution level. 
+Operational parameters are determined and, together with control and identification algorithms, are efficiently distributed to the subsystems of the execution level.
+
+The least intelligent, most precise execution level directly interfaces with the sensors and actuators of the UAV. 
+While receiving sensor data corresponding to the state of the UAV and the environment, 
+this level runs conventional control algorithms (e.g., attitude, trajectory, velocity and propulsion control) with operational parameters as determined by the coordination level 
+and sends low level control commands directly to the actuators of the UAV.
+Moreover, this level runs identification algorithms that process the sensor data in order to determine parameters, to perform state estimation and to detect faults.
+The gained information is sent upstream to the coordination level.
+
+The supervisor level enables humans at the GCS to interact with the autonomous UAV.
+However interaction is limited to the organization level, from where human commands are passed downstream.
+
+The system monitoring module monitors the status and health information of all subsystems of the control system. 
+In the occurrence of a fault, this module first, detects and localizes the fault
+and second, modifies operational parameters in order to eliminate, reduce or tolerate the fault.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV}
+    \decoRule
+    \caption[Hierarchical Control Architecture of Autonomous Control for UAV by Chen, Wang and Li]{Hierarchical Control Architecture of Autonomous Control for UAV by Chen, Wang and Li \textit{Source: figure 2, 3 and 4 from \cite{Chen2009} (edited), created with \href{https://www.draw.io/}{draw.io}}}
+    \label{fig:hierarchical_control_architecture_for_autonomous_UAV}
+\end{figure}
+
+
+
+%\paragraph{Navigation Control of MAVs}
+%--------------------------------------------------------
+
+
+%\cite{Chao2010} "Small  UAVs  normally  have  two  control  modes:  remote  control  (RC)  mode  and  autopilot  control  mode. 
+% Remote  control  mode,  or  radio  control  mode,  requires  human pilots to control the UAV through radio signals, 
+% while autopilot control mode can automatically keep the airplane at the desired state. 
+% There are also mixed control modes  in  some  small  UAV  applications,  such  as  3400  Autopilot  from  UNAV  company. 
+%  A  semi-autonomous  control  mode  is  provided  in  [8]  where  the  onboard  autopilot  controls  the  altitude  and  
+%  the  human  operator  controls the flight path.
+%" Although  RC  planes  can  be  applied  in  some  surveillance  situations, 
+% the  full  concentration  of  an  experienced RC human operator is required all the time.
+%  Therefore, autopilot systems are necessary to free human operators from tedious and repeatable jobs.
+%   In addition, they  can  also  improve  the  navigation  accuracy  and  the  autonomy of UAVs.
+
+
+
+%For the navigation of UAVs, there exist two general operation modes, i.e., the remote-controlled and the preprogrammed mode.
+%The remote-controlled mode clearly linked to the concept of human operation,
+%whereas the preprogrammed mode may range from automated to autonomous operation.
+%
+%The first two mentioned flight control modes are conventional, 
+%whereas technologies related to the autonomous operation mode are rapidly evolving.
+%
+%In the \textbf{remote-controlled} operation mode, 
+%a human pilot at the ground control station controls the flight of the UAV with a radio controller at all times.
+%Thus, this operation mode requires an always reliable communication link between the ground control station and the UAV.
+%Moreover, the maximum range of the communication link is a strict boundary for the flight range of the UAV and
+%in certain environments (e.g., caves and mines) a reduced signal strength may make this operation mode completely infeasible. 
+%This operation mode is mainly driven by the concept of human operation and exhibits related advantages and disadvantages.
+%On the one hand, the awareness of the human pilot entails great flexibility with respect to situational changes and unexpected events.
+%On the other hand, the limitations of human abilities also bound the flight performance of the UAV.
+%A human has a limited reaction time which might be too long in an emergency case.
+%Fatigue may appear during a long mission and shortens the flight endurance.
+%Either a direct visual contact or a livestream from an onboard camera is required.
+%Linear thinking prevents humans from applying complex mathematical optimization methods.
+%Last but not least, human operation cause labor cost and relies on available, qualified workers.
+%
+%In the \textbf{preprogrammed} operation mode, an onboard computer controls the flight of the UAV
+%according to a mission which has been uploaded to the onboard computer from the ground control station. 
+%Refering to the concept of automation this operation mode benefits from the efficiency and accuracy provided by computation and complex, mathematical optimization.
+%But it lacks of the comprehensive, situational awareness of a human.
+%Thus, without human action preprogrammed UAVs cannot properly react to neither,
+%significant changes of the overall situation that require mission updates, e.g., return to the ground control station if a storm come up,
+%nor unexpected events within uncontrolled environments that occur during the preprogrammed mission, e.g., avoidance of a falling tree.
+%Autonomy, as a combination of human reasoning and machine performance, is a major topic in current research on UAVs.
+%Navigation of UAVs in the \textbf{autonomous} operation mode will overcome the above mentioned limitations inhered by both conventional operation modes.
+
+%\textbf{Dynamics and Control}
+%
+%During flight, an UAV is an unstable system and requires continual control.
+%Traditionally, this control is engineered on multiple control levels. \textbf{QUELLE} (except some end-to-end learning control methods).
+%While on a lower control level, 
+%an onboard autopilot is permanently maintaining attitude and altitude of the UAV in order to prevent collisions and keep up maneuverability,
+%on a higher level, different actors can navigate the drone and perform maneuvers.
+%Either a human pilot steers the UAV remotely from the GCS per radio transmitter (RC) 
+%thereby, relying on direct visual contact to the vehicle  or on video stream from an onboard camera,
+%or an onboard computer constantly executes algorithms to track trajectories thereby, relying on sensor data.
+%While traditional navigation approaches, such as VIO or SLAM evaluate sensor data received from GPS, radio, inertial, SLAM, VIO to estimate the pose of the UAV,
+%new approaches basing on camera or LIDAR data utilize perception concepts of machine learning.
+%These computer tracked trajectories are either static, as part of a precomputed mission or adaptive to dynamic environments in sense of autonomous flight.
+%
+%However, even a remote-controlled UAV usually involves an autopilot 
+%which supports the human pilot during flight by automatedly/autonomously performing tasks, e.g. maintaining pose.
+%%and translation of higher order navigation tasks to individual lower level motor commands.
+
+
+
+
+
+%\paragraph{Open questions}
+%
+%"It  is  shown  that  current  technologies  are  adequate  for  automated   UAV   
+%that   operate   in   a   relatively   structured   environment.  
+%For  UAV  in  a  rapidly  changing  uncertain  environment the present techniques are inadequate [2]." - \cite{Chen2009}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\section{Autonomous Navigation of MAVs}          \label{sec:autonomous_navigation_of_MAVs}
+%////////////////////////////////////////
+
+Autonomous navigation of MAVs is a current theme in recent research.
+State-of-the-art methods are sophisticated, yet they fail in uncontrolled environments.
+The current trend is to integrate deep learning into autonomous navigation methods
+in order to give the MAVs perception and reasoning capacities.
+Both abilities are fundamental for boosting the robustness of navigation methods 
+which is necessary to cope with the uncertainty that occurs in uncontrolled environments.
+MAVs fly at low attitudes in proximity to obstacles and other agents.
+Moreover, they are restricted to lightweight sensors, computers and other devices
+which strongly constrains applied navigation methods, that must realiably run in real time, in computational complexity.
+Exspecially the sub-task of obstacle avoidance has remained highly challenging. \cite{Ross2013}
+
+This section, first, examines the task of navigation in detail and identifies all sub-tasks.
+Second, reliability and navigation qualities by which methods can be compared are discussed.
+Third, the state of research on autonomous navigation for MAVs is reviewed.
+
+
+
+%For humans, navigation through uncontrolled environments is part of everyday life, but for robots it has remained an unsolved task.
+%
+%
+%Navigation is an essential task on every flight mission.
+%It consists of three sub tasks that must be simultaneously performed by the MAV,
+%i.e., to arrive at the target position (high level goal), 
+%avoid obstacles and communicate with other agents in the environment. \cite{loquercio2018learning}
+%
+%
+%
+%
+%According to Loquercio and Scaramuzza \cite{loquercio2018learning}
+%the "safe and reliable navigation" of MAVs is a major unresolved obstacle for their application.
+
+%--------------------------------
+\subsection{Subdivision of Navigation}
+%--------------------------------
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{Figures/draw.io/sub-tasks_of_navigation}
+  \decoRule
+  \caption[The Sub-tasks of Navigation]{The Sub-tasks of Navigation. \textit{Source: own figure, created with \href{https://www.draw.io/}{draw.io}}}
+  \label{fig:sub-tasks_of_navigation}
+\end{figure}
+
+The online dictionary Lexico.com \cite{Lexico.com-navigation} defines navigation as 
+"the process or activity of accurately ascertaining one's position and planning and following a route".
+The navigation task of a generic system may be devided into six continuos and simultaneous sub-tasks (see figure \ref{fig:sub-tasks_of_navigation}).
+A sophisticated method for autonomous navigation should cover all of the sub-tasks.
+
+The overriding goal of a navigation method is that the system to be navigated arrives at the target position at the desired time
+as demanded by a higher-level unit (human operator or autonomous control structure).
+Usually a map is used for this purpose.
+First, the target position is identified in the coordinate frame of the map.
+The current state (position, orientation and derivatives) of the system is estimated in the frame of the map.
+A global trajectory in the frame of the map is generated 
+that continuously connects the current state at the current time with the target position at the desired arrival time.
+(Trajectories are 4D arrays consisting of consecutive 3D positions, each with a corresponding point in time and are
+often calculated with optimization methods, for example, to minimize the distance travelled or the time required.)
+Depending on the level of detail of the map, static obstacles may already be bypassed by the trajectory.
+Based on the estimation of the current pose, 
+the global trajectory in the coordinate frame of the map is converted to the local trajectory in the frame of the system.
+The current, immediate environment is scanned to detect the expansion of obstacles 
+and the presence of other agents in the frame of the system.
+If necessary, communication with other agents is established to coordinate further motion.
+In case of conflicts, the local trajectory is adjusted to avoid the obstacles or to follow the agreement with the other agents
+but to still follow the rough course of the global trajectory.
+Finally the collision-free trajectory is tracked by accordingly move the system.
+
+All the above actions are performed more or less simultaneously and constantly.
+At all time the current state of the system is estimated. 
+If at any time this estimation essentially differs from the global trajectory or changes occur in the map, 
+the global trajectory may be re-planned.
+Since the system is continuously changing its state, the global trajectory is constantly converted to the local trajectory in the frame of the system.
+The system must perceive the environment and may adjust the local trajectory at all times 
+in order to be able to cope with unpredictable, dynamically moving obstacles and agents.
+Simultaneously, the system must continuously follow the trajectory.
+
+Considering the complexity, it is admirable how humans can accomplish the navigation task without much effort.
+The street scenes of their residential areas may be the map stored in their mind.
+They may estimate their current state based on their vision of the immediate environment
+and transfer the global trajectory to the frame of their own body.
+While continuously walking along the local trajectory,
+at ease, they properly react to red traffic light, puddles, other pedestrians, etc.
+From experience, they may choose alternative routes accordingly to the current situation and
+know how to adjust their walking speed to arrive at the desired time.
+
+
+
+
+
+
+
+%------------------------------------------------------
+\subsection{Reliability and Qualities}
+%------------------------------------------------------
+
+Lazzaroni, Cristaldi, Peretto, Rinaldi and Catelani \cite{Lazzaroni2011}
+define reliability of a system as the "probability [...] of performing its required function 
+in the established time interval, under established conditions".
+In the context of autonomous navigation of MAVs,
+the required function is to safely fly to the target position.
+Thereby, the time interval is established by the desired arrival time.
+Depending on the intended application, the time interval may be short requiring the MAV to navigate at high speeds.
+For this, not only the flight control system of the MAV but also the navigation method must be highly agile.
+The conditions are determined by the intended application environment through which to be navigated and the design of the MAV.
+Depending on the application environment, the navigation method must integrate certain sub-functions to ensure safety.
+The design of the MAV constrains the capacities of electric and computation power available for the navigation method.
+
+This subsection discusses the impact of functional scope, efficiency and agility
+of autonomous navigation methods for MAVs on their reliability, 
+i.e., the probability that the navigation method performs 
+the required function (safely navigate to the target position in time)
+in a certain environment, with certain ressources, in a certain application.
+Functional scope, efficiency and agility can be considered as qualities
+which are applicable in the development of autonomous navigation methods for MAVs and the comparison of their performance.
+
+
+\paragraph{Functional scope}
+%----------------------
+The application environment poses which sub-functions of navigation (see figure \ref{fig:sub-tasks_of_navigation}) 
+are required to be integrated into the navigation method.
+In controlled and undisturbed environments, such as the airspace of rural areas,
+navigation methods may be considered reliable without the ability to perceive and reason the immediate environment
+since the environment is highly predictable.
+In contrast, uncontrolled environments which may be unstructured and dynamically variable and 
+in which multiple agents may simultaneously act, exhibit substantial uncertainty.
+An example is the traffic environment in urban areas, in which a large number of different road users participating. 
+Those uncontrolled environments demand the robust performance of all sub-tasks of navigation.
+The lack of structure, dynamic changes and multiple simultaneously acting agents
+may be too complex to be fully captured on global maps.
+For example, maps may show the position of a tree or an other agent but not the tree's branches or the agent's next movement.
+Thus, the MAV must be able to detect the expansion of the tree and the presence of the agent,
+in order to locally re-plan or coordinate a collision-free trajectory.
+Environments with highly dynamical obstacles may require a high agility for
+the navigation method for fast reactions.
+
+
+\paragraph{Efficiency}
+%-----------------------------------
+In the design of MAVs, hardware components are severely limited in size and weight
+which in turn strongly constrains power capacities and computational power.
+Bigger batteries and processors would sensitively affect the size and weight of the MAV 
+and thus, may decrease the maneuverability and agility of the MAV. \cite{Verbeke2017}
+Therefore, navigation methods are required to be energetic and computational efficient.
+Methods are only reliable, if they are processable in real time by the constrained hardware.
+The navigation system may be a significant electricity consumer of the MAV.
+The less energy the navigation system requires, the more energy is available for longer flights and payload.
+Autonomous navigation methods may essential differ in energy consumption by the type and number of sensors they are based on
+as well as their computational complexity which determines the processor performance required to run them in real time. \cite{Chao2010}
+
+
+\paragraph{Agility}
+%--------------------------------------
+The online dictionary Lexico.com \cite{Lexico.com-agility} defines agility as the capability,
+first, "to move quickly and easily" and, second, "to think and understand quickly".
+In the context of aviation, agility is closely linked to maneuverability. 
+Both are "flight qualities" \cite{Whalley1991} that find application in aircraft design.
+Lawrence, Corning and Wharburton \cite{Lawrence1991} define
+maneuverability as the "ability to change the aircraft flight path by application of forces from the main rotor, 
+tall rotor or other control devices"
+and agility as "how quickly the aircraft flight path can be changed".
+Whalley \cite{Whalley1991} measures maneuverability/agility of an aircraft by
+"the maximum achievable time-rate-of-change of the velocity[/acceleration] vector".
+Accordingly, maneuverability and agility encompass the execution control and dynamics of an aircraft
+and reflect the first part of the definition of Lexico.com.
+
+MAVs are generally very agile due to their small size.
+However, their agility is very sensitive to their weight and is therefore in a strong conflict with higher endurance and payloads. \cite{Verbeke2017}
+Agility often suffers in favor of safety which is the top priority of autonomous navigation.
+In contrast to professional human pilots,
+autonomous navigation control methods have not yet been able to push the dynamics of MAVs safely to the limit. \cite{Kaufmann2018}
+Exspecially with navigation methods based on global state estimation, high speeds easily leads to failure. \cite{loquercio2018learning}
+For a better comparability of autonomous navigation methods, it may be advisable to extend the above definitions of maneuverability and agility 
+to the second part of the definition of Lexico.com.
+Agility in the context of autonomous navigating MAVs should not only include the execution control level (see figure \ref{fig:hierarchical_control_architecture_for_autonomous_UAV})
+and the dynamics of the airframe but also the autonomous navigation control.
+In this case, all steps of the OODA loop (see figure \ref{fig:underlying_concept_of_the_OODA_loop_by_Boyd}), 
+i.e., to observe, orient, decide and act, would be covered by the extended concept of agility.
+
+
+
+
+
+
+
+
+%------------------------------
+\subsection{State of Research}
+%------------------------------
+
+The development of comprehensive, autonomous navigation methods for MAVs is complex 
+because the method must integrate several functions that perform simultaneously running sub-tasks (see figure \ref{fig:sub-tasks_of_navigation}).
+Loquercio and Scaramuzza \cite{loquercio2018learning} categorize the numerous existing autonomous navigation methods for MAVs
+into classical methods that follow the scheme of mapping-localization-planning-tracking,
+and modern methods which, with the use deep learning, train the MAV to learn end-to-end navigation policies.
+In turn, they subdivide deep learning methods into methods based on imitation learning and reinforcement learning.
+%% FERTIG
+%They point out that classical methods for autonomous navigation of robots are not robust enough for safe use in uncontrolled environments
+%since they are based on global state estimates that cannot respond adequately to dynamics and unpredictability (see ???).
+%Recent research integrates deep learning to enable perception and awareness. 
+%Methods here are not mature yet but have the long-term potential to solve uncontrolled environments for autonomous navigation (see ??).
+Following the classification of Loquercio and Scaramuzza, 
+this section presents the state of research on autonomous navigation methods of MAVs and discusses advantages and disadvantages.
+
+
+%SLAM
+%visual aliasing
+%dynamicscenes,  and  strong  appearance  changes
+%
+%end-to-end: "bond perception and control.[6][7], [8], [9]" \cite{loquercio2018learning}
+%
+%policy: "
+%A policy is a state-action mapping. 
+%A 'state' is a formalism used in AI that represents the state of the world, i.e. what the agent's idea of the world is. 
+%The action is, naturally, what action it should take in that state. A policy just maps states to actions.
+%"
+%%https://datascience.stackexchange.com/questions/27016/what-is-a-policy-in-machine-learning
+%
+%imitation 
+%
+%reinforcement
+
+
+\paragraph{Classical methods}
+%----------------------------
+
+Traditionally, navigation methods follow the the scheme of intermeshed steps, i.e., mapping-localization-planning-tracking.
+
+A common and simple type of system architecture for the navigation of MAVs through undisturbed outdoor environments
+estimates the state of the MAV based on data from an onboard GNSS sensor and localizes the MAV in a given map.
+Based on the current position of the MAV, the target position and the information of the map, a trajectory is generated and tracked.
+This type has two main disadvantages.
+First, in environments where the GNSS signal may be weak, as for example in urban areas, GNSS based navigation methods are not reliable.
+Second, functions to cope with obstacles and other agents in the immediate environment are absent.
+
+More sophisticated system architectures integrate simultaneously localize and mapping (SLAM) algorithms, 
+which do not require GNSS signals but visual or range sensors.
+SLAM algorithms generate and update a map of an unknown environment which captures present obstacles and 
+simultaneously localize the system in the map. \cite{Mur-Artal2015}
+Path planning algorithms (e.g., \cite{Bircher2016}, \cite{Cieslewski2017}) 
+identify collision-free trajectories in 3D depth maps build by the SLAM algorithm.
+Sophisticated navigation methods for MAVs exist that estimate the MAV state based on data from an inertial measurement unit (IMU)
+together with the output of vision-based SLAM algorithms (e.g., \cite{Lin2017}, \cite{Scaramuzza2014}, \cite{Sa2018}, \cite{Loianno2017}).
+
+
+The main disadvantage of SLAM methods is that generating the map of the environment coerces global consistency.
+This increases computational complexity and causes extreme effort to capture the dynamics of environments.
+Thus, classical methods reach their limits in environments which are not pre-dominantly static, i.e., fast changes may occur.
+Moreover, they are prone to fail at high speeds due to visual aliasing.
+In contrast to end-to-end policies, classical methods are a compound of clearly separated sub-systems.
+As a result, possible positive feedback effects between perception, reasoning and control 
+are prevented in the first place and one-way, complex algorithms must be deployed to
+connect the sub-systems by generating control commands based on 3D maps.
+
+
+
+
+
+
+
+
+\paragraph{Methods based on deep reinforcement learning}
+%--------------------------------------------------
+
+%"robot experience" ?? experience = learning?
+
+Recent Research has publicated various navigation methods involving deep reinforcement learning (RL) algorithms.
+Automatically generated control policies input raw sensor data and output complex flight control commands.
+%[9],  [25],  [26].
+RL Navigation methods are vision- or range-based, 
+i.e., they input images of a video camera or depth maps (at each pixel the distance to an object) of a LiDAR.
+The foremost benefit of deep RL methods is that policies are not affected by the control shift problem that occurs with IL methods,
+because the policies are learned with "trial-and-error" \cite{Sadeghi2016} from direct environmental interaction without the need for expert intervention.
+
+However, this way of learning requires an enormously high degree of sample complexity to achieve generalizing policies. \cite{Zhu2017}
+For MAVs, limited flight endurance makes the learning process inefficient. \cite{Sadeghi2016}
+Moreover, any collision is highly uncontrolled and thus very likely critical for the health of the system and the safety of the environment. \cite{Sadeghi2016}
+Thus, to acquire the required sample complexity is extremely costly and dangerous. 
+Researchers tried to circumvent this by transferring part or all of the learning process to simulation 
+while still testing the learned policies in the real world. 
+
+Sadeghi and Levine \cite{Sadeghi2016} propose a vision-based policy for collision avoidance in real world indoor flight 
+which is exclusively trained with simulated training data.
+From raw monocular RGB images, a deep convolutional neural network directly outputs velocity motor commands.
+A variety of higly randomized environments, textures and lighting, produces control policies that generalize to the real world.
+In real world test flights, they prove collision-free navigation through indoor environments. 
+But the MAV flies with extremly low agility.
+
+State-of-the-art simulation environments are capable of comprehensively modelling the dynamics of a quadcopter MAV. \cite{Meyer2012}
+Nevertheless, open problems have not been solved yet.
+First, complex aerodynamic effects such as rotor drag, which become important with the flight close to structures, is not yet be modelled. \cite{Faessler2018}
+Second, learned policies are affected by a domain shift between simulation environments and the real world.
+Even in the presence of photorealistic simulators (e.g., AirSim \cite{Shah2017}, CARLA \cite{Dosovitskiy2017}),
+the quality of rendered images is not yet sufficient.
+Zhu, Mottaghi, Kolve, Lim, Gupta, Fei-Fei and Farhadi \cite{Zhu2017} address the domain shift by fine-tuning 
+their vision-based deep RL policy learned in simulation with training data from the real world.
+
+
+
+
+
+
+
+
+
+
+
+
+\paragraph{Methods based on deep imitation learning}
+%---------------------------------------------------
+
+
+%end-to-end policies may closely link perception, reasoning and control.
+
+%Recently, new approaches based on  deep  learning  have  offered  a  way  to  learn  end-to-end flying  policies,  
+%tightly  coupling  perception  and  control  [6],
+%"Exspecially, methods based on supervised learning are promising 
+%"since  they  offer  an  effective  and sample efficient way to learn flying policies".
+%Nevertheless, the domain shift between teacher and learner is challenging." \cite{loquercio2018learning}
+
+
+Over the last years, more and more research has been done on methods of autonomous navigation
+that involve deep imitation learning in order to learn control policies from raw sensor data, usually camera images or depth maps.  %[6], [7], [19], [8],[20], [21]. 
+Compared to reinforcement learning, imitation learning is easier to implement and characterized by a low sample complexity. 
+This means that smaller amounts of training data are necessary to generalize learned control policies to test scenarios.
+However, the collection of training data as well as the evaluation of learned control policies
+may be inefficient and dangerous, exspecially in uncontrolled environments.
+Therefore, some researchers have chosen alternative ways to collect training data.
+Loquercio, Maqueda, del-Blanco and Scaramuzza \cite{Loquercio2018} trained a deep neural network 
+with real world data that has been safely gathered by cars and bicycles driving through urban areas.
+They achieved a generalized control policy 
+that also could safely navigate the MAV at high altitude in urban areas and also through indoor environments.
+Similarly, Giusti, Guzzi, Cirsan, He, Rodríguez, Fontana, Faessler, Forster, Schmidhuber, Di Caro, Scaramuzza and Gambardella \cite{Giusti2016}
+as well as Smolyanskiy, Kamenev, Smith and Birchfield \cite{Smolyanskiy2017} used image data collected by human hikers.
+The derived control policies could safely navigate MAVs through forest trails.
+Alternatively, the learning process can be shifted to simulation, i.e., train the network on simulated data (see next paragraph).
+
+Many navigation methods are restricted to planar motion not exploiting the agile dynamics of MAVs.
+Ross, Melik-Barkhudarov, Shankar, Wendel, Dey, Bagnell and Hebert \cite{Ross2013}
+developed a navigation system that inputs images from a monocular camera and
+reactively controls the MAV in planar motion in order to avoid trees.
+The policy, in the form of visual feature extraction plus a neural network is trained to mimic yaw control of human pilot experts.
+They could demonstrate collision-free flight with velocities up to 1.5 $\frac{\text m}{\text s}$
+in a controlled indoor environment as well as in outdoor forest environments.
+Giusti et al. \cite{Giusti2016}  used a deep convolutional neural network to map images
+to the direction of forest trails relative to the MAV.
+They could achieve a classification accuracy that is comparable to human decision.
+However, the flight control of the MAV was restricted to planar motion (i.e., yaw and speed control)
+The convolutional neural network of Loquercio et al. \cite{Loquercio2018}
+outputs a steering angle and a collison probability.
+The policy can follow roadways and simultaneously avoid obstacles
+but is also limited to planar control, i.e., forward velocity and yaw control.
+
+
+
+
+%Loquercio and Scaramuzza \cite{loquercio2018learning} name the main disadvantage of 
+%neural network policies to be the "lack planning to reach high-level goals"
+%and the "control-shift  between  the expert providing supervision and the learning agent" 
+%Thus, state-of-the-art deep IL methods are often limited in their maneuverability
+%(e.g., they only control planar motion) as well as in their agility, i.e., 
+%the UAVs move timidly and jerkily so that they do not make use of their possible flight dynamics.
+%
+%... propose a hybrid method that combines IL with conventional model-based control algorithms.
+%The vision-based policy is able to navigate the UAV with high agility.
+%In addition, generalization is achieved with a relatively low sample complexity.
+
+
+%\cite{Ross2013}
+%input: monocular RGB images from onboard forward facing camera.
+%processing: vector of visual featuresxfromthe current image, 
+%  neural network with ridge regression, imitation learning, smallset of human pilot demonstrations, 
+%  ontroller that canavoid trees by adapting the MAVs heading
+%output:  left-right velocity control commands,  fixed  forward velocityand altitude
+%success: navigates a small quadrotor helicopter autonomously at low altitude through natural forest environments
+%  maintain a constant velocity of up to 1.5m/s
+%  demonstrate theperformance of our system in a more controlled environmentindoors, and in real natural forest environments outdoors.
+%mentionable: planar motion
+%  -:
+
+
+%\cite{Giusti2016} 
+%input: monocular RGB  images from onboard forward facing camera
+%processing: deep neural network as supervised image classifier
+%output: heading of the forest/mountain trail with respect to the viewing direction.
+%success: classification accuracy comparable with humans, outperforming of then state-of-the-art methods
+%mentionable: planar motion, quadcopter MAV with implemented system (Yaw and speed control) can navigate unseen forest trail
+%-: agile dynamics of drones is not fully exploited
+%  not directly possibleto explicitly give the robot a goal to be reached, as it iscommon in other CNN-based controllers
+
+
+%\cite{Loquercio2018}
+%input: monocular RGB  images from onboard forward facing camera
+%processing: DroNet, convolutional neural network, 8-layers residual network
+%output: steering angle to keep the drone navigating while avoiding obstacles-ollow the roadway; 
+%  collision probability to let the MAV recognize dangerous situations and promptly react to them- react to dangerous situations exactly as any other groundvehicle would do
+%success: generalize policy, MAV at relatively high attitude, indoor environments (parking lots, corridors);
+%  safe flight of a quadrotor in urbanenvironments, new application spaces without anyinitial knowledge,
+%   scenarios completely unseenat training time including indoor corridors, parking lots,and high altitudes.
+%   ater converted into control flying commands
+%mentionable: train a MAV from data collected bycars and bicycles, planar motion with forward velocity (2nd output) and yaw (steering angle)
+%-: agile dynamics of dronesis not fully exploited
+%  not directly possibleto explicitly give the robot a goal to be reached, as it iscommon in other CNN-based controllers
+
+
+
+%\cite{Smolyanskiy2017}
+%
+%input: monocular image
+%processing: deep neural network
+%output: view  orientation  and  lateral offset  of  the  MAV  with  respect  to  the  trail  center
+%success: autonomously following trails in unstructured, outdoor environments such asforests
+%  DNN-based  controller  achieves  stable  flight  without  oscillations,  smoother 
+%  autonomous  flights  of  1  km
+%-: agile dynamics of dronesis not fully exploited???
+%not directly possibleto explicitly give the robot a goal to be reached, as it iscommon in other CNN-based controllers
+%mentionable: increase robustness with 2 additional vision systems: DNN  for  objectdetection and 
+%  visual  odometry  component  for  estimatingdepth for the purpose of low-level obstacle detection
+%
+%
+%
+%Smolyanskiy et al. \cite{Smolyanskiy2017}
+
+
+
+
+
+%[20] "The supervisory signal comes from hard-coded trajectories"  
+%
+%
+%How do you learn to navigate an Unmanned AerialVehicle  (UAV)  and  avoid  obstacles? 
+%One  approach  is  to  usea  small  dataset  collected  by  human  experts: 
+% however,  highcapacity learning algorithms tend to overfit when trained withlittle  data.  
+% An  alternative  is  to  use  simulation.  
+% But  the  gapbetween simulation and real world remains large especially forperception  problems.  
+% The  reason  most  research  avoids  usinglarge-scale  real  data  is  the  fear  of  crashes!  
+% In  this  paper,  wepropose to bite the bullet and collect a dataset of crashes itself!
+% We build a drone whose sole purpose is to crash into objects: 
+% itsamples naive trajectories and crashes into random objects.
+%  Wecrash our drone 11,500 times to create one of the biggest UAVcrash dataset. 
+%  This dataset captures the different ways in whicha  UAV  can  crash.  
+%  We  use  all  this  negative  flying  data  in  con-junction 
+%  with positive data sampled from the same trajectoriesto  learn  a 
+%   simple  yet  powerful  policy  for  UAV  navigation.  
+%   Weshow that this simple self-supervised model is quite effective innavigating  
+%   the  UAV  even  in  extremely  cluttered  environmentswith  dynamic  obstacles  including  humans.
+%
+%
+%
+%[21] The supervisory signal comes from model predictive control
+%
+%neural network architectures  [8], [23], [24]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\paragraph{Unsolved Issues}
+%%--------------------------
+%
+%<
+%There  has  been  many  significant  research  in  making  UAV  fly  autonomously,  
+%but  obstacle  avoidance  is  still  a  crucial   hurdle.   
+%For   small   quadrotor   UAV,   due   to   the   limitation  of  payloads 
+% it  is  infeasible  to  carry  sophisticated  radar  sensors.  Though  many  advanced  research  
+% has  used  light  detection  and  ranging(LiDAR)  [1]  or  the  cameras  of  Microsoft Kinect [2], both sensors are heavy, 
+% which will lead to  increase  the  power  consumption  and  drastically  decrease  the flight time.
+%>
+%\cite{Ross2013}
+%
+%<
+%"Even though systems based on deep learning achieve remarkable  results,  
+%we  believe  that  those  systems  are  still not  ready  to  completely  replace  traditional
+%  “map-localize-plan” approaches for drone navigation. 
+%Indeed, we speculate that  learning-based  and  traditional  approaches  are  going  to
+%  complement each other and enable drones to accomplish the most challenging tasks."
+%>
+%\cite{loquercio2018learning}
+%
+%
+%High Level Goal formulation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\subsection{+Autonomous Navigation Systems for Small Quadcopters}
+%Flight Control Pipeline
+%
+%
+%\paragraph{Classical System Architecture}
+%Env - Sensor - State (Velocity) Estimation                              - Velocity Controller - Flight Controller - Motors
+%             - obstacle detection - local planner - position controller -
+
+
+
+
+
+
+
+
+
+
+
+
+
+

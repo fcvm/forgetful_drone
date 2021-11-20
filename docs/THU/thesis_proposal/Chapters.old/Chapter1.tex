@@ -1,0 +1,88 @@
+% Chapter Template
+
+\chapter{Introduction} % Main chapter title
+
+\label{Chapter1} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+In "four, five years", the technology would be mature to use drones in parcel delivery,
+Jeff Bezos forecasted optimistically back in 2013, 
+while he was announcing Amazon Prime Air,
+bringing the idea of drone delivery to the public for the first time. \cite{Hamilton2019}
+Across the globe many big corporations and also smaller start-ups have
+joined the idea with own research initiatives.
+Nevertheless, apart from a few smaller test projects in sparsely populated areas, 
+drones have not yet really been able to assert themselves in this field,
+contrary to the back-then predictions of Bezos.
+Decisive reasons for this are of a technical nature.
+In particular, autonomous navigation methods are not yet robust enough 
+for reliable deployment in densely populated urban areas. \cite{loquercio2018learning}
+
+In science as well as in this thesis proposal, 
+the colloquial term "drone" is referred to as an unmanned aerial vehicle (UAV).
+Originating from the military, adopted by hobbyists,
+UAVs are gaining more and more acceptance in commercial applications today.
+Main areas of application are 
+infrastructure, transport, insurance, media and entertainment, telecommunication, agriculture, security and mining. \cite{PwC2016}
+Predominantely micro aerial vehicles (MAVs) are employed,
+a sub-class of UAVs around which the research of this master thesis revolves.
+MAVs navigate through the air, unaffected by obstacles on the ground and largely independent of the infrastructure. 
+Difficult to access areas can be reached without great effort or even danger for the pilot.
+From a bird's eye view, onboard sensors can easily record extensive data with high precision.
+These capabilities pay off all the more,
+the more functions MAVs perform independently, without the control of human pilots.
+This is especially true for delivery applications, 
+where, due to limited payloads, a MAV transports significantly fewer parcels than a conventional delivery truck.
+
+A basic function of every flight mission is navigation, i.e.,
+reaching a target position thereby avoiding obstacles and coordinating with other agents.
+In undisturbed airspace in rural areas, an automated approach of GNSS-based waypoint navigation may be sufficient.
+In contrast, urban areas exhibit a variety of unstructured and dynamic obstacles
+as well as a high density of other agents. 
+To cope with the resulting uncertainty in these environments,
+a high level of autonomy is required which autonomous navigation methods have not achieved yet.
+Recent research on autonomous navigation is mainly based on deep learning 
+in order to deeply perceive and reason the immediate environment.
+State-of-the-art navigation methods achieve a high spatial understanding of the environment
+by feeding convolutional neural networks (CNN) with vision or depth data.
+This research aims to develop a simple navigation method that extend this spatial perception onto temporal extension 
+by serially connecting a CNN with a long-short-term-memory (LSTM) network.
+Based on the assumption that powers of recall are crucial for humans when navigating,
+I am convinced that future autonomous navigation systems will encompass this ability.
+The navigation method will be tested in simulation and real world in a simplified test scenario,
+which, however, requires the MAV to remember the expansion and relative motion of obstacles while considering its own elapsed acceleration.
+
+This thesis proposal is structured as follows.
+In chapter \ref{Chapter2} relevant literature is reviewed.
+First, section \ref{sec:introduction_to_MAVs} provides a generic introduction to the aircraft class of UAVs and related concepts.
+Sub-classifications of the aircraft class are presented to identify the UAV class of MAVs.
+Commercial applications of UAVs with agriculture and urban delivery as examples  
+are reviewed to show the enourmous potential of UAV technologies
+as well as currently open technologic issues that hinder the breakthrough of UAV technologies.
+The concept of autonomy in the context of UAV technology is presented in general.
+Second, section \ref{sec:autonomous_navigation_of_MAVs} specifically deals with autonomous navigation of MAVs.
+Navigation is sub-divided into sub-tasks in order 
+to show the whole scope that would have to be covered by a mature, autonomous navigation system.
+Reliability and qualities of autonomous navigation are introduced to
+offer comparison criteria for the design and the comparison of autonomous navigation methods.
+Existing navigation methods, classical and current research, is refered to
+in order to identify advantages as well as technical issues that have not been solved yet.
+In chapter \ref{cha:research_project}, the intended research of this master thesis is presented.
+The potential contribution of powers of recall to the robustness of autonomous navigation for MAVs is discussed.
+The methodology, i.e., the general design of the unmanned aerial system, the navigation system and the test scenario,
+is presented.
+This proposal ends with a schedule of research and thesis writing. 
+
+
+
+
+
+
+
+
+%The breakthrough is closely coupled with
+%achieving high robustness of autonomous flight.
+%Guaranteeing safety at high speeds and high flight performance,
+%is crucial to responsibely and economically apply autonomous UAV technology
+%exspecially in areas with human civilization.
+
+%\cite{loquercio2018learning}.
