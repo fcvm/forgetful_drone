@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{456}
+Maria Musterfrau.
+\newblock {Ja, auch dieser Bibtex-Eintrag muss gelöscht werden...}
+\newblock {\em ACM Trans. Inf. Syst.}, 12(1):92--115, 1994.
+
+\bibitem{123}
+Max Mustermann.
+\newblock {Bitte lösche diesen Eintrag und schreibe deinen eigenen
+  Bibtex-einträge hier rein.}
+\newblock In {\em ABC '99: Proceedings of the eighth international conference
+  on ABC}, pages 330--334, New York, NY, USA, 1999. ACM Press.
+
+\end{thebibliography}

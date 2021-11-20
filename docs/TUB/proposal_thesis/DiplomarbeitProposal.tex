@@ -1,42 +1,47 @@
-\documentclass[12pt,a4paper,titlepage,oneside,BCOR1cm]{scrreprt}
+\documentclass[12pt,a4paper,titlepage,oneside,BCOR=1cm]{scrreprt}
 
-\usepackage{ngerman} % neue deutsche Rechtschreibung
+%\usepackage{ngerman} % neue deutsche Rechtschreibung
 \usepackage[latin1]{inputenc}
+%\usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel} % Silbentrennung
 \usepackage{amsmath,amstext,amssymb}
 
 \usepackage{setspace} % 1,5 Zeilenabstand
 \onehalfspacing
 \usepackage[T1]{fontenc} 
+\usepackage[latin1]{inputenc}
 \usepackage{bibgerm}
 \pagestyle{headings}
 
 
 \usepackage{ulem}
-\normalem %Änderung von \em und \emph nicht zulassen
+\normalem %ï¿½nderung von \em und \emph nicht zulassen
 
-\usepackage{graphicx} % Bilder einfügen
+\usepackage{graphicx} % Bilder einfï¿½gen
 \usepackage{color} % Farben
-\usepackage{subfigure} % mehrere Abbildungen nebeneinander/übereinander
+\usepackage{subfigure} % mehrere Abbildungen nebeneinander/ï¿½bereinander
 \usepackage{latexsym}
-\usepackage{fancyhdr} %Kopf- und Fußzeilen
-\bibliographystyle{gerunsrt} % Literaturangaben nach Auftreten sortieren %{gerplain}
+\usepackage{fancyhdr} %Kopf- und Fuï¿½zeilen
+%\bibliographystyle{gerunsrt} % Literaturangaben nach Auftreten sortieren %{gerplain}
+\bibliographystyle{plain}
+\usepackage{xcolor}
 
 \usepackage[pagebackref,pdfpagelabels]{hyperref} %Hyperlinks zw. Textstellen
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Hier bitte Werte ändern %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hier bitte Werte ï¿½ndern %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \date{\today} %{September 2006}
 \author{DAI-Labor}
-\title{Dokumentenvorlage für ein Diplomarbeitsproposal} % Bitte unter chapter/deckblatt.tex ändern!!
+\title{Dokumentenvorlage fÃ¼r ein Diplomarbeitsproposal} % Bitte unter chapter/deckblatt.tex ï¿½ndern!!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %Beginn des Dokuments
 \begin{document}
 %\maketitle
 
-\pagenumbering{Roman} % Römische Aufzählung
+\pagenumbering{Roman} % Rï¿½mische Aufzï¿½hlung
 \include{chapter/deckblatt} % Titelseite
 \tableofcontents % Inhaltsverzeichnis
 \addcontentsline{toc}{chapter}{Inhaltsverzeichnis} % Auch Inhaltsverzeichnis aufnehmen
@@ -44,19 +49,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Hauptteil
-\pagenumbering{arabic} % Normale Aufzählung
+\pagenumbering{arabic} % Normale Aufzï¿½hlung
 \include{chapter/proposal}
 
 
 \newpage
 
-%Übernehme alle Referenzen aus chapter/bibliography.bib
+%ï¿½bernehme alle Referenzen aus chapter/bibliography.bib
 \nocite{*}
 \bibliography{chapter/bibliography} % Literaturverzeichnis
 \addcontentsline{toc}{chapter}{Literaturverzeichnis}
-%\appendix % andere Aufzählung
+%\appendix % andere Aufzï¿½hlung
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Hier kommen die Anhänge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hier kommen die Anhï¿½nge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{chapter/anhanga}
 %\include{chapter/anhangb}
 \end{document}
