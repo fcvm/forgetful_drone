@@ -1,25 +1,20 @@
-PWD /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis
+PWD /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.tex
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.log
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/MastersDoctoralThesis.cls
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/MastersDoctoralThesis.cls
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.tex
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.log
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/MastersDoctoralThesis.cls
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/MastersDoctoralThesis.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-INPUT /usr/share/texlive/texmf-dist/tex/generic/unicode-data/UnicodeData.txt
-INPUT /usr/share/texlive/texmf-dist/tex/generic/unicode-data/CaseFolding.txt
-INPUT /usr/share/texlive/texmf-dist/tex/generic/unicode-data/SpecialCasing.txt
-INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/book.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/book.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/bk11.clo
@@ -28,10 +23,12 @@ INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
+INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrbase.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrbase.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
@@ -42,6 +39,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrhack.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrhack.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrkbase.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrkbase.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xpatch/xpatch.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xpatch/xpatch.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/setspace.hak
@@ -58,25 +57,19 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator-language-mappings.tex
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator-language-mappings.tex
+INPUT /usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
@@ -87,41 +80,37 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer-scrpage.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer-scrpage.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm1095.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/mathpazo.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/mathpazo.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_legacy.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_legacy.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
@@ -130,10 +119,14 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_legacy.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_legacy.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-bibtex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-bibtex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-natbib.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-natbib.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex-ieee/ieee.bbx
@@ -160,10 +153,6 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu
 INPUT /usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
@@ -186,6 +175,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty
 INPUT /usr/share/texmf/tex/latex/CJK/CJKutf8.sty
 INPUT /usr/share/texmf/tex/latex/CJK/CJKutf8.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty
 INPUT /usr/share/texmf/tex/latex/CJK/CJK.sty
 INPUT /usr/share/texmf/tex/latex/CJK/CJK.sty
 INPUT /usr/share/texmf/tex/latex/CJK/mule/MULEenc.sty
@@ -193,86 +184,100 @@ INPUT /usr/share/texmf/tex/latex/CJK/mule/MULEenc.sty
 INPUT /usr/share/texmf/tex/latex/CJK/CJK.enc
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/transparent.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/transparent.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/picture.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/picture.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.aux
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.aux
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8t.tfm
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/dicts/translator-basic-dictionary/translator-basic-dictionary-English.dict
-INPUT /usr/share/texlive/texmf-dist/tex/latex/beamer/translator/dicts/translator-basic-dictionary/translator-basic-dictionary-English.dict
+INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/transparent/transparent.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/transparent/transparent.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/picture/picture.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/picture/picture.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+INPUT /usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.aux
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.aux
+INPUT /usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict
+INPUT /usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict
 INPUT /usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
-INPUT /usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
-INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+INPUT /usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main-blx.bib
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main-blx.bib
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.bbl
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.bbl
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.bbl
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main-blx.bib
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.bbl
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.bbl
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.bbl
 INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
+INPUT /usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr7t.tfm
@@ -328,9 +333,9 @@ INPUT /usr/share/texmf/tex/latex/CJK/UTF8/UTF8.chr
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu80.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu69.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu96.tfm
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/watermark/Tsinghua_University_Logo.png
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/watermark/Tsinghua_University_Logo.png
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/watermark/Tsinghua_University_Logo.png
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/watermark/Tsinghua_University_Logo.png
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/watermark/Tsinghua_University_Logo.png
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/watermark/Tsinghua_University_Logo.png
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplrc8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
@@ -358,32 +363,32 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplr8c.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.toc
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.toc
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.toc
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.toc
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.toc
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.toc
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplb8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplb8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lof
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lof
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lof
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lot
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lot
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.lot
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lof
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lof
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lof
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lot
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lot
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.lot
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplb8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplro8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplro8r.tfm
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.tex
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8t.tfm
@@ -408,19 +413,19 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplr7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplri8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplri8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplri8r.tfm
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/sub-tasks_of_navigation.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/sub-tasks_of_navigation.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/sub-tasks_of_navigation.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/underlying_concept_of_the_OODA_loop_by_Boyd.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/hierarchical_control_architecture_for_autonomous_UAV.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/sub-tasks_of_navigation.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/sub-tasks_of_navigation.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/sub-tasks_of_navigation.pdf
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplr8t.vf
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.tex
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.tex
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/ufplmbb.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/psnfss/ufplmbb.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmbb.tfm
@@ -441,15 +446,15 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplri8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplr7t.vf
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixA.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixA.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixA.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixB.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixB.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixB.tex
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Figures/draw.io/levels_of_automation_in_man-computer_decision_making_for_a_single_elemental_decisive_step.pdf
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr7t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/zplmr7m.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/zplmr7y.tfm
@@ -463,30 +468,30 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplb8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/palatino/pplr8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixC.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixC.tex
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixC.tex
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.tex
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.tex
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ectt1095.tfm
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter1.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter2.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Chapters/Chapter3.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixA.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixA.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixB.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixB.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixC.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/Appendices/AppendixC.aux
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.out
-INPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.run.xml
-OUTPUT /home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis/main.run.xml
-INPUT /usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter1.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter2.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Chapters/Chapter3.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixA.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixB.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/Appendices/AppendixC.aux
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.out
+INPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.run.xml
+OUTPUT /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/THU/thesis_proposal/main.run.xml
+INPUT /home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk
 INPUT /usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
@@ -501,7 +506,6 @@ INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu69.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu6e.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu80.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu96.pfb
-INPUT /usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb

@@ -5,9 +5,14 @@ The style file: plain.bst
 A level-1 auxiliary file: chapter/deckblatt.aux
 A level-1 auxiliary file: chapter/proposal.aux
 Database file #1: chapter/bibliography.bib
+Warning--I didn't find a database entry for "PwC2016"
+Warning--I didn't find a database entry for "loquercio2018learning"
+Warning--I didn't find a database entry for "Kaufmann2018"
+Warning--I didn't find a database entry for "Kelchtermans2017"
+Warning--I didn't find a database entry for "Shakeri2019"
 You've used 2 entries,
             2118 wiz_defined-function locations,
-            514 strings with 4388 characters,
+            523 strings with 4501 characters,
 and the built_in function-call counts, 736 in all, are:
 = -- 81
 > -- 14
@@ -46,3 +51,4 @@ warning$ -- 0
 while$ -- 9
 width$ -- 3
 write$ -- 26
+(There were 5 warnings)

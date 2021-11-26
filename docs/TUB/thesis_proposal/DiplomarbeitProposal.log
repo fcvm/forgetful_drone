@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.11.20)  20 NOV 2021 16:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.11.20)  25 NOV 2021 20:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.tex
-(/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.tex
+**/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.tex
+(/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.tex
 LaTeX2e <2020-02-02> patch level 2
 L3 programming layer <2020-02-14> (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrreprt.cls
 Document Class: scrreprt 2020/01/24 v3.29 KOMA-Script document class (report)
@@ -141,10 +141,10 @@ File: latin1.def 2018/08/11 v1.3c Input encoding file
 Package: babel 2020/02/14 3.40 The Babel package
  (/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
 File: switch.def 2020/02/14 3.40 Babel switching mechanism
-) (/usr/share/texlive/texmf-dist/tex/generic/babel-german/ngerman.ldf
-Language: ngerman 2018/12/08 v2.11 German support for babel (post-1996 orthography)
- (/usr/share/texlive/texmf-dist/tex/generic/babel-german/ngermanb.ldf
-Language: ngermanb 2018/12/08 v2.11 German support for babel (post-1996 orthography)
+) (/usr/share/texlive/texmf-dist/tex/generic/babel-english/USenglish.ldf
+Language: USenglish 2017/06/06 v3.3r English support from the babel system
+ (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
  (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2020/02/14 3.40 Babel common definitions
 \babel@savecnt=\count177
@@ -153,7 +153,16 @@ File: babel.def 2020/02/14 3.40 Babel common definitions
 \bbl@readstream=\read2
 \bbl@dirlevel=\count178
 )
-Package babel Info: Making " an active character on input line 121.
+Package babel Info: \l@british = using hyphenrules for english
+(babel)             (\language0) on input line 82.
+Package babel Info: \l@UKenglish = using hyphenrules for english
+(babel)             (\language0) on input line 83.
+Package babel Info: \l@canadian = using hyphenrules for english
+(babel)             (\language0) on input line 102.
+Package babel Info: \l@australian = using hyphenrules for english
+(babel)             (\language0) on input line 105.
+Package babel Info: \l@newzealand = using hyphenrules for english
+(babel)             (\language0) on input line 108.
 ))) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2020/01/20 v2.17e AMS math features
 \@mathmargin=\skip64
@@ -292,7 +301,7 @@ Class scrreprt Warning: Usage of package `fancyhdr' together
 (scrreprt)              `\addtokomafont' for the page style elements need
 (scrreprt)              explicite user intervention to work.
 (scrreprt)              Nevertheless, using requested
-(scrreprt)              package `fancyhdr' on input line 26.
+(scrreprt)              package `fancyhdr' on input line 30.
 
 (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footers
@@ -425,25 +434,28 @@ File: hpdftex.def 2020/01/14 v7.00d Hyperref driver for pdfTeX
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count273
 \l__pdf_internal_box=\box52
-) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.aux (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/deckblatt.aux) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/proposal.aux))
+) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.aux (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/deckblatt.aux) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/proposal.aux))
 \openout1 = `DiplomarbeitProposal.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+Package scrbase Info: activating USenglish \contentsname on input line 45.
+Package scrbase Info: activating USenglish \listfigurename on input line 45.
+Package scrbase Info: activating USenglish \listtablename on input line 45.
 
 
 bibgerm.sty: babel.sty detected
@@ -468,7 +480,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \AtBeginShipoutBox=\box54
-Package hyperref Info: Link coloring OFF on input line 41.
+Package hyperref Info: Link coloring OFF on input line 45.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -478,10 +490,10 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count280
 )
-LaTeX Info: Redefining \ref on input line 41.
-LaTeX Info: Redefining \pageref on input line 41.
-LaTeX Info: Redefining \nameref on input line 41.
- (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.out) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.out)
+LaTeX Info: Redefining \ref on input line 45.
+LaTeX Info: Redefining \pageref on input line 45.
+LaTeX Info: Redefining \nameref on input line 45.
+ (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.out) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.out)
 \@outlinefile=\write3
 \openout3 = `DiplomarbeitProposal.out'.
 
@@ -492,7 +504,7 @@ Class scrreprt Info: loading recommended package `bookmark'.
 (scrreprt)           `bookmarkpackage=false' before \begin{document} and
 (scrreprt)           you can avoid this message adding:
 (scrreprt)             \usepackage{bookmark}
-(scrreprt)           before \begin{document} on input line 41.
+(scrreprt)           before \begin{document} on input line 45.
  (/usr/share/texlive/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2019/12/03 v1.28 PDF bookmarks (HO)
  (/usr/share/texlive/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
@@ -503,7 +515,7 @@ Package auxhook Info: \AddLineBeginMainAux comes a little late,
 ))
 \openout2 = `chapter/deckblatt.aux'.
 
- (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/deckblatt.tex
+ (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/deckblatt.tex
 <figures/DAI_Logo.png, id=4, 1321.93875pt x 260.975pt>
 File: figures/DAI_Logo.png Graphic file (type png)
 <use figures/DAI_Logo.png>
@@ -523,11 +535,11 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )) [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/figures/DAI_Logo.png (PNG copy)>]
-LaTeX Font Info:    Trying to load font information for T1+cmss on input line 46.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/figures/DAI_Logo.png (PNG copy)>]
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 50.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.toc)
+) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.toc)
 \tf@toc=\write4
 \openout4 = `DiplomarbeitProposal.toc'.
 
@@ -537,64 +549,85 @@ File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ]
 \openout2 = `chapter/proposal.aux'.
 
- (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/proposal.tex
+ (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/proposal.tex
 chapter 1.
+
+LaTeX Warning: Citation `PwC2016' on page 1 undefined on input line 15.
+
 [1
 
 
 ]
+
+LaTeX Warning: Citation `loquercio2018learning' on page 2 undefined on input line 68.
+
+[2] [3]
 chapter 2.
-[2
 
-]
-chapter 3.
-[3
+LaTeX Warning: Citation `Kaufmann2018' on page 4 undefined on input line 164.
 
-]
-chapter 4.
 [4
 
 ]
+
+LaTeX Warning: Citation `Kelchtermans2017' on page 5 undefined on input line 195.
+
+
+LaTeX Warning: Citation `Shakeri2019' on page 5 undefined on input line 197.
+
+[5] [6]
+chapter 3.
+[7
+
+]
+chapter 4.
+[8
+
+]
 chapter 5.
-[5
+[9
 
 ]
 chapter 6.
-) [6
+) [10
 
-] (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.bbl (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.brf)
+] (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.bbl (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.brf)
 \tf@brf=\write5
 \openout5 = `DiplomarbeitProposal.brf'.
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 67.
- [7
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
+ [11
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 67.
- (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.aux (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/deckblatt.aux) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/chapter/proposal.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 67.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 67.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
+ (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.aux (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/deckblatt.aux) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/chapter/proposal.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 71.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
 Package rerunfilecheck Info: File `DiplomarbeitProposal.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 Package rerunfilecheck Info: File `DiplomarbeitProposal.brf' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 67.
+(rerunfilecheck)             Checksum: 647F3A087B6563A9031C7051C54FDA01;227.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 71.
  ) 
 Here is how much of TeX's memory you used:
- 11420 strings out of 483130
- 190190 string characters out of 5963882
- 581464 words of memory out of 5000000
- 26190 multiletter control sequences out of 15000+600000
- 545167 words of font info for 57 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 53i,8n,72p,10197b,509s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2488.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1728.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm2488.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk>
-Output written on /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/proposal_thesis/DiplomarbeitProposal.pdf (9 pages, 163012 bytes).
+ 11385 strings out of 482543
+ 190039 string characters out of 5951368
+ 584319 words of memory out of 5000000
+ 26307 multiletter control sequences out of 15000+600000
+ 546070 words of font info for 57 fonts, out of 8000000 for 9000
+ 309 hyphenation exceptions out of 8191
+ 53i,8n,72p,10197b,495s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsl1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2488.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/fm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk>
+Output written on /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/thesis_proposal/DiplomarbeitProposal.pdf (13 pages, 194146 bytes).
 PDF statistics:
- 385 PDF objects out of 1000 (max. 8388607)
- 126 compressed objects within 2 object streams
- 20 named destinations out of 1000 (max. 500000)
- 70 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 468 PDF objects out of 1000 (max. 8388607)
+ 145 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
+ 78 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -3,7 +3,11 @@
 %\usepackage{ngerman} % neue deutsche Rechtschreibung
 \usepackage[latin1]{inputenc}
 %\usepackage[utf8]{inputenc}
-\usepackage[ngerman]{babel} % Silbentrennung
+%\usepackage[ngerman]{babel} % Silbentrennung
+
+\usepackage[USenglish]{babel}
+\addto\captionsUSenglish{\renewcommand{\contentsname}{Table of Contents}}
+
 \usepackage{amsmath,amstext,amssymb}
 
 \usepackage{setspace} % 1,5 Zeilenabstand
@@ -44,7 +48,7 @@
 \pagenumbering{Roman} % R�mische Aufz�hlung
 \include{chapter/deckblatt} % Titelseite
 \tableofcontents % Inhaltsverzeichnis
-\addcontentsline{toc}{chapter}{Inhaltsverzeichnis} % Auch Inhaltsverzeichnis aufnehmen
+\addcontentsline{toc}{chapter}{Table of Contents} % Auch Inhaltsverzeichnis aufnehmen
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -58,7 +62,7 @@
 %�bernehme alle Referenzen aus chapter/bibliography.bib
 \nocite{*}
 \bibliography{chapter/bibliography} % Literaturverzeichnis
-\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\addcontentsline{toc}{chapter}{Bibliography}
 %\appendix % andere Aufz�hlung
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hier kommen die Anh�nge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

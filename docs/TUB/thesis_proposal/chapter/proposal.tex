@@ -1,47 +1,296 @@
 \chapter{Motivation}
 
-Im Bereich ... (Warum muss es eine neue L"osung/ einen neuen Ansatz geben) 
+{\color{cyan}Im Bereich ... (Warum muss es eine neue L"osung/ einen neuen Ansatz geben)}
+
+
+
+
+The advances in drone technology 
+over the past years have been just as fantastic as 
+associated application possibilities in the 
+public, private and voluntary sector of today's and future economies.
+Especially the branches 
+infrastructure, transport, insurance, media and entertainment, 
+telecommunication, agriculture, security and mining 
+offer great potential for the commercial use of drones. \cite{PwC2016}
+Drones exhibit substantial advantages over ground vehicles
+as they are unaffected by many obstacles and largely independent of infrastructure.
+Destinations can be reached by the shortest route, waiting times can be avoided
+and the effort and risk of getting to places that are difficult to access can be reduced.
+In addition, from the privileged perspective of a bird, onboard sensors 
+are able to record extensive data 
+of high quality as well as increased speed 
+due to the fast aerial maneuverability of drones.
+On the downside,
+drones as smaller aircraft vehicles can move much less weight
+which, among other things, limits mission payload and battery capacity,
+which in turn restricts flight range and duration.
+In order for the use of drones to pay off economically, efficiency must therefore be maximized.
+One key to increase efficiency is to shift functions from a human operator to the drone itself,
+i.e., increase the drone's degree of autonomy.
+This becomes particularly clear in the example of delivery applications.
+Because drones can load significantly fewer packages and
+have to recharge or refuel more often than a conventional delivery truck,
+drone delivery systems would only really pay off if
+most decisions are made autonomously by the individual delivery drone
+or even by the collective of the drone swarm.
+Consequently, expensive human labor could be reduced
+and room for mathematical optimization could be created.
+
+%https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries
+%https://percepto.co/in-2022-percepto-is-bringing-visual-inspection-automation-to-all/
+%https://www.munichre.com/topics-online/en/mobility-and-transport/drone-use-taking-flight-on-small-farms.html
+While in the commercial context,
+already today drones are proving their economic and safety-related value
+in aerial inspection services of
+more controlled and undisturbed 
+environments of "large industrial sites" such as
+agriculture,
+construction,
+infrastructure,
+utilities,
+and mining,
+they have not yet have not yet really 
+been able to assert themselves for 
+commercial applications in the open-world environment
+of our daily lives.
+This is particularly true for drones with
+autonomous functions.
+
+
+drone-in-a-box %https://en.wikipedia.org/wiki/Drone_in_a_Box
+-In heavy industry, automation and drone use is now seen as the standard in inspection practices
+-Our 2021 solution, combining powerful autonomous robots with AI-powered visual data management is the nuanced and advanced solution industrial sites today can rely on to reduce risk, costs and environmental impact.
+
+Apart from legal restrictions and lack of acceptance in the population [Quelle], 
+decisive reasons for this are of a technical nature.
+For example, autonomous navigation methods are not yet robust enough
+for reliable deployment in densely populated urban areas.\cite{loquercio2018learning}
+The master's thesis is intended to make a contribution here.
+
+
+-----------BIS HIER
+
+
+
+In common parlance, the term "drone" is often used to refer 
+to the aircraft class of unmanned aerial vehicles (UAVs),
+which can be further devided into the sub-classes of
+
+
+This proposal deals with the sub-class of micro aerial vehicles (MAVs)
+which represent ...
+.
+Classification...
+Current research revolves around... batteries, lalala
+and more autonomy, especially in navigation.
 
 
 
 
 
+As a basic functionality of MAVs, navigation
+comprises the main task of achieving a desired pose or position
+while performing necessary sub-tasks at the same time.
+The necessity of implementing individual sub-tasks depend either on the environment,
+e.g., obstacle avoidance and coordination with other agents,
+or on the application,
+e.g., shooting plant seeds [].
+Consequently, state of the art allows the degree of autonomy 
+of MAVs in some environments and applications and not in others.
 
-\chapter{Zielsetzung}
+When again taking drone delivery as an example,
+projects are already realized in rural areas where the airspace is mainly undisturbed [].
+Here, navigating through waypoints only relying on GNSS 
+without any implementation of obstacle avoidance and agent-coordination may be sufficient. 
+
+In contrast, urban areas are full of unstructered obstacles and other agents 
+which result in a high uncertainty that cannot be planned in advance. 
+
+Only a high level of autonomy in navigation which has not yet been achieved
+can robustly cope with the challenges of this environment.
+
+
+Recent research on autonomous MAV navigation is mainly based on deep learning 
+which allows to perceive and reason the immediate environment.
+State-of-the-art navigation methods achieve a high spatial understanding of the environment
+by feeding convolutional neural networks (CNN) with vision or depth data.
+
+This research aims to develop a simple navigation method 
+that extend this spatial perception onto temporal extension 
+by serially connecting a CNN with a long-short-term-memory (LSTM) network.
+
+Based on the assumption that powers of recall are crucial for humans when navigating,
+I am convinced that future autonomous navigation systems will also encompass this ability.
+The navigation method will be tested in simulation and real world in a simplified test scenario,
+which, however, requires the MAV to remember the expansion and relative motion of obstacles while considering its own elapsed acceleration.
+
+
+
+
+\chapter{Objectives}
 Im Rahmen ... (Was will ich ueberhaupt mit meiner Abreit erreichen? Etwas verbessern, entwickeln, vergleichen...)
 
+ 
+The following objectives should be achieved within the framework of the master's thesis:
 
-\chapter{Aufgabenpakete}
-Ausgehend von der Zielbeschreibung werden folgende Arbeitspakete definiert:
+
+
+Many advanced methods for autonomous navigation of MAVs already exist.
+However, they are not sophisticated enough to conquer open-world environments of high uncertainty.
+In current research, deep learning techniques
+that empower MAVs with perception and reasoning abilities
+constitute the best approach to face the uncertainty of these environments.
+
+
+State-of-the-art, vision- or depth-based navigation methods 
+integrate feedforward, deep convolutional neural networks (CNNs)
+that map the current color or depth image to action. [Sources]
+
+By deploying CNNs in this way a high, spatial perception and reasoning 
+of the immediate surrounding of the MAV can be achieved.
+Yet, the mere comprehension of space, however good it is,
+may not be sufficient to robustly deploy autonomously navigating MAVs in 
+open-world environments.
+Therefore, I aim to develop a navigation method that besides spatial
+also includes temporal comprehension.
+
+
+To my knowledge, researchers from ETH Zurich have come up with very impressing work 
+with respect to autonomous MAVs.
+
+Current paper: ...
+
+Want to take a step back to the work of Loquercio, Kaufmann et. al. \cite{Kaufmann2018} from 20??:
+They developed a vision-based method that navigates a MAV through a drone racing 
+track with possibly dynamically moving race gates.
+Thereby, they achieved a high reliability and agility at high speeds.
+
+drone racing is a good test environment...
+- reactive, inherent problem of high-level goal formulation in deep learning policies
+
+Taking their work as a basis,
+by adding temporal comprehension,
+I expect the MAV to entfalten das folgende Potential:
+
+- As mentioned above, the navigation method theoretically does not require a high-level goal formulation
+since the reactive targeting the next gate already results in completing the race track.
+Practically, in the event that at any time the next gate is not located 
+in the frame of view (FOV) of the MAV's onboard camera,
+the output of the deep neural network (DNN) is not defined and the lack of a high-level goal becomes evident.
+This is also the case, even if the MAV has seen the next gate in the past (see figure ??).
+
+- In addition, humans cannot estimate the velocity and direction of motion of themselves, obstacles or other agents
+based on a short blink with their eyes but they need to observe over at least a short period of time.
+- Not only localization but also situational reasoning is strengthened by memory,
+e.g., a car driver observes a child that runs from the sidewalk through the parking cars onto the road
+and has enough reaction time or even anticipation to brake.
+Without any power of recall, the driver may start braking in anticipation
+when the child is still on the sidewalk, but may stop braking after the child disappears behind a parking car.
+
+- dynamic trajs
+
+In the navigation method of this research, I want to meet the lack of high-level goal planning 
+by introducing powers of recall to navigation.
+To my knowledge, Kelchtermans and Tuytelaars \cite{Kelchtermans2017}
+are the only ones who used a recurrent neural network for memory abilities in autonomous, 
+vision-based UAV navigation. \cite{Shakeri2019}
+-reason why their work is not what i want..
+However, they only tested their method in simulation and did not comprehensively evaluate their results.
+If the method, after passing the first gate, could remember that it has seen the second gate before,
+the method could plan to navigate through the second gate based on elapsed images.
+
+
+
+
+In my method, I plan to use a LSTM-CNN which is a deep convolutional neural network
+serially connected to a long-short-term-memory (LSTM) neural network.
+
+While the CNN has the ability to perceive and reason spatial structures of the immediate environment,
+the LSTM is able to establish connections through time. 
+
+In other words, the CNN is responsible to predict waypoints 
+or generate trajectories based on single images,
+whereas the LSTM empower the method to recall and remember 
+by evaluating the temporal structure between the predictions of the CNN.
+
+Besides the above steep curve scenario, this memory would show great benefit in situations
+when the quadcopter lost track of the goals and it can recall elapsed images.
+In case of the application in urban areas, for example, 
+quadcopters could remember obstacles 
+that were visible but have become occluded and thus, could better anticipate. 
+Or after an evasive maneuver, 
+the quadcopter could return to the actual path 
+much faster because he memorizes its maneuver.
+In that sense, the memory of the quadcopter is another form of localization in the environment, 
+which is not global but namely local.
+In addition, memory could enable better optimization, e.g., 
+the imitation learning of optimal trajectories which
+are not only spatial but also temporal objects.
+However, this research, in a simplified scenario, should only prove if powers of recall 
+are applicable and generally useful for the autonomous navigation of MAVs.
+
+\chapter{Task Packages}
+Based on the objectives, the following task packages are defined:
 
 \begin{itemize}
-	\item Einarbeitung in das Themenbereich. Dazu gehört die Evaluierung relevanter Paper sowie das Berücksichtigen der bereits verfügbaren Komponenten und Implemaentationen. Das Arbeitsergebnis ist eine Zusammenfassung relevanter Arbeiten.
+	\item Familiarization with the subject area. 
+	This includes evaluating relevant papers and 
+	taking into account the components and implementations 
+	that are already available. 
+	The work result is a summary of relevant work.
 
-	\item Entwicklung eines Ansatzes ...
+	\item Developing an Approach ...
 
-	\item Analyse, Design und Entwurf einer Architektur
+	\item Analysis, design and drafting of an architecture
 
-	\item Definition von geeigneten Testszenarien
+	\item Definition of suitable test scenarios
 
-	\item Umsetzung der Architektur, Implementierung
+	\item Implementation of the architecture, implementation
 
-	\item Dokumentation der Architektur und des Programmcodes
+	\item Documentation of the architecture and the program code
+	
+	\item ------------------------------------------------------
+	\item Shift simulation from Gazebo to the more photo-realistic Flightmare
+	\item Generate training data in simulation
+	\item Shift data input pipeline from tensor flow to pytorch
+	\item Design and drafting of the RCNN in pytorch
+	\item Train the RCNN
+	\item Definition of suitable test scenarios in simulation
+	\item Implementation
+	\item Documentation of the architecture and the program code
+
 \end{itemize}
 
 	
-\chapter{Zeitplan}
+\chapter{Time Schedule}
 Die Bearbeitung dauert maximal 6 Monate. (Am besten eignet sich ein Gannt Diagramm)
 
-\chapter{Organisatorisches}
+\chapter{Organizational Matters}
 \begin{itemize}
-	\item {\color{magenta} Sprache der Diplomarbeit} Thesis language: English
-	\item {\color{magenta} Textverarbeitungssystem} Text processing system: LaTeX
-	\item {\color{magenta} Programmiersprache} Programming languages: C++, Python
-	\item {\color{magenta} Betreuer} Supervisor: Dr. rer. nat. Yuan Xu
-	\item {\color{magenta} Gutachter} Reviewers: Prof. Dr. Sahin Albayrak, Dr.- Ing. Stefan Fricke
+	\item Language of the thesis: English
+	\item Text processing system: LaTeX
+	\item Programming languages: C++, Python
+	\item Supervisor: Dr. rer. nat. Yuan Xu
+	\item Reviewers: Prof. Dr. Sahin Albayrak, Dr.- Ing. Stefan Fricke
 \end{itemize}
 
-\chapter{Anhang}
+\chapter{Annex}
 
+\section{Steep curve scenario}
+
+For example, a section of the racetrack that consist of two successive gates, in between a steep curve
+could not successfully be navigated through by the method, even if both gates have already appeared on images.
+Before the MAV navigate through the first gate, both gates are in the FOV of the camera.
+After it has flown through the first gate, because the curve is too steep, the second gate is out the FOV 
+and the navigation method has no goal to be achieved.
+
+% Taking a human as example
+% HUMAN IN THE DRONE RACETRACK EXAMPLE
+%To solve this problem I consider what a human would do in this scenario.
+%From a position before entering the gate 1, a human can see gate 1 and 2.
+%After he flew through gate 1, he has no visual contact to both gates anymore.
+%Yet, he can manage to navigate through gate 2 because he has the ability 
+%to remember the position of gate 2 in his body frame. 
 
 
