@@ -5,43 +5,46 @@
 
 
 
-The advances in drone technology 
-over the past years have been just as fantastic as 
+Recent years advances in drone technology 
+are just as fantastic as 
 associated application possibilities in the 
 public, private and voluntary sector of today's and future economies.
-Especially the branches 
+In the nearer future, especially the branches 
 infrastructure, transport, insurance, media and entertainment, 
 telecommunication, agriculture, security and mining 
 offer great potential for the commercial use of drones. \cite{PwC2016}
-Drones exhibit substantial advantages over ground vehicles
+Drones, incorporating fast aerial maneuverability,
+exhibit substantial advantages over ground vehicles
 as they are unaffected by many obstacles and largely independent of infrastructure.
 Destinations can be reached by the shortest route, waiting times can be avoided
 and the effort and risk of getting to places that are difficult to access can be reduced.
 In addition, from the privileged perspective of a bird, onboard sensors 
 are able to record extensive data 
-of high quality as well as increased speed 
-due to the fast aerial maneuverability of drones.
+of high quality and speed.
+This quality is extremly powerful in times of big data and machine learning.
 On the downside,
-drones as smaller aircraft vehicles can move much less weight
-which, among other things, limits mission payload and battery capacity,
+drones as smaller aircraft vehicles can move substantially less weight
+which, besides, computational power and mission-specific payload 
+limits battery capacity,
 which in turn restricts flight range and duration.
-In order for the use of drones to pay off economically, efficiency must therefore be maximized.
+For drones paying off economically, efficiency must therefore be maximized.
 One key to increase efficiency is to shift functions from a human operator to the drone itself,
 i.e., increase the drone's degree of autonomy.
 This becomes particularly clear in the example of delivery applications.
-Because drones can load significantly fewer packages and
-have to recharge or refuel more often than a conventional delivery truck,
-drone delivery systems would only really pay off if
-most decisions are made autonomously by the individual delivery drone
-or even by the collective of the drone swarm.
+Because drones can only load significantly fewer packages and
+have to recharge more often than conventional delivery trucks have to refuel,
+one human pilot per drone would be too ineffective for general deployment.
+Drone delivery systems would only be profitable
+if most functions are performed autonomously by the individual delivery drone,
+or, at best, by the collective of the drone swarm.
 Consequently, expensive human labor could be reduced
 and room for mathematical optimization could be created.
 
 %https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries
 %https://percepto.co/in-2022-percepto-is-bringing-visual-inspection-automation-to-all/
 %https://www.munichre.com/topics-online/en/mobility-and-transport/drone-use-taking-flight-on-small-farms.html
-While in the commercial context,
-already today drones are proving their economic and safety-related value
+In the commercial context,
+drones have become the present standard
 in aerial inspection services of
 more controlled and undisturbed 
 environments of "large industrial sites" such as
@@ -49,9 +52,11 @@ agriculture,
 construction,
 infrastructure,
 utilities,
-and mining,
-they have not yet have not yet really 
-been able to assert themselves for 
+and mining.
+"Large industrial sites" provide a flight environment
+that is essentially controlled and undisturbed.
+In contrast, drones
+have not yet assert themselves for 
 commercial applications in the open-world environment
 of our daily lives.
 This is particularly true for drones with
@@ -62,59 +67,77 @@ drone-in-a-box %https://en.wikipedia.org/wiki/Drone_in_a_Box
 -In heavy industry, automation and drone use is now seen as the standard in inspection practices
 -Our 2021 solution, combining powerful autonomous robots with AI-powered visual data management is the nuanced and advanced solution industrial sites today can rely on to reduce risk, costs and environmental impact.
 
-Apart from legal restrictions and lack of acceptance in the population [Quelle], 
+Apart from legal restrictions and lack of acceptance by the population [Quelle], 
 decisive reasons for this are of a technical nature.
 For example, autonomous navigation methods are not yet robust enough
-for reliable deployment in densely populated urban areas.\cite{loquercio2018learning}
+for the reliable deployment in densely populated urban areas.\cite{loquercio2018learning}
 The master's thesis is intended to make a contribution here.
 
 
------------BIS HIER
 
 
 
-In common parlance, the term "drone" is often used to refer 
+The use of the term "drone" in common parlance often refers 
 to the aircraft class of unmanned aerial vehicles (UAVs),
-which can be further devided into the sub-classes of
-
-
+The International Civil Aviation Organization (ICAO) [4] defines unmanned aerial
+vehicles (UAVs) as aircrafts without a human pilot onboard, which are either remote-
+controlled by a human operator or "preprogrammed and fully autonomous".
+An UAV is a component of an unmanned aerial system (UAS), which in ad-
+dition consist of a ground control stations (GCS), communication link and payload. [5]
+Basic components of UAVs are the airframe, the electric power system, the flight
+control system and the air data terminal. For UAVs with autonomous functions, the
+necessary computation power is realized with additional onboard computers.
+Various systems exist that classify UAVs either by 
+airframe type [8] or by flight key characterstics.
+With respect to the latter, 
+Watts, Ambrosia and Hinkley [12] proposed a classification system 
+for scientific usage.
+Table 2.1 shows a selection of the UAV classes
+they mentioned, i.e., micro air vehicles (MAV), low altitude, short endurance (LASE),
+low altitude, long endurance (LALE), medium altitude, long endurance (MALE) and
+high altitude, long endurance (HALE).
 This proposal deals with the sub-class of micro aerial vehicles (MAVs)
-which represent ...
-.
-Classification...
-Current research revolves around... batteries, lalala
-and more autonomy, especially in navigation.
+that prevails among hobbyists and most commercial aplications. [Quelle/accordiing to my observation]
 
 
 
+Current UAV-related research revolves around
+... batteries, lalala
+and autonomy.
 
 
-As a basic functionality of MAVs, navigation
+As a basic functionality of MAVs, 
+autonomous navigation 
+is one of the most prevalent research fields.
+
+Navigation
 comprises the main task of achieving a desired pose or position
 while performing necessary sub-tasks at the same time.
-The necessity of implementing individual sub-tasks depend either on the environment,
+The necessity of individual sub-tasks depend either on the environment,
 e.g., obstacle avoidance and coordination with other agents,
 or on the application,
 e.g., shooting plant seeds [].
-Consequently, state of the art allows the degree of autonomy 
-of MAVs in some environments and applications and not in others.
-
-When again taking drone delivery as an example,
-projects are already realized in rural areas where the airspace is mainly undisturbed [].
+Consequently, 
+whether the state of the art in autonomous navigation
+is sufficient depends on the flight environment and the flight mission. 
+Again, drone delivery provides an explanatory example here.
+Drone delivery projects have been already 
+realized in rural areas where the airspace is mainly undisturbed [].
 Here, navigating through waypoints only relying on GNSS 
 without any implementation of obstacle avoidance and agent-coordination may be sufficient. 
+In contrast, urban areas are full of unstructered obstacles and other participating agents 
+which result in a high uncertainty that cannot be face with planning in advance. 
+Only a high level of autonomy in navigation
+could robustly cope with the challenges of this environment.
+This level has not yet been achieved.
 
-In contrast, urban areas are full of unstructered obstacles and other agents 
-which result in a high uncertainty that cannot be planned in advance. 
 
-Only a high level of autonomy in navigation which has not yet been achieved
-can robustly cope with the challenges of this environment.
-
-
-Recent research on autonomous MAV navigation is mainly based on deep learning 
-which allows to perceive and reason the immediate environment.
-State-of-the-art navigation methods achieve a high spatial understanding of the environment
-by feeding convolutional neural networks (CNN) with vision or depth data.
+Recent research on autonomous MAV navigation mainly relies on deep learning 
+which allows to comprehend the immediate environment based on the perception of
+onboard sensors.
+State-of-the-art navigation methods 
+achieve a high spatial understanding of the environment
+by feeding convolutional neural networks RGB or depth data.
 
 This research aims to develop a simple navigation method 
 that extend this spatial perception onto temporal extension 
