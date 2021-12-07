@@ -5,50 +5,54 @@ The style file: plain.bst
 A level-1 auxiliary file: chapter/deckblatt.aux
 A level-1 auxiliary file: chapter/proposal.aux
 Database file #1: chapter/bibliography.bib
-Warning--I didn't find a database entry for "PwC2016"
-Warning--I didn't find a database entry for "loquercio2018learning"
-Warning--I didn't find a database entry for "Kaufmann2018"
-Warning--I didn't find a database entry for "Kelchtermans2017"
-Warning--I didn't find a database entry for "Shakeri2019"
-You've used 2 entries,
+Warning--entry type for "ros" isn't style-file defined
+--line 635 of file chapter/bibliography.bib
+Warning--to sort, need author, editor, or key in ICAO2005
+Warning--to sort, need author or key in Equinox
+Warning--empty author and editor in ICAO2005
+Warning--empty journal in Kaufmann2018
+Warning--empty year in Kaufmann2018
+Warning--there's a number but no series in loquercio2018learning
+Warning--empty journal in song2020flightmare
+You've used 26 entries,
             2118 wiz_defined-function locations,
-            523 strings with 4501 characters,
-and the built_in function-call counts, 736 in all, are:
-= -- 81
-> -- 14
-< -- 1
-+ -- 6
-- -- 4
-* -- 45
-:= -- 116
-add.period$ -- 7
-call.type$ -- 2
-change.case$ -- 8
+            644 strings with 10145 characters,
+and the built_in function-call counts, 9949 in all, are:
+= -- 852
+> -- 773
+< -- 4
++ -- 308
+- -- 282
+* -- 777
+:= -- 1732
+add.period$ -- 80
+call.type$ -- 26
+change.case$ -- 213
 chr.to.int$ -- 0
-cite$ -- 2
-duplicate$ -- 34
-empty$ -- 66
-format.name$ -- 4
-if$ -- 163
+cite$ -- 33
+duplicate$ -- 293
+empty$ -- 623
+format.name$ -- 282
+if$ -- 1968
 int.to.chr$ -- 0
-int.to.str$ -- 2
-missing$ -- 2
-newline$ -- 13
-num.names$ -- 4
-pop$ -- 8
+int.to.str$ -- 26
+missing$ -- 20
+newline$ -- 133
+num.names$ -- 48
+pop$ -- 286
 preamble$ -- 1
-purify$ -- 6
+purify$ -- 191
 quote$ -- 0
-skip$ -- 25
+skip$ -- 199
 stack$ -- 0
-substring$ -- 64
-swap$ -- 11
-text.length$ -- 1
+substring$ -- 291
+swap$ -- 51
+text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 8
-warning$ -- 0
-while$ -- 9
-width$ -- 3
-write$ -- 26
-(There were 5 warnings)
+type$ -- 95
+warning$ -- 7
+while$ -- 58
+width$ -- 28
+write$ -- 265
+(There were 8 warnings)

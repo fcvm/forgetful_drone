@@ -5,6 +5,7 @@
 %\usepackage[utf8]{inputenc}
 %\usepackage[ngerman]{babel} % Silbentrennung
 
+
 \usepackage[USenglish]{babel}
 \addto\captionsUSenglish{\renewcommand{\contentsname}{Table of Contents}}
 
@@ -30,8 +31,23 @@
 \bibliographystyle{plain}
 \usepackage{xcolor}
 
+\usepackage[hyphens,spaces,obeyspaces]{url}
 \usepackage[pagebackref,pdfpagelabels]{hyperref} %Hyperlinks zw. Textstellen
 
+
+\usepackage{float}
+\usepackage{booktabs}
+% Define some commands to keep the formatting separated from the content 
+\newcommand{\keyword}[1]{\textbf{#1}}
+\newcommand{\tabhead}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{\bfseries#1}}
+\newcommand{\option}[1]{\texttt{\itshape#1}}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\usepackage{array}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hier bitte Werte �ndern %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

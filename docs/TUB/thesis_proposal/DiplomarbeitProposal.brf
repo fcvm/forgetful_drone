@@ -1,5 +1,32 @@
+\backcite {MunichRE}{{1}{1}{chapter.1}}
 \backcite {PwC2016}{{1}{1}{chapter.1}}
-\backcite {loquercio2018learning}{{2}{1}{chapter.1}}
+\backcite {Rosen2019}{{1}{1}{chapter.1}}
+\backcite {Garcia2019}{{1}{1}{chapter.1}}
+\backcite {loquercio2018learning}{{1}{1}{chapter.1}}
+\backcite {ICAO2005}{{1}{1}{chapter.1}}
+\backcite {Fahlstrom2012}{{1}{1}{chapter.1}}
+\backcite {Austin2011}{{1}{1}{chapter.1}}
+\backcite {USDOD2011, Wei2016}{{1}{1}{chapter.1}}
+\backcite {Watts2012}{{1}{1}{chapter.1}}
+\backcite {McKinsey, Equinox, Percepto}{{2}{1}{chapter.1}}
+\backcite {Watts2012}{{2}{1}{chapter.1}}
+\backcite {PwC2016}{{2}{1}{chapter.1}}
+\backcite {Garcia2019}{{2}{1}{chapter.1}}
+\backcite {Chiang2019, Lee2017}{{2}{1}{chapter.1}}
+\backcite {drones5040108}{{2}{1}{chapter.1}}
+\backcite {kellermann2020drones}{{3}{1}{chapter.1}}
+\backcite {Rosen2019}{{3}{1}{chapter.1}}
+\backcite {loquercio2018learning}{{3}{1}{chapter.1}}
+\backcite {loquercio2018learning}{{4}{2}{chapter.2}}
 \backcite {Kaufmann2018}{{4}{2}{chapter.2}}
-\backcite {Kelchtermans2017}{{5}{2}{chapter.2}}
-\backcite {Shakeri2019}{{5}{2}{chapter.2}}
+\backcite {ros}{{5}{2}{chapter.2}}
+\backcite {song2020flightmare}{{5}{2}{chapter.2}}
+\backcite {Kaufmann2018}{{5}{2}{chapter.2}}
+\backcite {Loquercio2021Science}{{5}{2}{chapter.2}}
+\backcite {song2020flightmare}{{6}{3}{chapter.3}}
+\backcite {Unity}{{6}{3}{chapter.3}}
+\backcite {Koenig2004}{{6}{3}{chapter.3}}
+\backcite {NEURIPS2019_9015}{{6}{3}{chapter.3}}
+\backcite {tensorflow2015-whitepaper}{{6}{3}{chapter.3}}
+\backcite {Kaufmann2018}{{6}{3}{chapter.3}}
+\backcite {Watts2012}{{10}{6.1}{table.6.1}}

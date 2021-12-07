@@ -3,9 +3,8 @@
 \contentsline {chapter}{Table of Contents}{II}{chapter*.1}%
 \contentsline {chapter}{\numberline {1}Motivation}{1}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Objectives}{4}{chapter.2}%
-\contentsline {chapter}{\numberline {3}Task Packages}{7}{chapter.3}%
+\contentsline {chapter}{\numberline {3}Task Packages}{6}{chapter.3}%
 \contentsline {chapter}{\numberline {4}Time Schedule}{8}{chapter.4}%
 \contentsline {chapter}{\numberline {5}Organizational Matters}{9}{chapter.5}%
 \contentsline {chapter}{\numberline {6}Annex}{10}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Steep curve scenario}{10}{section.6.1}%
-\contentsline {chapter}{Bibliography}{11}{chapter*.2}%
+\contentsline {chapter}{Bibliography}{14}{chapter*.2}%
