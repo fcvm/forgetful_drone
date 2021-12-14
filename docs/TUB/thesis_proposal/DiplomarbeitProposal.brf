@@ -28,5 +28,7 @@
 \backcite {Koenig2004}{{6}{3}{chapter.3}}
 \backcite {NEURIPS2019_9015}{{6}{3}{chapter.3}}
 \backcite {tensorflow2015-whitepaper}{{6}{3}{chapter.3}}
-\backcite {Kaufmann2018}{{6}{3}{chapter.3}}
-\backcite {Watts2012}{{10}{6.1}{table.6.1}}
+\backcite {Kaufmann2018}{{7}{3}{chapter.3}}
+\backcite {Watts2012}{{10}{6.1}{table.caption.4}}
+\backcite {jackson1986introduction}{{10}{6.2}{section.6.2}}
+\backcite {Kaufmann2018}{{10}{6.2}{section.6.2}}

@@ -10,49 +10,50 @@ Warning--entry type for "ros" isn't style-file defined
 Warning--to sort, need author, editor, or key in ICAO2005
 Warning--to sort, need author or key in Equinox
 Warning--empty author and editor in ICAO2005
+Warning--empty journal in jackson1986introduction
 Warning--empty journal in Kaufmann2018
 Warning--empty year in Kaufmann2018
 Warning--there's a number but no series in loquercio2018learning
 Warning--empty journal in song2020flightmare
-You've used 26 entries,
+You've used 27 entries,
             2118 wiz_defined-function locations,
-            644 strings with 10145 characters,
-and the built_in function-call counts, 9949 in all, are:
-= -- 852
-> -- 773
+            649 strings with 10252 characters,
+and the built_in function-call counts, 10152 in all, are:
+= -- 871
+> -- 780
 < -- 4
-+ -- 308
-- -- 282
-* -- 777
-:= -- 1732
-add.period$ -- 80
-call.type$ -- 26
-change.case$ -- 213
++ -- 311
+- -- 284
+* -- 785
+:= -- 1770
+add.period$ -- 83
+call.type$ -- 27
+change.case$ -- 217
 chr.to.int$ -- 0
-cite$ -- 33
-duplicate$ -- 293
-empty$ -- 623
-format.name$ -- 282
-if$ -- 1968
+cite$ -- 35
+duplicate$ -- 303
+empty$ -- 640
+format.name$ -- 284
+if$ -- 2008
 int.to.chr$ -- 0
-int.to.str$ -- 26
-missing$ -- 20
-newline$ -- 133
-num.names$ -- 48
-pop$ -- 286
+int.to.str$ -- 27
+missing$ -- 21
+newline$ -- 138
+num.names$ -- 50
+pop$ -- 292
 preamble$ -- 1
-purify$ -- 191
+purify$ -- 194
 quote$ -- 0
-skip$ -- 199
+skip$ -- 206
 stack$ -- 0
-substring$ -- 291
+substring$ -- 296
 swap$ -- 51
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 95
-warning$ -- 7
-while$ -- 58
-width$ -- 28
-write$ -- 265
-(There were 8 warnings)
+type$ -- 99
+warning$ -- 8
+while$ -- 60
+width$ -- 29
+write$ -- 274
+(There were 9 warnings)

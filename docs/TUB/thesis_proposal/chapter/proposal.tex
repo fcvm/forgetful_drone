@@ -150,7 +150,7 @@ Current autonomous navigation methods lack in robustness for complex environment
 
 
 
-\chapter{Objectives}
+\chapter{Objectives}\label{cha:objectives}
 
 Public research has put forth many advanced methods for autonomous navigation of MAVs.
 However, they are not sophisticated enough to conquer open-world environments of high uncertainty
@@ -189,11 +189,12 @@ This would possibly result in the following positive effects:
 \begin{itemize}
 	\item Due to its "memory", the network is able to generate meaningful waypoints in case that the next gate of the race track is not depicted in the current image, but has appeared in previous images.
 	\item Due to temporally distributed images, the network is able to take the speeds of moving gates (or obstacles) into the account of the navigation decisions.
-	\item Since trajectories are temporally extended maneuvers, a network with temporal comprehension is more able to imitate the expert policy.
+	\item Since trajectories are temporally extended maneuvers, a network with temporal comprehension is more able to imitate the expert system.
 	Thus, the resulting trajectory through the race track formed by the successively generated waypoints is more similar to a precomputed optimal (in terms of acceleration, jerk, snap, ...) trajectory.
 \end{itemize}
 The approach is implemented utilizing the middleware ROS \cite{ros}
 and simulated with the photo-realistic Flightmare Simulator \cite{song2020flightmare}.
+For the implementation concept, see section \ref{sec:implConcept}.
 Tests to compare my extended approach with the original method should be designed
 and conducted to investigate if the above enhancements could be realized.
 
@@ -277,11 +278,12 @@ Based on the objectives, the following task packages are defined:
 	\begin{itemize}
 		\item Familiarize with Flightmare \cite{song2020flightmare}, a photo-realistic simulator for quadcopters.
 		\item Familiarize with the Unity Engine \cite{Unity}, to create and manipulate the rendered environments in Flightmare.
-		\item Transfer the already implemented simulation from Gazebo \cite{Koenig2004} to Flightmare.
+		\item Transfer the already implemented simulation from Gazebo \cite{Koenig2004} to Flightmare. For exemplary training data generated in Gazebo see section \ref{sec:GazeboTrainingData}.
 	\end{itemize}
 	\item Generate training data in simulation.
 	\begin{itemize}
-		\item Adjust already implemented expert policy, so that the training data includes additional features and labels.
+		\item Adjust the already implemented expert system (see section \ref{sec:expert_system}), so that the training data includes
+		an RGB image and a state estimate of the drone as features and a waypoint and desired speed as labels.
 		\item Run simulation to generate the data.
 	\end{itemize}
 	\item Build the recurrent convolutional neural network (R-CNN).
@@ -291,11 +293,11 @@ Based on the objectives, the following task packages are defined:
 		\item Familiarize with R-CNNs.
 		\item Design the R-CNN using hyperparameters for later adjustments.
 		\item Implement the R-CNN in PyTorch.
-		\item Train the R-CNN and find best values for the hyperparameters.
+		\item Train the R-CNN and find best values for the hyperparameters. Use mean squared error as metrics for regression.
 	\end{itemize}
 	\item Evaluate my approach.
 	\begin{itemize}
-		\item Design test scenarios for comparison with the base navigation method of Kaufmann et al. \cite{Kaufmann2018}.
+		\item Design test scenarios (see section \ref{sec:testScen}) for comparison with the base navigation method of Kaufmann et al. \cite{Kaufmann2018}.
 		\item Implement and conduct tests in simulation. 
 		\item Evaluate results of tests.
 	\end{itemize}
@@ -331,6 +333,8 @@ Based on the objectives, the following task packages are defined:
 
 \chapter{Annex}
 
+
+\section{Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley}
 \begin{table}[H]
     \caption[Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley]{Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley. \textit{Source: assembled from \cite{Watts2012}.}}
     \label{tab:UAV_classification_system_by_Watts_Ambrosia_and_Hinkley}
@@ -363,5 +367,153 @@ Based on the objectives, the following task packages are defined:
 %After he flew through gate 1, he has no visual contact to both gates anymore.
 %Yet, he can manage to navigate through gate 2 because he has the ability 
 %to remember the position of gate 2 in his body frame. 
+
+
+\section{The Expert System}\label{sec:expert_system}
+
+In machine learning, an expert system is a program that imitates a human expert in order to solve a problem. 
+It comprises two main components: a \textit{knowledge base} that stores known facts and rules, and an
+\textit{inference engine} which, by applying the rules to the known facts,
+generates new facts. \cite{jackson1986introduction}
+
+For the navigation method of my thesis, 
+I have already re-implemented the expert system (in the paper, referred to as expert policy) 
+by Kaufmann et al. \cite{Kaufmann2018} as a function within a ROS node. 
+The following structure summarizes the expert system:
+
+\begin{itemize}
+	\item Problem to solve
+	\begin{itemize}
+		\item Replace the yet untrained CNN when navigating the drone through the drone race track by
+		generating the inputs (i.e., a waypoint in image coordinates ($x, y \in [-1, 1]$), desired speed) 
+		to the conventional control system (see chapter \ref{cha:objectives}).
+		\item While flying through the race track, 
+		generate training data (i.e., RGB images) 
+		with labels (i.e., a waypoint in image coordinates ($x, y \in [-1, 1]$), desired speed).
+	\end{itemize}
+	\item Knowledge base
+	\begin{itemize}
+		\item Known facts
+		\begin{itemize}
+			\item Center points of the gates that build the drone race track.
+			\item A pre-computed, minimum-snap trajectory (referred to as global trajectory) traversing the center points of the gates.
+			\item Continually updated, ground-truth state of the drone.
+			\item Current gate (i.e., the gate that needs to be traversed next when completing the race track) 
+			and last gate (i.e., the gate that has been traversed most recently)
+		\end{itemize}
+		\item Rules
+		\begin{itemize}
+			\item Project the current drone state to a state of the global trajectory and name this state expert state. 
+			For more details of the rather complex projection, see the original paper.
+			\item If the drone is more distant to the expert state than a user-specified parameter, 
+			set the expert state to the state of the global trajectory with minimum distance to the drone.
+			\item Set the desired speed (component of the label) to the velocity of the state 
+			that is ahead of the expert state with a user-specified distance. 
+			However, the desired speed is bounded by an user-specified minimum and maximum speed 
+			as well as an user-specified maximum speed increment with respect to the current speed of the drone.
+			\item Compute the horizon (a distance) as the product of a user-specified time duration and the desired speed. 
+			However, the horizon must not be greater than the distances to the current and last gate.
+			\item Set the waypoint in image coordinates, $x, y \in [-1, 1]$, (component of the label) by projecting the position of the state,
+			which is ahead of the expert state with a distance equal to the horizon, onto the image. 
+			Do this in consideration of the current state of the drone.
+		\end{itemize}
+	\end{itemize} 
+	\item Inference engine
+	\begin{itemize}
+		\item Implemented as a set of functions within a C++ ros node, that fetches the known facts via ROS topics or computes and store them as internal variables.
+		\item The user can de-/activate the expert system as functional part of the navigation method.
+	\end{itemize} 
+\end{itemize}
+
+In my thesis, I will most likely adapt the expert system,
+so that the training data includes additional features.
+In addition to an RGB image, the features will probably include a state estimate of the drone.
+
+
+
+
+
+\section{Labeled training data generated in simulation with Gazebo}\label{sec:GazeboTrainingData}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/camera_frame_00666.jpg}
+		\caption{x = -0.347238\\ y = 0.201331\\v = 0.568805} 
+		\label{fig:y equals x}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/camera_frame_01300.jpg}
+		\caption{x = 0.365596\\ y = -0.043410\\v = 0.845403}
+		\label{fig:three sin x}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/camera_frame_02499.jpg}
+		\caption{x = -0.247982\\y = 0.166272\\v = 0.651439}
+		\label{fig:five over x}
+	\end{subfigure}
+		\caption{Three samples of labeled training data, generated in randomized simulation with Gazebo. 
+		Features: 300x200 RGB image, Labels: x-,y-coordinate of waypoint in image reference frame, normalized desired speed.}
+		\label{fig:three graphs}
+\end{figure}
+
+
+
+\section{Implementation Concept}\label{sec:implConcept}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/ConceptMasterThesis.drawio.pdf}
+%    \decoRule
+    \caption[Implementation Concept]{Implementation Concept: 
+	Besides the internal communication in Flightmare (yellow frame),
+	all communication is carried out via ROS. 
+	The ROS node (blue frame) contains code from the base method that I have re-implemented and adjusted to my needs.
+	The purple color marks the parts that will be fully my work. \textit{Created with \href{https://app.diagrams.net/}{Diagrams.net}}.}
+    \label{fig:OverviewDiagram}
+\end{figure}
+
+\section{Test Scenarios}\label{sec:testScen}
+This sections introduces three possible scenarios for testing my navigation approach and comparing it with the base method.
+
+
+
+\paragraph{Drone Racing}
+Simulate a closed drone racing track.
+Navigate the drone through the race track using the base method and my approach.
+Metrics for evaluation would be at various maximum speeds:
+percentage share of successful runs,
+average time of completion
+and 
+closeness to the global trajectory in terms of optimality.
+The latter could be calculated by applying a cost function on the resulting trajectories through the track.
+
+
+\paragraph{Sharp curve}
+Simulate two gates with a sharp curve in between.
+Before the drone passes the first gate,
+both successive gates must appear in the frame of view of the onboard camera.
+The curve must be so sharp, that, after traversing the first gate, not only the first but also the second gate has left the frame of view.
+The base method, whose CNN makes navigation decisions from only the current image, will likely to fail in this scenario
+due to the absence of a goal.
+In contrast, my approach uses an R-CNN which is able to internally store information from previous images.
+In case that the R-CNN is well trained, it should be able to generate meaningful waypoints to complete the sharp curve and traverse the second gate.
+The percentage share of successful runs would be a convenient metric for evaluation.
+
+
+\paragraph{Moving gate}
+Simulate a gate that moves along a linear path with a low, constant speed.
+Both, the base method and my approach, should be able to traverse the moving gate if its speed is not too high.
+But, the R-CNN of my approach has the potential to anticipate the motion of the gate from the temporally distributed RGB images.
+Thus, it may be able to reach the moving gate faster on a shorter route.
+The average time needed to traverse the gate could be used as metric for evaluation.
+
+
 
 
