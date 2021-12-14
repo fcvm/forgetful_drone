@@ -1,0 +1,451 @@
+% Encoding: UTF-8
+
+@Article{Kaufmann2018,
+  author       = {Elia Kaufmann and Antonio Loquercio and Rene Ranftl and Alexey Dosovitskiy and Vladlen Koltun and Davide Scaramuzza},
+  title        = {Deep Drone Racing: Learning Agile Flight in Dynamic Environments},
+  abstract     = {Autonomous agile flight brings up fundamental challenges in robotics, such as coping with unreliable state estimation, reacting optimally to dynamically changing environments, and coupling perception and action in real time under severe resource constraints. In this paper, we consider these challenges in the context of autonomous, vision-based drone racing in dynamic environments. Our approach combines a convolutional neural network (CNN) with a state-of-the-art path-planning and control system. The CNN directly maps raw images into a robust representation in the form of a waypoint and desired speed. This information is then used by the planner to generate a short, minimum-jerk trajectory segment and corresponding motor commands to reach the desired goal. We demonstrate our method in autonomous agile flight scenarios, in which a vision-based quadrotor traverses drone-racing tracks with possibly moving gates. Our method does not require any explicit map of the environment and runs fully onboard. We extensively test the precision and robustness of the approach in simulation and in the physical world. We also evaluate our method against state-of-the-art navigation approaches and professional human drone pilots.},
+  date         = {2018-06-22},
+  eprint       = {http://arxiv.org/abs/1806.08548v3},
+  eprintclass  = {cs.RO},
+  eprinttype   = {arXiv},
+  file         = {:http\://arxiv.org/pdf/1806.08548v3:PDF},
+  journaltitle = {Conference on Robotic Learning (CoRL), 2018},
+  keywords     = {cs.RO},
+}
+
+@InProceedings{loquercio2018learning,
+  author    = {Loquercio, Antonio and Scaramuzza, Davide},
+  title     = {Learning to Control Drones in Natural Environments: A Survey},
+  booktitle = {e ICRA Workshop on Perception, Inference, and Learning for Joint Semantic, Geometric, and Physical Understanding},
+  year      = {2018},
+  number    = {CONF},
+}
+
+@Article{Watts2012,
+  author    = {Adam C. Watts and Vincent G. Ambrosia and Everett A. Hinkley},
+  title     = {Unmanned Aircraft Systems in Remote Sensing and Scientific Research: Classification and Considerations of Use},
+  journal   = {Remote Sensing},
+  year      = {2012},
+  volume    = {4},
+  number    = {6},
+  pages     = {1671--1692},
+  month     = {jun},
+  doi       = {10.3390/rs4061671},
+  publisher = {{MDPI} {AG}},
+}
+
+@Book{Fahlstrom2012,
+  title     = {Introduction to UAV Systems 4e},
+  publisher = {John Wiley \& Sons},
+  year      = {2012},
+  author    = {Fahlstrom, Thomas Gleason},
+  isbn      = {1119978661},
+  date      = {2012-09-07},
+  ean       = {9781119978664},
+  pagetotal = {308},
+  url       = {https://www.ebook.de/de/product/19222078/fahlstrom_thomas_gleason_introduction_to_uav_systems_4e.html},
+}
+
+@Misc{Sheehan,
+  author = {Mark Sheehan},
+  title  = {The Current State of Drone Delivery Worldwide},
+  year   = {2019},
+  note   = {Last time checked: 2019/09/09},
+  month  = aug,
+  url    = {https://mydroneauthority.com/industry/drone-delivery/},
+}
+
+@Article{Ross2018,
+  author    = {Philip E. Ross},
+  title     = {Iceland{\textquotesingle}s consumers try drone delivery: The startup Aha takes on Amazon with basic drones bearing burgers - [News]},
+  journal   = {{IEEE} Spectrum},
+  year      = {2018},
+  volume    = {55},
+  number    = {10},
+  pages     = {12--13},
+  month     = {oct},
+  doi       = {10.1109/mspec.2018.8482412},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@Article{Kong2010,
+  author    = {Zhaodan Kong and Bernie Mettler},
+  title     = {Evaluation of Guidance Performance in Urban Terrains for Different {UAV} Types and Performance Criteria Using Spatial {CTG} Maps},
+  journal   = {Journal of Intelligent {\&} Robotic Systems},
+  year      = {2010},
+  volume    = {61},
+  number    = {1-4},
+  pages     = {135--156},
+  month     = {oct},
+  doi       = {10.1007/s10846-010-9485-9},
+  publisher = {Springer Science and Business Media {LLC}},
+}
+
+@Book{Austin2011,
+  title     = {Unmanned Aircraft Systems: UAVS Design, Development and Deployment (Aerospace Series Book 55)},
+  publisher = {Wiley},
+  year      = {2011},
+  author    = {Reg Austin},
+  isbn      = {9780470058190},
+  url       = {https://www.amazon.com/Unmanned-Aircraft-Systems-Development-Deployment-ebook/dp/B005UQLG0C?SubscriptionId=AKIAIOBINVZYXZQZ2U3A&tag=chimbori05-20&linkCode=xm2&camp=2025&creative=165953&creativeASIN=B005UQLG0C},
+}
+
+@Misc{Zipline,
+  author = {Zipline},
+  title  = {Our Impact - Serving Rwanda \& Ghana},
+  url    = {https://flyzipline.com/impact/},
+}
+
+@Proceedings{USDOD2011,
+  title        = {Unmanned Aircraft System Airspace Integration Plan, Version 2.0},
+  year         = {2011},
+  organization = {United States Department of Defense},
+  month        = mar,
+  url          = {https://web.archive.org/web/20160121155841/http://www.acq.osd.mil/sts/docs/DoD_UAS_Airspace_Integ_Plan_v2_(signed).pdf},
+}
+
+@Article{Wei2016,
+  author       = {Wei, Jun and Tazewell Ellet, E. and Ellman, Lisa and Rizzi, Patrick R. and Zhou, Lu E. Tazewell Ellett},
+  title        = {China Launches First Operational Rules for Civil Unmanned Aircraft},
+  journal      = {Hogan Lovells},
+  year         = {2016},
+  month        = jan,
+  howpublished = {https://www.hlmediacomms.com/2016/01/21/china-launches-first-operational-rules-for-civil-unmanned-aircraft/},
+  url          = {https://www.hlmediacomms.com/2016/01/21/china-launches-first-operational-rules-for-civil-unmanned-aircraft/
+},
+}
+
+@MastersThesis{Garcia2019,
+  author = {Garcia, Oriol Rosales and Santoso, Antonius},
+  title  = {Comparative Evaluation of Drone Delivery Systemsin Last-Mile Delivery},
+  school = {MASSACHUSETTS INSTITUTE OF TECHNOLOGY},
+  year   = {2019},
+  type   = {mathesis},
+  month  = jun,
+  url    = {https://dspace.mit.edu/bitstream/handle/1721.1/121319/Garcia_Santoso_2019.pdf?sequence=1&isAllowed=y#cite.IWM},
+}
+
+@Misc{Goldman,
+  author = {{Goldman Sachs Research}},
+  title  = {Drones - Reporting for Work},
+  url    = {https://www.goldmansachs.com/insights/technology-driving-innovation/drones/},
+}
+
+@TechReport{Mazur2016,
+  author      = {Mazur, Michael},
+  title       = {Six Ways Drones Are Revolutionizing Agriculture},
+  institution = {PricewaterhouseCoopers},
+  year        = {2016},
+  journal     = {MIT Technology Review},
+  url         = {https://www.technologyreview.com/s/601935/six-ways-drones-are-revolutionizing-agriculture/},
+}
+
+@Misc{JD.com2018,
+  author = {{JD.com Corporate Blog}},
+  title  = {JD Cultivates New Smart Agriculture Push in China},
+  year   = {2018},
+  month  = apr,
+  url    = {https://jdcorporateblog.com/jd-cultivates-new-smart-agriculture-push-in-china/},
+}
+
+@Article{Ahirwar2019,
+  author    = {S. Ahirwar and R. Swarnkar and S. Bhukya and G. Namwade},
+  title     = {Application of Drone in Agriculture},
+  journal   = {International Journal of Current Microbiology and Applied Sciences},
+  year      = {2019},
+  volume    = {8},
+  number    = {01},
+  pages     = {2500--2505},
+  month     = {jan},
+  doi       = {10.20546/ijcmas.2019.801.264},
+  publisher = {Excellent Publishers},
+}
+
+@Misc{DeveronUAS,
+  author = {{Deveron UAS}},
+  title  = {Imagery \& Targeted Soil Sampling},
+  url    = {https://deveronuas.com/about-us/advisory-board/},
+}
+
+@Misc{DroneSeed,
+  author = {DroneSeed},
+  title  = {Services},
+  url    = {https://www.droneseed.co/services},
+}
+
+@Misc{HSE,
+  author = {{HSE UAV}},
+  title  = {HSE Agriculture UAV Crop Duster Sprayers},
+  url    = {http://www.uavcropdustersprayers.com/},
+}
+
+@Misc{PrecisionHawk,
+  author = {PrecisionHawk},
+  title  = {Drone Data Collection and Analytics for Agriculture},
+  url    = {https://www.precisionhawk.com/agriculture},
+}
+
+@Book{PwC2016,
+  title     = {Clarity from above},
+  publisher = {PwC Poland},
+  year      = {2016},
+  author    = {Michał Mazur and Adam Wiśniewski and Jeffery McMillan and Vicki Huff and Richard Abadie and Julian Smith and Stefan Stroh and Piotr Romanowski and Adam Krasoń and Filip Orliński and Agnieszka Babicz and Paulina Lulkowska and Ewa Boguszewska and Bartosz Czerkies and Adam Głąb and Rozalia Hołoga and Jakub Jagiełło and Weronika Jankowska-Tofani and Arkadiusz Kramza and Sandra Kuprijaniuk and Remigiusz Piwowarski and Jacek Sygutowski and Grzegorz Urban and Marek Walczak and Marek Wolski and Ewa Zdrojowy},
+  month     = may,
+  date      = {2016-05},
+  subtitle  = {PwC global report on the commercial applications of drone technology},
+  url       = {https://www.pwc.pl/pl/pdf/clarity-from-above-pwc.pdf},
+  urldate   = {2019-10-12},
+}
+
+@Misc{McKinsey,
+  author = {McKinsey\&Company},
+  title  = {Parcel delivery - The future of last mile},
+  year   = {2016},
+  month  = sep,
+  url    = {https://www.mckinsey.com/~/media/mckinsey/industries/travel%20transport%20and%20logistics/our%20insights/how%20customer%20demands%20are%20reshaping%20last%20mile%20delivery/parcel_delivery_the_future_of_last_mile.ashx},
+}
+
+@Article{Goodchild2018,
+  author    = {Anne Goodchild and Jordan Toy},
+  title     = {Delivery by drone: An evaluation of unmanned aerial vehicle technology in reducing {CO} 2 emissions in the delivery service industry},
+  journal   = {Transportation Research Part D: Transport and Environment},
+  year      = {2018},
+  volume    = {61},
+  pages     = {58--67},
+  month     = {jun},
+  doi       = {10.1016/j.trd.2017.02.017},
+  publisher = {Elsevier {BV}},
+}
+
+@Article{Stolaroff2018,
+  author    = {Joshuah K. Stolaroff and Constantine Samaras and Emma R. O'Neill and Alia Lubers and Alexandra S. Mitchell and Daniel Ceperley},
+  title     = {Energy use and life cycle greenhouse gas emissions of drones for commercial package delivery},
+  journal   = {Nature Communications},
+  year      = {2018},
+  volume    = {9},
+  number    = {1},
+  month     = {feb},
+  doi       = {10.1038/s41467-017-02411-5},
+  publisher = {Springer Nature},
+}
+
+@InProceedings{Lee2017,
+  author    = {Jaihyun Lee},
+  title     = {Optimization of a modular drone delivery system},
+  booktitle = {2017 Annual {IEEE} International Systems Conference ({SysCon})},
+  year      = {2017},
+  month     = {apr},
+  publisher = {{IEEE}},
+  doi       = {10.1109/syscon.2017.7934790},
+}
+
+@Misc{Wehrmann2019,
+  author = {Benjamin Wehrmann},
+  title  = {Air pollution remains too high in nearly 60 German cities – environment agency},
+  year   = {2019},
+  month  = jun,
+  url    = {https://www.cleanenergywire.org/news/air-pollution-remains-too-high-nearly-60-german-cities-environment-agency},
+}
+
+@Article{Shi2016,
+  author    = {Han Shi and Yutao Wang and Jianmin Chen and Donald Huisingh},
+  title     = {Preventing smog crises in China and globally},
+  journal   = {Journal of Cleaner Production},
+  year      = {2016},
+  volume    = {112},
+  pages     = {1261--1271},
+  month     = {jan},
+  doi       = {10.1016/j.jclepro.2015.10.068},
+  publisher = {Elsevier {BV}},
+}
+
+@Misc{AmazonPrimeAir,
+  author = {Amazon},
+  title  = {Amazon Prime Air},
+  url    = {https://www.amazon.com/b?node=8037720011},
+}
+
+@Article{Manjoo2016,
+  author  = {Farhad Manjoo},
+  title   = {Think Amazon’s Drone Delivery Idea Is a Gimmick? Think Again},
+  journal = {The New York Times},
+  year    = {2016},
+  month   = aug,
+  url     = {https://www.nytimes.com/2016/08/11/technology/think-amazons-drone-delivery-idea-is-a-gimmick-think-again.html},
+}
+
+@Article{Hessinger2013,
+  author  = {Shawn Hessinger},
+  title   = {UPS Considers Delivery Drones Too},
+  journal = {Small Business Trends},
+  year    = {2013},
+  month   = dec,
+  url     = {https://smallbiztrends.com/2013/12/ups-delivery-drones.html},
+}
+
+@Misc{Flirtey2015,
+  author = {Flirtey},
+  title  = {Flirtey making history with the first US drone delivery},
+  year   = {2015},
+  month  = jul,
+  url    = {https://www.youtube.com/watch?v=xEm7bI_meQY},
+}
+
+@Article{PostnParcel,
+  title   = {Flirtey and 7Eleven hail home drone delivery},
+  journal = {Post \& Parcel},
+  year    = {2016},
+  month   = jul,
+  url     = {https://postandparcel.info/74430/news/faa-approved-home-drone-delivery/},
+}
+
+@Misc{Amazon2016,
+  author = {Amazon},
+  title  = {Amazon Prime Air’s First Customer Delivery},
+  year   = {2016},
+  month  = dec,
+  url    = {https://www.youtube.com/watch?v=vNySOrI2Ny8},
+}
+
+@Article{DailyCaller2017,
+  author  = {{The Daily Caller}},
+  title   = {Drone Deliveries in US Stalled by More Regulations},
+  journal = {Small Business Trends},
+  year    = {2017},
+  month   = nov,
+  url     = {https://smallbiztrends.com/2016/12/faa-drone-regulations.html},
+}
+
+@Article{CBS2013,
+  author  = {Danielle Elliot},
+  title   = {DHL testing delivery drones},
+  journal = {CBS News},
+  year    = {2013},
+}
+
+@Article{Atlantic2014,
+  author  = {Alexis C. Madrigal},
+  title   = {Inside Google's Secret Drone-Delivery Program},
+  journal = {The Atlantic},
+  year    = {2014},
+  month   = aug,
+}
+
+@Article{IBTimes2014,
+  author  = {Finbarr Bermingham},
+  title   = {FedEx Researching Drone Delivery But Not For Widespread Use},
+  journal = {IBTimes},
+  year    = {2014},
+  month   = oct,
+  url     = {https://www.ibtimes.co.uk/fedex-researching-drone-delivery-not-widespread-use-1471063},
+}
+
+@Article{IBTimes2014-09,
+  author  = {Mary-Ann Russon},
+  title   = {DHL To Launch Parcelcopter Medicine Drone Delivery Service to Remote German Island},
+  journal = {IBTimes},
+  year    = {2014},
+  month   = sep,
+  url     = {https://www.ibtimes.co.uk/dhl-launch-parcelcopter-medicine-drone-delivery-service-remote-german-island-1467141},
+}
+
+@Article{Telegraph2014,
+  author  = {Henry Samuel},
+  title   = {France's La Poste develops drone to deliver parcels},
+  journal = {The Telegraph},
+  year    = {2014},
+  month   = dec,
+  url     = {https://www.telegraph.co.uk/news/worldnews/europe/france/11313044/Frances-La-Poste-develops-drone-to-deliver-parcels.html},
+}
+
+@Article{BusinessInsider2015,
+  author  = {Joshua Barrie},
+  title   = {Drones are delivering ginger tea in China},
+  journal = {Business Insider},
+  year    = {2015},
+  month   = feb,
+  url     = {https://www.businessinsider.com/alibabas-tea-delivery-drones-in-china-2015-2?IR=T},
+}
+
+@Misc{Xaircraft,
+  author = {XAircraft},
+  title  = {SF-Express Logistics UAV by XAIRCRAFT},
+  year   = {2015},
+  month  = mar,
+  url    = {https://www.youtube.com/watch?v=NOJd7x2fqBE&index=17&list=PLL3t5xY2V44xOxvTIxS4AHuUhFE_bMwhz},
+}
+
+@Misc{FPS2015,
+  author = {FPS},
+  title  = {FPS Takes Flight with First Commercial UK Drone Delivery},
+  year   = {2015},
+  month  = mar,
+  url    = {https://fpsdistribution.com/fps-take-flight-with-1st-commercial-uk-drone-delivery/},
+}
+
+@Article{PostnParcel2015,
+  title   = {CJ Group unveils cargo-carrying drones},
+  journal = {Post \& Parcel},
+  year    = {2015},
+  month   = may,
+  url     = {https://postandparcel.info/65116/news/cj-group-unveils-cargo-carrying-drones/},
+}
+
+@Book{ICAO2011,
+  title     = {Unmanned Aircraft Systems (UAS)},
+  publisher = {International Civil Aviation Organization},
+  year      = {2011},
+}
+
+@InProceedings{Chen2009,
+  author    = {Hai Chen and Xin-min Wang and Yan Li},
+  title     = {A Survey of Autonomous Control for {UAV}},
+  booktitle = {2009 International Conference on Artificial Intelligence and Computational Intelligence},
+  year      = {2009},
+  publisher = {{IEEE}},
+  doi       = {10.1109/aici.2009.147},
+}
+
+@Book{Weinswig2015,
+  author    = {Weinswig, Deborah and Driscoll, Marie and Harmon, John and Hedrick, Amy and Ho, Aragorn and Mercer, John and Poon, Charlie and Reilly, Stephanie and Rosengard, Lan and Wang, Jing},
+  title     = {Send in the Drones!},
+  year      = {2015},
+  date      = {2015-04-21},
+  subtitle  = {An In-Depth View on the Growing Market for Drones},
+  publisher = {Fung Business Intelligence Centre, The Fung Group},
+  pages     = {6},
+  url       = {https://www.fbicgroup.com/sites/default/files/FBIC%20Global%20Retail%20Tech%20Report%20Drones%20Apr.%2021_%202015.pdf},
+  urldate   = {2019-10-12},
+  groups    = {Chinese},
+}
+
+@Book{Jacobs2019,
+  title     = {The last-mile delivery challenge},
+  publisher = {Capgemini Research Institute, Capgemini},
+  year      = {2019},
+  author    = {Jacobs, Kees and Warner, Shannon and Rietra, Marc and Mazza, Lindsey and Buvat, Jerome and Khadikar, Amol and Cherian, Sumit and Khemka, Yashwardhan},
+  date      = {2019-01-10},
+  groups    = {International},
+  pages     = {20},
+  subtitle  = {Giving retail and consumer product customers a superior delivery experience without impacting profitability},
+  url       = {https://www.capgemini.com/wp-content/uploads/2019/01/Report-Digital-%E2%80%93-Last-Mile-Delivery-Challenge1.pdf},
+  urldate   = {2019-10-12},
+}
+
+@Book{Bouton2017,
+  author    = {Bouton, Shannon and Hannon, Eric and Haydamous, Linda and Heid, Bernd and Knupfer, Stefan and Naucler, Tomas and Neuhaus, Florian and Tijs Nijssen, Jan and Ramanathan, Swarna},
+  title     = {An integrated perspective on the future of mobility, part 2},
+  year      = {2017},
+  date      = {2017-09},
+  subtitle  = {Transforming urban delivery},
+  part      = {2},
+  publisher = {McKinsey Center for Business and Environment, McKinsey\&Company},
+  pages     = {14},
+  url       = {https://www.mckinsey.com/~/media/mckinsey/business%20functions/sustainability/our%20insights/urban%20commercial%20transport%20and%20the%20future%20of%20mobility/an-integrated-perspective-on-the-future-of-mobility.ashx},
+  urldate   = {2019-10-12},
+  groups    = {International},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}
+
+@Comment{jabref-meta: fileDirectory-fm-fm-UX303LAB:/home/fm/dev/Tsinghua/MasterThesis/catkin_ws/src/deepdrone/Proposal Defense/Thesis;}

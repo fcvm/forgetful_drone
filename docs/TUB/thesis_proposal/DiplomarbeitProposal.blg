@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: DiplomarbeitProposal.aux
+The style file: plain.bst
+A level-1 auxiliary file: chapter/deckblatt.aux
+A level-1 auxiliary file: chapter/proposal.aux
+Database file #1: chapter/bibliography.bib
+Warning--entry type for "ros" isn't style-file defined
+--line 635 of file chapter/bibliography.bib
+Warning--to sort, need author, editor, or key in ICAO2005
+Warning--to sort, need author or key in Equinox
+Warning--empty author and editor in ICAO2005
+Warning--empty journal in jackson1986introduction
+Warning--empty journal in Kaufmann2018
+Warning--empty year in Kaufmann2018
+Warning--there's a number but no series in loquercio2018learning
+Warning--empty journal in song2020flightmare
+You've used 27 entries,
+            2118 wiz_defined-function locations,
+            649 strings with 10252 characters,
+and the built_in function-call counts, 10152 in all, are:
+= -- 871
+> -- 780
+< -- 4
++ -- 311
+- -- 284
+* -- 785
+:= -- 1770
+add.period$ -- 83
+call.type$ -- 27
+change.case$ -- 217
+chr.to.int$ -- 0
+cite$ -- 35
+duplicate$ -- 303
+empty$ -- 640
+format.name$ -- 284
+if$ -- 2008
+int.to.chr$ -- 0
+int.to.str$ -- 27
+missing$ -- 21
+newline$ -- 138
+num.names$ -- 50
+pop$ -- 292
+preamble$ -- 1
+purify$ -- 194
+quote$ -- 0
+skip$ -- 206
+stack$ -- 0
+substring$ -- 296
+swap$ -- 51
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 99
+warning$ -- 8
+while$ -- 60
+width$ -- 29
+write$ -- 274
+(There were 9 warnings)

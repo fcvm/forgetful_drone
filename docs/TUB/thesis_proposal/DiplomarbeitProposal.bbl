@@ -1,0 +1,178 @@
+\begin{thebibliography}{10}
+
+\bibitem{Equinox}
+Visual drone inspection across different industries.
+\newblock
+  \url{https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{ICAO2005}
+{\em Global Air Traffic Management Operational Concept (Doc 9854)}.
+\newblock International Civil Aviation Organization (ICAO), 2005.
+
+\bibitem{tensorflow2015-whitepaper}
+Mart\'{\i}n Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng Chen,
+  Craig Citro, Greg~S. Corrado, Andy Davis, Jeffrey Dean, Matthieu Devin,
+  Sanjay Ghemawat, Ian Goodfellow, Andrew Harp, Geoffrey Irving, Michael Isard,
+  Yangqing Jia, Rafal Jozefowicz, Lukasz Kaiser, Manjunath Kudlur, Josh
+  Levenberg, Dandelion Man\'{e}, Rajat Monga, Sherry Moore, Derek Murray, Chris
+  Olah, Mike Schuster, Jonathon Shlens, Benoit Steiner, Ilya Sutskever, Kunal
+  Talwar, Paul Tucker, Vincent Vanhoucke, Vijay Vasudevan, Fernanda Vi\'{e}gas,
+  Oriol Vinyals, Pete Warden, Martin Wattenberg, Martin Wicke, Yuan Yu, and
+  Xiaoqiang Zheng.
+\newblock {TensorFlow}: Large-scale machine learning on heterogeneous systems,
+  2015.
+\newblock Software available from tensorflow.org.
+
+\bibitem{Percepto}
+Dor Abuhasira.
+\newblock In 2022, percepto is bringing visual inspection automation to all.
+\newblock
+  \url{https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{Austin2011}
+Reg Austin.
+\newblock {\em Unmanned Aircraft Systems: UAVS Design, Development and
+  Deployment (Aerospace Series Book 55)}.
+\newblock Wiley, 2011.
+
+\bibitem{drones5040108}
+Boaz Ben-Moshe.
+\newblock Power line charging mechanism for drones.
+\newblock {\em Drones}, 5(4), 2021.
+
+\bibitem{Chiang2019}
+Wen-Chyuan Chiang, Yuyu Li, Jennifer Shang, and Timothy~L. Urban.
+\newblock Impact of drone delivery on sustainability and cost: Realizing the
+  {UAV} potential through vehicle routing optimization.
+\newblock {\em Applied Energy}, 242:1164--1175, may 2019.
+
+\bibitem{McKinsey}
+Pamela Cohn, Alastair Green, Meredith Langstaff, and Melanie Roller.
+\newblock Commercial drones are here: The future of unmanned aerial systems.
+\newblock
+  \url{https://www.mckinsey.com/industries/travel-logistics-and-infrastructure/our-insights/commercial-drones-are-here-the-future-of-unmanned-aerial-systems}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{MunichRE}
+Jason Dunn.
+\newblock Drone use taking flight on small farms.
+\newblock
+  \url{https://www.munichre.com/topics-online/en/mobility-and-transport/drone-use-taking-flight-on-small-farms.html}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{Fahlstrom2012}
+Thomas~Gleason Fahlstrom.
+\newblock {\em Introduction to UAV Systems 4e}.
+\newblock John Wiley \& Sons, 2012.
+
+\bibitem{Garcia2019}
+Oriol~Rosales Garcia and Antonius Santoso.
+\newblock Comparative evaluation of drone delivery systemsin last-mile
+  delivery.
+\newblock mathesis, MASSACHUSETTS INSTITUTE OF TECHNOLOGY, June 2019.
+
+\bibitem{jackson1986introduction}
+Peter Jackson.
+\newblock Introduction to expert systems.
+\newblock 1986.
+
+\bibitem{Kaufmann2018}
+Elia Kaufmann, Antonio Loquercio, Rene Ranftl, Alexey Dosovitskiy, Vladlen
+  Koltun, and Davide Scaramuzza.
+\newblock Deep drone racing: Learning agile flight in dynamic environments.
+
+\bibitem{kellermann2020drones}
+Robin Kellermann, Tobias Biehle, and Liliann Fischer.
+\newblock Drones for parcel and passenger transportation: A literature review.
+\newblock {\em Transportation Research Interdisciplinary Perspectives},
+  4:100088, 2020.
+
+\bibitem{Koenig2004}
+N.~Koenig and A.~Howard.
+\newblock {Design and use paradigms for Gazebo, an open-source multi-robot
+  simulator}.
+\newblock In {\em {IEEE}/{RSJ} International Conference on Intelligent Robots
+  and Systems ({IROS}) ({IEEE} Cat. No.04{CH}37566)}, volume~3, pages
+  2149--2154, 2004.
+
+\bibitem{Lee2017}
+Jaihyun Lee.
+\newblock Optimization of a modular drone delivery system.
+\newblock In {\em 2017 Annual {IEEE} International Systems Conference
+  ({SysCon})}. {IEEE}, apr 2017.
+
+\bibitem{Loquercio2021Science}
+Antonio Loquercio, Elia Kaufmann, Ren{\'e} Ranftl, Matthias M{\"u}ller, Vladlen
+  Koltun, and Davide Scaramuzza.
+\newblock Learning high-speed flight in the wild.
+\newblock In {\em Science Robotics}, October 2021.
+
+\bibitem{loquercio2018learning}
+Antonio Loquercio and Davide Scaramuzza.
+\newblock Learning to control drones in natural environments: A survey.
+\newblock In {\em e ICRA Workshop on Perception, Inference, and Learning for
+  Joint Semantic, Geometric, and Physical Understanding}, number CONF, 2018.
+
+\bibitem{PwC2016}
+Michal Mazur, Adam Wisniewski, Jeffery McMillan, Vicki Huff, Richard Abadie,
+  Julian Smith, Stefan Stroh, Piotr Romanowski, Adam Krason, Filip Orlinski,
+  Agnieszka Babicz, Paulina Lulkowska, Ewa Boguszewska, Bartosz Czerkies, Adam
+  Glab, Rozalia Hologa, Jakub Jagiello, Weronika Jankowska-Tofani, Arkadiusz
+  Kramza, Sandra Kuprijaniuk, Remigiusz Piwowarski, Jacek Sygutowski, Grzegorz
+  Urban, Marek Walczak, Marek Wolski, and Ewa Zdrojowy.
+\newblock {\em Clarity from above}.
+\newblock PwC Poland, May 2016.
+
+\bibitem{NEURIPS2019_9015}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
+  Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban
+  Desmaison, Andreas Kopf, Edward Yang, Zachary DeVito, Martin Raison, Alykhan
+  Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu~Fang, Junjie Bai, and Soumith
+  Chintala.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle
+  Alch\'{e}-Buc, E.~Fox, and R.~Garnett, editors, {\em Advances in Neural
+  Information Processing Systems 32}, pages 8024--8035. Curran Associates,
+  Inc., 2019.
+
+\bibitem{Rosen2019}
+Ellen Rosen.
+\newblock Skies aren't clogged with drones yet, but don't rule them out.
+\newblock {\em The New York Times}, 2019.
+
+\bibitem{song2020flightmare}
+Yunlong Song, Selim Naji, Elia Kaufmann, Antonio Loquercio, and Davide
+  Scaramuzza.
+\newblock Flightmare: A flexible quadrotor simulator.
+\newblock 2020.
+
+\bibitem{ros}
+{Stanford Artificial Intelligence Laboratory et al.}
+\newblock Robotic operating system.
+
+\bibitem{USDOD2011}
+United States Department of Defense.
+\newblock {\em Unmanned Aircraft System Airspace Integration Plan, Version
+  2.0}, March 2011.
+
+\bibitem{Unity}
+Unity.
+\newblock Unity.
+\newblock \url{https://unity.com/de/products/unity-platform}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{Watts2012}
+Adam~C. Watts, Vincent~G. Ambrosia, and Everett~A. Hinkley.
+\newblock Unmanned aircraft systems in remote sensing and scientific research:
+  Classification and considerations of use.
+\newblock {\em Remote Sensing}, 4(6):1671--1692, jun 2012.
+
+\bibitem{Wei2016}
+Jun Wei, E.~Tazewell~Ellet, Lisa Ellman, Patrick~R. Rizzi, and Lu~E.
+  Tazewell~Ellett Zhou.
+\newblock China launches first operational rules for civil unmanned aircraft.
+\newblock {\em Hogan Lovells}, January 2016.
+
+\end{thebibliography}

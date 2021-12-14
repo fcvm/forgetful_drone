@@ -1,0 +1,92 @@
+\documentclass[12pt,a4paper,titlepage,oneside,BCOR=1cm]{scrreprt}
+
+%\usepackage{ngerman} % neue deutsche Rechtschreibung
+\usepackage[latin1]{inputenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[ngerman]{babel} % Silbentrennung
+
+
+\usepackage[USenglish]{babel}
+\addto\captionsUSenglish{\renewcommand{\contentsname}{Table of Contents}}
+
+\usepackage{amsmath,amstext,amssymb}
+
+\usepackage{setspace} % 1,5 Zeilenabstand
+\onehalfspacing
+\usepackage[T1]{fontenc} 
+\usepackage[latin1]{inputenc}
+\usepackage{bibgerm}
+\pagestyle{headings}
+
+
+\usepackage{ulem}
+\normalem %�nderung von \em und \emph nicht zulassen
+
+\usepackage{graphicx} % Bilder einf�gen
+\usepackage{color} % Farben
+%\usepackage{subfigure} % mehrere Abbildungen nebeneinander/�bereinander
+\usepackage{latexsym}
+\usepackage{fancyhdr} %Kopf- und Fu�zeilen
+%\bibliographystyle{gerunsrt} % Literaturangaben nach Auftreten sortieren %{gerplain}
+\bibliographystyle{plain}
+\usepackage{xcolor}
+
+\usepackage[hyphens,spaces,obeyspaces]{url}
+\usepackage[pagebackref,pdfpagelabels]{hyperref} %Hyperlinks zw. Textstellen
+
+
+\usepackage{float}
+\usepackage{booktabs}
+% Define some commands to keep the formatting separated from the content 
+\newcommand{\keyword}[1]{\textbf{#1}}
+\newcommand{\tabhead}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{\bfseries#1}}
+\newcommand{\option}[1]{\texttt{\itshape#1}}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\usepackage{array}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hier bitte Werte �ndern %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\date{\today} %{September 2006}
+\author{DAI-Labor}
+\title{Dokumentenvorlage für ein Diplomarbeitsproposal} % Bitte unter chapter/deckblatt.tex �ndern!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%Beginn des Dokuments
+\begin{document}
+%\maketitle
+
+\pagenumbering{Roman} % R�mische Aufz�hlung
+\include{chapter/deckblatt} % Titelseite
+\tableofcontents % Inhaltsverzeichnis
+\addcontentsline{toc}{chapter}{Table of Contents} % Auch Inhaltsverzeichnis aufnehmen
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Hauptteil
+\pagenumbering{arabic} % Normale Aufz�hlung
+\include{chapter/proposal}
+
+
+\newpage
+
+%�bernehme alle Referenzen aus chapter/bibliography.bib
+\nocite{*}
+\bibliography{chapter/bibliography} % Literaturverzeichnis
+\addcontentsline{toc}{chapter}{Bibliography}
+%\appendix % andere Aufz�hlung
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hier kommen die Anh�nge %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\include{chapter/anhanga}
+%\include{chapter/anhangb}
+\end{document}
+

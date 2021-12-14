@@ -1,0 +1,18 @@
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {chapter}{Table of Contents}{II}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Motivation}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Objectives}{4}{chapter.2}%
+\contentsline {chapter}{\numberline {3}Task Packages}{6}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Time Schedule}{8}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Organizational Matters}{9}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Annex}{10}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Selected UAV Classes of the Classification System by Watts, Ambrosia and Hinkley}{10}{section.6.1}%
+\contentsline {section}{\numberline {6.2}The Expert System}{10}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Labeled training data generated in simulation with Gazebo}{12}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Implementation Concept}{13}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Test Scenarios}{13}{section.6.5}%
+\contentsline {paragraph}{\nonumberline Drone Racing}{13}{section*.7}%
+\contentsline {paragraph}{\nonumberline Sharp curve}{14}{section*.8}%
+\contentsline {paragraph}{\nonumberline Moving gate}{14}{section*.9}%
+\contentsline {chapter}{Bibliography}{18}{chapter*.10}%
