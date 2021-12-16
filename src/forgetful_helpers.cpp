@@ -1,10 +1,41 @@
-#include "forgetful_drones/forgetful_helpers.h"
+#include "forgetful_drones/forgetful_helpers.hpp"
 
 
 
 
 namespace forgetful_drone
 {
+
+
+geometry_msgs::Point Pose::position_as_geometry_msg() const
+{
+    geometry_msgs::Point Point;
+    Point.x = position.x();
+    Point.y = position.y();
+    Point.z = position.z();
+    return Point;
+}
+geometry_msgs::Quaternion Pose::orientation_as_geometry_msg() const
+{
+    geometry_msgs::Quaternion Quaternion;
+    Quaternion.w = orientation.w();
+    Quaternion.x = orientation.x();
+    Quaternion.y = orientation.y();
+    Quaternion.z = orientation.z();
+    return Quaternion;
+}
+geometry_msgs::Pose Pose::as_geometry_msg() const
+{
+    geometry_msgs::Pose Pose;
+    Pose.position = position_as_geometry_msg();
+    Pose.orientation = orientation_as_geometry_msg();
+    return Pose;
+}
+double Pose::yaw() const
+{
+    return orientation.toRotationMatrix().eulerAngles(0, 1, 2).z();
+}
+
 
 
 

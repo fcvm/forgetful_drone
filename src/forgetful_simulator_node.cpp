@@ -1,5 +1,4 @@
-#include "forgetful_drones/forgetful_simulator.h"
-
+#include "forgetful_drones/forgetful_simulator.hpp"
 
 
 int main( int argc, char** argv )

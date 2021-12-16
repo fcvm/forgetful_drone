@@ -403,7 +403,7 @@ namespace forgetful_drone
     visualization_msgs::MarkerArray m_GateMarkerArray;
     gazebo_msgs::ModelStates m_GazeboModelStates;
 
-    std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_Gates_BasePoint;
+    std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_GatesInitPositions;
     std::vector< double > m_Gates_Yaw;
     std::vector< std::string > m_Gates_ModelName;
     std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_DynGates_AxAmps;

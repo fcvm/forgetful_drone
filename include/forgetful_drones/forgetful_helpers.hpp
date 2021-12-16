@@ -28,6 +28,19 @@ namespace forgetful_drone
 
 
 
+class Pose
+{
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    Eigen::Vector3f position{0.0, 0.0, 0.0};
+    Eigen::Quaternionf orientation{1.0, 0.0, 0.0, 0.0};
+
+    geometry_msgs::Point position_as_geometry_msg() const;
+    geometry_msgs::Quaternion orientation_as_geometry_msg() const;
+    geometry_msgs::Pose as_geometry_msg() const;
+    double yaw() const;
+};
+
 
 Eigen::Vector3d 
 EigenVector3d_From_Vec3
