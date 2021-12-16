@@ -1,72 +1,56 @@
-cmake_minimum_required(VERSION 3.1.0)
-#project(forgetful_drones)
-PROJECT(forgetful_drones VERSION 1.1.0 LANGUAGES CXX)
+project(forgetful_drones)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-set(CMAKE_BUILD_TYPE Release)
-add_compile_options(-std=c++11)
-add_compile_options(-std=c++14)
-add_compile_options(-std=c++17)
-
+cmake_minimum_required(VERSION 3.0.0)
 
 find_package(catkin_simple REQUIRED)
 find_package(OpenCV REQUIRED)
 
-# ???Find out if it is part of catkin_simple()???
-#find_package(catkin REQUIRED COMPONENTS
-#  geometry_msgs
-#)
-#
-#catkin_package(
-#  CATKIN_DEPENDS geometry_msgs
-#)
-
 catkin_simple()
 
+# Setup Default Build Type as Release
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+endif ()
+
+# Setup Architcture-specific Flags
+if ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "armv7l")
+    message(STATUS "Using ARMv7 optimized flags!")
+    set(CMAKE_CXX_ARCH_FLAGS " -Wno-psabi -march=armv7-a -mfpu=neon -mfloat-abi=hard -funsafe-math-optimizations")
+elseif ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
+    message(STATUS "Using ARM aarch64 optimized flags!")
+    set(CMAKE_CXX_ARCH_FLAGS " -Wno-psabi -march=armv8-a+crypto -mcpu=cortex-a57+crypto")
+else ()
+    set(CMAKE_CXX_ARCH_FLAGS " -march=native")
+endif ()
+
+# Setup General C++ Flags
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_STACK_ALLOCATION_LIMIT=1048576")
+# otherwise double free or corruption (out) error when running racing or motion_planning example
+add_compile_options(-O3)
+
+# Setup Release and Debug flags
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_ARCH_FLAGS} -Wall -DNDEBUG -fPIC")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -g")
+
+
+
+
+# CPP Units -> Libraries
 cs_add_library(forgetful_helpers src/forgetful_helpers.cpp)
 cs_add_library(forgetful_drone_base src/forgetful_drone_base.cpp)
 cs_add_library(forgetful_simulator_base src/forgetful_simulator_base.cpp)
 
-#cs_add_library(forgetful_orchestrator_base src/forgetful_orchestrator_base.cpp)
-#cs_add_library(forgetful_navigator_base src/forgetful_navigator_base.cpp)
-#cs_add_library(forgetful_expert_base src/forgetful_expert_base.cpp)
+target_link_libraries(forgetful_helpers ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
+target_link_libraries(forgetful_drone_base ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
+target_link_libraries(forgetful_drone_base ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
 
 cs_add_executable(forgetful_drone src/forgetful_drone_node.cpp)
 cs_add_executable(forgetful_simulator src/forgetful_simulator_node.cpp)
 
-#cs_add_executable(forgetful_orchestrator_node src/forgetful_orchestrator_node.cpp)
-#cs_add_executable(forgetful_navigator_node src/forgetful_navigator_node.cpp)
-#cs_add_executable(forgetful_expert_node src/forgetful_expert_node.cpp)
-
-target_link_libraries(forgetful_drone forgetful_drone_base)
-target_link_libraries(forgetful_drone ${OpenCV_LIBS})
-target_link_libraries(forgetful_drone forgetful_helpers)
-
-target_link_libraries(forgetful_simulator forgetful_simulator_base)
-target_link_libraries(forgetful_simulator forgetful_helpers)
-
-#target_link_libraries(forgetful_orchestrator_node forgetful_orchestrator_base)
-#target_link_libraries(forgetful_orchestrator_node forgetful_helpers)
-
-#target_link_libraries(forgetful_navigator_node forgetful_navigator_base)
-#target_link_libraries(forgetful_navigator_node forgetful_helpers)
-
-#target_link_libraries(forgetful_expert_node forgetful_expert_base)
-#target_link_libraries(forgetful_expert_node forgetful_helpers)
+target_link_libraries(forgetful_drone forgetful_drone_base forgetful_helpers ${OpenCV_LIBRARIES} stdc++fs)
+target_link_libraries(forgetful_simulator forgetful_simulator_base forgetful_helpers ${OpenCV_LIBRARIES} stdc++fs)
 
 cs_install()
 cs_export()
 
-# CMake Indexing
-FILE(GLOB_RECURSE LibFiles "include/*")
-add_custom_target(headers SOURCES ${LibFiles})
-FILE(GLOB_RECURSE ProtoFiles "proto/*")
-add_custom_target(protos SOURCES ${ProtoFiles})
-
-# add files
-file(GLOB_RECURSE FORGETFUL_DRONES_SOURCE
-  "*.h"
-  "*.c"
-  "*.hpp"
-  "*.cpp"
-)

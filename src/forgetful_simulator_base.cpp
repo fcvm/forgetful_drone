@@ -259,6 +259,8 @@ bool ForgetfulSimulator::ROSCB_buildDroneRacingSimulation(
     //res.Gates_WaypointPose.clear();
     //for (size_t GateIdx = 0; GateIdx < m_GatesInitPose_WorldRF.size(); GateIdx++)
     //    res.Gates_WaypointPose.push_back(m_GatesInitPose_WorldRF[GateIdx].as_geometry_msg());
+
+    return true;
 }
 
 

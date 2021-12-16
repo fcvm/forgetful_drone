@@ -30,10 +30,8 @@
 #include <memory>
 
 // flightlib
-#include "flightlib/bridges/unity_message_types.hpp"
-
 #include "flightlib/bridges/unity_bridge.hpp"
-
+#include "flightlib/bridges/unity_message_types.hpp"
 #include "flightlib/common/quad_state.hpp"
 #include "flightlib/common/types.hpp"
 #include "flightlib/objects/quadrotor.hpp"
@@ -134,7 +132,7 @@ private: // ROS related
             forgetful_drones_msgs::BuildDroneRacingSimulation::Request& req,
             forgetful_drones_msgs::BuildDroneRacingSimulation::Response& res
             );
-        bool ForgetfulSimulator::buildDroneRacingSimulation(
+        bool buildDroneRacingSimulation(
             const geometry_msgs::Pose& RaceTrackPose_WorldRF,
             const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RaceType_type& RaceTrackType,
             const double& GateWaypointHeight, //-> GateType

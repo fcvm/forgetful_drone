@@ -42,6 +42,9 @@
     <depend>std_msgs</depend>
     <depend>tf</depend>
     <depend>forgetful_drones_msgs</depend>
+    <depend>flightlib</depend>
+    <depend>image_transport</depend>
+    
     
     
     <export>

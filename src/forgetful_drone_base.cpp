@@ -752,7 +752,7 @@ void ForgetfulDrone::generateTrainingData()
     m_TrainingDataDirPath
         = ros::package::getPath( "forgetful_drones" ) 
         + "/training_data/" + getCurrUTCDateTimeAsString();
-    std::filesystem::create_directory( m_TrainingDataDirPath );
+    std::experimental::filesystem::create_directory( m_TrainingDataDirPath );
 
 
    std::string FailedRuns = "";
@@ -779,8 +779,8 @@ void ForgetfulDrone::generateTrainingData()
         RunCountStream << std::setw( 4 ) << std::setfill( '0' ) << m_RunCount;
         m_RunCountString = RunCountStream.str();
         m_RunDirPath = m_TrainingDataDirPath + "/run_" + m_RunCountString;
-        std::filesystem::create_directory( m_RunDirPath );
-        std::filesystem::create_directory( m_RunDirPath + "/images" );
+        std::experimental::filesystem::create_directory( m_RunDirPath );
+        std::experimental::filesystem::create_directory( m_RunDirPath + "/images" );
         m_CamFrameCount = 0;
 
         resetRVIZ();
