@@ -187,7 +187,7 @@ private: // parameters
 
     std::vector<std::pair<const char*, const bool*>> m_KeysBoolPtrs
     {
-        {"unity_render", &m_FM_UnityRenderOn},
+        {"unity_render_on", &m_FM_UnityRenderOn},
     };
     
     std::vector<std::pair<const char*, const int*>> m_KeysIntPtrs

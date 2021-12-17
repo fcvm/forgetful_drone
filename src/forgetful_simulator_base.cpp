@@ -14,7 +14,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& RNH, const ros::N
     m_ROSRNH(RNH), 
     m_ROSPNH(PNH),
     m_ROSNodeName{ros::this_node::getName().c_str()},
-    m_FM_SceneID{flightlib::UnityScene::WAREHOUSE},
+    m_FM_SceneID{flightlib::UnityScene::INDUSTRIAL},
     m_FM_UnityReady{false},
     m_FM_UnityRenderOn{false},
     m_FM_receive_id_{0},
@@ -135,6 +135,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& RNH, const ros::N
         ROS_INFO("[%s] Unity Bridge created.", m_ROSNodeName);
     }
 
+    
 
 
     // TESTING & DEBUGGING
@@ -142,9 +143,9 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& RNH, const ros::N
 
     // -> req
     geometry_msgs::Pose RaceTrackPose_WorldRF; // for a spot in FM INDUSTRIAL SCENE: ->parameter
-    RaceTrackPose_WorldRF.position.x = 67.0;
-    RaceTrackPose_WorldRF.position.y = -17.0;
-    RaceTrackPose_WorldRF.position.z = -17.0;
+    RaceTrackPose_WorldRF.position.x = 80.0;
+    RaceTrackPose_WorldRF.position.y = -30.0;
+    RaceTrackPose_WorldRF.position.z = 2.0;
     RaceTrackPose_WorldRF.orientation = tf::createQuaternionMsgFromYaw( 0.0 );
     constexpr double GateWaypointHeight = 2.0; // for FM RPG GATE: ->parameter
 
@@ -240,11 +241,12 @@ bool ForgetfulSimulator::ROSCB_buildDroneRacingSimulation(
 {
     // -> req
     geometry_msgs::Pose RaceTrackPose_WorldRF; // for a spot in FM INDUSTRIAL SCENE: ->parameter
-    RaceTrackPose_WorldRF.position.x = 67.0;
-    RaceTrackPose_WorldRF.position.y = -17.0;
-    RaceTrackPose_WorldRF.position.z = -17.0;
+    RaceTrackPose_WorldRF.position.x = 80.0;
+    RaceTrackPose_WorldRF.position.y = -30.0;
+    RaceTrackPose_WorldRF.position.z = 2.0;
     RaceTrackPose_WorldRF.orientation = tf::createQuaternionMsgFromYaw( 0.0 );
     constexpr double GateWaypointHeight = 2.0; // for FM RPG GATE: ->parameter
+
 
 
     buildDroneRacingSimulation(
@@ -356,57 +358,78 @@ void ForgetfulSimulator::compGatesAndDroneInitPose_Fig8Det(
     forgetful_drone::Pose& out_DroneInitPose_WorldRF
     )
 {
+
     // Data
     constexpr size_t GatesN = 14;
-    constexpr double PosOffsetX = 22.7;
-    constexpr double PosOffsetY = 14.5;
-    std::array<Eigen::Vector3d, GatesN> GatesInitPos_RaceTrackRF = {
-        Eigen::Vector3d{ 2.7  - PosOffsetX ,     6.7  - PosOffsetY ,   in_GatesWaypointHeight  }, // #01
-        Eigen::Vector3d{ 10.6 - PosOffsetX ,     4.2  - PosOffsetY ,   in_GatesWaypointHeight  }, // #02
-        Eigen::Vector3d{ 19.0 - PosOffsetX ,     10.0 - PosOffsetY ,   in_GatesWaypointHeight  }, // #03
-        Eigen::Vector3d{ 26.6 - PosOffsetX ,     19.6 - PosOffsetY ,   in_GatesWaypointHeight  }, // #04
-        Eigen::Vector3d{ 35.1 - PosOffsetX ,     26.5 - PosOffsetY ,   in_GatesWaypointHeight  }, // #05
-        Eigen::Vector3d{ 45.0 - PosOffsetX ,     22.2 - PosOffsetY ,   in_GatesWaypointHeight  }, // #06
-        Eigen::Vector3d{ 47.4 - PosOffsetX ,     13.6 - PosOffsetY ,   in_GatesWaypointHeight  }, // #07
-        Eigen::Vector3d{ 42.4 - PosOffsetX ,     5.8  - PosOffsetY ,   in_GatesWaypointHeight  }, // #08
-        Eigen::Vector3d{ 33.7 - PosOffsetX ,     4.7  - PosOffsetY ,   in_GatesWaypointHeight  }, // #09
-        Eigen::Vector3d{ 26.0 - PosOffsetX ,     9.4  - PosOffsetY ,   in_GatesWaypointHeight  }, // #10
-        Eigen::Vector3d{ 18.2 - PosOffsetX ,     20.0 - PosOffsetY ,   in_GatesWaypointHeight  }, // #11
-        Eigen::Vector3d{ 10.2 - PosOffsetX ,     25.0 - PosOffsetY ,   in_GatesWaypointHeight  }, // #12
-        Eigen::Vector3d{ 2.1  - PosOffsetX ,     22.0 - PosOffsetY ,   in_GatesWaypointHeight  }, // #13
-        Eigen::Vector3d{ -1.1 - PosOffsetX ,     13.2 - PosOffsetY ,   in_GatesWaypointHeight  }  // #14
+    std::array<Eigen::Vector3d, GatesN +1> GatesAndDroneInitPos_RaceTrackRF = {
+        Eigen::Vector3d{ 2.7    ,     6.7   ,   in_GatesWaypointHeight  }, // #01
+        Eigen::Vector3d{ 10.6   ,     4.2   ,   in_GatesWaypointHeight  }, // #02
+        Eigen::Vector3d{ 19.0   ,     10.0  ,   in_GatesWaypointHeight  }, // #03
+        Eigen::Vector3d{ 26.6   ,     19.6  ,   in_GatesWaypointHeight  }, // #04
+        Eigen::Vector3d{ 35.1   ,     26.5  ,   in_GatesWaypointHeight  }, // #05
+        Eigen::Vector3d{ 45.0   ,     22.2  ,   in_GatesWaypointHeight  }, // #06
+        Eigen::Vector3d{ 47.4   ,     13.6  ,   in_GatesWaypointHeight  }, // #07
+        Eigen::Vector3d{ 42.4   ,     5.8   ,   in_GatesWaypointHeight  }, // #08
+        Eigen::Vector3d{ 33.7   ,     4.7   ,   in_GatesWaypointHeight  }, // #09
+        Eigen::Vector3d{ 26.0   ,     9.4   ,   in_GatesWaypointHeight  }, // #10
+        Eigen::Vector3d{ 18.2   ,     20.0  ,   in_GatesWaypointHeight  }, // #11
+        Eigen::Vector3d{ 10.2   ,     25.0  ,   in_GatesWaypointHeight  }, // #12
+        Eigen::Vector3d{ 2.1    ,     22.0  ,   in_GatesWaypointHeight  }, // #13
+        Eigen::Vector3d{ -1.1   ,     13.2  ,   in_GatesWaypointHeight  }, // #14
+        Eigen::Vector3d{ -0.5   ,     22.0  ,   0.2                     }  // Drone
         };
-    std::array<double, GatesN> GatesInitYaw_RaceTrackRF = {
-        -0.44,  // #01
-        0.0  ,  // #02
-        0.97 ,  // #03
-        -2.2 ,  // #04
-        3.5  ,  // #05
-        2.57 ,  // #06
-        1.57 ,  // #07
-        -2.6 ,  // #08
-        3.1  ,  // #09
-        -1.0 ,  // #10
-        -0.9 ,  // #11
-        -3.1 ,  // #12
-        0.8  ,  // #13
-        -1.5 ,  // #14
-        };
-    const geometry_msgs::Pose DroneInitPose_RaceTrackRF;
-        const_cast<geometry_msgs::Pose&>(DroneInitPose_RaceTrackRF).position.x = -0.5;
-        const_cast<geometry_msgs::Pose&>(DroneInitPose_RaceTrackRF).position.y = 22.0;
-        const_cast<geometry_msgs::Pose&>(DroneInitPose_RaceTrackRF).position.z = 0.0;
-        const_cast<geometry_msgs::Pose&>(DroneInitPose_RaceTrackRF).orientation
-            = tf::createQuaternionMsgFromYaw(-M_PI / 2.0);
+    double PosOffsetX = 0.0;
+    double PosOffsetY = 0.0;
 
-    // Create transformation between reference frames
-        // race track -> world
+
+    for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
+    {
+        PosOffsetX += GatesAndDroneInitPos_RaceTrackRF[GateIdx].x() / GatesN;
+        PosOffsetY += GatesAndDroneInitPos_RaceTrackRF[GateIdx].y() / GatesN;
+    }
+
+
+    for (size_t GateIdx = 0; GateIdx < GatesN +1; GateIdx++)
+    {
+        GatesAndDroneInitPos_RaceTrackRF[GateIdx].x() -= PosOffsetX;
+        GatesAndDroneInitPos_RaceTrackRF[GateIdx].y() -= PosOffsetY;
+    }
+    std::array<double, GatesN +1> GatesAndDroneInitYaw_RaceTrackRF = {
+        -0.44   - M_PI / 2.0,   // #01
+        0.0     - M_PI / 2.0,   // #02
+        0.97    - M_PI / 2.0,   // #03
+        -2.2    - M_PI / 2.0,   // #04
+        3.5     - M_PI / 2.0,   // #05
+        2.57    - M_PI / 2.0,   // #06
+        1.57    - M_PI / 2.0,   // #07
+        -2.6    - M_PI / 2.0,   // #08
+        3.1     - M_PI / 2.0,   // #09
+        -1.0    - M_PI / 2.0,   // #10
+        -0.9    - M_PI / 2.0,   // #11
+        -3.1    - M_PI / 2.0,   // #12
+        0.8     - M_PI / 2.0,   // #13
+        -1.5    - M_PI / 2.0,   // #14
+        M_PI    // Drone, PREVIOUSLY -90 DEG
+        };
     kindr::minimal::QuatTransformation T_WorldRF_RaceTrackRF;
     tf::poseMsgToKindr(in_RaceTrackPose_WorldRF, &T_WorldRF_RaceTrackRF);
-        // drone init -> world
-    kindr::minimal::QuatTransformation T_RaceTrackRF_DroneInitRF;
-    tf::poseMsgToKindr(DroneInitPose_RaceTrackRF, &T_RaceTrackRF_DroneInitRF);
-    kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF = T_WorldRF_RaceTrackRF * T_RaceTrackRF_DroneInitRF;
+
+    for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
+    {
+        ROS_INFO("[%s] Gate at [%f, %f, %f] (Race Track RF)", 
+            m_ROSNodeName, 
+            GatesAndDroneInitPos_RaceTrackRF[GateIdx].x(),
+            GatesAndDroneInitPos_RaceTrackRF[GateIdx].y(),
+            GatesAndDroneInitPos_RaceTrackRF[GateIdx].z()
+            );
+    }
+
+    ROS_INFO("[%s] Race track at [%f, %f, %f] (World RF)", 
+            m_ROSNodeName, 
+            T_WorldRF_RaceTrackRF.getPosition().x(),
+            T_WorldRF_RaceTrackRF.getPosition().y(),
+            T_WorldRF_RaceTrackRF.getPosition().z()
+            );
 
 
     // Resize the vector containing gates
@@ -417,13 +440,9 @@ void ForgetfulSimulator::compGatesAndDroneInitPose_Fig8Det(
         // ...to the gate data
     for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
     {
-        
-        
-        
-        
         geometry_msgs::Pose GateInitPose_RaceTrackRF;
-        GateInitPose_RaceTrackRF.position = GeometryMsgsPoint_From_EigenVector3d(GatesInitPos_RaceTrackRF[GateIdx]);
-        GateInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesInitYaw_RaceTrackRF[GateIdx]);
+        GateInitPose_RaceTrackRF.position = GeometryMsgsPoint_From_EigenVector3d(GatesAndDroneInitPos_RaceTrackRF[GateIdx]);
+        GateInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GateIdx]);
         
         kindr::minimal::QuatTransformation T_RaceTrackRF_GateInitRF;
         tf::poseMsgToKindr(GateInitPose_RaceTrackRF, &T_RaceTrackRF_GateInitRF);
@@ -431,10 +450,35 @@ void ForgetfulSimulator::compGatesAndDroneInitPose_Fig8Det(
 
         out_GatesInitPose_WorldRF[GateIdx].position = T_WorldRF_GateInitRF.getPosition().cast<float>();
         out_GatesInitPose_WorldRF[GateIdx].orientation = T_WorldRF_GateInitRF.getEigenQuaternion().cast<float>();
+
+        ROS_INFO("[%s] Gate at [%f, %f, %f].", 
+            m_ROSNodeName, 
+            out_GatesInitPose_WorldRF[GateIdx].position.x(),
+            out_GatesInitPose_WorldRF[GateIdx].position.y(),
+            out_GatesInitPose_WorldRF[GateIdx].position.z()
+            );
     }
         // ...to the drone data
-    out_DroneInitPose_WorldRF.position = T_WorldRF_DroneInitRF.getPosition().cast<float>();
-    out_DroneInitPose_WorldRF.orientation = T_WorldRF_DroneInitRF.getEigenQuaternion().cast<float>();
+    for (size_t GateIdx = GatesN; GateIdx < GatesN +1; GateIdx++)
+    {
+        geometry_msgs::Pose DroneInitPose_RaceTrackRF;
+        DroneInitPose_RaceTrackRF.position = GeometryMsgsPoint_From_EigenVector3d(GatesAndDroneInitPos_RaceTrackRF[GateIdx]);
+        DroneInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GateIdx]);
+        
+        kindr::minimal::QuatTransformation T_RaceTrackRF_DroneInitRF;
+        tf::poseMsgToKindr(DroneInitPose_RaceTrackRF, &T_RaceTrackRF_DroneInitRF);
+        kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF = T_WorldRF_RaceTrackRF * T_RaceTrackRF_DroneInitRF;
+
+        out_DroneInitPose_WorldRF.position = T_WorldRF_DroneInitRF.getPosition().cast<float>();
+        out_DroneInitPose_WorldRF.orientation = T_WorldRF_DroneInitRF.getEigenQuaternion().cast<float>();
+
+        ROS_INFO("[%s] Drone at [%f, %f, %f].", 
+            m_ROSNodeName, 
+            out_DroneInitPose_WorldRF.position.x(),
+            out_DroneInitPose_WorldRF.position.y(),
+            out_DroneInitPose_WorldRF.position.z()
+            );
+    }
 }
 
 
@@ -471,6 +515,23 @@ void ForgetfulSimulator::spawnGatesInUnity(const std::vector<forgetful_drone::Po
 
 void ForgetfulSimulator::spawnDroneInGazebo(const forgetful_drone::Pose& DroneInitPose_WorldRF)
 {
+    //DEBUG
+    /*
+    geometry_msgs::Pose RaceTrackPose_WorldRF; // for a spot in FM INDUSTRIAL SCENE: ->parameter
+    RaceTrackPose_WorldRF.position.x = 67.0;
+    RaceTrackPose_WorldRF.position.y = -17.0;
+    RaceTrackPose_WorldRF.position.z = -17.0;
+
+    RaceTrackPose_WorldRF.position.x = 80.0;
+    RaceTrackPose_WorldRF.position.y = -30.5;
+    RaceTrackPose_WorldRF.position.z = 0.2;
+    RaceTrackPose_WorldRF.orientation = tf::createQuaternionMsgFromYaw( 0.0 );*/
+
+
+
+
+
+    
     gazebo_msgs::SpawnModel srv;
         srv.request.model_name = m_DroneModelName;
         srv.request.model_xml = m_DroneModelDescription;
