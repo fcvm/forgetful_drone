@@ -11,9 +11,13 @@
 #include <image_transport/image_transport.h>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
+#include <ros/package.h>
+#include <std_msgs/Empty.h>
 
 // gazebo_ros
 #include <gazebo_msgs/SpawnModel.h>
+#include <gazebo_msgs/ModelStates.h>
+#include <gazebo_msgs/DeleteModel.h>
 
 // standard libraries
 #include <assert.h>
@@ -28,6 +32,7 @@
 #include <thread>
 #include <vector>
 #include <memory>
+#include <random>
 
 // flightlib
 #include "flightlib/bridges/unity_bridge.hpp"
@@ -51,40 +56,7 @@
 #include <quadrotor_common/parameter_helper.h>
 #include <quadrotor_msgs/AutopilotFeedback.h>
 
-
-/*
-class manual_timer {
-  std::chrono::high_resolution_clock::time_point t0;
-  double timestamp{0.0};
-
- public:
-  void start() { t0 = std::chrono::high_resolution_clock::now(); }
-  void stop() {
-    timestamp = std::chrono::duration<double>(
-                  std::chrono::high_resolution_clock::now() - t0)
-                  .count() *
-                1000.0;
-  }
-  const double &get() { return timestamp; }
-};
-
-// void setupQuad();
-bool setUnity(const bool render);
-bool connectUnity(void);
-
-// unity quadrotor
-std::shared_ptr<flightlib::Quadrotor> quad_ptr_;
-std::shared_ptr<flightlib::RGBCamera> rgb_camera_;
-flightlib::QuadState quad_state_;
-
-// Flightmare(Unity3D)
-std::shared_ptr<flightlib::UnityBridge> unity_bridge_ptr_;
-flightlib::SceneID scene_id_{flightlib::UnityScene::WAREHOUSE};
-bool unity_ready_{false};
-bool unity_render_{true};
-flightlib::RenderMessage_t unity_output_;
-uint16_t receive_id_{0};
-*/
+#include "forgetful_drones/matplotlibcpp.h"
 
 
 
@@ -94,7 +66,8 @@ uint16_t receive_id_{0};
 
 
 
-namespace forgetful_drone{ class ForgetfulSimulator{
+namespace forgetful_drone{ 
+class ForgetfulSimulator{
 
 
 public:
@@ -111,6 +84,7 @@ private: // ROS related
     ros::NodeHandle m_ROSRNH; // resolved to the node's namespace.
     ros::NodeHandle m_ROSPNH; // resolved to: <node's namespace>/<node's name>.
     const char* m_ROSNodeName;
+    std::string m_ROSNodePath;
 
     // publisher
     image_transport::Publisher m_ITPub_RGBImg;
@@ -123,6 +97,12 @@ private: // ROS related
     ros::Subscriber m_ROSSub_StateEstimate;
         void ROSCB_StateEstimate(const nav_msgs::Odometry::ConstPtr& msg);
 
+        void ROSCB_SimulatorStart(const std_msgs::Empty::ConstPtr& msg);
+        void startSimulation();
+        void ROSCB_SimulatorStop(const std_msgs::Empty::ConstPtr& msg);
+        void stopSimulation();
+        
+
     // main loop timer
     ros::Timer m_ROSTimer_MainLoop;
         void ROSCB_MainLoop(const ros::TimerEvent& event);
@@ -133,24 +113,23 @@ private: // ROS related
             forgetful_drones_msgs::BuildDroneRacingSimulation::Response& res
             );
         bool buildDroneRacingSimulation(
-            const geometry_msgs::Pose& RaceTrackPose_WorldRF,
-            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RaceType_type& RaceTrackType,
-            const double& GateWaypointHeight, //-> GateType
-            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_DynGatesActivated_type& GatesDynamic
+            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_UnityScene_type UnityScene,
+            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RacetrackSite_type& SceneSite,
+            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType,
+            const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RaceGateType_type& RaceGateType
             );
-        void compGatesAndDroneInitPose_Fig8Det( 
-            const geometry_msgs::Pose& in_RaceTrackPose_WorldRF, 
-            const double& in_GatesWaypointHeight,
-            std::vector<forgetful_drone::Pose>& out_GatesInitPose_WorldRF,
-            forgetful_drone::Pose& out_DroneInitPose_WorldRF
-            );
-        std::vector<std::shared_ptr<flightlib::StaticGate>> m_UnityGates;
-        void spawnGatesInUnity(const std::vector<forgetful_drone::Pose> GatesInitPose_WorldRF);
+        void computeRaceTrack_Figure8(const forgetful_drones_msgs::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType);
+        //void computeRaceTrack_Fig8Rand();
+        //std::vector<std::shared_ptr<flightlib::StaticGate>> m_UnityGates;
+        std::vector<std::shared_ptr<flightlib::StaticObject>> m_UnityGates;
+        void spawnGatesInUnity();
+        void spawnGatesInGazebo();
+        void spawnGatesInRViz();
         bool m_DroneSpawned;
         const std::string m_DroneModelName;
         const std::string m_DroneModelDescription;
-        void spawnDroneInGazebo(const forgetful_drone::Pose& DroneInitPose_WorldRF);
-        void spawnDroneInUnity(const forgetful_drone::Pose& DroneInitPose_WorldRF);
+        void spawnDroneInGazebo();
+        void spawnDroneInUnity();
         const double m_DroneCamFOV;
         const int m_DroneCamWidth;
         const int m_DroneCamHeight;
@@ -167,12 +146,12 @@ private: // Flightmare related
     flightlib::QuadState m_FM_DroneState;
 
     // Flightmare(Unity3D)
-    std::shared_ptr<flightlib::UnityBridge> m_FM_UnityBridgePtr;
-    flightlib::SceneID m_FM_SceneID;
-    bool m_FM_UnityReady;
-    const bool m_FM_UnityRenderOn;
+    std::shared_ptr<flightlib::UnityBridge> m_UnityBridgePtr;
+    flightlib::SceneID m_UnitySceneID;
+    bool m_UnityReady;
+    const bool m_UnityRender_ON;
     flightlib::RenderMessage_t m_FM_UnityOutput;
-    uint16_t m_FM_receive_id_;
+    const std::string m_FM_PointCloudFileName;
 
     void setUnity(const bool RenderOn);
     void connectUnity();
@@ -180,14 +159,19 @@ private: // Flightmare related
 
 private: // auxiliary variables
 
-    double m_MainLoopFreq;
+    const double m_MainLoopFreq;
 
 
 private: // parameters
 
+    const bool m_Debug_ON;
+    const bool m_RacetrackDataGeneration_ON;
+
     std::vector<std::pair<const char*, const bool*>> m_KeysBoolPtrs
     {
-        {"unity_render_on", &m_FM_UnityRenderOn},
+        {"unity_render_on", &m_UnityRender_ON},
+        {"debug_on", &m_Debug_ON},
+        {"racetrack_data_generation_on", &m_RacetrackDataGeneration_ON},
     };
     
     std::vector<std::pair<const char*, const int*>> m_KeysIntPtrs
@@ -199,18 +183,24 @@ private: // parameters
         //{"randomized_sprint_max_number_of_gates", &m_RandSprint_GateMaxN},
         //{"randomized_sprint_min_number_of_gates_in_section", &m_RandSprint_SectionGateMinN},
         //{"randomized_sprint_max_number_of_gates_in_section", &m_RandSprint_SectionGateMaxN},
-        //{"drone_marker_number_of_rotors", &m_Drone_RotorN},
+        {"drone_marker_number_of_rotors", &m_RVizDroneRotorN},
+        {"unity_scene_index", &m_UnitySceneIdx},
+        {"racetrack_site_index", &m_UnitySiteIdx},
+        {"racetrack_type_index", &m_RacetrackTypeIdx},
+        {"race_gate_type_index", &m_RaceGateTypeIdx},
+        
+        
+        
     };
 
     std::vector<std::pair<const char*, const double*>> m_KeysDoublePtrs
     {
         {"main_loop_freq", &m_MainLoopFreq},
         {"drone_cam_field_of_view", &m_DroneCamFOV},
-        //{"gate_waypoint_height_above_base", &m_GateWaypointHeight},
-        //{"gate_base_min_altitude", &m_GateBaseMinAltitude},
-        //{"randomized_figure8_max_axial_shift", &m_RandFig8_MaxAxShift},
-        //{"randomized_figure8_min_scale", &m_RandFig8_MinScale},
-        //{"randomized_figure8_max_scale", &m_RandFig8_MaxScale},
+        {"randomized_figure8_max_axial_shift", &m_RandFig8_MaxAxShift},
+        {"randomized_figure8_max_yaw_twist", &m_RandFig8_MaxYawTwist},
+        {"randomized_figure8_min_scale", &m_RandFig8_MinScale},
+        {"randomized_figure8_max_scale", &m_RandFig8_MaxScale},
         //{"randomized_sprint_min_gate_spacing", &m_RandSprint_MinSpacing},
         //{"randomized_sprint_unidirectional_standard_deviation_of_gate_spacing", &m_RandSprint_UnidirStdDevSpacing},
         //{"randomized_sprint_left_right_mean_yaw_between_gates", &m_RandSprint_LRMeanYaw},
@@ -219,17 +209,10 @@ private: // parameters
         //{"randomized_sprint_standard_deviation_pitch_between_gates", &m_RandSprint_StdDevPitch},
         //{"dynamic_gates_max_axial_amplitude", &m_DynGates_MaxAxAmp},
         //{"dynamic_gates_max_axial_frequency", &m_DynGates_MaxAxFreq},
-        //{"wall_buffer_distance_to_gate", &m_WallBufferDistance},
-        //{"wall_height", &m_WallHeight},
-        //{"wall_thickness", &m_WallThickness},
-        //{"drone_initial_position_x", &m_Drone_InitX},            
-        //{"drone_initial_position_y", &m_Drone_InitY},
-        //{"drone_initial_position_z", &m_Drone_InitZ},
-        //{"drone_initial_position_yaw", &m_Drone_InitYaw},
-        //{"drone_marker_arm_length", &m_Drone_ArmLength},
-        //{"drone_marker_body_width", &m_Drone_BodyWidth},
-        //{"drone_marker_body_height", &m_Drone_BodyHeight},
-        //{"drone_marker_scale", &m_Drone_Scale},
+        {"drone_marker_arm_length", &m_RVizDroneArmLength},
+        {"drone_marker_body_width", &m_RVizDroneBodyWidth},
+        {"drone_marker_body_height", &m_RVizDroneBodyHeight},
+        {"drone_marker_scale", &m_RVizDroneScale},
         //{"simulator_loop_nominal_period_time", &m_SimulatorLoopTime}         
     };
 
@@ -248,56 +231,44 @@ private: // old ROS
     // ----
     //ros::Subscriber m_ROSSub_DynamicGatesSwitch;
     //ros::Subscriber m_ROSSub_GazeboModelStates;    // Subscribes to ROS topic "/gazebo/model_states"
-    
     //ros::Publisher m_ROSPub_GazeboSetModelState;        // gazebo_msgs::ModelState -> "/gazebo/set_model_state". Used in: respawnGazeboGateModelsWithRandomAxialShifts(), moveGazeboGateModels()
-    //ros::Publisher m_ROSPub_RvizGates;
-    //ros::Publisher m_ROSPub_RvizDrone;
+    ros::Publisher m_ROSPub_RVizGates;
+    ros::Publisher m_ROSPub_RVizDrone;
 
-    //ros::ServiceClient m_ROSSrvCl_GazeboDeleteModel; // gazebo_msgs::DeleteModel -> "/gazebo/delete_model"
+    ros::ServiceClient m_ROSSrvCl_GazeboDeleteModel; // gazebo_msgs::DeleteModel -> "/gazebo/delete_model"
     //ros::ServiceClient m_ROSSrvCl_GazeboResetSimulation; // std_srvs::Empty -> "/gazebo/reset_simulation"
-    //ros::ServiceClient m_ROSSrvCl_GazeboSpawnSDFModel; // gazebo_msgs::SpawnModel -> "/gazebo/spawn_sdf_model"
+    ros::ServiceClient m_ROSSrvCl_GazeboSpawnSDFModel; // gazebo_msgs::SpawnModel -> "/gazebo/spawn_sdf_model"
     
 
-    //ros::ServiceServer m_ROSSrvSv_BuildDroneRacingSimulation; // "sim_rand_sprint_race" <- forgetful_drones_msgs::SimRace
+    ros::ServiceServer m_ROSSrvSv_BuildDroneRacingSimulation; // "sim_rand_sprint_race" <- forgetful_drones_msgs::SimRace
     
     //ros::Timer m_ROSTimer_SimulatorLoop;
+    ros::Subscriber m_ROSSub_SimulatorStart;
+    ros::Subscriber m_ROSSub_SimulatorStop;
+    
 
+    
+    
+    bool m_SimulationReady;
+    const std::string m_GroundPlaneID; // Name for ground plane model in Gazebo.
 
     
-    //std::uniform_real_distribution< double > m_UniRealDistri_0To1;
-    //bool m_SimulationReady;
-    //const std::string m_Models_DirPath; // Path to directory of this ROS package (forgetful_drones).
-    //const std::string m_Gate_NamePrefix; // Prefix for names of gate models in Gazebo.
-    //const std::string m_Gate_TexDirPath;
-    //const std::vector< std::string > m_Gate_TexFileNames; // Path to directory of all texture resources
-    //const std::string m_Gate_DAEDirPath;
-    //const std::vector< std::string > m_Gate_DAEFileNames; // Path to directory of all .dae resources
-    //const std::string m_Gate_STLDirPath;
-    //const std::vector< std::string > m_Gate_STLFileNames; // Path to directory of all .sdf resources
-    //const std::string m_Gate_RandIllumScriptFilePath; // Path to python script that sets the tags ´abient´ and ´emission´ to command line args.
-    //const std::string m_Gate_TmpDirPath;
-    //const std::string m_Ground_Name; // Name for ground plane model in Gazebo.
-    //const std::string m_Ground_TexDirPath;
-    //const std::vector< std::string > m_Ground_TexFileNames; // Path to directory of all texture resources
-    //const std::string m_Ground_TmpDirPath;
-    //const std::string m_Wall_NamePrefix; // Prefix for names of wall models in Gazebo.
-    //const std::string m_Wall_TexDirPath;
-    //const std::vector< std::string > m_Wall_TexFileNames; // Path to directory of all texture resources
-    //const std::string m_Wall_TmpDirPath;
-    
-    
+    int m_UnitySceneIdx;
+    int m_UnitySiteIdx;
+    const int m_RacetrackTypeIdx;
+    const int m_RaceGateTypeIdx;
+    std::string m_GatePrefabID;
     
 
 private:
 
-    // Race track generic
-    //const double m_GateWaypointHeight;
-    //const double m_GateBaseMinAltitude;
+    void debugNode();
 
     // Rand Figure 8 Race Specific
-    //const double m_RandFig8_MaxAxShift;
-    //const double m_RandFig8_MinScale;
-    //const double m_RandFig8_MaxScale;
+    const double m_RandFig8_MaxAxShift;
+    const double m_RandFig8_MaxYawTwist;
+    const double m_RandFig8_MinScale;
+    const double m_RandFig8_MaxScale;
 
     // Rand Sprint Race Specific
     //const int m_RandSprint_GateN;
@@ -316,45 +287,35 @@ private:
     //const double m_DynGates_MaxAxAmp;
     //const double m_DynGates_MaxAxFreq;
     
-    // Environment Specific (until now only ground and walls)
-    //const double m_WallBufferDistance;
-    //const double m_WallHeight;
-    //const double m_WallThickness;
 
     // Drone RVIZ
-    //const int m_Drone_RotorN;
-    //const double m_Drone_ArmLength;
-    //const double m_Drone_BodyWidth;
-    //const double m_Drone_BodyHeight;
-    //const double m_Drone_Scale;
-    //const std::string m_Drone_FrameID;
-    //const Eigen::Vector3d m_Drone_InitPosition;
-    //const double m_Drone_InitX;
-    //const double m_Drone_InitY;
-    //const double m_Drone_InitZ;
-    //const double m_Drone_InitYaw;
-    
-
+    const int m_RVizDroneRotorN;
+    const double m_RVizDroneArmLength;
+    const double m_RVizDroneBodyWidth;
+    const double m_RVizDroneBodyHeight;
+    const double m_RVizDroneScale;
+    const std::string m_RVizDroneFrameID;
 
 
 
     //const double m_SimulatorLoopTime;
-    //std::default_random_engine m_RandEngine;
+    std::default_random_engine m_RandEngine;
 
     
 
-
-
-
-
-
-
-
-
-
 private:
-    //void rvizDrone();
+    void spawnDroneInRViz();
 
+    forgetful_drone::Pose m_RacetrackPose_Flightmare;
+    forgetful_drone::Pose m_RacetrackPose_Gazebo;
+    float m_GateWaypointHeight;
+    std::vector<forgetful_drone::Pose> m_GatesInitPose_Flightmare;
+    std::vector<forgetful_drone::Pose> m_GatesInitPose_Gazebo;
+    forgetful_drone::Pose m_DroneInitPose_Flightmare;
+    forgetful_drone::Pose m_DroneInitPose_Gazebo;
+    Eigen::Vector3f m_GroundPlaneOrigin_Gazebo;
+    Eigen::Vector2f m_GroundPlaneSize_Gazebo;
+    
 
 
 ////////////////////////////////////////////////////////
@@ -363,19 +324,18 @@ private:// ROS CALLBACKS & Service & Timer Functions //
 
 
     // /// \brief Sets "m_GazeboModelStates" to latest message on ROS topic "/gazebo/model_states".
-    // void ROS_CB_GazeboModelStates( const gazebo_msgs::ModelStates::ConstPtr& msg );
+    //void ROS_CB_GazeboModelStates( const gazebo_msgs::ModelStates::ConstPtr& msg );
     // void ROSCB_DynamicGatesSwitch( const std_msgs::Bool::ConstPtr& msg );
     // bool ROSSrvFunc_buildDroneRacingSimulation(
     //     forgetful_drones_msgs::BuildDroneRacingSimulation::Request& req,
     //     forgetful_drones_msgs::BuildDroneRacingSimulation::Response& res
     //     );
-    //     void deleteAllGazeboModelsExceptDrone();
-    //     void compGatesAndDroneInitPose_Fig8Det();
+        void deleteAllGazeboModelsExceptDrone();
     //     void computeGatePoses_Fig8Rand();
     //     void computeGatePoses_SprintRand();
     //     void setGatesID();
     //     void initRandParamsOfDynGates();
-    //     void computePositionAndSizeOfGroundAndWalls();
+         void computeGazeboGroundPlane();
     //     void spawnRandGatesInGazeboAndRVIZ();
 
 
@@ -384,27 +344,29 @@ private:// ROS CALLBACKS & Service & Timer Functions //
     // void ROSTimerFunc_SimulatorLoop( const ros::TimerEvent& MainLoop_TimerEvent );
     // void visualizeGatesInRVIZ();
     // std::string m_Gate_DAEFilePath;
+    std::string m_GateSTLFilePath;
+    std::string m_GateSDFFilePath;
 
 
 
 private: // members
 
-    //visualization_msgs::Marker m_GateMarker;
-    //visualization_msgs::MarkerArray m_GateMarkerArray;
-    //gazebo_msgs::ModelStates m_GazeboModelStates;
-    //std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_GatesInitPos_WorldRF;
-    //std::vector< double > m_GatesInitYaw_WorldRF;
+    visualization_msgs::Marker m_RVizGate;
+    visualization_msgs::MarkerArray m_RVizGates;
     //std::vector< std::string > m_GatesID;
     //std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_DynGates_AxAmps;
     //std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_DynGates_AxFreqs;
     //std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_DynGates_InitAxPhases;
-    //Eigen::Vector2d m_Ground_BasePoint;
-    //Eigen::Vector2d m_Ground_Size;
-    //std::array< Eigen::Vector3d, 4 > m_Walls_BasePoint;
-    //std::array< Eigen::Vector3d, 4 > m_Walls_Size;
-    //bool m_DroneSpawned;
+
     
 
+
+
+    std::string getGroundPlaneSDF(const Eigen::Vector2f& GroundPlaneSize);
+    void spawnGroundPlaneInGazebo();
+
+
+    void setRacetrackPose();
 
 
 private: // friends

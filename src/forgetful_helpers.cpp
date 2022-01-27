@@ -3,9 +3,20 @@
 
 
 
+
+
+
+
 namespace forgetful_drone
 {
 
+Pose::Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori)
+    : position{pos}, orientation{ori}
+    {}
+
+Pose::Pose()
+    : position{0.0, 0.0, 0.0}, orientation{1.0, 0.0, 0.0, 0.0}
+    {}
 
 geometry_msgs::Point Pose::position_as_geometry_msg() const
 {
@@ -38,6 +49,14 @@ double Pose::yaw() const
 
 
 
+double
+Yaw_From_EigenQuaterniond(
+    const Eigen::Quaterniond& IN
+){
+    return IN.toRotationMatrix().eulerAngles(0, 1, 2).z();
+}
+
+
 
 Eigen::Vector3d 
 EigenVector3d_From_Vec3
@@ -46,6 +65,33 @@ EigenVector3d_From_Vec3
     return { IN.x, IN.y, IN.z };
 }
 
+
+Eigen::Quaternionf EigenQuaternionF_From_Yaw(const double& IN, const bool& InDegree)
+{
+    float 
+        Roll = 0.0, 
+        Pitch = 0.0, 
+        Yaw = InDegree? (IN/180.0*M_PI) : IN;
+    
+
+    Eigen::Quaternionf OUT;
+    //OUT = Eigen::AngleAxisf(Roll, Eigen::Vector3f::UnitX())
+    //    * Eigen::AngleAxisf(Pitch, Eigen::Vector3f::UnitY())
+    //    * Eigen::AngleAxisf(Yaw, Eigen::Vector3f::UnitZ());
+    //
+    //OUT.normalize();
+
+    OUT = Eigen::Quaternionf{Eigen::AngleAxisf{Yaw, Eigen::Vector3f{0, 0, 1}}};
+    
+    
+    //tf::Quaternion OUT2 = tf::createQuaternionFromYaw(Yaw);
+    //OUT.w() = OUT2.w();
+    //OUT.x() = OUT2.x();
+    //OUT.y() = OUT2.y();
+    //OUT.z() = OUT2.z();
+    
+    return OUT;
+}
 
 Vec3 
 Vec3_From_EigenVector3d
@@ -115,6 +161,27 @@ GeometryMsgsQuaternion_From_EigenQuaterniond
     return OUT;
 }
 
+
+
+std::vector<double>
+StdVector_From_EigenVector
+( const Eigen::VectorXd& IN )
+{
+    std::vector<double> OUT;
+    for (int i = 0; i < IN.size(); i++)
+        OUT.push_back(IN(i));
+    return OUT;
+}
+
+Eigen::VectorXd
+EigenVector_From_StdVector
+( const std::vector<double>& IN )
+{
+    Eigen::VectorXd OUT = Eigen::VectorXd::Zero(IN.size());
+    for (std::size_t i = 0; i < IN.size(); i++)
+        OUT(i) = IN[i];
+    return OUT;
+}
 
 
 
@@ -395,7 +462,71 @@ rvizPosition
         
         case VisPosTypes::LT_END :
             Marker.id = 5;
-            setRGBOfVisMarker( VisualizationColors::GREEN, Marker );
+            setRGBOfVisMarker( VisualizationColors::BLACK, Marker );
+            Marker.ns = "local_trajectory_end_state";
+            break;
+        
+        default:
+            break;
+        }
+
+    ROSPub.publish( Marker );
+}
+
+
+
+void
+rvizState
+(
+    const Eigen::Vector3d& Pos,
+    const Eigen::Vector3d& Vel,
+    const VisPosTypes& Type,
+    const ros::Publisher& ROSPub
+)
+{
+    visualization_msgs::Marker Marker;
+        Marker.header.frame_id = "world";
+        Marker.header.stamp = ros::Time();
+        Marker.type = visualization_msgs::Marker::ARROW;
+        Marker.action = visualization_msgs::Marker::ADD;
+        Marker.scale.x = 0.1; // shaft diameter
+        Marker.scale.y = 0.2; // head diameter
+        Marker.scale.z = 0.0; // if not zero: head length
+        Marker.color.a = 1.0;
+
+        Marker.points.push_back(GeometryMsgsPoint_From_EigenVector3d(Pos));
+        Marker.points.push_back(GeometryMsgsPoint_From_EigenVector3d(Pos + Vel.normalized()));
+
+
+        switch (Type)
+        {
+        case VisPosTypes::CURRGATE :
+            Marker.id = 1;
+            setRGBOfVisMarker( VisualizationColors::BLACK, Marker );
+            Marker.ns = "current_gate";
+            break;
+
+        case VisPosTypes::EXPERT :
+            Marker.id = 2;
+            setRGBOfVisMarker( VisualizationColors::YELLOW, Marker );
+            Marker.ns = "expert_state";
+            break;
+
+        case VisPosTypes::HORIZON :
+            Marker.id = 3;
+            setRGBOfVisMarker( VisualizationColors::BLUE, Marker );
+            Marker.ns = "horizon_state";
+            break;
+
+        case VisPosTypes::REFERENCE :
+            Marker.id = 4;
+            setRGBOfVisMarker( VisualizationColors::RED, Marker );
+            Marker.ns = "reference_state";
+            break;
+        
+        case VisPosTypes::LT_END :
+            Marker.id = 5;
+            setRGBOfVisMarker( VisualizationColors::BLACK, Marker );
             Marker.ns = "local_trajectory_end_state";
             break;
         
@@ -432,13 +563,14 @@ fetchROSParameters
             const_cast< bool& >( *std::get<1>(KeysAndBoolOutputs[ i ]) ) 
                 = static_cast<bool>( Output );
             
-            ROS_INFO( "[%s]\n  >> Fetched \"%s: %s\" from ROS parameter server.", 
-                ros::this_node::getName().c_str(), 
-                std::get<0>(KeysAndBoolOutputs[ i ]),  (*std::get<1>(KeysAndBoolOutputs[ i ]))? "true" : "false" );
+            //ROS_INFO( "[%s]\n  >> Fetched \"%s: %s\" from ROS parameter server.", 
+            //    ros::this_node::getName().c_str(), 
+            //    std::get<0>(KeysAndBoolOutputs[ i ]),  (*std::get<1>(KeysAndBoolOutputs[ i ]))? "true" : "false" );
         }
         else
         {
-            ROS_FATAL( "[%s]\n  >> Failed to fetch \"%s\" from ROS parameter server.", 
+            std::cout << std::endl;
+            ROS_FATAL( "[%s]    Failed to fetch ROS parameter \"%s\".", 
                 ros::this_node::getName().c_str(), std::get<0>(KeysAndBoolOutputs[ i ]) );
             ReturnBool = false;
         }
@@ -452,13 +584,14 @@ fetchROSParameters
             const_cast< int& >( *std::get<1>(KeysAndIntOutputs[ i ]) ) 
                 = static_cast<int>( Output );
             
-            ROS_INFO( "[%s]\n  >> Fetched \"%s: %d\" from ROS parameter server.", 
-                ros::this_node::getName().c_str(), 
-                std::get<0>(KeysAndIntOutputs[ i ]),  *std::get<1>(KeysAndIntOutputs[ i ]));
+            //ROS_INFO( "[%s]\n  >> Fetched \"%s: %d\" from ROS parameter server.", 
+            //    ros::this_node::getName().c_str(), 
+            //    std::get<0>(KeysAndIntOutputs[ i ]),  *std::get<1>(KeysAndIntOutputs[ i ]));
         }
         else
         {
-            ROS_FATAL( "[%s]\n  >> Failed to fetch \"%s\" from ROS parameter server.", 
+            std::cout << std::endl;
+            ROS_FATAL( "[%s]    Failed to fetch ROS parameter \"%s\".", 
                 ros::this_node::getName().c_str(), std::get<0>(KeysAndIntOutputs[ i ]) );
             ReturnBool = false;
         }
@@ -472,13 +605,14 @@ fetchROSParameters
             const_cast< double& >( *std::get<1>(KeysAndDoubleOutputs[ i ]) ) 
                 = static_cast<double>( Output );
 
-            ROS_INFO( "[%s]\n  >> Fetched \"%s: %f\" from ROS parameter server.", 
-                ros::this_node::getName().c_str(), 
-                std::get<0>(KeysAndDoubleOutputs[ i ]),  *std::get<1>(KeysAndDoubleOutputs[ i ]));
+            //ROS_INFO( "[%s]\n  >> Fetched \"%s: %f\" from ROS parameter server.", 
+            //    ros::this_node::getName().c_str(), 
+            //    std::get<0>(KeysAndDoubleOutputs[ i ]),  *std::get<1>(KeysAndDoubleOutputs[ i ]));
         }
         else
         {
-            ROS_FATAL( "[%s]\n  >> Failed to fetch \"%s\" from ROS parameter server.", 
+            std::cout << std::endl;
+            ROS_FATAL( "[%s]    Failed to fetch ROS parameter \"%s\".", 
                 ros::this_node::getName().c_str(), std::get<0>(KeysAndDoubleOutputs[ i ]) );
             ReturnBool = false;
         }
@@ -492,17 +626,17 @@ fetchROSParameters
             const_cast< std::string& >( *std::get<1>(KeysAndStringOutputs[ i ]) ) 
                 = static_cast<std::string>( Output );
             
-            const std::string& Value = *std::get<1>(KeysAndStringOutputs[ i ]);
-
-            ROS_INFO( "[%s]\n  >> Fetched \"%s: %s\" from ROS parameter server.", 
-                ros::this_node::getName().c_str(), 
-                std::get<0>(KeysAndStringOutputs[ i ]),
-                Value.length() > 30? (Value.substr(0, 30) + "...").c_str() : Value.c_str()
-                );
+            //const std::string& Value = *std::get<1>(KeysAndStringOutputs[ i ]);
+            //ROS_INFO( "[%s]\n  >> Fetched \"%s: %s\" from ROS parameter server.", 
+            //    ros::this_node::getName().c_str(), 
+            //    std::get<0>(KeysAndStringOutputs[ i ]),
+            //    Value.length() > 30? (Value.substr(0, 30) + "...").c_str() : Value.c_str()
+            //    );
         }
         else
         {
-            ROS_FATAL( "[%s]\n  >> Failed to fetch \"%s\" from ROS parameter server.", 
+            std::cout << std::endl;
+            ROS_FATAL( "[%s]    Failed to fetch ROS parameter \"%s\".", 
                 ros::this_node::getName().c_str(), std::get<0>(KeysAndStringOutputs[ i ]) );
             ReturnBool = false;
         }
@@ -520,5 +654,11 @@ void runMultiThreadedSpinner()
     ros::MultiThreadedSpinner Spinner;
     Spinner.spin();
 }
+
+
+
+
+
+
 
 }

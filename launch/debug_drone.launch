@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Arguments -->
+        <!-- Gazebo/RotorS -->
+            <arg name="debug" default="false"/>
+            <arg name="paused" default="true"/>
+            <arg name="gui" default="false"/>
+            <arg name="verbose" default="false"/>
+            <arg name="world_name" default="$(find rotors_gazebo)/worlds/basic.world"/>
+
+            <arg name="quad_name" default="hummingbird"/>
+            <arg name="model" default="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>
+            <arg name="custom_models" default="$(find forgetful_drones)/gazebo"/>
+            <arg name="enable_logging" default="false"/>
+            <arg name="enable_ground_truth" default="true"/>
+            <arg name="enable_mavlink_interface" default="false"/>
+            <arg name="wait_to_record_bag" default="false"/>
+
+        <!-- Autopilot -->
+            <arg name="enable_command_feedthrough" default="false"/>
+
+        <!-- RPG Flightmare Unity Render -->
+            <arg name="use_unity_editor" default="false" />
+
+    
+
+
+
+
+        <!-- Forgetful Drones -->
+
+            <node pkg="forgetful_drones" type="forgetful_drone" name="forgetful_drone" output="screen">
+                <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml" />
+            </node>
+
+        <!-- /Forgetful Drones -->
+
+        
+
+
+
+</launch>
+

@@ -36,6 +36,29 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -g")
 
 
 
+#get_filename_component(matplotlib_cpp_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" "/home/fm/git/matplotlib-cpp")
+#
+#if(NOT TARGET matplotlib_cpp::matplotlib_cpp)
+#  find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+#  find_package(Python3 COMPONENTS NumPy)
+#  include("${matplotlib_cpp_CMAKE_DIR}/matplotlib_cppTargets.cmake")
+#
+#  get_target_property(matplotlib_cpp_INCLUDE_DIRS matplotlib_cpp::matplotlib_cpp INTERFACE_INCLUDE_DIRECTORIES)
+#
+#endif()
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+
+
+
+set(GUROBI_INCLUDE_DIRECTORY "/opt/gurobi950/linux64/include")
+include_directories(${GUROBI_INCLUDE_DIRECTORY})
+set(GUROBI_LIB_DIRECTORY "/opt/gurobi950/linux64/lib")
+link_directories(${GUROBI_LIB_DIRECTORY})
+
+
+
+
 # CPP Units -> Libraries
 cs_add_library(forgetful_helpers src/forgetful_helpers.cpp)
 cs_add_library(forgetful_drone_base src/forgetful_drone_base.cpp)
@@ -43,7 +66,8 @@ cs_add_library(forgetful_simulator_base src/forgetful_simulator_base.cpp)
 
 target_link_libraries(forgetful_helpers ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
 target_link_libraries(forgetful_drone_base ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
-target_link_libraries(forgetful_drone_base ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} stdc++fs)
+target_link_libraries(forgetful_drone_base ${PYTHON_LIBRARIES})
+target_link_libraries(forgetful_drone_base libgurobi_g++5.2.a gurobi95)
 
 cs_add_executable(forgetful_drone src/forgetful_drone_node.cpp)
 cs_add_executable(forgetful_simulator src/forgetful_simulator_node.cpp)

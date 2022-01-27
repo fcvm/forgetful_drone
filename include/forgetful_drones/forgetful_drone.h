@@ -34,6 +34,8 @@
 
 #include <rviz/SendFilePath.h>
 
+
+
 namespace forgetful_drone{
 namespace RQTG = RapidQuadrocopterTrajectoryGenerator;
 
@@ -80,7 +82,8 @@ private:// Expert //
 
 
 
-
+    const char* m_ROSNodeName;
+    std::string m_ROSNodePath;
 
 
 
@@ -106,7 +109,7 @@ private:// CONST MEMBER VARIABLES //
         void ROSCB_NetworkPrediction( const geometry_msgs::PointConstPtr& msg );
             Eigen::Vector3d m_NetworkPrediciton;
 
-    ros::Subscriber m_ROSSub_RGBCameraImageRaw;
+    ros::Subscriber m_ROSSub_FlightmareRGB;
         void ROSCB_RGBCameraImageRaw( const sensor_msgs::ImageConstPtr& msg );
             cv::Mat m_CamFrame;
             cv::Mat m_CamFrameWithPredictions;
@@ -123,6 +126,8 @@ private:// CONST MEMBER VARIABLES //
     ros::Publisher m_ROSPub_StopNavigation;
     ros::Publisher m_ROSPub_NavigatorState;
     ros::Publisher m_ROSPub_RVIZGlobalTrajectory;
+    ros::Publisher m_ROSPub_SimulatorStart;
+    ros::Publisher m_ROSPub_SimulatorStop;
 
     ros::Publisher m_ROSPub_RVIZPositions;
 
@@ -163,7 +168,7 @@ private:// CONST MEMBER VARIABLES //
             void findHorizonState( const double& Horizon );
             void rvizExpertAndHorizonState();
             void rvizCurrWaypoint();
-            void rvizReferenceState();
+            void rvizRefStatePosVel();
 
             void processNavigatorInput( Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal );
             Eigen::Vector3d XYZ_DRF_From_XYDist_IRF( 
@@ -178,7 +183,7 @@ private:// CONST MEMBER VARIABLES //
             );
             bool LocTrajFeasible( RQTG::RapidTrajectoryGenerator& LocalTrajectory );
 
-            void markTrainingDataOfCurrRunAsFailed();
+            void markRunTrainingDataAsFailed();
             void saveTrainData();
     
 
@@ -194,6 +199,8 @@ private:// ROS PARAMETERS //
 ///////////////////////////
 
     const bool m_SIMDynGatesEnabled;
+    const bool m_RacetrackDataGeneration_ON;
+    const bool m_Debug_ON;
 
 
     const int m_ORCRunMaxCount;
@@ -207,22 +214,24 @@ private:// ROS PARAMETERS //
     const double m_DRONECamHalfYawAOV;
     const double m_DRONECamHalfPitchAOV;
     
-    const double m_ORCNoWaypointArrivalMaxDuration;
+    const double m_ORCCurrWP_MaxFlightDuration;
 
     const double m_GTMinWeightVel;
     const double m_GTMinWeightAcc;
     const double m_GTMinWeightJerk;
     const double m_GTMinWeightSnap;
-    const double m_GTMaxNormThrust;
+    const double m_GTMaxThrust;
     const double m_GTMaxRollPitchRate;
     const double m_GTMaxSpeed;
+    const double m_GTNonDimTemporalRange;
+    const double m_GTNonDimSpatialRange;
     const double m_WUThresDist2DetectWaypointArrival;
     const double m_EXPMinHorizon;
     //const double m_DRONECamHalfYawAOV;
     //const double m_DRONECamHalfPitchAOV;
     const double m_EXPSpeedHorizon;
     //const double m_ROSParam_NominalExpertLoopTime;
-    const double m_NAVMaxDivFromRefState;
+    const double m_NAVMaxDist2RefState;
     const double m_EXPMaxDivFromGT4Projection;
 
 
@@ -267,7 +276,8 @@ void launchDroneOffGround();
 void flyDroneToInitPose();
 void flyDroneBetweenLastAndSecLastGate();
 void landDroneOnGround();
-void computeGloTrajForExpert();
+bool computeGloTrajForExpert();
+void precomputeGloTrajForExpert();
 void rvizGloTraj();
 
 ////////////////////////////////////////////////////////
@@ -283,7 +293,7 @@ private:// NON-CONST MEMBER VARIABLES //
 std::vector<geometry_msgs::Pose, std::allocator<geometry_msgs::Pose>> m_Gates_WaypointPose;
 geometry_msgs::Pose m_Drone_InitPose;
 
-std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_GloTrajWaypoints;
+std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_GT_WP;
 double m_Expert_MaxHorizon;
 
 std::vector< quadrotor_common::TrajectoryPoint > m_GloTraj;
@@ -296,8 +306,8 @@ kindr::minimal::QuatTransformation m_Trafo_ARF_DRF;
 
 kindr::minimal::QuatTransformation m_Trafo_ARF_RRF;
 
-double m_Dist2CurrWaypoint;
-double m_Dist2LastWaypoint;
+double m_Dist2CurrWP;
+double m_Dist2LastWP;
 
 
 std::mutex m_CloneImgMtx;
@@ -305,7 +315,7 @@ std::mutex m_CloneImgMtx;
 
 std::string m_TrainingDataDirPath;
 std::string m_RunDirPath;
-std::string m_RunCountString;
+//std::string m_RunCountString;
 
 uint8_t m_AutopilotState;
 uint8_t m_SIMRaceTrackType;
@@ -314,15 +324,15 @@ FlightMissions m_ORCFlightMission;
 
 double m_EstimatedNormalizedSpeed;
 
-Eigen::Vector3d m_ReferenceStatePos_WRF;
-size_t m_CurrWaypointIdx;
-size_t m_LastWaypointIdx;
-size_t m_ExpertStateIdx;
-size_t m_HorizonStateIdx;
-size_t m_SpeedStateIdx;
-int m_RunCount;
-int m_CamFrameCount;
-int m_LapCount;
+Eigen::Vector3d m_RefStatePos_WRF;
+size_t m_CurrWP_i;
+size_t m_LastWP_i;
+size_t m_GT_ExpertState_i;
+size_t m_GT_HorizonState_i;
+size_t m_GT_SpeedState_i;
+int m_Run_i;
+int m_CamFrame_i;
+int m_Lap_i;
 
 Eigen::Vector3d m_ExpertPrediction;
 Eigen::Vector3d m_NavigatorInput;
@@ -334,15 +344,15 @@ bool m_TrainDataSaverEnabled;
 unsigned int m_LocTraj_SubseqInfeasibleN;
 ros::Time m_LocTraj_StartTime;
 RQTG::RapidTrajectoryGenerator m_LocTraj;
-size_t m_MainLoopIterCount;
+size_t m_MainLoopIter_i;
 unsigned int m_LocTraj_FeasibleCompCount;
 
-quadrotor_common::TrajectoryPoint m_ReferenceState_ARF;
+quadrotor_common::TrajectoryPoint m_RefState_ARF;
 
 
-bool m_GloTrajCompFailed;
+bool m_GT_CompFailed;
 
-ros::Time m_LastWaypointArrivalTime;
+ros::Time m_LastWP_ArrivalTime;
 
 
 //////////////////////
@@ -353,6 +363,14 @@ void switchDynamicGates( const bool& SwitchOn );
 void switchNavigator( const bool& SwitchOn );
 
 void resetRVIZ();
+
+
+
+public:
+    
+    
+private:
+    void gGT_computePreliminaryTemporalCoordinates();
 
 
 
@@ -373,4 +391,9 @@ fetchROSParameters
 
 
 };
+
+
+void generateRacetrackData();
+std::vector<quadrotor_common::TrajectoryPoint> computeGlobalTrajectory
+(std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> Waypoints);
 }

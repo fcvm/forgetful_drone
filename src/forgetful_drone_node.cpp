@@ -19,13 +19,20 @@ int main( int argc, char** argv )
   return runForgetfulDrone(argc, argv);
 }
 
-int runForgetfulDrone(int argc, char** argv) 
+int runForgetfulDrone(int argc, char** argv)
 {
-  ros::init( argc, argv, "forgetful_drone" );
-
-  forgetful_drone::ForgetfulDrone ForgetfulDrone;
-  ros::MultiThreadedSpinner Spinner;
-  Spinner.spin();
+  if (false)
+  {
+    ros::Time::init();
+    forgetful_drone::generateRacetrackData();
+  }
+  else
+  {
+    ros::init( argc, argv, "forgetful_drone" );
+    forgetful_drone::ForgetfulDrone ForgetfulDrone;
+    ros::MultiThreadedSpinner Spinner;
+    Spinner.spin();
+  }
   
   return 0;
 }

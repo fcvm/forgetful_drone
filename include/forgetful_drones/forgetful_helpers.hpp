@@ -19,6 +19,12 @@
 #include <tf/transform_datatypes.h>
 
 
+#define MY_ROS_DEBUG(...) {std::cout<<std::endl;ROS_LOG(::ros::console::levels::Debug, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__);}
+#define MY_ROS_INFO(...) {std::cout<<std::endl;ROS_LOG(::ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__);}
+#define MY_ROS_WARN(...) {std::cout<<std::endl;ROS_LOG(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__);}
+#define MY_ROS_ERROR(...) {std::cout<<std::endl;ROS_LOG(::ros::console::levels::Error, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__);}
+#define MY_ROS_FATAL(...) {std::cout<<std::endl;ROS_LOG(::ros::console::levels::Fatal, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__);}
+
 
 
 
@@ -35,6 +41,9 @@ public:
     Eigen::Vector3f position{0.0, 0.0, 0.0};
     Eigen::Quaternionf orientation{1.0, 0.0, 0.0, 0.0};
 
+    Pose();
+    Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori);
+
     geometry_msgs::Point position_as_geometry_msg() const;
     geometry_msgs::Quaternion orientation_as_geometry_msg() const;
     geometry_msgs::Pose as_geometry_msg() const;
@@ -45,6 +54,14 @@ public:
 Eigen::Vector3d 
 EigenVector3d_From_Vec3
 ( const Vec3& IN );
+
+Eigen::Quaternionf EigenQuaternionF_From_Yaw(const double& IN, const bool& InDegree);
+
+
+double
+Yaw_From_EigenQuaterniond(
+    const Eigen::Quaterniond& IN
+);
 
 
 Vec3 
@@ -79,6 +96,14 @@ geometry_msgs::Quaternion
 GeometryMsgsQuaternion_From_EigenQuaterniond
 ( const Eigen::Quaterniond& IN );
 
+
+std::vector<double>
+StdVector_From_EigenVector
+( const Eigen::VectorXd& IN );
+
+Eigen::VectorXd
+EigenVector_From_StdVector
+( const std::vector<double>& IN );
 
 // 
 
@@ -170,6 +195,15 @@ rvizPosition
     const ros::Publisher& ROSPub
 );
 
+void
+rvizState
+(
+    const Eigen::Vector3d& Pos,
+    const Eigen::Vector3d& Vel,
+    const VisPosTypes& Type,
+    const ros::Publisher& ROSPub
+);
+
 
 
 bool
@@ -186,5 +220,6 @@ fetchROSParameters
 
 void 
 runMultiThreadedSpinner();
+
 
 }

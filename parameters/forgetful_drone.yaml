@@ -5,7 +5,7 @@
 ORC_flight_mission: "generate_training_data"
 #ORC_flight_mission: "test_simulation_with_autopilot"
 ###
-ORC_nominal_period_duration_of_main_loop: 0.02
+ORC_nominal_period_duration_of_main_loop: 0.09 #0.02
 ORC_number_of_runs: 100
 ORC_number_of_laps_per_run: 1
 ORC_duration_without_reaching_waypoint_to_abort_run: 20.0
@@ -21,11 +21,11 @@ SIM_race_track_type: "randomized_figure8"
 SIM_dynamic_gates_enabled: false
 
 # --- DRONE ---
-DRONE_half_yaw_angle_of_view_of_onboard_camera: deg(50.0)
-DRONE_half_pitch_angle_of_view_of_onboard_camera: deg(35.0)
+DRONE_half_yaw_angle_of_view_of_onboard_camera: deg(54.45) #deg(50.0) # from unreliable measurements in Unity
+DRONE_half_pitch_angle_of_view_of_onboard_camera: deg(45.64) #deg(35.0)
 
 # --- GLOBAL TRAJECTORY (GT) ---
-GT_polynomial_order: 11
+GT_polynomial_order: 11 # 11
 GT_continuous_order: 4
 GT_velocity_minimization_weight: 1.0 #0.1 
 GT_acceleration_minimization_weight: 10.0
@@ -34,6 +34,8 @@ GT_snap_minimization_weight: 1000.0
 GT_max_normalized_thrust: 18.0
 GT_max_roll_pitch_rate: 1.5
 GT_max_speed: 10.0
+GT_max_non_dim_temporal_range: 2.0
+GT_max_non_dim_spatial_range: 2.0
 
 # --- WAYPOINT UPDATER (WU) ---
 WU_initial_waypoint_index_for_figure8_race_tracks: 13
@@ -69,3 +71,20 @@ RVIZ_elapsed_LTs_enabled: true
 RVIZ_duration_of_LTs: 0.0 # 0.0 means display full traj
 RVIZ_sampling_frequency_of_LTs: 10.0
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+debug_on: false
+racetrack_data_generation_on: false
