@@ -1,0 +1,247 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################
+
+
+###########
+## DRONE ##
+###########
+DRONE_TEST_ENABLED: false 
+
+DRONE_MAINLOOP_FREQ: 50.0 # [Hz]
+
+CONFIG_NUMRUNS: 5
+RUN_NUMLAPS: 1 # [1]
+
+
+# NAVIGATOR
+NAV_REFSTATE_MAXDIVERGENCE: 1.2 #[m]
+NAV_REPLANNING_MAINLOOPITERSCNT: 3 #[1]
+NAV_INPUTPERTURBATION_ELEMENTWISEAMP: 0.15 #[1] #0.05 # 0.01 is a good value
+# NAVIGATOR - LOCAL TRAJECTORY
+NAV_LOCTRAJ_MAXSPEEDS: [4.0]
+NAV_LOCTRAJ_MINSPEED: 2.0
+NAV_LOCTRAJ_MAXSPEEDINCREMENT: 0.5
+NAV_LOCTRAJ_DURATION: 1.0 #1.5 # [s]
+NAV_LOCTRAJ_MINDIST: 2.0 # 3.0
+NAV_LOCTRAJ_MAXDIST: 5.0
+NAV_LOCTRAJ_FEASIBILITY_POSITION_MINALTITUDE: 0.2
+NAV_LOCTRAJ_FEASIBILITY_POSITION_MAXALTITUDE: 10.0
+NAV_LOCTRAJ_FEASIBILITY_INPUT_MINTHRUST: 0.0
+NAV_LOCTRAJ_FEASIBILITY_INPUT_MAXTHRUST: 50.0
+NAV_LOCTRAJ_FEASIBILITY_INPUT_MAXBODYRATES: 30.0
+NAV_LOCTRAJ_FEASIBILITY_INPUT_MINSAMPLINGTIME: 0.05 # [s]: min sampling time when checking input feasibility of trajectory
+NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT: 5 #[1]
+# RVIZ
+RVIZ_LOCTRAJ_ELAPSEDDISPLAYED: false # show only current or also past trajectories
+RVIZ_LOCTRAJ_SAMPLINGDURATION: 0.0 # [s] ZERO: show full trajectory
+RVIZ_LOCTRAJ_SAMPLINGFREQUENCY: 10.0 # [Hz]
+
+# GLOBAL TRAJECTORY
+GLOTRAJ_POLYNOMIALORDER: 11 #[1]
+GLOTRAJ_CONTINUITYORDER: 4 #[1]
+GLOTRAJ_MAXTHRUST: 18.0 #[m/s^2]
+GLOTRAJ_MAXROLLPITCHRATE: 1.5 #[1/s]
+GLOTRAJ_MAXSPEED: 10.0 #[m/s]
+GLOTRAJ_NONDIMTEMPORALRANGE: 2.0 #[1]
+GLOTRAJ_NONDIMSPATIALRANGE: 2.0 #[1]
+
+# WAYPOINT ARRIVAL
+WAYPARRIV_THRESHOLDDIST: 1.0 # [m]
+WAYPARRIV_MAXDURATION: 20 # [s]
+
+# RVIZ
+RVIZ_CONFIGRELFPATH: "/rviz/default.rviz"
+RVIZ_LABELEDRGB_ENABLED: true
+RVIZ_LABELEDRGB_SAVED: false
+
+# --- EXPERT (EXP) ---
+EXPERT_MINWAYPHORIZON: 2.0
+EXPERT_SPEEDHORIZON: 0.5
+EXPERT_PROJECTIONMAXDIVERGENCE: 1.0 #[m] If drone is more than THIS away from global trajectory, do not use projection to identify the expert state but chose the closest state
+
+
+DRONE_CAMERA_HALF_YAW_AOV: deg(54.45) #deg(50.0) # from unreliable measurements in Unity
+DRONE_CAMERA_HALF_PITCH_AOV: deg(45.64) #deg(35.0)
+
+
+# "": Start new experiment
+DRONE_EXPERIMENT_ID: "UTC_2022_5_21_8_36_5" 
+
+# 0: Track global trajectory through racetrack
+# 1: Navigate through racetrack with expert system
+# 2: Navigate through racetrack with brain (ANN)
+# 3: Generate training data
+# 4: DAGGER
+DRONE_FLIGHTMISSION: 4
+
+# 0: Spaceship Interior
+# 1: Destroyed City
+# 2: Industrial Park
+# 3: Polygon City
+# 4: Desert Mountain
+# 255: Random choice
+DRONE_FLIGHTMISSION_UNITYSCENES: [1]
+# 0: Site A
+# 1: Site B
+# 2: Site C
+# 255: Random choice
+DRONE_FLIGHTMISSION_SCENESITES: [0]
+# 0: Figure 8
+# 1: Gap
+# 2: Random Circuit
+# 3: Randomized Sprint
+# 255: Random choice
+DRONE_FLIGHTMISSION_TRACKTYPES: [0]
+# 0: Deterministic
+# 1: Randomized
+# 255: Random choice
+DRONE_FLIGHTMISSION_TRACKGENERATIONS: [1]
+# 0: Clockwise
+# 1: Counterclockwise
+# 255: Random choice
+DRONE_FLIGHTMISSION_TRACKDIRECTIONS: [0, 1]
+# 0: RPG Gate
+# 1: TUB/DAI Gate
+# 2: THU/DME Gate
+# 255: Random choice
+DRONE_FLIGHTMISSION_GATETYPES: [1]
+
+
+# Pose [x, y, z, qw, qx, qy, qz] of autopilot reference frame in world reference frame
+DRONE_AUTOPILOT_REFFRAME_WRF: [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+
+# 0: python
+# 1: cpp
+DRONE_BRAIN_TORCHINTERFACE: 0
+# 0: cpu
+# 1: cuda
+DRONE_BRAIN_TORCHDEVICE: 0
+
+
+
+
+
+
+DRONE_DAGGER_MARGINS: [0.7, 0.5]
+DRONE_DAGGER_FIRSTRUN_NUMLAPS: 10
+DRONE_FLIGHTMISSION_DAGGER_NUM_EPOCHS: 10
+DRONE_FLIGHTMISSION_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD: 0.01
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############
+## SIMULATOR ##
+###############
+
+SIM_MAINLOOP_FREQ: 50.0 # Publish frames from unity
+
+# UNITY
+SIM_UNITY_ENABLED: true
+SIM_UNITY_DRONE_CAMERA_WIDTH: 720
+SIM_UNITY_DRONE_CAMERA_HEIGHT: 480
+SIM_UNITY_DRONE_CAMERA_FOV: 90.0
+
+# RVIZ
+SIM_RVIZ_ENABLED: true
+SIM_RVIZ_CONFIG_FPATH: "/rviz/default.rviz"
+SIM_RVIZ_DRONE_NUM_ROTORS: 4
+SIM_RVIZ_DRONE_ARM_LENGTH: 0.2
+SIM_RVIZ_DRONE_BODY_WIDTH: 0.15
+SIM_RVIZ_DRONE_BODY_HEIGHT: 0.1
+SIM_RVIZ_DRONE_SCALE: 2.5
+
+# TRACK RANDOMIZATION
+SIM_TRACKRAND_AXSHIFT_MAX: 0.8 # [m] Max axial shift applied to each gate (in z-direction only positive values)
+SIM_TRACKRAND_YAWTWIST_MAX: deg(5.0)
+SIM_TRACKRAND_SCALE_MIN: 0.8 # Min scaling factor for the whole track (after shifting)
+SIM_TRACKRAND_SCALE_MAX: 1.2 # Max scaling factor for the whole track (after shifting)
+
+# RANDOM SPRINT
+SIM_RANDSPRINT_NUM_GATES: 0 # Number of gates of race track.
+SIM_RANDSPRINT_NUM_GATES_MIN: 10 # Limits of uniform int distribution. Uses only, if above set to zero
+SIM_RANDSPRINT_NUM_GATES_MAX: 40 # Limits of uniform int distribution. Uses only, if above set to zero
+SIM_RANDSPRINT_SECTION_NUM_GATES_MIN: 2 # Limits of uniform int distribution: Number of gates of race track section (a section has the same yaw and pitch between its gates and brings structure into the randomness)
+SIM_RANDSPRINT_SECTION_NUM_GATES_MAX: 4 # Limits of uniform int distribution: Number of gates of race track section (a section has the same yaw and pitch between its gates and brings structure into the randomness)
+SIM_RANDSPRINT_SPACING_MIN: 20.0 # [m], Minimum distance between gates.
+SIM_RANDSPRINT_SPACING_UNIDIRECTIONAL_STD_DEV: 6.0 # [m], Standard deviation of one-sided normal distribution for distance between gates.
+SIM_RANDSPRINT_YAW_LR_MEAN: deg(20.0) # [degree], randomly chosen if +/- used as mean in normal distribution.
+SIM_RANDSPRINT_YAW_STD_DEV: deg(3.0) # [degree], Standard deviation in normal distribution.
+SIM_RANDSPRINT_PITCH_MEAN: deg(-0.5) # [degree], Mean in normal distribution. Negative value to offset effect of ´p_Test_SprintRace_Gates_MinZ´.
+SIM_RANDSPRINT_PITCH_STD_DEV: deg(2.0) # [degree], Standard deviation in normal distribution.
+
+# DYNAMIC GATES
+SIM_DYNGATES_AXAMP_MAX: 0.8 # Max axial amplitude of moving gates
+SIM_DYNGATES_AXFREQ_MAX: 0.2 # Max axial frequency of moving gates
+
+# TEST
+SIM_TEST_ENABLED: false
+# 0: Spaceship Interior
+# 1: Destroyed City
+# 2: Industrial Park
+# 3: Polygon City
+# 4: Desert Mountain
+# 255: Random choice
+SIM_TEST_UNITYSCENE: 1
+# 0: Site A
+# 1: Site B
+# 2: Site C
+# 255: Random choice
+SIM_TEST_SCENESITE: 0
+# 0: Figure 8
+# 1: Gap
+# 2: Random Circuit
+# 3: Randomized Sprint
+# 255: Random choice
+SIM_TEST_TRACKTYPE: 0
+# 0: Deterministic
+# 1: Randomized
+# 255: Random choice
+SIM_TEST_TRACKGENERATION: 1
+# 0: RPG Gate
+# 1: TUB/DAI Gate
+# 2: THU/DME Gate
+# 255: Random choice
+SIM_TEST_GATETYPE: 1
+# 0: Clockwise
+# 1: Counterclockwise
+# 255: Random choice
+SIM_TEST_TRACKDIRECTION: 0
