@@ -1,0 +1,3 @@
+float64 GoalX_IRF
+float64 GoalY_IRF
+float64 Speed2Goal_Normalized

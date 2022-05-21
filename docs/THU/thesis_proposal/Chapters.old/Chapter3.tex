@@ -1,0 +1,487 @@
+% Chapter Template
+
+\chapter{The Research Project} \label{cha:research_project} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+For my master thesis within the  
+"Double/Joint Degree Master Program in Mechanical Engineering/Physikalische Ingenieurwissenschaft 
+of Tsinghua University and the Technical University of Berlin",
+I decided to research on the topic "\ttitle".
+This chapter, first, clarifies the objective of the research of this master thesis and
+discusses the potential contribution to the field of autonomous navigation of UAVs.
+Secondly, the intended methodology and elaboration of
+the general design of the unmanned aerial system, the navigation system and the test scenario, is presented.
+Thirdly, the scope of this master thesis is reflected in a schedule of research and thesis writing.
+
+
+
+
+
+
+%While the methods can successfully avoid obstacles,
+%they lack of a high-level goal formulation and lose orientation if there is nothing to react to.
+%High-level formulation is an inherent problem for deep learning.
+%Within my research, I aim to develop an autonomous navigation method for MAVs that can bridge phases without orientation
+%by empowering the MAV with power of recall.
+%Trained with imitation learning, the policy should map not only the current image 
+%from a forward facing camera but also selectively remembered, elapsed images to current actions.
+%Then, the MAV could not only perceive in the spatial but also in the temporal dimension, i.e., remember,
+%which in turn would make the navigation method robust against phases without orientation.
+
+
+
+
+
+%-----------------------------
+\section{Research Objective and Anticipated Contribution}
+%-----------------------------
+
+Although many sophisticated methods for the autonomous navigation of MAVs already exist,
+open-world environments of high uncertainty have not yet been conquered by autonomous MAVs (see section \ref{sec:autonomous_navigation_of_MAVs}).
+Current research is making effort to face the uncertainty of this environments by using deep learning techniques 
+that empower MAVs with necessary perception and reasoning abilities.
+State-of-the-art, vision-based navigation methods integrate policies in the form of feedforward, deep convolutional neural networks
+that map the current state in form of the current picture to action.
+Convolutional neural networks already achieve a high, spatial perception and reasoning of the immediate environment, however, 
+this alone may not be enough for the long-term objective to robustly apply autonomous MAVs in open-world environments.
+
+Kaufmann, Loquercio, Ranftl, Dosovitskiy, Koltun and Scaramuzza\cite{Kaufmann2018}
+developed a vision-based method that navigates a MAV through a drone racing track with possibly dynamically moving race gates.
+Thereby, they achieved a high reliability and agility at high speeds.
+But the method, exemplarily of other methods, has a decisive deficiency that stands out 
+due the inherent problem of high-level goal formulation in deep learning.
+At any time the next gate must be in the frame of view (FOV) of the onboard camera. 
+If not, the navigation method has no target position.
+This is also the case, even if the MAV has seen the next gate in the past.
+For example, a section of the race track that consist of two successive gates, in between a steep curve
+could not successfully be navigated through by the method, even if both gates have already appeared on images.
+Before the MAV navigate through the first gate, both gates are in the FOV of the camera.
+After it has flown through the first gate, because the curve is too steep, the second gate is out the FOV 
+and the navigation method has no goal to be achieved.
+
+The lack of high-level goal planning is an inherent problem of deep learning policies.
+In the navigation method of this research, I want to meet the lack of high-level goal planning 
+by introducing powers of recall to navigation.
+To my knowledge, Kelchtermans and Tuytelaars \cite{Kelchtermans2017}
+are the only ones who used a recurrent neural network for memory abilities in autonomous, vision-based UAV navigation. \cite{Shakeri2019}
+However, they only tested their method in simulation and did not comprehensively evaluate their results.
+If the method, after passing the first gate, could remember that it has seen the second gate before,
+the method could plan to navigate through the second gate based on elapsed images.
+% HUMAN IN THE DRONE RACETRACK EXAMPLE
+%To solve this problem I consider what a human would do in this scenario.
+%From a position before entering the gate 1, a human can see gate 1 and 2.
+%After he flew through gate 1, he has no visual contact to both gates anymore.
+%Yet, he can manage to navigate through gate 2 because he has the ability 
+%to remember the position of gate 2 in his body frame. 
+
+Deep learning enables machines to learn human-like abilities of perception and reasoning.
+Thus, it seems promising to orient methods also on human behavior.
+Powers of recall in human navigation has an important function.
+For example, after entering a room, humans can still locate themselves relatively to the door which is not in their FOV anymore.
+In addition, humans cannot estimate the velocity and direction of motion of themselves, obstacles or other agents
+based on a short blink with their eyes but they need to observe over at least a short period of time.
+Not only localization but also situational reasoning is strengthend by memory,
+e.g., a car driver observes a child that runs from the sidewalk through the parking cars onto the road
+and has enough reaction time or even anticipation to brake.
+Without any power of recall, the driver may start braking in anticipation
+when the child is still on the sidewalk, but may stop braking after the child disappears behind a parking car.
+
+In my method I plan to use deep convolutional neural networks serially connected to a long-short-term-memory (LSTM) neural network.
+While the CNN has the ability to perceive and reason spatial structures of the environment,
+the LSTM is able to establish connections through time. 
+In other words, the CNN is responsible to predict waypoints or generate trajectories based on single images,
+whereas the LSTM empower the method to recall and remember by evaluating the temporal structure between the predictions of the CNN.
+Besides the above steep curve scenario, this memory would show great benefit in situations
+when the quadcopter lost track of the goals and he can recall elapsed images.
+In case of the application in urban areas, for example, 
+quadcopters could remember obstacles that were visible but have become occluded and thus, could better anticipate. 
+Or after an evasive maneuver, the quadcopter could return to the actual path much faster because he memorizes its maneuver.
+In that sense, the memory of the quadcopter is another form of localization in the environment which is not global but namely local.
+In addition, memory could enable better optimization, e.g., the imitation learning of optimal trajectories which
+are not only spatial but also temporal objects.
+However, this research, in a simplified scenario, should only prove if powers of recall are applicable and generally useful 
+for the autonomous navigation of MAVs.
+
+
+
+
+
+
+
+
+
+%LSTM - MEMORY PAPER%https://arxiv.org/pdf/1702.07600.pdf
+%OVERVIEW PAPER %https://arxiv.org/pdf/1810.09729.pdf
+
+
+%occlusion, small field of view effects, Figure 7: \cite{Ross2013}
+%
+%
+%
+%They also use PX4.%https://arxiv.org/pdf/1705.02550.pdf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\section{Methodology and Elaboration}
+%//////////////////////////////////////
+
+
+%----------------------------
+\subsection{Setup of the UAS}
+%----------------------------
+
+The GCS is represented by a laptop, a wireless LAN router as ground data terminal and an RC controller for emergency cases.
+At the GCS, the human operator switchs on/off and arms the MAV as well as sets the flight control mode to preprogrammed (normal operation)
+or to remote-controlled (emergency case).
+In the preprogrammed mode, the human operator only supervises the autonomously navigating MAV and
+the navigation control system autonomously controls the MAV as described in the next subsection.
+In the remote-controlled mode, 
+the human operator manually sends navigation commands (e.g., turn left, assume the pose) via the RC controller
+to the RC receiver of the air data terminal onboard the MAV.
+The flight controller tracks those navigation commands while also stabilizing the MAV
+by sending out corresponding low-level control commands  to the individual actuators of the flight control system of the MAV.
+
+
+
+
+
+%---------------------------------------------------
+\subsection{Design of the Navigation Control System}
+%---------------------------------------------------
+
+The navigation control system of this thesis builds on the navigation methods of Kaufmann et al. \cite{Kaufmann2018}.
+Similarly, the system is subdivided into the perception/reasoning, the path-planning and the low-level control system.
+While the path-planning and the low-level control system remain broadly the same,
+the perception/reasoning system is structurally oriented towards the design of Kelchtermans and Tuytelaars \cite{Kelchtermans2017},
+i.e., the serial connection of a CNN and a LSTM network that can perceive and reason in both the spatial and temporal dimension.
+However, instead of using the CNN to extract generic features from images like Kelchtermans and Tuytelaars,
+the CNN maps images to a higher level representation in the form of waypoints and desired velociy 
+similarly to original approach by Kaufmann et al. \cite{Kaufmann2018}.
+With this, I aim to significantly reduce computational costs in comparison to Kelchtermans and Tuytelaars
+while remaining the agility qualities of the method of Kaufmann et al. \cite{Kaufmann2018}.
+
+
+The perception/reasoning system is a serial connection of a deep convolutional neural network and a LSTM network.
+The CNN policy inputs the current image from the forward-facing onboard camera of the MAV
+and outputs for each of the next two gates a waypoint in the images coordinates as well as a corresponding normalized speed.
+\begin{align}
+    \left\{ \vec x_i \in [ -1,1 ]^2 \in \mathbb{R}^2 ,\ v_i \in [0,1] \in \mathbb{R} \right\} ,\ i=1,2
+\end{align}
+If the image does not depict gate $i$, the corresponding normalized speed is zero, i.e.,
+if there is no gate, both velocities are zero;
+if there is one gate, the first velocity is a non-zero value and the second velocity is zero;
+if there are two gates, both velocities are non-zero values.
+\begin{align}
+    v_i \in
+    \begin{cases}
+        \{0\},\ &\text{if picture does not depict gate }i \\
+        ]0,1],\ &\text{else} 
+    \end{cases}
+    \quad,\ i=1,2
+\end{align}
+Indices $i=1/2$ refer to the closer/farther one of two closest gate, 
+which is detected by the expansion (e.g., area or diameter) of the gates on the image.
+In case there are more than two gates in the picture, the gates besides the closest two are neglected.
+Assuming that in a common race track the next gate is also the closest gate,
+indices $i=1/2$ correctly reflect the sequence of the race gates in the race track.
+
+
+The LSTM policy inputs the output of the CNN network as well as acceleration data from onboard sensors.
+In case that the current image depicts one or two race gates (i.e., $v_1 \in ]0,1]$),
+the LSTM directly outputs $\vec x = \vec x_1,\ v= v_1$ to the path-planning system.
+In case that the current image depicts no race gate (i.e., $v_1 = 0$),
+the LSTM outputs a bridging waypoint $\vec x = \vec x_b$ with a corresponding bridging velocity $v=v_b$.
+\begin{align}
+    \left\{
+    \vec x = 
+    \begin{cases}
+        \vec x_1\ & \text{if }v_1 \in ]0,1] \\
+        \vec x_b\ & \text{else}
+    \end{cases},\ 
+    v =
+    \begin{cases}
+        v_1\ & \text{if }v_1 \in ]0,1] \\
+        v_b\ & \text{else}
+    \end{cases}
+    \right\}
+\end{align}
+Assuming the next gate had been depicted before the MAV has navigated through the last race gate,
+the relative position of the next gate to the unaccelerated MAV can be estimated by the course of
+the elapsed waypoints of the farther gate (i.e., $\vec x_2$) before the gate had left the FOV (i.e., before $v_2 = 0$).
+However, the MAV has been accelerated in the meantime.
+Therefore, the LSTM also inputs the acceleration data in order to estimate
+the additional, relative displacement of the race gate due to acceleration of the MAV since the gate has left the FOV.
+This bridging navigation is required to be too accurate because the goal is that the race gate, 
+that has disappeared in the meantime, re-appears in the FOV of the camera.
+Then again, the LSTM only passes the predictions from the CNN as described.
+
+The path-planning system inputs the waypoint $\vec x$ in image coordinates and the normalized velocity $v$.
+First, the actual speed is computed with the maximum velocity $v_{\text{max}}$ which is set by the human operator 
+to determine the maximum and therewith also average speed of the MAV.
+\begin{align}
+    v_{\text{out}} = v_{\text{max}} \cdot v
+\end{align}
+Secondly, the prediction horizon is determined proportionally to the velocity $v_{\text{out}}$,
+however, in the range $[d_\text{min}, d_\text{max}]$.
+The proportionality factor $m_d$ as well as the range parameters $d_\text{min}$ and $d_\text{max}$
+are set by the human operator to influence the aggressiveness of the flight of the MAV.
+A smaller prediction horizon at lower speed allows agile flight required in sharp curves,
+whereas a bigger prediction horizon at higher speed smoothens the flight which is benefitial on straight race track sections.
+\begin{align}
+    d = \text{min} \{\text{max}\{d_\text{min}, m_d \cdot v_{\text{out}}\}, d_\text{max}\} 
+\end{align}
+Thirdly, the waypoint $\vec x$ in image coordinates 
+is transformed to the waypoint $\vec p = (p_1, p_2, p_3)^T \in \mathbb{R}^3$ in the coordinate frame of the MAV.
+The x-component is set equal to the prediction horizon (i.e., $p_1 = d$).
+With a back-projecting transformation $T$ of a library (e.g., OpenCV \cite{OpenCV}) the y- and z-components are computed.
+\begin{align}
+    \vec p &= (p_1, p_2, p_3)^T \in \mathbb{R}^3 \text{ with } & p_1 &= d \nonumber \\
+    && (p_2,  p_3)  & = T\left\{ \vec x\right\}
+\end{align}
+Fourthly, a computationally efficient, minimum-jerk trajectory segment $t_s$, 
+as proposed by Mueller, Hehn D'Andrea \cite{Mueller2013}, is computed.
+In the coordinate frame of the MAV, the trajectory segment connects the current state, 
+(i.e., the position $(0, 0, 0)^T \in \mathbb{R}^3$ as well as velocities and accelerations from onboard sensors),
+with the waypoint $\vec p$ in the time span defined by the velocity $v_\text{out}$.
+Thereby, the velocity and acceleration at the waypoint remain unconstrained since 
+a trajectory segment is computed for each incoming prediction of the perception/reasoning system
+and thus, only the first part of the trajectory segment is tracked.
+
+The low-level control system (e.g., as proposed by Faessler, Fontana, Forster and Scaramuzza \cite{Faessler2015}) 
+tracks the trajectory segments $t_s$ by outputting low-level commands that are sent to the actuators of the MAV.
+
+The perception/reasoning system is trained with imitation learning (IL) as follows.
+During the training, the position of the race gates $\vec p_{\text{r},n},$ and
+the estimates of the pose of the MAV must be known in the global reference frame.
+First, a global, minimum-snap trajectory $t_g$ as proposed by Mellinger and Kumar \cite{Mellinger2011}
+traversing through all race gates is calculated.
+The trajectory can be constrained in maximum velocity, body rates and thrust.
+To collect the training features, the MAV captures images throughout the race track.
+For each image, the corresponding label is derived in the following process.
+According to the position and orientation of the MAV, 
+all race gates ahead the MAV are projected onto the image plane.
+If then no race gate is in the FOV of the camera,
+the ground truth label of the image, as above, is set to be $\vec x_i = (0,0)^T,\ v_i =0,\ i=1,2 $.
+If there is one gate in the FOV of the camera,
+first, the closest point on the global trajectory $\vec p_c$ to the position of the MAV $\vec p_M$ is determined.
+Second, a testing prediction horizon is determined that adapts to gate proximity in the racing track,
+i.e., $d_\text{train} = \text{max} \{ d_\text{min}, \text{min} \{ s_\text{last} , s_\text{next} \}\} $
+with the distances to the lastly passed $s_\text{last}$ and the next to be passed gate $s_\text{next}$.
+The point on the forthcoming global trajectory that has the distance of the prediction horizon to the MAV is determined,
+i.e., $\vec p_g$ with $\text{distance} \{ \vec p_c, \vec p_g \} = d_\text{train}$.
+Then, according to the position and orientation of the MAV, the point $\vec p_g$ is projected onto a point of the image plane $\vec x_g$.
+Besides, the velocity at the point $\vec p_c$ is normalized with the maximum speed on the global trajectory, 
+i.e., $v_g = v(\vec p_c) / \text{max} \{v(t_g) \}$.
+The point on the image plane and the normalized velocity are the label for the the first waypoint
+while the second waypoint remains as in the no gate case, 
+i.e., $\vec x_1 = \vec x_g,\ \vec x_2 = (0,0)^T,\ v_1 = v_g,\ v_2 = 0 $.
+In case of two or more gates in the FOV,
+the first waypoint is labeled as in the one gate case.
+The second waypoint is labeled with the position of the second closest gate in the coordinate frame of the MAV.
+
+
+
+%------------------------------
+\subsection{Test Setup} 
+%------------------------------
+
+For the final test, a simple setup of two racing gates connected with a sharp curve is used.
+To show that powers of recall can increase robustness of navigation,
+after pasing the first gate, there must be a time span, where the images from the onboard camera show no gate at all.
+Different time spans without current orientation that the navigation system has to bridge with powers of recall could be examined.
+The MAV could be pushed to different speeds to compare the agility with the original method of Kaufmann et al. \cite{Kaufmann2018}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\section{Schedule of the Master Thesis}
+%///////////////////////////////////////////
+
+This section outlines the scope of the master thesis by presenting the necessary equipment,
+the research plan and the schedule of writing.
+
+
+%----------------------------------------------------------------------------------------
+\subsection{Equipment} \label{sub:the_UAV_of_this_research}
+%----------------------------------------------------------------------------------------
+
+\begin{itemize}
+    \item Quadcopter MAV with 
+    \begin{itemize}
+        \item onboard camera
+        \item Companion computer
+        \item WLAN antenna
+    \end{itemize}
+    \item WLAN router
+    \item Laptop
+\end{itemize}
+
+
+
+
+
+%"  Small  UAVs  have  a  relatively  short  wingspan and light weight. 
+%They are expendable, easy to be built and operated. 
+%Most of them can be operated by one  to  two  people,  
+%or  even  be  hand-carried  and  hand-launched [1,2]. 
+%In fact, small UAVs are designed to fly at low altitude (normally less than 1000 meters) 
+%to provide a  close  observation  of  the  ground  objects.  
+%This  low  altitude flight makes the UAVs easy to crash.
+% A robust and accurate autopilot system is indispensable for small UAVs 
+%  to  successfully  perform  tasks  like  low-altitude  surveillance. "\cite{Chao2010}
+%
+%"Nowadays,   technological   advances   in   wireless networks and micro electromechanical systems (MEMS)  
+%make  it  possible  to  use  inexpensive  micro  autopilots on small UAVs."\cite{Chao2010}
+%
+%
+%
+%
+%
+%The quadcopter configuration is the most common airframe for UAVs in the civil realm. 
+%For any multicopter, electronic complexity replaces the mechanical complexity of a helicopters.
+%Multiple motors, speed controllers, a power distribution board as well as an autopilot,
+%which computes individual motor speeds in order to stabilize the aircraft and follow navigation inputs,
+%are mounted onboard the UAV.
+% 
+%Due to extensive cost decrease and performance increases from the year of 2000 on, 
+%huge markets and broad research on UAVs, exspecially multicopters, have been established.
+%%https://dspace.mit.edu/bitstream/handle/1721.1/121319/Garcia_Santoso_2019.pdf?sequence=1&isAllowed=y
+%
+%
+%
+%However, the insights of my master thesis
+%will be reproducible for other configurations
+%of multicopters because my research
+%takes place on a higher level of navigation control.
+%and low level control of individual motors is excluded.
+%Thus, common autopilots can
+%cancel the differences between the various
+%configurations of multicopters and can ensure
+%an essentially similar flight behaviour.
+
+
+
+
+
+
+
+
+%-------------------------
+\subsection{Research Plan}
+%-------------------------
+The research plan is devided into four main tasks, i.e.,
+the framework for the test scenario in simulation as well as in real world, the design of the navigation method
+and the test execution.
+
+
+
+\paragraph{Framework for experiments in simulation}
+%--------------------------------------------------
+\begin{itemize}
+    \item In the simulation environment, implement randomized test scenario (i.e., steep curve between two successive gates of a drone race track).
+    \item Generate the minimum-snap expert trajectory through the scenario.
+    \item Use available flight control implementation that can track the trajectory.
+    \item Implement the onboard camera to generate images in simulation.
+\end{itemize}
+
+\paragraph{Framework for experiments in real world}
+%--------------------------------------------------
+\begin{itemize}
+    \item Find an appropriate environment and build two race gates.
+    \item Deploy a system that precisely localizes the MAV and the gates.
+    \item Configure MAV hardware (i.e., companion computer, camera, etc.).
+    \item Generate the minimum-snap expert trajectory through the scenario.
+    \item Use available flight control to track the trajectory.
+    \item Collect data with carrying the MAV through the race track section.
+\end{itemize}
+    
+\paragraph{Design of the navigation method}
+%------------------------------------------
+\begin{itemize}
+    \item Establish interface to sensors in simulation/real world.
+    \item Configure architecture of the CNN and LSTM.
+    \item Automize data collection and training of the network.
+\end{itemize}
+
+\paragraph{Test execution}
+%-------------------------
+\begin{itemize}
+    \item Plan the parameters of the test.
+    \item Define evaluation criteria.
+    \item Organize required equipment.
+    \item Conduct the test.
+\end{itemize}
+
+
+
+%------------------------------------------------------
+\subsection{Thesis Writing and Proposed Date of Defense}
+%-----------------------------------------------------
+
+Im am going to return to Germany on December 16, 2019.
+With the begin of the New Year I will continue my research at the Technical University of Berlin.
+I intend to complete the research plan within three months
+and subsequentely start writing the master thesis based on that research.
+At my present discretion, I will finalize the thesis until the end of May 2020.
+According to the regulations of Tsinghua University,
+one year after this thesis proposal in January 2021, I am going to complete the master thesis
+by undergoing the final defense either in personal appearance or via video conference.
+
+
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+%/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\

@@ -1,0 +1,6 @@
+float64 SamplingTime
+bool IsRingTrajectory
+int8 Rounds_N
+geometry_msgs/Pose InitDronePose
+geometry_msgs/Pose[] WaypointPoses
+---

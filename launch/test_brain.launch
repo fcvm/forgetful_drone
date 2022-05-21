@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="quad_name" default="hummingbird"/>
+    <group ns="$(arg quad_name)">
+
+        
+
+        <!-- FORGETFUL DRONES -->
+            <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml"/>
+
+            <param name="EXPERIMENT_DPATH" value="/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/output/DAGGER/UTC_2022_5_15_16_8_17"/>
+            <param name="LATEST_RUN_ID" value="1_0_0_1_0_1_04.00_00.20_000"/>
+            <!-- FORGETFUL BRAIN -->
+            <node
+                pkg="forgetful_drones" 
+                type="forgetful_brain.py" 
+                name="forgetful_brain" 
+                output="screen"
+            />
+    
+    </group>
+
+</launch>
+

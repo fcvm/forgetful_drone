@@ -1,0 +1,74 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: biblatex.bst
+A level-1 auxiliary file: Chapters/Chapter1.aux
+A level-1 auxiliary file: Chapters/Chapter2.aux
+A level-1 auxiliary file: Chapters/Chapter3.aux
+A level-1 auxiliary file: Appendices/AppendixA.aux
+A level-1 auxiliary file: Appendices/AppendixB.aux
+A level-1 auxiliary file: Appendices/AppendixC.aux
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated field_info (elt_size=4) to 20151 items from 5000.
+Database file #1: main-blx.bib
+Database file #2: ProposalDefense.bib
+Warning--I didn't find a database entry for "Shakeri2019"
+Biblatex version: 3.13
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 108 entries,
+            6365 wiz_defined-function locations,
+            1949 strings with 40968 characters,
+and the built_in function-call counts, 862794 in all, are:
+= -- 54542
+> -- 40402
+< -- 5776
++ -- 42218
+- -- 28582
+* -- 52068
+:= -- 100550
+add.period$ -- 0
+call.type$ -- 108
+change.case$ -- 2692
+chr.to.int$ -- 2570
+cite$ -- 214
+duplicate$ -- 81720
+empty$ -- 67934
+format.name$ -- 7393
+if$ -- 159780
+int.to.chr$ -- 0
+int.to.str$ -- 271
+missing$ -- 0
+newline$ -- 3873
+num.names$ -- 5820
+pop$ -- 37912
+preamble$ -- 1
+purify$ -- 3442
+quote$ -- 0
+skip$ -- 25251
+stack$ -- 0
+substring$ -- 97341
+swap$ -- 19839
+text.length$ -- 3617
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 3646
+warning$ -- 0
+while$ -- 11465
+width$ -- 0
+write$ -- 3766
+(There was 1 warning)

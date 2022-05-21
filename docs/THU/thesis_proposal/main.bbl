@@ -1,0 +1,4022 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global}
+  \entry{Hamilton2019}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HIA}{%
+         family={Hamilton},
+         familyi={H\bibinitperiod},
+         given={Isobel\bibnamedelima Asher},
+         giveni={I\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HIA1}
+    \strng{fullhash}{HIA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Amazon drone deliveries are coming, but Jeff Bezos still
+  missed his own deadline for airborne logistics}
+    \verb{url}
+    \verb https://www.businessinsider.com/jeff-bezos-predicted-amazon-would-be-
+    \verb making-drone-deliveries-by-2018-2018-12
+    \endverb
+    \field{journaltitle}{Business Insider}
+    \field{day}{06}
+    \field{month}{06}
+    \field{year}{2019}
+    \field{urlday}{07}
+    \field{urlmonth}{12}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{loquercio2018learning}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=LA}{%
+         family={Loquercio},
+         familyi={L\bibinitperiod},
+         given={Antonio},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LASD1}
+    \strng{fullhash}{LASD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{e ICRA Workshop on Perception, Inference, and Learning
+  for Joint Semantic, Geometric, and Physical Understanding}
+    \field{number}{CONF}
+    \field{title}{Learning to Control Drones in Natural Environments: A Survey}
+    \verb{url}
+    \verb http://rpg.ifi.uzh.ch/docs/WICRA18_Loquercio.pdf
+    \endverb
+    \field{year}{2018}
+    \field{urlday}{24}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{PwC2016}{book}{}
+    \name{author}{26}{}{%
+      {{hash=MM}{%
+         family={Mazur},
+         familyi={M\bibinitperiod},
+         given={Michał},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WA}{%
+         family={Wiśniewski},
+         familyi={W\bibinitperiod},
+         given={Adam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MJ}{%
+         family={McMillan},
+         familyi={M\bibinitperiod},
+         given={Jeffery},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HV}{%
+         family={Huff},
+         familyi={H\bibinitperiod},
+         given={Vicki},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=AR}{%
+         family={Abadie},
+         familyi={A\bibinitperiod},
+         given={Richard},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Smith},
+         familyi={S\bibinitperiod},
+         given={Julian},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Stroh},
+         familyi={S\bibinitperiod},
+         given={Stefan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Romanowski},
+         familyi={R\bibinitperiod},
+         given={Piotr},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Krasoń},
+         familyi={K\bibinitperiod},
+         given={Adam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=OF}{%
+         family={Orliński},
+         familyi={O\bibinitperiod},
+         given={Filip},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Babicz},
+         familyi={B\bibinitperiod},
+         given={Agnieszka},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LP}{%
+         family={Lulkowska},
+         familyi={L\bibinitperiod},
+         given={Paulina},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Boguszewska},
+         familyi={B\bibinitperiod},
+         given={Ewa},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=CB}{%
+         family={Czerkies},
+         familyi={C\bibinitperiod},
+         given={Bartosz},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Głąb},
+         familyi={G\bibinitperiod},
+         given={Adam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HR}{%
+         family={Hołoga},
+         familyi={H\bibinitperiod},
+         given={Rozalia},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=JJ}{%
+         family={Jagiełło},
+         familyi={J\bibinitperiod},
+         given={Jakub},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=JTW}{%
+         family={Jankowska-Tofani},
+         familyi={J\bibinithyphendelim T\bibinitperiod},
+         given={Weronika},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Kramza},
+         familyi={K\bibinitperiod},
+         given={Arkadiusz},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Kuprijaniuk},
+         familyi={K\bibinitperiod},
+         given={Sandra},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PR}{%
+         family={Piwowarski},
+         familyi={P\bibinitperiod},
+         given={Remigiusz},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Sygutowski},
+         familyi={S\bibinitperiod},
+         given={Jacek},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=UG}{%
+         family={Urban},
+         familyi={U\bibinitperiod},
+         given={Grzegorz},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=WM}{%
+         family={Walczak},
+         familyi={W\bibinitperiod},
+         given={Marek},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WM}{%
+         family={Wolski},
+         familyi={W\bibinitperiod},
+         given={Marek},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=ZE}{%
+         family={Zdrojowy},
+         familyi={Z\bibinitperiod},
+         given={Ewa},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {PwC Poland}%
+    }
+    \strng{namehash}{MMWAMJ+1}
+    \strng{fullhash}{MMWAMJHVARSJSSRPKAOFBALPBECBGAHRJJJTWKAKSPRSJUGWMWMZE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{subtitle}{PwC global report on the commercial applications of drone
+  technology}
+    \field{title}{Clarity from above}
+    \verb{url}
+    \verb https://www.pwc.pl/pl/pdf/clarity-from-above-pwc.pdf
+    \endverb
+    \field{month}{05}
+    \field{year}{2016}
+    \field{urlday}{12}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'month' \item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{ICAO2005}{book}{}
+    \list{publisher}{1}{%
+      {International Civil Aviation Organization (ICAO)}%
+    }
+    \field{labeltitlesource}{title}
+    \field{title}{Global Air Traffic Management Operational Concept (Doc 9854)}
+    \verb{url}
+    \verb https://www.icao.int/Meetings/anconf12/Document%20Archive/9854_cons_e
+    \verb n%5B1%5D.pdf
+    \endverb
+    \field{year}{2005}
+    \field{urlday}{25}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Fahlstrom2012}{book}{}
+    \name{author}{1}{}{%
+      {{hash=FTG}{%
+         family={Fahlstrom},
+         familyi={F\bibinitperiod},
+         given={Thomas\bibnamedelima Gleason},
+         giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {John Wiley \& Sons}%
+    }
+    \strng{namehash}{FTG1}
+    \strng{fullhash}{FTG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{isbn}{1119978661}
+    \field{pagetotal}{308}
+    \field{title}{Introduction to UAV Systems 4e}
+    \verb{url}
+    \verb https://www.ebook.de/de/product/19222078/fahlstrom_thomas_gleason_int
+    \verb roduction_to_uav_systems_4e.html
+    \endverb
+    \verb{file}
+    \verb :Jabref Links/Introduction to UAV Systems:
+    \endverb
+    \field{day}{07}
+    \field{month}{09}
+    \field{year}{2012}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Chao2010}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CH}{%
+         family={Chao},
+         familyi={C\bibinitperiod},
+         given={HaiYang},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=CY}{%
+         family={Cao},
+         familyi={C\bibinitperiod},
+         given={YongCan},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=CY}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={YangQuan},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Springer Science}%
+      {Business Media {LLC}}%
+    }
+    \strng{namehash}{CHCYCY1}
+    \strng{fullhash}{CHCYCY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1007/s12555-010-0105-z
+    \endverb
+    \field{number}{1}
+    \field{pages}{36\bibrangedash 44}
+    \field{title}{Autopilots for small unmanned aerial vehicles: A survey}
+    \verb{url}
+    \verb https://link.springer.com/content/pdf/10.1007/s12555-010-0105-z.pdf
+    \endverb
+    \field{volume}{8}
+    \field{journaltitle}{International Journal of Control, Automation and
+  Systems}
+    \field{year}{2010}
+    \field{urlday}{27}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Kong2010}{article}{}
+    \name{author}{2}{}{%
+      {{hash=KZ}{%
+         family={Kong},
+         familyi={K\bibinitperiod},
+         given={Zhaodan},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=MB}{%
+         family={Mettler},
+         familyi={M\bibinitperiod},
+         given={Bernie},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Springer Science}%
+      {Business Media {LLC}}%
+    }
+    \strng{namehash}{KZMB1}
+    \strng{fullhash}{KZMB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1007/s10846-010-9485-9
+    \endverb
+    \field{number}{1-4}
+    \field{pages}{135\bibrangedash 156}
+    \field{title}{Evaluation of Guidance Performance in Urban Terrains for
+  Different {UAV} Types and Performance Criteria Using Spatial {CTG} Maps}
+    \field{volume}{61}
+    \field{journaltitle}{Journal of Intelligent {\&} Robotic Systems}
+    \field{year}{2010}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Austin2011}{book}{}
+    \name{author}{1}{}{%
+      {{hash=AR}{%
+         family={Austin},
+         familyi={A\bibinitperiod},
+         given={Reg},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Wiley}%
+    }
+    \strng{namehash}{AR1}
+    \strng{fullhash}{AR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{isbn}{9780470058190}
+    \field{title}{Unmanned Aircraft Systems: UAVS Design, Development and
+  Deployment (Aerospace Series Book 55)}
+    \verb{url}
+    \verb https://www.amazon.com/Unmanned-Aircraft-Systems-Development-Deployme
+    \verb nt-ebook/dp/B005UQLG0C?SubscriptionId=AKIAIOBINVZYXZQZ2U3A&tag=chimbo
+    \verb ri05-20&linkCode=xm2&camp=2025&creative=165953&creativeASIN=B005UQLG0
+    \verb C
+    \endverb
+    \field{year}{2011}
+  \endentry
+
+  \entry{Gleason2010}{article}{}
+    \name{author}{2}{}{%
+      {{hash=GTJ}{%
+         family={Gleason},
+         familyi={G\bibinitperiod},
+         given={Thomas\bibnamedelima J},
+         giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=FPG}{%
+         family={Fahlstrom},
+         familyi={F\bibinitperiod},
+         given={Paul\bibnamedelima G},
+         giveni={P\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Wiley Online Library}%
+    }
+    \strng{namehash}{GTJFPG1}
+    \strng{fullhash}{GTJFPG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{1\bibrangedash 7}
+    \field{title}{Recovery of UAVs}
+    \field{journaltitle}{Encyclopedia of Aerospace Engineering}
+    \field{year}{2010}
+  \endentry
+
+  \entry{USDOD2011}{proceedings}{}
+    \list{organization}{1}{%
+      {United States Department of Defense}%
+    }
+    \field{labeltitlesource}{title}
+    \field{title}{Unmanned Aircraft System Airspace Integration Plan, Version
+  2.0}
+    \verb{url}
+    \verb https://web.archive.org/web/20160121155841/http://www.acq.osd.mil/sts
+    \verb /docs/DoD_UAS_Airspace_Integ_Plan_v2_(signed).pdf
+    \endverb
+    \field{month}{03}
+    \field{year}{2011}
+  \endentry
+
+  \entry{Wei2016}{article}{}
+    \name{author}{5}{}{%
+      {{hash=WJ}{%
+         family={Wei},
+         familyi={W\bibinitperiod},
+         given={Jun},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=TEE}{%
+         family={Tazewell\bibnamedelima Ellet},
+         familyi={T\bibinitperiod\bibinitdelim E\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=EL}{%
+         family={Ellman},
+         familyi={E\bibinitperiod},
+         given={Lisa},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=RPR}{%
+         family={Rizzi},
+         familyi={R\bibinitperiod},
+         given={Patrick\bibnamedelima R.},
+         giveni={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=ZLETE}{%
+         family={Zhou},
+         familyi={Z\bibinitperiod},
+         given={Lu\bibnamedelima E. Tazewell\bibnamedelima Ellett},
+         giveni={L\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim
+  T\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WJTEEEL+1}
+    \strng{fullhash}{WJTEEELRPRZLETE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+  \field{howpublished}{https://www.hlmediacomms.com/2016/01/21/china-launches-first-operational-rules-for-civil-unmanned-aircraft/}
+    \field{title}{China Launches First Operational Rules for Civil Unmanned
+  Aircraft}
+    \verb{url}
+    \verb https://www.hlmediacomms.com/2016/01/21/china-launches-first-operatio
+    \verb nal-rules-for-civil-unmanned-aircraft/
+    \endverb
+    \field{journaltitle}{Hogan Lovells}
+    \field{month}{01}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Watts2012}{article}{}
+    \name{author}{3}{}{%
+      {{hash=WAC}{%
+         family={Watts},
+         familyi={W\bibinitperiod},
+         given={Adam\bibnamedelima C.},
+         giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=AVG}{%
+         family={Ambrosia},
+         familyi={A\bibinitperiod},
+         given={Vincent\bibnamedelima G.},
+         giveni={V\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=HEA}{%
+         family={Hinkley},
+         familyi={H\bibinitperiod},
+         given={Everett\bibnamedelima A.},
+         giveni={E\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{MDPI} {AG}}%
+    }
+    \strng{namehash}{WACAVGHEA1}
+    \strng{fullhash}{WACAVGHEA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.3390/rs4061671
+    \endverb
+    \field{number}{6}
+    \field{pages}{1671\bibrangedash 1692}
+    \field{title}{Unmanned Aircraft Systems in Remote Sensing and Scientific
+  Research: Classification and Considerations of Use}
+    \field{volume}{4}
+    \verb{file}
+    \verb :Jabref Links/Unmanned Aircraft Systems in Remote Sensing and Scienti
+    \verb fic.pdf:PDF
+    \endverb
+    \field{journaltitle}{Remote Sensing}
+    \field{year}{2012}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Sifton2012}{article}{}
+    \name{author}{1}{}{%
+      {{hash=SJ}{%
+         family={Sifton},
+         familyi={S\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SJ1}
+    \strng{fullhash}{SJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{subtitle}{With the invention of drones, we crossed into a new
+  frontier: killing that’s risk-free, remote, and detached from human cues.}
+    \field{title}{A Brief History of Drones}
+    \verb{url}
+    \verb https://www.thenation.com/article/brief-history-drones/
+    \endverb
+    \field{journaltitle}{The Nation}
+    \field{day}{07}
+    \field{month}{02}
+    \field{year}{2012}
+    \field{urlday}{22}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Garcia2019}{thesis}{}
+    \name{author}{2}{}{%
+      {{hash=GOR}{%
+         family={Garcia},
+         familyi={G\bibinitperiod},
+         given={Oriol\bibnamedelima Rosales},
+         giveni={O\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Santoso},
+         familyi={S\bibinitperiod},
+         given={Antonius},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GORSA1}
+    \strng{fullhash}{GORSA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Comparative Evaluation of Drone Delivery Systemsin Last-Mile
+  Delivery}
+    \verb{url}
+    \verb https://dspace.mit.edu/bitstream/handle/1721.1/121319/Garcia_Santoso_
+    \verb 2019.pdf?sequence=1&isAllowed=y#cite.IWM
+    \endverb
+    \list{institution}{1}{%
+      {MASSACHUSETTS INSTITUTE OF TECHNOLOGY}%
+    }
+    \field{type}{mathesis}
+    \field{month}{06}
+    \field{year}{2019}
+  \endentry
+
+  \entry{Goldman}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={{Goldman Sachs Research}},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Drones - Reporting for Work}
+    \verb{url}
+    \verb https://www.goldmansachs.com/insights/technology-driving-innovation/d
+    \verb rones/
+    \endverb
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Weinswig2015}{book}{}
+    \name{author}{10}{}{%
+      {{hash=WD}{%
+         family={Weinswig},
+         familyi={W\bibinitperiod},
+         given={Deborah},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=DM}{%
+         family={Driscoll},
+         familyi={D\bibinitperiod},
+         given={Marie},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Harmon},
+         familyi={H\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HA}{%
+         family={Hedrick},
+         familyi={H\bibinitperiod},
+         given={Amy},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HA}{%
+         family={Ho},
+         familyi={H\bibinitperiod},
+         given={Aragorn},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MJ}{%
+         family={Mercer},
+         familyi={M\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=PC}{%
+         family={Poon},
+         familyi={P\bibinitperiod},
+         given={Charlie},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=RS}{%
+         family={Reilly},
+         familyi={R\bibinitperiod},
+         given={Stephanie},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=RL}{%
+         family={Rosengard},
+         familyi={R\bibinitperiod},
+         given={Lan},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=WJ}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Jing},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Fung Business Intelligence Centre, The Fung Group}%
+    }
+    \strng{namehash}{WDDMHJ+1}
+    \strng{fullhash}{WDDMHJHAHAMJPCRSRLWJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{6}
+    \field{subtitle}{An In-Depth View on the Growing Market for Drones}
+    \field{title}{Send in the Drones!}
+    \verb{url}
+    \verb https://www.fbicgroup.com/sites/default/files/FBIC%20Global%20Retail%
+    \verb 20Tech%20Report%20Drones%20Apr.%2021_%202015.pdf
+    \endverb
+    \field{day}{21}
+    \field{month}{04}
+    \field{year}{2015}
+    \field{urlday}{12}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Desjardins2016}{article}{}
+    \name{author}{1}{}{%
+      {{hash=DJ}{%
+         family={Desjardins},
+         familyi={D\bibinitperiod},
+         given={Jeff},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DJ1}
+    \strng{fullhash}{DJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{The Emergence of Commercial Drones}
+    \verb{url}
+    \verb https://www.visualcapitalist.com/emergence-commercial-drones/
+    \endverb
+    \field{journaltitle}{Visual Capitalist}
+    \field{day}{04}
+    \field{month}{12}
+    \field{year}{2016}
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Lei2019}{article}{}
+    \name{author}{2}{}{%
+      {{hash=LL}{%
+         family={Lei},
+         familyi={L\bibinitperiod},
+         given={Li},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=YH}{%
+         family={Yan},
+         familyi={Y\bibinitperiod},
+         given={Huo},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LLYH1}
+    \strng{fullhash}{LLYH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Forests breathe life into province, keep desert at bay}
+    \verb{url}
+    \verb https://www.chinadaily.com.cn/a/201909/04/WS5d6f1680a310cf3e3556999d.
+    \verb html
+    \endverb
+    \field{journaltitle}{China Daily}
+    \field{day}{04}
+    \field{month}{09}
+    \field{year}{2019}
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Xiang2019}{article}{}
+    \name{author}{1}{}{%
+      {{hash=XL}{%
+         family={Xiang},
+         familyi={X\bibinitperiod},
+         given={Luan},
+         giveni={L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{XL1}
+    \strng{fullhash}{XL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Nonprofit leads crackdown on air pollution}
+    \verb{url}
+    \verb https://www.chinadaily.com.cn/a/201907/12/WS5d27dc46a3105895c2e7d0f6.
+    \verb html
+    \endverb
+    \field{journaltitle}{China Daily}
+    \field{day}{12}
+    \field{month}{07}
+    \field{year}{2019}
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{McCarthy2018}{article}{}
+    \name{author}{1}{}{%
+      {{hash=MS}{%
+         family={McCarthy},
+         familyi={M\bibinitperiod},
+         given={Simone},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MS1}
+    \strng{fullhash}{MS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{subtitle}{Flying machine used to track down man who went missing for
+  over an hour after going sightseeing in Taklimakan Desert without food or
+  water}
+    \field{title}{Chinese police use drone to rescue man lost in Xinjiang
+  desert}
+    \verb{url}
+    \verb https://www.scmp.com/news/china/society/article/2168091/chinese-polic
+    \verb e-use-drone-rescue-man-lost-xinjiang-desert
+    \endverb
+    \field{journaltitle}{South China Morning Post}
+    \field{day}{11}
+    \field{month}{10}
+    \field{year}{2018}
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{PeoplesDaily2019}{article}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Zhejiang hospital tests 5G UAV ambulance in emergency rescue}
+    \verb{url}
+    \verb http://en.people.cn/n3/2019/0410/c90000-9565324.html
+    \endverb
+    \field{journaltitle}{People's Daily Online}
+    \field{day}{10}
+    \field{month}{04}
+    \field{year}{2019}
+    \field{urlday}{23}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{UN2019}{report}{}
+    \field{labeltitlesource}{title}
+    \field{title}{World Population Prospects 2019}
+    \verb{url}
+    \verb https://population.un.org/wpp/
+    \endverb
+    \list{institution}{2}{%
+      {United Nations, Department of Economic}%
+      {Social Affairs, Population Division}%
+    }
+    \field{type}{techreport}
+    \field{year}{2019}
+    \field{urlday}{28}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{NationalAcademies2016}{book}{}
+    \name{author}{1}{}{%
+      {{hash=N}{%
+         family={{National Academies of Sciences, Engineering and Medicine}},
+         familyi={N\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Washington DC: The National Academies Press}%
+    }
+    \strng{namehash}{N1}
+    \strng{fullhash}{N1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.17226/21852
+    \endverb
+    \field{title}{Attribution of Extreme Weather Events in the Context of
+  Climate Change}
+    \verb{url}
+    \verb https://books.google.com/books?hl=en&lr=&id=WWEpDQAAQBAJ&oi=fnd&pg=PR
+    \verb 1&dq=climate+change+extreme+weather+&ots=DeJAROsdmb&sig=r0XKAsVPKo1qp
+    \verb etuUR5vM5ICrBM#v=onepage&q=climate%20change%20extreme%20weather&f=fal
+    \verb se
+    \endverb
+    \field{year}{2016}
+    \field{urlday}{28}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Ahirwar2019}{article}{}
+    \name{author}{4}{}{%
+      {{hash=AS}{%
+         family={Ahirwar},
+         familyi={A\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Swarnkar},
+         familyi={S\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bhukya},
+         familyi={B\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=NG}{%
+         family={Namwade},
+         familyi={N\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Excellent Publishers}%
+    }
+    \strng{namehash}{ASSRBS+1}
+    \strng{fullhash}{ASSRBSNG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.20546/ijcmas.2019.801.264
+    \endverb
+    \field{number}{01}
+    \field{pages}{2500\bibrangedash 2505}
+    \field{title}{Application of Drone in Agriculture}
+    \field{volume}{8}
+    \verb{file}
+    \verb :Jabref Links/Application of Drone in Agriculture.pdf:PDF
+    \endverb
+    \field{journaltitle}{International Journal of Current Microbiology and
+  Applied Sciences}
+    \field{year}{2019}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{DeveronUAS}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=D}{%
+         family={{Deveron UAS}},
+         familyi={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{D1}
+    \strng{fullhash}{D1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Imagery \& Targeted Soil Sampling}
+    \verb{url}
+    \verb https://deveronuas.com/about-us/advisory-board/
+    \endverb
+  \endentry
+
+  \entry{DroneSeed}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=D}{%
+         family={DroneSeed},
+         familyi={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{D2}
+    \strng{fullhash}{D2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Services}
+    \verb{url}
+    \verb https://www.droneseed.co/services
+    \endverb
+  \endentry
+
+  \entry{HSE}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=H}{%
+         family={{HSE UAV}},
+         familyi={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{H1}
+    \strng{fullhash}{H1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{HSE Agriculture UAV Crop Duster Sprayers}
+    \verb{url}
+    \verb http://www.uavcropdustersprayers.com/
+    \endverb
+  \endentry
+
+  \entry{PrecisionHawk}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=P}{%
+         family={PrecisionHawk},
+         familyi={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{P1}
+    \strng{fullhash}{P1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Drone Data Collection and Analytics for Agriculture}
+    \verb{url}
+    \verb https://www.precisionhawk.com/agriculture
+    \endverb
+  \endentry
+
+  \entry{JD.com2018}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=J}{%
+         family={{JD.com Corporate Blog}},
+         familyi={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{J1}
+    \strng{fullhash}{J1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{JD Cultivates New Smart Agriculture Push in China}
+    \verb{url}
+    \verb https://jdcorporateblog.com/jd-cultivates-new-smart-agriculture-push-
+    \verb in-china/
+    \endverb
+    \field{month}{04}
+    \field{year}{2018}
+  \endentry
+
+  \entry{Mazur2016}{report}{}
+    \name{author}{1}{}{%
+      {{hash=MM}{%
+         family={Mazur},
+         familyi={M\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MM1}
+    \strng{fullhash}{MM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Six Ways Drones Are Revolutionizing Agriculture}
+    \verb{url}
+    \verb https://www.technologyreview.com/s/601935/six-ways-drones-are-revolut
+    \verb ionizing-agriculture/
+    \endverb
+    \list{institution}{1}{%
+      {PricewaterhouseCoopers}%
+    }
+    \field{type}{techreport}
+    \field{journaltitle}{MIT Technology Review}
+    \field{year}{2016}
+  \endentry
+
+  \entry{eMarketer2019}{online}{}
+    \name{author}{1}{}{%
+      {{hash=LA}{%
+         family={Lipsman},
+         familyi={L\bibinitperiod},
+         given={Andrew},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {eMarketer}%
+    }
+    \strng{namehash}{LA1}
+    \strng{fullhash}{LA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Report Global Ecommerce 2019}
+    \verb{url}
+    \verb https://www.emarketer.com/content/global-ecommerce-2019
+    \endverb
+    \field{day}{27}
+    \field{month}{06}
+    \field{year}{2019}
+    \field{urlday}{31}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Weideli2013}{thesis}{}
+    \name{author}{1}{}{%
+      {{hash=WD}{%
+         family={Weideli},
+         familyi={W\bibinitperiod},
+         given={Dimitri},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WD1}
+    \strng{fullhash}{WD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{titleaddon}{Master Thesis Executive Summary}
+    \field{title}{Environmental Analysis of US Online Shopping}
+    \verb{url}
+    \verb https://ctl.mit.edu/sites/ctl.mit.edu/files/library/public/Dimitri-We
+    \verb ideli-Environmental-Analysis-of-US-Online-Shopping_0.pdf
+    \endverb
+    \list{institution}{2}{%
+      {Ecole Polytechnique Fédérale de Lausanne (EPFL)}%
+      {Massachusetts Institute of Technology (MIT) Center for Transportation \&
+  Logistics}%
+    }
+    \field{type}{mathesis}
+    \field{year}{2013}
+    \field{urlday}{31}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{AmazonPrimeAir}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=A}{%
+         family={Amazon},
+         familyi={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{A1}
+    \strng{fullhash}{A1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Amazon Prime Air}
+    \verb{url}
+    \verb https://www.amazon.com/b?node=8037720011
+    \endverb
+  \endentry
+
+  \entry{Manjoo2016}{article}{}
+    \name{author}{1}{}{%
+      {{hash=MF}{%
+         family={Manjoo},
+         familyi={M\bibinitperiod},
+         given={Farhad},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MF1}
+    \strng{fullhash}{MF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Think Amazon’s Drone Delivery Idea Is a Gimmick? Think
+  Again}
+    \verb{url}
+    \verb https://www.nytimes.com/2016/08/11/technology/think-amazons-drone-del
+    \verb ivery-idea-is-a-gimmick-think-again.html
+    \endverb
+    \field{journaltitle}{The New York Times}
+    \field{month}{08}
+    \field{year}{2016}
+  \endentry
+
+  \entry{McKinsey}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={McKinsey\&Company},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Parcel delivery - The future of last mile}
+    \verb{url}
+    \verb https://www.mckinsey.com/~/media/mckinsey/industries/travel%20transpo
+    \verb rt%20and%20logistics/our%20insights/how%20customer%20demands%20are%20
+    \verb reshaping%20last%20mile%20delivery/parcel_delivery_the_future_of_last
+    \verb _mile.ashx
+    \endverb
+    \field{month}{09}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Rosen2019}{article}{}
+    \name{author}{1}{}{%
+      {{hash=RE}{%
+         family={Rosen},
+         familyi={R\bibinitperiod},
+         given={Ellen},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RE1}
+    \strng{fullhash}{RE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Skies Aren’t Clogged With Drones Yet, but Don’t Rule Them
+  Out}
+    \verb{url}
+    \verb https://www.nytimes.com/2019/03/19/technology/drone-deliveries-faa-pi
+    \verb lot-programs.html
+    \endverb
+    \field{journaltitle}{The New York Times}
+    \field{day}{19}
+    \field{month}{03}
+    \field{year}{2019}
+    \field{urlday}{02}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Jacobs2019}{book}{}
+    \name{author}{8}{}{%
+      {{hash=JK}{%
+         family={Jacobs},
+         familyi={J\bibinitperiod},
+         given={Kees},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=WS}{%
+         family={Warner},
+         familyi={W\bibinitperiod},
+         given={Shannon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Rietra},
+         familyi={R\bibinitperiod},
+         given={Marc},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=ML}{%
+         family={Mazza},
+         familyi={M\bibinitperiod},
+         given={Lindsey},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Buvat},
+         familyi={B\bibinitperiod},
+         given={Jerome},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Khadikar},
+         familyi={K\bibinitperiod},
+         given={Amol},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Cherian},
+         familyi={C\bibinitperiod},
+         given={Sumit},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=KY}{%
+         family={Khemka},
+         familyi={K\bibinitperiod},
+         given={Yashwardhan},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Capgemini Research Institute, Capgemini}%
+    }
+    \strng{namehash}{JKWSRM+1}
+    \strng{fullhash}{JKWSRMMLBJKACSKY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{20}
+    \field{subtitle}{Giving retail and consumer product customers a superior
+  delivery experience without impacting profitability}
+    \field{title}{The last-mile delivery challenge}
+    \verb{url}
+    \verb https://www.capgemini.com/wp-content/uploads/2019/01/Report-Digital-%
+    \verb E2%80%93-Last-Mile-Delivery-Challenge1.pdf
+    \endverb
+    \field{day}{10}
+    \field{month}{01}
+    \field{year}{2019}
+    \field{urlday}{12}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Dolan2018}{article}{}
+    \name{author}{1}{}{%
+      {{hash=DS}{%
+         family={Dolan},
+         familyi={D\bibinitperiod},
+         given={Shelagh},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DS1}
+    \strng{fullhash}{DS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{The challenges of last mile logistics \& delivery technology
+  solutions}
+    \verb{url}
+    \verb https://www.businessinsider.com/last-mile-delivery-shipping-explained
+    \endverb
+    \field{journaltitle}{Business Insider}
+    \field{day}{11}
+    \field{month}{05}
+    \field{year}{2018}
+    \field{urlday}{06}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Kim2016}{article}{}
+    \name{author}{1}{}{%
+      {{hash=KE}{%
+         family={Kim},
+         familyi={K\bibinitperiod},
+         given={Eugene},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KE1}
+    \strng{fullhash}{KE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{The most staggering part about Amazon's upcoming drone
+  delivery service}
+    \verb{url}
+    \verb https://www.businessinsider.com/cost-savings-from-amazon-drone-delive
+    \verb ries-2016-6
+    \endverb
+    \field{journaltitle}{Business Insider}
+    \field{day}{16}
+    \field{month}{06}
+    \field{year}{2016}
+    \field{urlday}{06}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Kearney2018}{book}{}
+    \name{author}{5}{}{%
+      {{hash=MS}{%
+         family={Monahan},
+         familyi={M\bibinitperiod},
+         given={Sean},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WJ}{%
+         family={Ward},
+         familyi={W\bibinitperiod},
+         given={Jeff},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=ZM}{%
+         family={Zimmerman},
+         familyi={Z\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Sonthalia},
+         familyi={S\bibinitperiod},
+         given={Balika},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=AK}{%
+         family={Acar},
+         familyi={A\bibinitperiod},
+         given={Korhan},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {A.T. Kearney}%
+      {Council of Supply Chain Management Professionals (CSCMP)}%
+    }
+    \strng{namehash}{MSWJZM+1}
+    \strng{fullhash}{MSWJZMSBAK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{subtitle}{Steep Grade Ahead}
+    \field{title}{CSCMP'S Annual State of Logistics Report}
+    \verb{url}
+    \verb https://info.atkearney.com/30/2134/uploads/steep-grade-ahead-2018-sta
+    \verb te-of-logistics-report.pdf
+    \endverb
+    \field{year}{2018}
+    \field{urlday}{30}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Chiang2019}{article}{}
+    \name{author}{4}{}{%
+      {{hash=CWC}{%
+         family={Chiang},
+         familyi={C\bibinitperiod},
+         given={Wen-Chyuan},
+         giveni={W\bibinithyphendelim C\bibinitperiod},
+      }}%
+      {{hash=LY}{%
+         family={Li},
+         familyi={L\bibinitperiod},
+         given={Yuyu},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Shang},
+         familyi={S\bibinitperiod},
+         given={Jennifer},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=UTL}{%
+         family={Urban},
+         familyi={U\bibinitperiod},
+         given={Timothy\bibnamedelima L.},
+         giveni={T\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier {BV}}%
+    }
+    \strng{namehash}{CWCLYSJ+1}
+    \strng{fullhash}{CWCLYSJUTL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1016/j.apenergy.2019.03.117
+    \endverb
+    \field{pages}{1164\bibrangedash 1175}
+    \field{title}{Impact of drone delivery on sustainability and cost:
+  Realizing the {UAV} potential through vehicle routing optimization}
+    \field{volume}{242}
+    \verb{file}
+    \verb :Jabref Links/Impact of drone delivery on sustainability and cost.pdf
+    \verb :PDF
+    \endverb
+    \field{journaltitle}{Applied Energy}
+    \field{year}{2019}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Lee2017}{inproceedings}{}
+    \name{author}{1}{}{%
+      {{hash=LJ}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Jaihyun},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{LJ1}
+    \strng{fullhash}{LJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2017 Annual {IEEE} International Systems Conference
+  ({SysCon})}
+    \verb{doi}
+    \verb 10.1109/syscon.2017.7934790
+    \endverb
+    \field{title}{Optimization of a modular drone delivery system}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Deutschlandfunk2017}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HG}{%
+         family={Hetzke},
+         familyi={H\bibinitperiod},
+         given={Günter},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HG1}
+    \strng{fullhash}{HG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Feinstaub, NOX, CO2 – was ist eigentlich was?}
+    \verb{url}
+    \verb https://www.deutschlandfunk.de/luftverschmutzung-feinstaub-nox-co2-wa
+    \verb s-ist-eigentlich-was.1773.de.html?dram:article_id=391466
+    \endverb
+    \field{journaltitle}{Deutschlandfunk}
+    \field{day}{19}
+    \field{month}{07}
+    \field{year}{2017}
+    \field{urlday}{02}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{EPA2019}{book}{}
+    \list{publisher}{2}{%
+      {United States Environmental Protection Agency (EPA), Office of
+  Transportation}%
+      {Air Quality}%
+    }
+    \field{labeltitlesource}{title}
+    \field{title}{Fast Facts - U.S. Transportation Sector Greenhouse Gas
+  Emissions 1990-2017}
+    \verb{url}
+    \verb https://nepis.epa.gov/Exe/ZyPDF.cgi?Dockey=P100WUHR.pdf
+    \endverb
+    \field{year}{2019}
+    \field{urlday}{31}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{EEA2019}{report}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Annual European Union greenhouse gas inventory 1990–2017
+  and inventory report 2019}
+    \verb{url}
+    \verb https://www.eea.europa.eu//publications/european-union-greenhouse-gas
+    \verb -inventory-2019
+    \endverb
+    \list{institution}{1}{%
+      {European Environment Agency (EEA)}%
+    }
+    \field{day}{27}
+    \field{month}{05}
+    \field{year}{2019}
+    \field{urlday}{31}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Stolaroff2018}{article}{}
+    \name{author}{6}{}{%
+      {{hash=SJK}{%
+         family={Stolaroff},
+         familyi={S\bibinitperiod},
+         given={Joshuah\bibnamedelima K.},
+         giveni={J\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=SC}{%
+         family={Samaras},
+         familyi={S\bibinitperiod},
+         given={Constantine},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=OER}{%
+         family={O'Neill},
+         familyi={O\bibinitperiod},
+         given={Emma\bibnamedelima R.},
+         giveni={E\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lubers},
+         familyi={L\bibinitperiod},
+         given={Alia},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MAS}{%
+         family={Mitchell},
+         familyi={M\bibinitperiod},
+         given={Alexandra\bibnamedelima S.},
+         giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Ceperley},
+         familyi={C\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Nature}%
+    }
+    \strng{namehash}{SJKSCOER+1}
+    \strng{fullhash}{SJKSCOERLAMASCD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1038/s41467-017-02411-5
+    \endverb
+    \field{number}{1}
+    \field{title}{Energy use and life cycle greenhouse gas emissions of drones
+  for commercial package delivery}
+    \field{volume}{9}
+    \field{journaltitle}{Nature Communications}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Goodchild2018}{article}{}
+    \name{author}{2}{}{%
+      {{hash=GA}{%
+         family={Goodchild},
+         familyi={G\bibinitperiod},
+         given={Anne},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=TJ}{%
+         family={Toy},
+         familyi={T\bibinitperiod},
+         given={Jordan},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier {BV}}%
+    }
+    \strng{namehash}{GATJ1}
+    \strng{fullhash}{GATJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1016/j.trd.2017.02.017
+    \endverb
+    \field{pages}{58\bibrangedash 67}
+    \field{title}{Delivery by drone: An evaluation of unmanned aerial vehicle
+  technology in reducing {CO} 2 emissions in the delivery service industry}
+    \field{volume}{61}
+    \verb{file}
+    \verb :Jabref Links/Delivery by drone.pdf:PDF
+    \endverb
+    \field{journaltitle}{Transportation Research Part D: Transport and
+  Environment}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{WHO2018}{report}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Air pollution}
+    \verb{url}
+    \verb https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-ai
+    \verb r-quality-and-health
+    \endverb
+    \list{institution}{1}{%
+      {World Health Organization (WHO)}%
+    }
+    \field{day}{02}
+    \field{month}{05}
+    \field{year}{2018}
+    \field{urlday}{02}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Bouton2017}{book}{}
+    \name{author}{9}{}{%
+      {{hash=BS}{%
+         family={Bouton},
+         familyi={B\bibinitperiod},
+         given={Shannon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=HE}{%
+         family={Hannon},
+         familyi={H\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=HL}{%
+         family={Haydamous},
+         familyi={H\bibinitperiod},
+         given={Linda},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=HB}{%
+         family={Heid},
+         familyi={H\bibinitperiod},
+         given={Bernd},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Knupfer},
+         familyi={K\bibinitperiod},
+         given={Stefan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=NT}{%
+         family={Naucler},
+         familyi={N\bibinitperiod},
+         given={Tomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=NF}{%
+         family={Neuhaus},
+         familyi={N\bibinitperiod},
+         given={Florian},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=TNJ}{%
+         family={Tijs\bibnamedelima Nijssen},
+         familyi={T\bibinitperiod\bibinitdelim N\bibinitperiod},
+         given={Jan},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=RS}{%
+         family={Ramanathan},
+         familyi={R\bibinitperiod},
+         given={Swarna},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {McKinsey Center for Business}%
+      {Environment, McKinsey\&Company}%
+    }
+    \strng{namehash}{BSHEHL+1}
+    \strng{fullhash}{BSHEHLHBKSNTNFTNJRS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{14}
+    \field{part}{2}
+    \field{subtitle}{Transforming urban delivery}
+    \field{title}{An integrated perspective on the future of mobility, part 2}
+    \verb{url}
+    \verb https://www.mckinsey.com/~/media/mckinsey/business%20functions/sustai
+    \verb nability/our%20insights/urban%20commercial%20transport%20and%20the%20
+    \verb future%20of%20mobility/an-integrated-perspective-on-the-future-of-mob
+    \verb ility.ashx
+    \endverb
+    \field{month}{09}
+    \field{year}{2017}
+    \field{urlday}{12}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Wehrmann2019}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=WB}{%
+         family={Wehrmann},
+         familyi={W\bibinitperiod},
+         given={Benjamin},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WB1}
+    \strng{fullhash}{WB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Air pollution remains too high in nearly 60 German cities –
+  environment agency}
+    \verb{url}
+    \verb https://www.cleanenergywire.org/news/air-pollution-remains-too-high-n
+    \verb early-60-german-cities-environment-agency
+    \endverb
+    \field{month}{06}
+    \field{year}{2019}
+  \endentry
+
+  \entry{Intech2009}{book}{}
+    \name{author}{2}{}{%
+      {{hash=LMPEDF}{%
+         family={Luis\bibnamedelima Mejias},
+         familyi={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+         suffix={Daniel\bibnamedelima Fitzgerald},
+         suffixi={D\bibinitperiod\bibinitdelim F\bibinitperiod},
+         given={Pillar\bibnamedelima Eng},
+         giveni={P\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=LX}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Xi},
+         giveni={X\bibinitperiod},
+      }}%
+    }
+    \name{editor}{1}{}{%
+      {{hash=LTM}{%
+         family={Lam},
+         familyi={L\bibinitperiod},
+         given={Thanh\bibnamedelima Mung},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IntechOpen}%
+    }
+    \strng{namehash}{LMDFPELX1}
+    \strng{fullhash}{LMDFPELX1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{chapter}{Forced Landing Technologies for Unmanned Aerial Vehicles:
+  Towards Safer Operations}
+    \field{isbn}{9537619419}
+    \field{pagetotal}{780}
+    \field{title}{Aerial Vehicles}
+    \verb{url}
+    \verb https://www.ebook.de/de/product/36334387/aerial_vehicles.html
+    \endverb
+    \field{day}{01}
+    \field{month}{01}
+    \field{year}{2009}
+    \field{urlday}{03}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Forrest2018}{article}{}
+    \name{author}{1}{}{%
+      {{hash=FC}{%
+         family={Forrest},
+         familyi={F\bibinitperiod},
+         given={Conner},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FC1}
+    \strng{fullhash}{FC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{17 drone disasters that show why the FAA hates drones}
+    \verb{url}
+    \verb https://www.techrepublic.com/article/12-drone-disasters-that-show-why
+    \verb -the-faa-hates-drones/
+    \endverb
+    \field{journaltitle}{Innovation}
+    \field{year}{2018}
+    \field{urlday}{01}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'journaltitle' + 'journal'}
+  \endentry
+
+  \entry{Susini2015}{article}{}
+    \name{author}{1}{}{%
+      {{hash=SA}{%
+         family={Susini},
+         familyi={S\bibinitperiod},
+         given={Alberto},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA1}
+    \strng{fullhash}{SA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{27\bibrangedash 38}
+    \field{title}{A Technocritical Review of Drones Crash Risk Probabilistic
+  Consequences and its Societal Acceptance}
+    \verb{url}
+    \verb https://www.researchgate.net/profile/Alberto_Susini/publication/29169
+    \verb 7791_A_Technocritical_Review_of_Drones_Crash_Risk_Probabilistic_Conse
+    \verb quences_and_its_Societal_Acceptance/links/56a5365a08ae232fb207a641.pd
+    \verb f
+    \endverb
+    \field{volume}{7}
+    \field{journaltitle}{RIMMA Risk Information Management, Risk Models, and
+  Applications}
+    \field{year}{2015}
+    \field{urlday}{01}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'journaltitle' + 'journal'}
+  \endentry
+
+  \entry{Biggs2017}{article}{}
+    \name{author}{1}{}{%
+      {{hash=BJ}{%
+         family={Biggs},
+         familyi={B\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BJ2}
+    \strng{fullhash}{BJ2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Researchers train drones to use Wi-Fi to look through walls}
+    \verb{url}
+    \verb https://techcrunch.com/2017/06/19/researchers-train-drones-to-use-wi-
+    \verb fi-to-look-through-walls/
+    \endverb
+    \field{journaltitle}{TechCrunch}
+    \field{year}{2017}
+    \field{urlday}{01}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Holt2017}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HB}{%
+         family={Holt},
+         familyi={H\bibinitperiod},
+         given={Bryan},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HB1}
+    \strng{fullhash}{HB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{The Herrera Bladeless Drone Drops the Blades for a Safer and
+  Quieter Design}
+    \verb{url}
+    \verb https://www.themanual.com/outdoors/herrera-bladeless-drone-concept/
+    \endverb
+    \field{journaltitle}{The Manual}
+    \field{year}{2017}
+    \field{urlday}{01}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{DailyCaller2017}{article}{}
+    \name{author}{1}{}{%
+      {{hash=T}{%
+         family={{The Daily Caller}},
+         familyi={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{T1}
+    \strng{fullhash}{T1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Drone Deliveries in US Stalled by More Regulations}
+    \verb{url}
+    \verb https://smallbiztrends.com/2016/12/faa-drone-regulations.html
+    \endverb
+    \field{journaltitle}{Small Business Trends}
+    \field{month}{11}
+    \field{year}{2017}
+  \endentry
+
+  \entry{eMarketer2016}{article}{}
+    \field{labeltitlesource}{title}
+    \field{title}{How Do Consumers Feel About Drones Delivering Their
+  Packages?}
+    \verb{url}
+    \verb https://www.emarketer.com/Article/How-Do-Consumers-Feel-About-Drones-
+    \verb Delivering-Their-Packages/1014138
+    \endverb
+    \field{journaltitle}{Retail \& Ecommerce}
+    \field{year}{2016}
+    \field{urlday}{01}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'journaltitle' + 'journal'}
+  \endentry
+
+  \entry{Williams}{article}{}
+    \name{author}{1}{}{%
+      {{hash=WA}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Andrew},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WA1}
+    \strng{fullhash}{WA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{27}
+    \field{title}{Defining Autonomy in Systems: Challenges and Solutions}
+    \verb{url}
+    \verb https://www.act.nato.int/images/stories/media/capdev/capdev_02.pdf
+    \endverb
+    \field{journaltitle}{Issues for Defence Policymakers}
+    \field{year}{2015}
+    \field{urlday}{24}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Caterpillar}{article}{}
+    \name{editor}{1}{}{%
+      {{hash=C}{%
+         family={Caterpillar},
+         familyi={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{C1}
+    \strng{fullhash}{C1}
+    \field{labelnamesource}{editor}
+    \field{labeltitlesource}{title}
+    \field{title}{Automation \& Autonomy: What's the Difference?}
+    \verb{url}
+    \verb https://www.catallday.com/articles/challenges/technology/automation-a
+    \verb utonomy-whats-difference/
+    \endverb
+    \field{urlday}{15}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Yang2009}{book}{}
+    \name{author}{1}{}{%
+      {{hash=YJL}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Jia\bibnamedelima Lynn},
+         giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Cable News Network, Inc.}%
+    }
+    \strng{namehash}{YJL1}
+    \strng{fullhash}{YJL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Fortune 500 2009: Top 100 American Companies – Caterpillar
+  – CAT}
+    \verb{url}
+    \verb https://money.cnn.com/magazines/fortune/fortune500/2009/snapshots/81.
+    \verb html
+    \endverb
+    \field{day}{04}
+    \field{month}{05}
+    \field{year}{2009}
+    \field{urlday}{16}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Chen2009}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=CH}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Hai},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=mWX}{%
+         prefix={min},
+         prefixi={m\bibinitperiod},
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Xin},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=LY}{%
+         family={Li},
+         familyi={L\bibinitperiod},
+         given={Yan},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{CHWXmLY1}
+    \strng{fullhash}{CHWXmLY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2009 International Conference on Artificial Intelligence
+  and Computational Intelligence}
+    \verb{doi}
+    \verb 10.1109/aici.2009.147
+    \endverb
+    \field{title}{A Survey of Autonomous Control for {UAV}}
+    \verb{file}
+    \verb :Jabref Links/A Survey of Autonomous Control for UAV.pdf:PDF
+    \endverb
+    \field{year}{2009}
+  \endentry
+
+  \entry{Sheridan1978}{report}{}
+    \name{author}{2}{}{%
+      {{hash=STB}{%
+         family={Sheridan},
+         familyi={S\bibinitperiod},
+         given={Thomas\bibnamedelima B},
+         giveni={T\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=VWL}{%
+         family={Verplank},
+         familyi={V\bibinitperiod},
+         given={William\bibnamedelima L},
+         giveni={W\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{STBVWL1}
+    \strng{fullhash}{STBVWL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{8\bibrangedash 17}
+    \field{title}{Human and Computer Control of Undersea Teleoperators}
+    \verb{url}
+    \verb https://apps.dtic.mil/dtic/tr/fulltext/u2/a057655.pdf
+    \endverb
+    \list{institution}{1}{%
+      {Man-Machine Systems of Mechanical Engineering, Massachusetts Institute
+  of Technology, Cambridge Massachusetts}%
+    }
+    \field{type}{techreport}
+    \field{year}{1978}
+    \field{urlday}{17}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Clough2002}{report}{}
+    \name{author}{1}{}{%
+      {{hash=CBT}{%
+         family={Clough},
+         familyi={C\bibinitperiod},
+         given={Bruce\bibnamedelima T},
+         giveni={B\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CBT1}
+    \strng{fullhash}{CBT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Metrics, schmetrics! How the heck do you determine a UAV's
+  autonomy anyway}
+    \verb{url}
+    \verb https://apps.dtic.mil/dtic/tr/fulltext/u2/a515926.pdf
+    \endverb
+    \list{institution}{1}{%
+      {Air Force Research Laboratory, Wright-Patterson Air Force Base, Ohio}%
+    }
+    \field{type}{techreport}
+    \field{year}{2002}
+    \field{urlday}{17}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Angerman2014}{thesis}{}
+    \name{author}{1}{}{%
+      {{hash=AWS}{%
+         family={Angerman},
+         familyi={A\bibinitperiod},
+         given={William\bibnamedelima S.},
+         giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AWS1}
+    \strng{fullhash}{AWS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{subtitle}{An analysis of innovation diffusion and evolution}
+    \field{title}{Coming full circle with Boyd's OODA loop ideas}
+    \verb{url}
+    \verb https://apps.dtic.mil/dtic/tr/fulltext/u2/a425228.pdf
+    \endverb
+    \list{institution}{2}{%
+      {Air Force Institute of Technology, Wright-Patterson AFB OH School of
+  Engineering}%
+      {Management}%
+    }
+    \field{type}{mathesis}
+    \field{year}{2004}
+    \field{urlday}{19}
+    \field{urlmonth}{10}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Ross2013}{inproceedings}{}
+    \name{author}{7}{}{%
+      {{hash=RS}{%
+         family={Ross},
+         familyi={R\bibinitperiod},
+         given={Stephane},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MBN}{%
+         family={Melik-Barkhudarov},
+         familyi={M\bibinithyphendelim B\bibinitperiod},
+         given={Narek},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=SKS}{%
+         family={Shankar},
+         familyi={S\bibinitperiod},
+         given={Kumar\bibnamedelima Shaurya},
+         giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=WA}{%
+         family={Wendel},
+         familyi={W\bibinitperiod},
+         given={Andreas},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=DD}{%
+         family={Dey},
+         familyi={D\bibinitperiod},
+         given={Debadeepta},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BJA}{%
+         family={Bagnell},
+         familyi={B\bibinitperiod},
+         given={J.\bibnamedelima Andrew},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=HM}{%
+         family={Hebert},
+         familyi={H\bibinitperiod},
+         given={Martial},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{RSMBNSKS+1}
+    \strng{fullhash}{RSMBNSKSWADDBJAHM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2013 {IEEE} International Conference on Robotics and
+  Automation}
+    \verb{doi}
+    \verb 10.1109/icra.2013.6630809
+    \endverb
+    \field{title}{Learning monocular reactive {UAV} control in cluttered
+  natural environments}
+    \field{year}{2013}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Lexico.com-navigation}{article}{}
+    \name{author}{1}{}{%
+      {{hash=O}{%
+         family={{Oxford University Press (OUP)}},
+         familyi={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{O1}
+    \strng{fullhash}{O1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{navigation}
+    \verb{url}
+    \verb https://www.lexico.com/en/definition/navigation
+    \endverb
+    \field{journaltitle}{Lexico.com}
+    \field{year}{2019}
+    \field{urlday}{08}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Lazzaroni2011}{book}{}
+    \name{author}{5}{}{%
+      {{hash=LM}{%
+         family={Lazzaroni},
+         familyi={L\bibinitperiod},
+         given={Massimo},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CL}{%
+         family={Cristaldi},
+         familyi={C\bibinitperiod},
+         given={Loredana},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=PL}{%
+         family={Peretto},
+         familyi={P\bibinitperiod},
+         given={Lorenzo},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Rinaldi},
+         familyi={R\bibinitperiod},
+         given={Paola},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=CM}{%
+         family={Catelani},
+         familyi={C\bibinitperiod},
+         given={Marcantonio},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Berlin Heidelberg}%
+    }
+    \strng{namehash}{LMCLPL+1}
+    \strng{fullhash}{LMCLPLRPCM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1007/978-3-642-20983-3
+    \endverb
+    \field{title}{Reliability Engineering}
+    \field{year}{2011}
+  \endentry
+
+  \entry{Verbeke2017}{article}{}
+    \name{author}{2}{}{%
+      {{hash=VJ}{%
+         family={Verbeke},
+         familyi={V\bibinitperiod},
+         given={Jon},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SJD}{%
+         family={Schutter},
+         familyi={S\bibinitperiod},
+         given={Joris\bibnamedelima De},
+         giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{SAGE} Publications}%
+    }
+    \strng{namehash}{VJSJD1}
+    \strng{fullhash}{VJSJD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1177/1756829317736204
+    \endverb
+    \field{number}{1}
+    \field{pages}{3\bibrangedash 11}
+    \field{title}{Experimental maneuverability and agility quantification for
+  rotary unmanned aerial vehicle}
+    \field{volume}{10}
+    \field{journaltitle}{International Journal of Micro Air Vehicles}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Lexico.com-agility}{article}{}
+    \name{author}{1}{}{%
+      {{hash=O}{%
+         family={{Oxford University Press (OUP)}},
+         familyi={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{O1}
+    \strng{fullhash}{O1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{agility}
+    \verb{url}
+    \verb https://www.lexico.com/en/definition/agility
+    \endverb
+    \field{journaltitle}{Lexico.com}
+    \field{year}{2019}
+    \field{urlday}{08}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Whalley1991}{report}{}
+    \name{author}{1}{}{%
+      {{hash=WMS}{%
+         family={Whalley},
+         familyi={W\bibinitperiod},
+         given={Matthew\bibnamedelima S.},
+         giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WMS1}
+    \strng{fullhash}{WMS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{NASA TM 102889, USAAVS-COM TR 90-A-008}
+    \field{title}{Development and evaluation of an inverse solution technique
+  for studying helicopter maneuverability and agility}
+    \verb{url}
+    \verb https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19910022831.pdf
+    \endverb
+    \list{institution}{2}{%
+      {United States Army Aviation Systems Command (USAAVS-COM), National
+  Aeronautics}%
+      {Space Administration (NASA)}%
+    }
+    \field{type}{techreport}
+    \field{month}{07}
+    \field{year}{1991}
+    \field{urlday}{07}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Lawrence1991}{report}{}
+    \name{author}{3}{}{%
+      {{hash=LTH}{%
+         family={Lawrence},
+         familyi={L\bibinitperiod},
+         given={Thomas\bibnamedelima H.},
+         giveni={T\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Corning},
+         familyi={C\bibinitperiod},
+         given={Sherman},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WF}{%
+         family={Wharburton},
+         familyi={W\bibinitperiod},
+         given={Frank},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LTHCSWF1}
+    \strng{fullhash}{LTHCSWF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{USAAVSCOM TR 91-D-3}
+    \field{title}{Helicopter Maneuverability and agility design sensitivity and
+  air combat maneuver data correlation study}
+    \verb{url}
+    \verb https://apps.dtic.mil/dtic/tr/fulltext/u2/b160550.pdf
+    \endverb
+    \list{institution}{1}{%
+      {United States Army Aviation Systems Command (USAAVSCOM)}%
+    }
+    \field{type}{techreport}
+    \field{month}{10}
+    \field{year}{1991}
+    \field{urlday}{07}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+    \warn{\item Can't use 'date' + 'year'}
+  \endentry
+
+  \entry{Kaufmann2018}{article}{}
+    \name{author}{6}{}{%
+      {{hash=KE}{%
+         family={Kaufmann},
+         familyi={K\bibinitperiod},
+         given={Elia},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Loquercio},
+         familyi={L\bibinitperiod},
+         given={Antonio},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=RR}{%
+         family={Ranftl},
+         familyi={R\bibinitperiod},
+         given={Rene},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=DA}{%
+         family={Dosovitskiy},
+         familyi={D\bibinitperiod},
+         given={Alexey},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KV}{%
+         family={Koltun},
+         familyi={K\bibinitperiod},
+         given={Vladlen},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \keyw{cs.RO}
+    \strng{namehash}{KELARR+1}
+    \strng{fullhash}{KELARRDAKVSD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Autonomous agile flight brings up fundamental challenges in robotics, such
+  as coping with unreliable state estimation, reacting optimally to dynamically
+  changing environments, and coupling perception and action in real time under
+  severe resource constraints. In this paper, we consider these challenges in
+  the context of autonomous, vision-based drone racing in dynamic environments.
+  Our approach combines a convolutional neural network (CNN) with a
+  state-of-the-art path-planning and control system. The CNN directly maps raw
+  images into a robust representation in the form of a waypoint and desired
+  speed. This information is then used by the planner to generate a short,
+  minimum-jerk trajectory segment and corresponding motor commands to reach the
+  desired goal. We demonstrate our method in autonomous agile flight scenarios,
+  in which a vision-based quadrotor traverses drone-racing tracks with possibly
+  moving gates. Our method does not require any explicit map of the environment
+  and runs fully onboard. We extensively test the precision and robustness of
+  the approach in simulation and in the physical world. We also evaluate our
+  method against state-of-the-art navigation approaches and professional human
+  drone pilots.%
+    }
+    \verb{eprint}
+    \verb http://arxiv.org/abs/1806.08548v3
+    \endverb
+    \field{title}{Deep Drone Racing: Learning Agile Flight in Dynamic
+  Environments}
+    \verb{file}
+    \verb :http\://arxiv.org/pdf/1806.08548v3:PDF
+    \endverb
+    \field{journaltitle}{Conference on Robotic Learning (CoRL), 2018}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.RO}
+    \field{day}{22}
+    \field{month}{06}
+    \field{year}{2018}
+  \endentry
+
+  \entry{Mur-Artal2015}{article}{}
+    \name{author}{3}{}{%
+      {{hash=MAR}{%
+         family={Mur-Artal},
+         familyi={M\bibinithyphendelim A\bibinitperiod},
+         given={Raul},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=MJMM}{%
+         family={Montiel},
+         familyi={M\bibinitperiod},
+         given={J.\bibnamedelima M.\bibnamedelima M.},
+         giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim
+  M\bibinitperiod},
+      }}%
+      {{hash=TJD}{%
+         family={Tardos},
+         familyi={T\bibinitperiod},
+         given={Juan\bibnamedelima D.},
+         giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{MARMJMMTJD1}
+    \strng{fullhash}{MARMJMMTJD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/tro.2015.2463671
+    \endverb
+    \field{number}{5}
+    \field{pages}{1147\bibrangedash 1163}
+    \field{title}{{ORB}-{SLAM}: A Versatile and Accurate Monocular {SLAM}
+  System}
+    \field{volume}{31}
+    \field{journaltitle}{{IEEE} Transactions on Robotics}
+    \field{year}{2015}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Bircher2016}{article}{}
+    \name{author}{5}{}{%
+      {{hash=BA}{%
+         family={Bircher},
+         familyi={B\bibinitperiod},
+         given={Andreas},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kamel},
+         familyi={K\bibinitperiod},
+         given={Mina},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=AK}{%
+         family={Alexis},
+         familyi={A\bibinitperiod},
+         given={Kostas},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=OH}{%
+         family={Oleynikova},
+         familyi={O\bibinitperiod},
+         given={Helen},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Siegwart},
+         familyi={S\bibinitperiod},
+         given={Roland},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Nature}%
+    }
+    \strng{namehash}{BAKMAK+1}
+    \strng{fullhash}{BAKMAKOHSR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1007/s10514-016-9610-0
+    \endverb
+    \field{number}{2}
+    \field{pages}{291\bibrangedash 306}
+    \field{title}{Receding horizon path planning for 3D exploration and surface
+  inspection}
+    \field{volume}{42}
+    \field{journaltitle}{Autonomous Robots}
+    \field{year}{2016}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Cieslewski2017}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=CT}{%
+         family={Cieslewski},
+         familyi={C\bibinitperiod},
+         given={Titus},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={Kaufmann},
+         familyi={K\bibinitperiod},
+         given={Elia},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{CTKESD1}
+    \strng{fullhash}{CTKESD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2017 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems ({IROS})}
+    \verb{doi}
+    \verb 10.1109/iros.2017.8206030
+    \endverb
+    \field{title}{Rapid exploration with multi-rotors: A frontier selection
+  method for high speed flight}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Lin2017}{article}{}
+    \name{author}{8}{}{%
+      {{hash=LY}{%
+         family={Lin},
+         familyi={L\bibinitperiod},
+         given={Yi},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=GF}{%
+         family={Gao},
+         familyi={G\bibinitperiod},
+         given={Fei},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=QT}{%
+         family={Qin},
+         familyi={Q\bibinitperiod},
+         given={Tong},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GW}{%
+         family={Gao},
+         familyi={G\bibinitperiod},
+         given={Wenliang},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=LT}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Tianbo},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=WW}{%
+         family={Wu},
+         familyi={W\bibinitperiod},
+         given={William},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=YZ}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Zhenfei},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Shen},
+         familyi={S\bibinitperiod},
+         given={Shaojie},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Wiley}%
+    }
+    \strng{namehash}{LYGFQT+1}
+    \strng{fullhash}{LYGFQTGWLTWWYZSS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1002/rob.21732
+    \endverb
+    \field{number}{1}
+    \field{pages}{23\bibrangedash 51}
+    \field{title}{Autonomous aerial navigation using monocular visual-inertial
+  fusion}
+    \field{volume}{35}
+    \field{journaltitle}{Journal of Field Robotics}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Scaramuzza2014}{article}{}
+    \name{author}{22}{}{%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=AMC}{%
+         family={Achtelik},
+         familyi={A\bibinitperiod},
+         given={Michael\bibnamedelima C.},
+         giveni={M\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=DL}{%
+         family={Doitsidis},
+         familyi={D\bibinitperiod},
+         given={Lefteris},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Friedrich},
+         familyi={F\bibinitperiod},
+         given={Fraundorfer},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={Kosmatopoulos},
+         familyi={K\bibinitperiod},
+         given={Elias},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Martinelli},
+         familyi={M\bibinitperiod},
+         given={Agostino},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=AMW}{%
+         family={Achtelik},
+         familyi={A\bibinitperiod},
+         given={Markus\bibnamedelima W.},
+         giveni={M\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=CM}{%
+         family={Chli},
+         familyi={C\bibinitperiod},
+         given={Margarita},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Chatzichristofis},
+         familyi={C\bibinitperiod},
+         given={Savvas},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=KL}{%
+         family={Kneip},
+         familyi={K\bibinitperiod},
+         given={Laurent},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=GD}{%
+         family={Gurdan},
+         familyi={G\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=HL}{%
+         family={Heng},
+         familyi={H\bibinitperiod},
+         given={Lionel},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=LGH}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Gim\bibnamedelima Hee},
+         giveni={G\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=LS}{%
+         family={Lynen},
+         familyi={L\bibinitperiod},
+         given={Simon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Pollefeys},
+         familyi={P\bibinitperiod},
+         given={Marc},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RA}{%
+         family={Renzaglia},
+         familyi={R\bibinitperiod},
+         given={Alessandro},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Siegwart},
+         familyi={S\bibinitperiod},
+         given={Roland},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SJC}{%
+         family={Stumpf},
+         familyi={S\bibinitperiod},
+         given={Jan\bibnamedelima Carsten},
+         giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=TP}{%
+         family={Tanskanen},
+         familyi={T\bibinitperiod},
+         given={Petri},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=TC}{%
+         family={Troiani},
+         familyi={T\bibinitperiod},
+         given={Chiara},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=WS}{%
+         family={Weiss},
+         familyi={W\bibinitperiod},
+         given={Stephan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=ML}{%
+         family={Meier},
+         familyi={M\bibinitperiod},
+         given={Lorenz},
+         giveni={L\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{SDAMCDL+1}
+    \strng{fullhash}{SDAMCDLFFKEMAAMWCMCSKLGDHLLGHLSPMRASRSJCTPTCWSML1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/mra.2014.2322295
+    \endverb
+    \field{number}{3}
+    \field{pages}{26\bibrangedash 40}
+    \field{title}{Vision-Controlled Micro Flying Robots: From System Design to
+  Autonomous Navigation and Mapping in {GPS}-Denied Environments}
+    \field{volume}{21}
+    \field{journaltitle}{{IEEE} Robotics {\&} Automation Magazine}
+    \field{year}{2014}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Sa2018}{article}{}
+    \name{author}{8}{}{%
+      {{hash=SI}{%
+         family={Sa},
+         familyi={S\bibinitperiod},
+         given={Inkyu},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kamel},
+         familyi={K\bibinitperiod},
+         given={Mina},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Burri},
+         familyi={B\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bloesch},
+         familyi={B\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={Khanna},
+         familyi={K\bibinitperiod},
+         given={Raghav},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Popovic},
+         familyi={P\bibinitperiod},
+         given={Marija},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=NJ}{%
+         family={Nieto},
+         familyi={N\bibinitperiod},
+         given={Juan},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Siegwart},
+         familyi={S\bibinitperiod},
+         given={Roland},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{SIKMBM+1}
+    \strng{fullhash}{SIKMBMBMKRPMNJSR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/mra.2017.2771326
+    \endverb
+    \field{number}{1}
+    \field{pages}{89\bibrangedash 103}
+    \field{title}{Build Your Own Visual-Inertial Drone: A Cost-Effective and
+  Open-Source Autonomous Drone}
+    \field{volume}{25}
+    \field{journaltitle}{{IEEE} Robotics {\&} Automation Magazine}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Loianno2017}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LG}{%
+         family={Loianno},
+         familyi={L\bibinitperiod},
+         given={Giuseppe},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Brunner},
+         familyi={B\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=MG}{%
+         family={McGrath},
+         familyi={M\bibinitperiod},
+         given={Gary},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=KV}{%
+         family={Kumar},
+         familyi={K\bibinitperiod},
+         given={Vijay},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{LGBCMG+1}
+    \strng{fullhash}{LGBCMGKV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/lra.2016.2633290
+    \endverb
+    \field{number}{2}
+    \field{pages}{404\bibrangedash 411}
+    \field{title}{Estimation, Control, and Planning for Aggressive Flight With
+  a Small Quadrotor With a Single Camera and {IMU}}
+    \field{volume}{2}
+    \field{journaltitle}{{IEEE} Robotics and Automation Letters}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Sadeghi2016}{article}{}
+    \name{author}{2}{}{%
+      {{hash=SF}{%
+         family={Sadeghi},
+         familyi={S\bibinitperiod},
+         given={Fereshteh},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=LS}{%
+         family={Levine},
+         familyi={L\bibinitperiod},
+         given={Sergey},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \keyw{cs.LG, cs.CV, cs.RO}
+    \strng{namehash}{SFLS1}
+    \strng{fullhash}{SFLS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Deep reinforcement learning has emerged as a promising and powerful
+  technique for automatically acquiring control policies that can process raw
+  sensory inputs, such as images, and perform complex behaviors. However,
+  extending deep RL to real-world robotic tasks has proven challenging,
+  particularly in safety-critical domains such as autonomous flight, where a
+  trial-and-error learning process is often impractical. In this paper, we
+  explore the following question: can we train vision-based navigation policies
+  entirely in simulation, and then transfer them into the real world to achieve
+  real-world flight without a single real training image? We propose a learning
+  method that we call CAD$^2$RL, which can be used to perform collision-free
+  indoor flight in the real world while being trained entirely on 3D CAD
+  models. Our method uses single RGB images from a monocular camera, without
+  needing to explicitly reconstruct the 3D geometry of the environment or
+  perform explicit motion planning. Our learned collision avoidance policy is
+  represented by a deep convolutional neural network that directly processes
+  raw monocular images and outputs velocity commands. This policy is trained
+  entirely on simulated images, with a Monte Carlo policy evaluation algorithm
+  that directly optimizes the network's ability to produce collision-free
+  flight. By highly randomizing the rendering settings for our simulated
+  training set, we show that we can train a policy that generalizes to the real
+  world, without requiring the simulator to be particularly realistic or
+  high-fidelity. We evaluate our method by flying a real quadrotor through
+  indoor environments, and further evaluate the design choices in our simulator
+  through a series of ablation studies on depth prediction. For supplementary
+  video see: https://youtu.be/nXBWmzFrj5s%
+    }
+    \verb{eprint}
+    \verb http://arxiv.org/abs/1611.04201v4
+    \endverb
+    \field{title}{CAD2RL: Real Single-Image Flight without a Single Real Image}
+    \verb{url}
+    \verb https://arxiv.org/pdf/1611.04201.pdf
+    \endverb
+    \verb{file}
+    \verb :http\://arxiv.org/pdf/1611.04201v4:PDF
+    \endverb
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{day}{13}
+    \field{month}{11}
+    \field{year}{2016}
+    \field{urlday}{24}
+    \field{urlmonth}{11}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Zhu2017}{inproceedings}{}
+    \name{author}{7}{}{%
+      {{hash=ZY}{%
+         family={Zhu},
+         familyi={Z\bibinitperiod},
+         given={Yuke},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=MR}{%
+         family={Mottaghi},
+         familyi={M\bibinitperiod},
+         given={Roozbeh},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={Kolve},
+         familyi={K\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=LJJ}{%
+         family={Lim},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima J.},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Gupta},
+         familyi={G\bibinitperiod},
+         given={Abhinav},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=FFL}{%
+         family={Fei-Fei},
+         familyi={F\bibinithyphendelim F\bibinitperiod},
+         given={Li},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=FA}{%
+         family={Farhadi},
+         familyi={F\bibinitperiod},
+         given={Ali},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{ZYMRKE+1}
+    \strng{fullhash}{ZYMRKELJJGAFFLFA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2017 {IEEE} International Conference on Robotics and
+  Automation ({ICRA})}
+    \verb{doi}
+    \verb 10.1109/icra.2017.7989381
+    \endverb
+    \field{title}{Target-driven visual navigation in indoor scenes using deep
+  reinforcement learning}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Meyer2012}{incollection}{}
+    \name{author}{5}{}{%
+      {{hash=MJ}{%
+         family={Meyer},
+         familyi={M\bibinitperiod},
+         given={Johannes},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Sendobry},
+         familyi={S\bibinitperiod},
+         given={Alexander},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Kohlbrecher},
+         familyi={K\bibinitperiod},
+         given={Stefan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=KU}{%
+         family={Klingauf},
+         familyi={K\bibinitperiod},
+         given={Uwe},
+         giveni={U\bibinitperiod},
+      }}%
+      {{hash=vSO}{%
+         prefix={von},
+         prefixi={v\bibinitperiod},
+         family={Stryk},
+         familyi={S\bibinitperiod},
+         given={Oskar},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Berlin Heidelberg}%
+    }
+    \strng{namehash}{MJSAKS+1}
+    \strng{fullhash}{MJSAKSKUSOv1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Simulation, Modeling, and Programming for Autonomous
+  Robots}
+    \verb{doi}
+    \verb 10.1007/978-3-642-34327-8_36
+    \endverb
+    \field{pages}{400\bibrangedash 411}
+    \field{title}{Comprehensive Simulation of Quadrotor {UAVs} Using {ROS} and
+  Gazebo}
+    \field{year}{2012}
+  \endentry
+
+  \entry{Faessler2018}{article}{}
+    \name{author}{3}{}{%
+      {{hash=FM}{%
+         family={Faessler},
+         familyi={F\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=FA}{%
+         family={Franchi},
+         familyi={F\bibinitperiod},
+         given={Antonio},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{FMFASD1}
+    \strng{fullhash}{FMFASD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/lra.2017.2776353
+    \endverb
+    \field{number}{2}
+    \field{pages}{620\bibrangedash 626}
+    \field{title}{Differential Flatness of Quadrotor Dynamics Subject to Rotor
+  Drag for Accurate Tracking of High-Speed Trajectories}
+    \field{volume}{3}
+    \field{journaltitle}{{IEEE} Robotics and Automation Letters}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Shah2017}{incollection}{}
+    \name{author}{4}{}{%
+      {{hash=SS}{%
+         family={Shah},
+         familyi={S\bibinitperiod},
+         given={Shital},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=DD}{%
+         family={Dey},
+         familyi={D\bibinitperiod},
+         given={Debadeepta},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=LC}{%
+         family={Lovett},
+         familyi={L\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Kapoor},
+         familyi={K\bibinitperiod},
+         given={Ashish},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer International Publishing}%
+    }
+    \strng{namehash}{SSDDLC+1}
+    \strng{fullhash}{SSDDLCKA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Field and Service Robotics}
+    \verb{doi}
+    \verb 10.1007/978-3-319-67361-5_40
+    \endverb
+    \field{pages}{621\bibrangedash 635}
+    \field{title}{{AirSim}: High-Fidelity Visual and Physical Simulation for
+  Autonomous Vehicles}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Dosovitskiy2017}{article}{}
+    \name{author}{5}{}{%
+      {{hash=DA}{%
+         family={Dosovitskiy},
+         familyi={D\bibinitperiod},
+         given={Alexey},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Ros},
+         familyi={R\bibinitperiod},
+         given={German},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CF}{%
+         family={Codevilla},
+         familyi={C\bibinitperiod},
+         given={Felipe},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lopez},
+         familyi={L\bibinitperiod},
+         given={Antonio},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KV}{%
+         family={Koltun},
+         familyi={K\bibinitperiod},
+         given={Vladlen},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \keyw{cs.LG, cs.AI, cs.CV, cs.RO}
+    \strng{namehash}{DARGCF+1}
+    \strng{fullhash}{DARGCFLAKV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We introduce CARLA, an open-source simulator for autonomous driving
+  research. CARLA has been developed from the ground up to support development,
+  training, and validation of autonomous urban driving systems. In addition to
+  open-source code and protocols, CARLA provides open digital assets (urban
+  layouts, buildings, vehicles) that were created for this purpose and can be
+  used freely. The simulation platform supports flexible specification of
+  sensor suites and environmental conditions. We use CARLA to study the
+  performance of three approaches to autonomous driving: a classic modular
+  pipeline, an end-to-end model trained via imitation learning, and an
+  end-to-end model trained via reinforcement learning. The approaches are
+  evaluated in controlled scenarios of increasing difficulty, and their
+  performance is examined via metrics provided by CARLA, illustrating the
+  platform's utility for autonomous driving research. The supplementary video
+  can be viewed at https://youtu.be/Hp8Dz-Zek2E%
+    }
+    \verb{eprint}
+    \verb http://arxiv.org/abs/1711.03938v1
+    \endverb
+    \field{title}{CARLA: An Open Urban Driving Simulator}
+    \verb{file}
+    \verb :http\://arxiv.org/pdf/1711.03938v1:PDF
+    \endverb
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{day}{10}
+    \field{month}{11}
+    \field{year}{2017}
+  \endentry
+
+  \entry{Loquercio2018}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LA}{%
+         family={Loquercio},
+         familyi={L\bibinitperiod},
+         given={Antonio},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MAI}{%
+         family={Maqueda},
+         familyi={M\bibinitperiod},
+         given={Ana\bibnamedelima I.},
+         giveni={A\bibinitperiod\bibinitdelim I\bibinitperiod},
+      }}%
+      {{hash=dBCR}{%
+         prefix={del},
+         prefixi={d\bibinitperiod},
+         family={Blanco},
+         familyi={B\bibinitperiod},
+         given={Carlos\bibnamedelima R.},
+         giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{LAMAIBCRd+1}
+    \strng{fullhash}{LAMAIBCRdSD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/lra.2018.2795643
+    \endverb
+    \field{number}{2}
+    \field{pages}{1088\bibrangedash 1095}
+    \field{title}{{DroNet}: Learning to Fly by Driving}
+    \field{volume}{3}
+    \field{journaltitle}{{IEEE} Robotics and Automation Letters}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Giusti2016}{article}{}
+    \name{author}{12}{}{%
+      {{hash=GA}{%
+         family={Giusti},
+         familyi={G\bibinitperiod},
+         given={Alessandro},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=GJ}{%
+         family={Guzzi},
+         familyi={G\bibinitperiod},
+         given={Jerome},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CDC}{%
+         family={Ciresan},
+         familyi={C\bibinitperiod},
+         given={Dan\bibnamedelima C.},
+         giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=HFL}{%
+         family={He},
+         familyi={H\bibinitperiod},
+         given={Fang-Lin},
+         giveni={F\bibinithyphendelim L\bibinitperiod},
+      }}%
+      {{hash=RJP}{%
+         family={Rodriguez},
+         familyi={R\bibinitperiod},
+         given={Juan\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Fontana},
+         familyi={F\bibinitperiod},
+         given={Flavio},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=FM}{%
+         family={Faessler},
+         familyi={F\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=FC}{%
+         family={Forster},
+         familyi={F\bibinitperiod},
+         given={Christian},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Schmidhuber},
+         familyi={S\bibinitperiod},
+         given={Jurgen},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CGD}{%
+         family={Caro},
+         familyi={C\bibinitperiod},
+         given={Gianni\bibnamedelima Di},
+         giveni={G\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=GLM}{%
+         family={Gambardella},
+         familyi={G\bibinitperiod},
+         given={Luca\bibnamedelima M.},
+         giveni={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{GAGJCDC+1}
+    \strng{fullhash}{GAGJCDCHFLRJPFFFMFCSJCGDSDGLM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/lra.2015.2509024
+    \endverb
+    \field{number}{2}
+    \field{pages}{661\bibrangedash 667}
+    \field{title}{A Machine Learning Approach to Visual Perception of Forest
+  Trails for Mobile Robots}
+    \field{volume}{1}
+    \field{journaltitle}{{IEEE} Robotics and Automation Letters}
+    \field{year}{2016}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Smolyanskiy2017}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=SN}{%
+         family={Smolyanskiy},
+         familyi={S\bibinitperiod},
+         given={Nikolai},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Kamenev},
+         familyi={K\bibinitperiod},
+         given={Alexey},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Smith},
+         familyi={S\bibinitperiod},
+         given={Jeffrey},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Birchfield},
+         familyi={B\bibinitperiod},
+         given={Stan},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{SNKASJ+1}
+    \strng{fullhash}{SNKASJBS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2017 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems ({IROS})}
+    \verb{doi}
+    \verb 10.1109/iros.2017.8206285
+    \endverb
+    \field{title}{Toward low-flying autonomous {MAV} trail navigation using
+  deep neural networks for environmental awareness}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Kelchtermans2017}{article}{}
+    \name{author}{2}{}{%
+      {{hash=KK}{%
+         family={Kelchtermans},
+         familyi={K\bibinitperiod},
+         given={Klaas},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=TT}{%
+         family={Tuytelaars},
+         familyi={T\bibinitperiod},
+         given={Tinne},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \keyw{cs.CV}
+    \strng{namehash}{KKTT1}
+    \strng{fullhash}{KKTT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    This work explores the feasibility of steering a drone with a (recurrent)
+  neural network, based on input from a forward looking camera, in the context
+  of a high-level navigation task. We set up a generic framework for training a
+  network to perform navigation tasks based on imitation learning. It can be
+  applied to both aerial and land vehicles. As a proof of concept we apply it
+  to a UAV (Unmanned Aerial Vehicle) in a simulated environment, learning to
+  cross a room containing a number of obstacles. So far only feedforward neural
+  networks (FNNs) have been used to train UAV control. To cope with more
+  complex tasks, we propose the use of recurrent neural networks (RNN) instead
+  and successfully train an LSTM (Long-Short Term Memory) network for
+  controlling UAVs. Vision based control is a sequential prediction problem,
+  known for its highly correlated input data. The correlation makes training a
+  network hard, especially an RNN. To overcome this issue, we investigate an
+  alternative sampling method during training, namely window-wise truncated
+  backpropagation through time (WW-TBPTT). Further, end-to-end training
+  requires a lot of data which often is not available. Therefore, we compare
+  the performance of retraining only the Fully Connected (FC) and LSTM control
+  layers with networks which are trained end-to-end. Performing the relatively
+  simple task of crossing a room already reveals important guidelines and good
+  practices for training neural control networks. Different visualizations help
+  to explain the behavior learned.%
+    }
+    \verb{eprint}
+    \verb http://arxiv.org/abs/1702.07600v1
+    \endverb
+    \field{title}{How hard is it to cross the room? -- Training (Recurrent)
+  Neural Networks to steer a UAV}
+    \verb{file}
+    \verb :http\://arxiv.org/pdf/1702.07600v1:PDF
+    \endverb
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.CV}
+    \field{day}{24}
+    \field{month}{02}
+    \field{year}{2017}
+  \endentry
+
+  \entry{OpenCV}{article}{}
+    \name{author}{1}{}{%
+      {{hash=TO}{%
+         family={Team},
+         familyi={T\bibinitperiod},
+         given={OpenCV},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TO1}
+    \strng{fullhash}{TO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Camera Calibration and 3D Reconstruction}
+    \verb{url}
+    \verb https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_an
+    \verb d_3d_reconstruction.html
+    \endverb
+    \field{journaltitle}{OpenCV Documentation}
+    \field{day}{04}
+    \field{month}{12}
+    \field{year}{2019}
+    \field{urlday}{04}
+    \field{urlmonth}{12}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{Mueller2013}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=MMW}{%
+         family={Mueller},
+         familyi={M\bibinitperiod},
+         given={Mark\bibnamedelima W.},
+         giveni={M\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=HM}{%
+         family={Hehn},
+         familyi={H\bibinitperiod},
+         given={Markus},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DR}{%
+         family={D{\textquotesingle}Andrea},
+         familyi={D\bibinitperiod},
+         given={Raffaello},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{MMWHMDR1}
+    \strng{fullhash}{MMWHMDR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2013 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems}
+    \verb{doi}
+    \verb 10.1109/iros.2013.6696852
+    \endverb
+    \field{title}{A computationally efficient algorithm for state-to-state
+  quadrocopter trajectory generation and feasibility verification}
+    \field{year}{2013}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Faessler2015}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=FM}{%
+         family={Faessler},
+         familyi={F\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Fontana},
+         familyi={F\bibinitperiod},
+         given={Flavio},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=FC}{%
+         family={Forster},
+         familyi={F\bibinitperiod},
+         given={Christian},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scaramuzza},
+         familyi={S\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{FMFFFC+1}
+    \strng{fullhash}{FMFFFCSD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2015 {IEEE} International Conference on Robotics and
+  Automation ({ICRA})}
+    \verb{doi}
+    \verb 10.1109/icra.2015.7139420
+    \endverb
+    \field{title}{Automatic re-initialization and failure recovery for
+  aggressive flight with a monocular vision-based quadrotor}
+    \field{year}{2015}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Mellinger2011}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=MD}{%
+         family={Mellinger},
+         familyi={M\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KV}{%
+         family={Kumar},
+         familyi={K\bibinitperiod},
+         given={Vijay},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{IEEE}}%
+    }
+    \strng{namehash}{MDKV1}
+    \strng{fullhash}{MDKV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{2011 {IEEE} International Conference on Robotics and
+  Automation}
+    \verb{doi}
+    \verb 10.1109/icra.2011.5980409
+    \endverb
+    \field{title}{Minimum snap trajectory generation and control for
+  quadrotors}
+    \field{year}{2011}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Hessinger2013}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HS}{%
+         family={Hessinger},
+         familyi={H\bibinitperiod},
+         given={Shawn},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HS1}
+    \strng{fullhash}{HS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{UPS Considers Delivery Drones Too}
+    \verb{url}
+    \verb https://smallbiztrends.com/2013/12/ups-delivery-drones.html
+    \endverb
+    \field{journaltitle}{Small Business Trends}
+    \field{month}{12}
+    \field{year}{2013}
+  \endentry
+
+  \entry{CBS2013}{article}{}
+    \name{author}{1}{}{%
+      {{hash=ED}{%
+         family={Elliot},
+         familyi={E\bibinitperiod},
+         given={Danielle},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ED1}
+    \strng{fullhash}{ED1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{DHL testing delivery drones}
+    \field{journaltitle}{CBS News}
+    \field{year}{2013}
+  \endentry
+
+  \entry{Atlantic2014}{article}{}
+    \name{author}{1}{}{%
+      {{hash=MAC}{%
+         family={Madrigal},
+         familyi={M\bibinitperiod},
+         given={Alexis\bibnamedelima C.},
+         giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MAC1}
+    \strng{fullhash}{MAC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Inside Google's Secret Drone-Delivery Program}
+    \field{journaltitle}{The Atlantic}
+    \field{month}{08}
+    \field{year}{2014}
+  \endentry
+
+  \entry{IBTimes2014-09}{article}{}
+    \name{author}{1}{}{%
+      {{hash=RMA}{%
+         family={Russon},
+         familyi={R\bibinitperiod},
+         given={Mary-Ann},
+         giveni={M\bibinithyphendelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RMA1}
+    \strng{fullhash}{RMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{DHL To Launch Parcelcopter Medicine Drone Delivery Service to
+  Remote German Island}
+    \verb{url}
+    \verb https://www.ibtimes.co.uk/dhl-launch-parcelcopter-medicine-drone-deli
+    \verb very-service-remote-german-island-1467141
+    \endverb
+    \field{journaltitle}{IBTimes}
+    \field{month}{09}
+    \field{year}{2014}
+  \endentry
+
+  \entry{IBTimes2014}{article}{}
+    \name{author}{1}{}{%
+      {{hash=BF}{%
+         family={Bermingham},
+         familyi={B\bibinitperiod},
+         given={Finbarr},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BF1}
+    \strng{fullhash}{BF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{FedEx Researching Drone Delivery But Not For Widespread Use}
+    \verb{url}
+    \verb https://www.ibtimes.co.uk/fedex-researching-drone-delivery-not-widesp
+    \verb read-use-1471063
+    \endverb
+    \field{journaltitle}{IBTimes}
+    \field{month}{10}
+    \field{year}{2014}
+  \endentry
+
+  \entry{Telegraph2014}{article}{}
+    \name{author}{1}{}{%
+      {{hash=SH}{%
+         family={Samuel},
+         familyi={S\bibinitperiod},
+         given={Henry},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SH1}
+    \strng{fullhash}{SH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{France's La Poste develops drone to deliver parcels}
+    \verb{url}
+    \verb https://www.telegraph.co.uk/news/worldnews/europe/france/11313044/Fra
+    \verb nces-La-Poste-develops-drone-to-deliver-parcels.html
+    \endverb
+    \field{journaltitle}{The Telegraph}
+    \field{month}{12}
+    \field{year}{2014}
+  \endentry
+
+  \entry{BusinessInsider2015}{article}{}
+    \name{author}{1}{}{%
+      {{hash=BJ}{%
+         family={Barrie},
+         familyi={B\bibinitperiod},
+         given={Joshua},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BJ1}
+    \strng{fullhash}{BJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Drones are delivering ginger tea in China}
+    \verb{url}
+    \verb https://www.businessinsider.com/alibabas-tea-delivery-drones-in-china
+    \verb -2015-2?IR=T
+    \endverb
+    \field{journaltitle}{Business Insider}
+    \field{month}{02}
+    \field{year}{2015}
+  \endentry
+
+  \entry{Xaircraft}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=X}{%
+         family={XAircraft},
+         familyi={X\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{X1}
+    \strng{fullhash}{X1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{SF-Express Logistics UAV by XAIRCRAFT}
+    \verb{url}
+    \verb https://www.youtube.com/watch?v=NOJd7x2fqBE&index=17&list=PLL3t5xY2V4
+    \verb 4xOxvTIxS4AHuUhFE_bMwhz
+    \endverb
+    \field{month}{03}
+    \field{year}{2015}
+  \endentry
+
+  \entry{FPS2015}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=F}{%
+         family={FPS},
+         familyi={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{F2}
+    \strng{fullhash}{F2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{FPS Takes Flight with First Commercial UK Drone Delivery}
+    \verb{url}
+    \verb https://fpsdistribution.com/fps-take-flight-with-1st-commercial-uk-dr
+    \verb one-delivery/
+    \endverb
+    \field{month}{03}
+    \field{year}{2015}
+  \endentry
+
+  \entry{PostnParcel2015}{article}{}
+    \field{labeltitlesource}{title}
+    \field{title}{CJ Group unveils cargo-carrying drones}
+    \verb{url}
+    \verb https://postandparcel.info/65116/news/cj-group-unveils-cargo-carrying
+    \verb -drones/
+    \endverb
+    \field{journaltitle}{Post \& Parcel}
+    \field{month}{05}
+    \field{year}{2015}
+  \endentry
+
+  \entry{Flirtey2015}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=F}{%
+         family={Flirtey},
+         familyi={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{F1}
+    \strng{fullhash}{F1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Flirtey making history with the first US drone delivery}
+    \verb{url}
+    \verb https://www.youtube.com/watch?v=xEm7bI_meQY
+    \endverb
+    \field{month}{07}
+    \field{year}{2015}
+  \endentry
+
+  \entry{PostnParcel}{article}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Flirtey and 7Eleven hail home drone delivery}
+    \verb{url}
+    \verb https://postandparcel.info/74430/news/faa-approved-home-drone-deliver
+    \verb y/
+    \endverb
+    \field{journaltitle}{Post \& Parcel}
+    \field{month}{07}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Amazon2016}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=A}{%
+         family={Amazon},
+         familyi={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{A1}
+    \strng{fullhash}{A1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Amazon Prime Air’s First Customer Delivery}
+    \verb{url}
+    \verb https://www.youtube.com/watch?v=vNySOrI2Ny8
+    \endverb
+    \field{month}{12}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Ross2018}{article}{}
+    \name{author}{1}{}{%
+      {{hash=RPE}{%
+         family={Ross},
+         familyi={R\bibinitperiod},
+         given={Philip\bibnamedelima E.},
+         giveni={P\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Institute of Electrical}%
+      {Electronics Engineers ({IEEE})}%
+    }
+    \strng{namehash}{RPE1}
+    \strng{fullhash}{RPE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1109/mspec.2018.8482412
+    \endverb
+    \field{number}{10}
+    \field{pages}{12\bibrangedash 13}
+    \field{title}{Iceland{\textquotesingle}s consumers try drone delivery: The
+  startup Aha takes on Amazon with basic drones bearing burgers - [News]}
+    \field{volume}{55}
+    \field{journaltitle}{{IEEE} Spectrum}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+\enddatalist
+\endinput
