@@ -71,3 +71,11 @@ repositories:
     type: git
     url: git@github.com:fcvm/sim2real_drone_racing.git
     version: master
+  flightmare:
+    type: git
+    url: https://github.com/fcvm/flightmare
+    version: master
+  flightmare_unity:
+    type: git
+    url: git@github.com:fcvm/flightmare_unity.git
+    version: master
