@@ -67,3 +67,7 @@ repositories:
     type: git
     url: git@github.com:fcvm/rotors_simulator.git
     version: master
+  sim2real_drone_racing:
+    type: git
+    url: git@github.com:fcvm/sim2real_drone_racing.git
+    version: master
