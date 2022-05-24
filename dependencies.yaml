@@ -78,4 +78,4 @@ repositories:
   flightmare_unity:
     type: git
     url: git@github.com:fcvm/flightmare_unity.git
-    version: master
+    version: main
