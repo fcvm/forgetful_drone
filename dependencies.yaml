@@ -1,0 +1,81 @@
+repositories:
+  catkin_boost_python_buildtool:
+    type: git
+    url: git@github.com:fcvm/catkin_boost_python_buildtool.git
+    version: master
+  catkin_simple:
+    type: git
+    url: git@github.com:fcvm/catkin_simple.git
+    version: master
+  cmake_external_project_catkin:
+    type: git
+    url: git@github.com:fcvm/cmake_external_project_catkin.git
+    version: master
+  eigen_catkin:
+    type: git
+    url: git@github.com:fcvm/eigen_catkin.git
+    version: master
+  eigen_checks:
+    type: git
+    url: git@github.com:fcvm/eigen_checks.git
+    version: master
+  gflags_catkin:
+    type: git
+    url: git@github.com:fcvm/gflags_catkin.git
+    version: master
+  glog_catkin:
+    type: git
+    url: git@github.com:fcvm/glog_catkin.git
+    version: master
+  mav_comm:
+    type: git
+    url: git@github.com:fcvm/mav_comm.git
+    version: master
+  minkindr:
+    type: git
+    url: git@github.com:fcvm/minkindr.git
+    version: master
+  minkindr_ros:
+    type: git
+    url: git@github.com:fcvm/minkindr_ros.git
+    version: master
+  numpy_eigen:
+    type: git
+    url: git@github.com:fcvm/numpy_eigen.git
+    version: master
+  octomap:
+    type: git
+    url: git@github.com:fcvm/octomap.git
+    version: master
+  octomap_msgs:
+    type: git
+    url: git@github.com:fcvm/octomap_msgs.git
+    version: master
+  octomap_ros:
+    type: git
+    url: git@github.com:fcvm/octomap_ros.git
+    version: melodic-devel
+  rpg_quadrotor_control:
+    type: git
+    url: git@github.com:fcvm/rpg_quadrotor_control.git
+    version: master
+  rpg_quadrotor_common:
+    type: git
+    url: git@github.com:fcvm/rpg_quadrotor_common.git
+    version: master
+  rotors_simulator:
+    type: git
+    url: git@github.com:fcvm/rotors_simulator.git
+    version: master
+  sim2real_drone_racing:
+    type: git
+    url: git@github.com:fcvm/sim2real_drone_racing.git
+    version: master
+  flightmare:
+    type: git
+    url: https://github.com/fcvm/flightmare
+    version: master
+  flightmare_unity:
+    type: git
+    url: git@github.com:fcvm/flightmare_unity.git
+    version: main
