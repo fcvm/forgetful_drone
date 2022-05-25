@@ -9,7 +9,7 @@ user_input = {
                 3: 'efficientnet_b0',
                 4: 'efficientnet_b5',
                 5: 'mobilenet_v3_small'
-            }[0],
+            }[1],
             'pretrained': True,
             'trainable': True,
         },
@@ -18,12 +18,12 @@ user_input = {
         },
         'gru': {
             'num_layers': 1,
-            'hidden_size': 128,
+            'hidden_size': 512,
             'dropout': 0.0, #0.2
         },
         'fc': {
             'num_layers': 1, #None
-            'width': 256,
+            'width': 512,
             'activation_function_id': {
                 0: 'ReLU',
                 1: 'PReLU',
@@ -40,7 +40,7 @@ user_input = {
 
     'data': {
         'sequential': {
-            'length': 5, #200#36#18#72,
+            'length': 2, #200#36#18#72,
             'step': 1
         },
         'processed': {
@@ -78,7 +78,7 @@ user_input = {
     },
 
     'learn': {
-        'batch_size': 8, #4#8#16#4
+        'batch_size': 16, #4#8#16#4
         'num_epochs': 10,
         'optimizer': {
             'id': {
@@ -90,7 +90,7 @@ user_input = {
             'id': {
                 0: 'SmoothL1Loss',
                 1: 'MSELoss'
-            }[1],
+            }[0],
             'waypoint_to_speed_weighting': 10 # NOT IMPLEMENTED
         },
         'lr_scheduler' : {
