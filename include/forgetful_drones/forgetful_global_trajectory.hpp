@@ -1,6 +1,6 @@
 #include <Eigen/Dense>
 #include <gurobi_c++.h>
-#include "forgetful_drones/matplotlibcpp.h"
+#include "matplotlibcpp/matplotlibcpp.h"
 
 #define DEBUG_LOG(msg) if(m_DebugEnabled)std::cout<<"\033[37;46m"<<" FORGETFUL GLOBAL TRAJECTORY "<<"\033[0m"<<"\033[36m"<<"    "<<msg<<"\033[0m"<<std::endl
 #define ERROR_LOG(msg) std::cout<<"\033[31;46m"<<" FORGETFUL GLOBAL TRAJECTORY "<<"\033[0m"<<"\033[31m"<<"    "<<msg<<"\033[0m"<<std::endl
