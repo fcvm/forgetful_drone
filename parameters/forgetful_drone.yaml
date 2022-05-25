@@ -92,7 +92,7 @@ DRONE_CAMERA_HALF_PITCH_AOV: deg(45.64) #deg(35.0)
 
 
 # "": Start new experiment
-DRONE_EXPERIMENT_ID: "UTC_2022_5_21_8_36_5" 
+DRONE_EXPERIMENT_ID: "UTC_2022_5_23_10_13_36" 
 
 # 0: Track global trajectory through racetrack
 # 1: Navigate through racetrack with expert system
