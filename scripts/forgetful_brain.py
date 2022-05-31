@@ -1002,9 +1002,9 @@ class DAGGER:
                 ),
                 dtype=np.float32
             )
-            self.imu_dt = self.rgb_mgs.header.stamp.to_sec() - self.imu_t_last
-            self.imu_t_last = self.rgb_mgs.header.stamp.to_sec()
-        except Exception as e: 
+            self.imu_dt = self.imu_msg.header.stamp.to_sec() - self.imu_t_last
+            self.imu_t_last = self.imu_msg.header.stamp.to_sec()
+        except Exception as e:
             print(e)
             self.imu = None
             return
