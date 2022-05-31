@@ -571,7 +571,7 @@ class DAGGER:
                 self.h = self.h.data
                 self.optimizer.zero_grad()
 
-                output, h = self.model.forward (
+                output, self.h = self.model.forward (
                     x_img=batch['input']['cnn'].to(TORCH_DEVICE), 
                     x_cat=batch['input']['cat'].to(TORCH_DEVICE), 
                     h=self.h
