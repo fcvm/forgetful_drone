@@ -1,3 +1,6 @@
+# This file is only an example for the git repo and should not be modified.
+# Make a copy of this file named 'user_input.py' and modify parameters there.
+
 user_input = {
     
     'ann': {
