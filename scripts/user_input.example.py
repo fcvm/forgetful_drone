@@ -40,7 +40,7 @@ user_input = {
 
     'data': {
         'sequential': {
-            'length': 2, #200#36#18#72,
+            'length': 10, #200#36#18#72,
             'step': 1
         },
         'processed': {
@@ -53,14 +53,14 @@ user_input = {
                 'rgb_fpath'
             ],
             'cat' : [
-                #'rgb_dt',
-                #'imu_dt',
-                #'imu_linacc_x',
-                #'imu_linacc_y',
-                #'imu_linacc_z',
-                #'imu_angvel_x',
-                #'imu_angvel_y',
-                #'imu_angvel_z',
+                'rgb_dt',
+                'imu_dt',
+                'imu_linacc_x',
+                'imu_linacc_y',
+                'imu_linacc_z',
+                'imu_angvel_x',
+                'imu_angvel_y',
+                'imu_angvel_z'
             ],
         },
         'label': [
@@ -78,7 +78,7 @@ user_input = {
     },
 
     'learn': {
-        'batch_size': 16, #4#8#16#4
+        'batch_size': 4, #4#8#16#4
         'num_epochs': 10,
         'optimizer': {
             'id': {

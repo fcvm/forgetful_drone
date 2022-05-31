@@ -19,3 +19,10 @@ experiments/*
 
 tmp/*
 !tmp/.gitkeep
+
+
+
+
+__pycache__/
+parameters/forgetful_drone.yaml
+scripts/user_input.py
