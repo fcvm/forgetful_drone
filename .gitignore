@@ -11,10 +11,6 @@ experiments/*
 
 #msg/
 
-#parameters/
-
-#rviz/
-
 #scripts/
 
 #src/
