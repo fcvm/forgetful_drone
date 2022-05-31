@@ -517,6 +517,37 @@ void ForgetfulDrone::rvizLabeledCamFrame() {
         cv::Point2f(static_cast<int>(xPx_N/2-85), yPx_N - 23), 
         cv::FONT_ITALIC, 0.7, cv::Scalar(0, 0, 255, 255));
 
+    // --- Add brain decision / expert intervention bar
+    int total_cnt = m_ExpertInterventionsCnt + m_BrainDecisionsCnt;
+    if (total_cnt != 0) {
+        double exp_share = (double)m_ExpertInterventionsCnt / (double)total_cnt;
+        double brain_share = 1.0 - exp_share;
+        int total_width = xPx_N - 20;
+            // - brain
+            int brain_width = (int)(total_width * brain_share);
+            roi = m_RGBData(cv::Rect(10, 10, brain_width, 40));
+            color = cv::Mat(roi.size(), CV_8UC3, cv::Scalar(0, 255, 0));
+            cv::addWeighted(color, alpha, roi, 1.0 - alpha, 0.0, roi);
+            // - expert
+            int exp_width = total_width - brain_width;
+            roi = m_RGBData(cv::Rect(10 + brain_width + 1, 10, exp_width, 40));
+            color = cv::Mat(roi.size(), CV_8UC3, cv::Scalar(255, 0, 0));
+            cv::addWeighted(color, alpha, roi, 1.0 - alpha, 0.0, roi);
+
+            cv::putText(m_RGBData, 
+                (std::to_string(100 * brain_share).substr(0, 5) + " %").c_str(), 
+                cv::Point2f(20, 50 - 13), 
+                cv::FONT_ITALIC, 0.7, cv::Scalar(125, 125, 125, 255));
+                
+            cv::putText(m_RGBData, 
+                (std::to_string(100 * exp_share).substr(0, 5) + " %").c_str(), 
+                cv::Point2f(xPx_N - 130, 50 - 13), 
+                cv::FONT_ITALIC, 0.7, cv::Scalar(125, 125, 125, 255));
+    }
+    
+
+    
+
     // rviz labeled camera frame
     cv_bridge::CvImage msg;
     msg.header.stamp = ros::Time::now();
@@ -1493,6 +1524,7 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
             flyDroneAboveTrack ();
 
             if (!track_completed) {
+                playAudioFromText("Run failed. Delete data and repeat run.");
                 ROSINFO("Expert failed to complete the track -> delete data & repeat run.");
                 std::experimental::filesystem::remove_all (m_RunDpath);
             } else {
@@ -1974,10 +2006,14 @@ void ForgetfulDrone::interveneBrainDecisionWithExpert (Eigen::Vector3d& target_p
     if (dist_2_glotraj > m_DaggerMargin) {
         m_NavigatorInput = m_ExpertOutput;
         processNavigatorInput(target_pos_ARF, speed_to_target);
-        m_ExpertInterventionsCnt++;
-        exp_intervened = true;
+        if (m_RunLapCnt >= 0) {
+            m_ExpertInterventionsCnt++;
+            exp_intervened = true;
+        }
     } else {
-        m_BrainDecisionsCnt++;
+        if (m_RunLapCnt >= 0) {
+            m_BrainDecisionsCnt++;
+        }
     }
 }
 
