@@ -1,3 +1,4 @@
+from ast import literal_eval
 import torch
 from typing import List
 import cv2
@@ -79,6 +80,7 @@ class ForgetfulDataset (torch.utils.data.Dataset):
         super().__init__(*args, **kwargs)
 
         self.df = df
+        self.df['max_speed'] = self.df['max_speed'].apply(lambda x: literal_eval(x))
         self.id = id
 
         self.cnn_cols = cnn_cols

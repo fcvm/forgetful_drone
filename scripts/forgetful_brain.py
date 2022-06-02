@@ -400,6 +400,7 @@ class DAGGER:
 
                 df_rgb = pd.DataFrame(rgb_fpaths, columns=self.RGB_COLS)
                 df_data = pd.read_csv(data_fpath);
+                df_data['max_speed'] = df_data['max_speed'].astype(float)
                 assert list(df_data.columns) == self.RAW_DATA_COLS, 'Columns of raw data mismatch'
                 assert len(df_rgb) == len(df_data), '#frames and #datasamples mismatch'
                 
@@ -1089,6 +1090,6 @@ if __name__ == '__main__':
     #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
     #dagger.train_ann(
     #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
-    #    latest_run_id='0000___0_0_0_1_0_1_04.00_00.00___000'
+    #    latest_run_id='0001___0_0_0_1_0_1_04.00_00.70___001'
     #)
     rospy.spin()
