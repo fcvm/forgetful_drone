@@ -106,6 +106,7 @@ class DAGGER:
             'imu_angvel_x',
             'imu_angvel_y',
             'imu_angvel_z',
+            'max_speed'
         ]
 
         self.RGB_COLS = ['rgb_fpath']
@@ -119,6 +120,7 @@ class DAGGER:
             'imu_angvel_x',
             'imu_angvel_y',
             'imu_angvel_z',
+            'max_speed'
             'exp_waypoint_x',
             'exp_waypoint_y',
             'exp_normspeed',
@@ -341,8 +343,7 @@ class DAGGER:
             print('ENABLE INFERENCE')
             self.model.eval()
             self.h = self.model.getZeroInitializedHiddenState(1, TORCH_DEVICE)
-
-
+            self.max_speed = rospy.get_param('brain_MAX_SPEED')
         else:
             print('DISABLE INFERENCE')
             self.model.train()
@@ -1024,7 +1025,8 @@ class DAGGER:
         cat = np.concatenate(
             (
                 np.array([self.rgb_dt, self.imu_dt]), 
-                self.imu
+                self.imu,
+                self.max_speed
             ), 
             dtype=np.float32
         )[self.cat_mask]

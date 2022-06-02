@@ -63,7 +63,8 @@ user_input = {
                 'imu_linacc_z',
                 'imu_angvel_x',
                 'imu_angvel_y',
-                'imu_angvel_z'
+                'imu_angvel_z',
+                'max_speed'
             ],
         },
         'label': [

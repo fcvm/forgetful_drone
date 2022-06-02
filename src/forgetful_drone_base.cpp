@@ -816,6 +816,7 @@ void ForgetfulDrone::performFlightMission_NavigationByBrain () {
         m_TrackDirectionIdx = static_cast<uint8_t>(track_direction);
         m_GateTypeIdx = static_cast<uint8_t>(gate_type);
         m_LocTrajMaxSpeed = loctraj_maxspeed;
+        m_rosRNH.setParam("brain_MAX_SPEED", m_LocTrajMaxSpeed);
 
         int config_run_cnt {0};
         int config_run_successful_cnt {0};
@@ -924,6 +925,7 @@ void ForgetfulDrone::initRunDirectory () {
         << "imu_angvel_x" << delimiter
         << "imu_angvel_y" << delimiter
         << "imu_angvel_z" << delimiter
+        << "max_speed" << delimiter
         << "exp_waypoint_x" << delimiter
         << "exp_waypoint_y" << delimiter
         << "exp_normspeed" << delimiter
@@ -2451,7 +2453,7 @@ void ForgetfulDrone::runBrain () {
     
     
     //ROSDEBUG("Create tensor from IMU data.");
-    double cat_data[8] = {
+    double cat_data[9] = {
         m_RGBTimeIncrement,
         m_IMUTimeIncrement,
         m_IMUData[0],
@@ -2460,6 +2462,7 @@ void ForgetfulDrone::runBrain () {
         m_IMUData[3],
         m_IMUData[4],
         m_IMUData[5],
+        m_LocTrajMaxSpeed,
     };
 
     at::Tensor x_cat = torch::from_blob(
@@ -2770,6 +2773,7 @@ void ForgetfulDrone::saveTrainSample (const bool& expert_intervened) {
         << m_IMUData[3] << delimiter
         << m_IMUData[4] << delimiter
         << m_IMUData[5] << delimiter
+        << m_LocTrajMaxSpeed << delimiter
         << m_ExpertOutput.x() << delimiter
         << m_ExpertOutput.y() << delimiter
         << m_ExpertOutput.z() << delimiter
