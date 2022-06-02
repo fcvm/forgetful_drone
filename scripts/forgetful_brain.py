@@ -1029,7 +1029,7 @@ class DAGGER:
             (
                 np.array([self.rgb_dt, self.imu_dt]), 
                 self.imu,
-                self.max_speed
+                np.array([self.max_speed])
             ), 
             dtype=np.float32
         )[self.cat_mask]
@@ -1081,14 +1081,14 @@ if __name__ == '__main__':
     rospy.init_node('forgetful_brain')
     
     
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    #rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
 
     dagger = DAGGER (user_input.user_input)
     #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
-    dagger.train_ann(
-        experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_19_55_10'),
-        latest_run_id='0000___0_0_0_1_0_1_04.00_00.00___000'
-    )
+    #dagger.train_ann(
+    #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
+    #    latest_run_id='0000___0_0_0_1_0_1_04.00_00.00___000'
+    #)
     rospy.spin()

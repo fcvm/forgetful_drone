@@ -1425,6 +1425,7 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
         m_TrackDirectionIdx = static_cast<uint8_t>(track_direction);
         m_GateTypeIdx = static_cast<uint8_t>(gate_type);
         m_LocTrajMaxSpeed = loctraj_maxspeed;
+        m_rosRNH.setParam("brain_MAX_SPEED", m_LocTrajMaxSpeed);
 
 
         m_DaggerRepCnt = 0;
