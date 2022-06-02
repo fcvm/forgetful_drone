@@ -120,7 +120,7 @@ class DAGGER:
             'imu_angvel_x',
             'imu_angvel_y',
             'imu_angvel_z',
-            'max_speed'
+            'max_speed',
             'exp_waypoint_x',
             'exp_waypoint_y',
             'exp_normspeed',
@@ -481,6 +481,7 @@ class DAGGER:
                         seq_imu_angvel_x = []
                         seq_imu_angvel_y = []
                         seq_imu_angvel_z = []
+                        seq_max_speed = []
 
                         if df_intermediate.iloc[i]['expert_intervened']:
                             exp_iv_cnt += 1
@@ -496,6 +497,7 @@ class DAGGER:
                                 seq_imu_angvel_x.append(df_intermediate.iloc[j]['imu_angvel_x'])
                                 seq_imu_angvel_y.append(df_intermediate.iloc[j]['imu_angvel_y'])
                                 seq_imu_angvel_z.append(df_intermediate.iloc[j]['imu_angvel_z'])
+                                seq_max_speed.append(df_intermediate.iloc[j]['max_speed'])
 
                             if not len(seq_rgb_dt) == 0:
                                 assert self.config['data']['sequential']['length'] == len(seq_rgb_dt), "len(sequence) != sequence length"
@@ -525,6 +527,7 @@ class DAGGER:
                                             seq_imu_angvel_x,
                                             seq_imu_angvel_y,
                                             seq_imu_angvel_z,
+                                            seq_max_speed,
                                             df_intermediate.iloc[i]['exp_waypoint_x'],
                                             df_intermediate.iloc[i]['exp_waypoint_y'],
                                             df_intermediate.iloc[i]['exp_normspeed'],
@@ -1078,14 +1081,14 @@ if __name__ == '__main__':
     rospy.init_node('forgetful_brain')
     
     
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    #rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
 
     dagger = DAGGER (user_input.user_input)
-    #dagger.train_nontrained(exp_id='UTC_2022_5_17_0_15_43')
-    #dagger.train_ann(
-    #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_5_17_0_15_43'),
-    #    latest_run_id='1_0_0_1_0_1_04.00_00.70_029'
-    #)
+    #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
+    dagger.train_ann(
+        experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_19_55_10'),
+        latest_run_id='0000___0_0_0_1_0_1_04.00_00.00___000'
+    )
     rospy.spin()
