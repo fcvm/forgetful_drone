@@ -43,6 +43,7 @@
     <depend>tf</depend>
     <!--<depend>forgetful_drones_msgs</depend>-->
     <depend>flightlib</depend>
+    <depend>flightrender</depend>
     <depend>image_transport</depend>
     
     
