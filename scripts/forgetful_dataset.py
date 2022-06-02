@@ -80,7 +80,7 @@ class ForgetfulDataset (torch.utils.data.Dataset):
         super().__init__(*args, **kwargs)
 
         self.df = df
-        self.df['max_speed'] = self.df['max_speed'].apply(lambda x: literal_eval(x))
+        #self.df['max_speed'] = self.df['max_speed'].apply(lambda x: literal_eval(x) if isinstance(x, str) else x)
         self.id = id
 
         self.cnn_cols = cnn_cols

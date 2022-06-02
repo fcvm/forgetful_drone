@@ -138,7 +138,7 @@ class DAGGER:
             *self.RAW_DATA_COLS[2:],
         ]
         self.PROCESSED_DATA_COLS = self.INTERMEDIATE_DATA_COLS[1:]
-        self.PROCESSED_DATA_SEQ_COLS = self.PROCESSED_DATA_COLS[:9]
+        self.PROCESSED_DATA_SEQ_COLS = self.PROCESSED_DATA_COLS[:10]
         self.USER_INPUT_FNAME = 'user_input.json'
         self.CONFIG_FNAME = 'config.json'
         self.RECORDINGS_FNAME = 'recordings.json'
@@ -1082,14 +1082,14 @@ if __name__ == '__main__':
     rospy.init_node('forgetful_brain')
     
     
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    #rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
 
     dagger = DAGGER (user_input.user_input)
     #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
-    #dagger.train_ann(
-    #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
-    #    latest_run_id='0001___0_0_0_1_0_1_04.00_00.70___001'
-    #)
+    dagger.train_ann(
+        experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
+        latest_run_id='0002___0_0_0_1_0_1_04.00_00.70___002'
+    )
     rospy.spin()
