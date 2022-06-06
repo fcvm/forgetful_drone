@@ -2006,7 +2006,7 @@ void ForgetfulDrone::interveneBrainDecisionWithExpert (Eigen::Vector3d& target_p
     double dist_2_glotraj; size_t _;
     findDistance2GlobalTrajectory(target_pos_WRF, dist_2_glotraj, _);
     
-    if (dist_2_glotraj > m_DaggerMargin) {
+    if (dist_2_glotraj > m_DaggerMargin * m_LocTrajMaxSpeed / 4.0) {
         m_NavigatorInput = m_ExpertOutput;
         processNavigatorInput(target_pos_ARF, speed_to_target);
         if (m_RunLapCnt >= 0) {
@@ -2037,7 +2037,7 @@ void ForgetfulDrone::interveneBrainDecisionWithExpert_firstRun (Eigen::Vector3d&
     double dist_2_glotraj; size_t _;
     findDistance2GlobalTrajectory(target_pos_WRF, dist_2_glotraj, _);
     
-    if (dist_2_glotraj > m_DaggerMargin) {
+    if (dist_2_glotraj > m_DaggerMargin * m_LocTrajMaxSpeed / 4.0) {
         m_NavigatorInput = m_ExpertOutput + Eigen::Vector3d::Ones() * p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP * std::sin(0.5*ros::WallTime::now().toSec());
         processNavigatorInput(target_pos_ARF, speed_to_target);
         m_ExpertInterventionsCnt++;
