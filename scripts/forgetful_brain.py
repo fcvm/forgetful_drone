@@ -934,6 +934,11 @@ class DAGGER:
         self.epoch_i = self.checkpoint['epoch']
         self.loss = self.checkpoint['loss']
         if log: print(f"Loaded checkpoint from \"{fpath}\"")
+        
+        for g in self.optimizer.param_groups:
+            g['lr'] = self.config['learn']['lr_scheduler']['init']
+
+        
         return True
 
 
@@ -1082,14 +1087,14 @@ if __name__ == '__main__':
     rospy.init_node('forgetful_brain')
     
     
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    #rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
 
     dagger = DAGGER (user_input.user_input)
     #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
-    dagger.train_ann(
-        experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
-        latest_run_id='0002___0_0_0_1_0_1_04.00_00.70___002'
-    )
+    #dagger.train_ann(
+    #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
+    #    latest_run_id='0002___0_0_0_1_0_1_04.00_00.70___002'
+    #)
     rospy.spin()

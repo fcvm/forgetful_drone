@@ -2402,7 +2402,8 @@ void ForgetfulDrone::runExpert () {
 
 
     m_ExpertOutput = {
-        target_pos_IRF.x(), target_pos_IRF.y(), norm_speed_2_target};
+        target_pos_IRF.x(), target_pos_IRF.y(), norm_speed_2_target
+    };
 }
 
 
