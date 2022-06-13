@@ -1225,26 +1225,27 @@ void ForgetfulDrone::setTrackWaypoints () {
         m_TrackWaypoints.push_back(EV3d_From_GMP(pose.position));
     }
 
-
     if (m_TrackTypeIdx == 1) // Gap
         insertGapWaypoint();
 
     //for (size_t i = 0; i < m_TrackWaypoints.size(); i++) {
-    //    ROSDEBUG("Waypoint " << i + 1 << ": " << m_TrackWaypoints[i].transpose());
+    //    ROSWARN("Waypoint " << i + 1 << ": " << m_TrackWaypoints[i].transpose());
     //}
 }
 
 void ForgetfulDrone::insertGapWaypoint () {
-    int i0 = (int) (m_TrackWaypoints.size() / 2);
+    int i0 = static_cast<int>(m_TrackWaypoints.size() / 2) - 1;
     int i1 = i0 + 1;
 
+    const Eigen::Vector3d& wp_0 = m_TrackWaypoints.back();
     const Eigen::Vector3d& wp_gap_0 = m_TrackWaypoints[i0];
     const Eigen::Vector3d& wp_gap_1 = m_TrackWaypoints[i1];
 
     Eigen::Vector3d wp_gap_c = (wp_gap_0 + wp_gap_1) / 2;
-    const Eigen::Vector3d& wp_0 = m_TrackWaypoints[0];
+    
 
-    Eigen::Vector3d direction = wp_gap_c - wp_0; direction.normalize();
+    Eigen::Vector3d direction = wp_gap_c - wp_0; 
+    direction.normalize();
     double distance = (wp_gap_0 -wp_gap_1).norm();
 
     Eigen::Vector3d wp_gap = wp_gap_c + direction * distance / 2;
@@ -1257,6 +1258,9 @@ void ForgetfulDrone::insertGapWaypoint () {
 void ForgetfulDrone::initWaypointIndices () {
 
     m_CurrWaypointIdx = m_GateInitPoses.size() - 1 - *ForgetfulSimulator::getDroneInitPoseNumGatesSetback();
+    if (m_TrackTypeIdx == 1) {
+        m_CurrWaypointIdx++; // easy fix, no time to code better
+    }
     m_LastWaypointIdx = (m_CurrWaypointIdx + m_GateInitPoses.size() - 1) % m_GateInitPoses.size();
 }
 
@@ -1377,6 +1381,7 @@ bool ForgetfulDrone::runNavigation () {
         
         if (time_left < 0) {
             ROSERROR("No waypoint passed in " << p_WPARR_MAXDUR << " s -> abort run");
+            switchNavigator (false);
             break;
         }
     } while (m_RunLapCnt < m_RunNumLaps && m_NavigatorENABLED);
