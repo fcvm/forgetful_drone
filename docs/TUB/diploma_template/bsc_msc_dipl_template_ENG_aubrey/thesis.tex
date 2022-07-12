@@ -1,0 +1,168 @@
+\documentclass[12pt,a4paper]{report}
+
+%###################################################################################
+%###################### Document Defintions ########################################
+%###################################################################################
+%aubrey: no real need to change these
+%how to handle spaces
+\sloppy
+\makeindex
+
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath, marvosym} % Mathematik
+%\usepackage{harvard} %for harvard style citation, keep this position before url package
+\usepackage{times, url, geometry, amssymb, booktabs, html}
+\usepackage{hyperref} %Hyperlinks zw. Textstellen
+\usepackage[pdftex]{graphicx} %pdf figures
+\usepackage{subfig} %multi-figures
+\usepackage{listings} %code listings
+\usepackage{multirow} %for multi-row tables
+\usepackage{color} %needed for listings
+\usepackage{wasysym}
+
+%depth of section
+\setcounter{secnumdepth}{4}
+%depth of TOC
+\setcounter{tocdepth}{3} 
+%directory for graphics
+\graphicspath{{gfx/}}
+
+%setting for listing
+\lstset{
+	extendedchars=true,
+	basicstyle=\scriptsize\ttfamily,
+	%basicstyle=\tiny\ttfamily,
+	tabsize=2,
+	keywordstyle=\textbf,
+	commentstyle=\color{grau},
+	stringstyle=\textit,
+	numbers=left,
+	numberstyle=\tiny,
+	% f�r sch�nen Zeilenumbruch
+	breakautoindent  = true,
+	breakindent      = 2em,
+	breaklines       = true,
+	postbreak        = ,
+	%prebreak         = \raisebox{-.8ex}[0ex][0ex]{\ensuremath{\lrcorner}},
+	prebreak         = \raisebox{-.8ex}[0ex][0ex]{\Righttorque},
+}
+
+%Table of Content TOC settings
+\setcounter{tocdepth}{3}
+%This is needed for entering URLs for harvard citation style
+%\renewcommand{\harvardurl}{URL: \url}
+
+
+%###################################################################################
+%########################### Thesis content ########################################
+%###################################################################################
+\begin{document}
+%__________________________Start_of_Thesis______________________________________________
+%Roman numeral numbering for initial section of thesis
+\pagenumbering{roman}
+%title page specification, deployed as seperate file the input folder
+\input{input/00a_title_page}
+%abstract plus acknowledgement and statement
+\input{input/00b_abstract_ack}
+%TOC
+\tableofcontents
+%add list of figures to TOC
+\cleardoublepage
+\addcontentsline{toc}{chapter}{List of Figures}
+\newpage
+\listoffigures
+%add list of tables to TOC
+\cleardoublepage
+\addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+\listoftables
+
+
+
+%\newcommand{\user}{{}^\text{user}}
+%\newcommand{\ltv}[1][]{v^\text{loctraj}_\text{#1}}
+%\newcommand{\dur}[2][]{T^\text{#2}_\text{#1}}
+%\newcommand{\pos}[3][]{{}_\textbf{#3} \underline p^\text{#2}_\text{#1}}
+%\newcommand{\vel}[3][]{{}_\textbf{#3} \underline v^\text{#2}_\text{#1}}
+%\newcommand{\acc}[3][]{{}_\textbf{#3} \underline a^\text{#2}_\text{#1}}
+%\newcommand{\dist}[3][]{d^\text{#2-#3}_\text{#1}}
+%\newcommand{\speed}[3][]{_\textbf{#3} v^\text{#2}_\text{#1}}
+%\newcommand{\trafo}[2]{T_\textbf{#1#2}}
+
+
+
+
+%%%%%%%%%%%
+\newcommand{\hadfct}[1]{\overset{\scriptscriptstyle \odot}{#1}}
+\newcommand{\ddt}{\frac{\text d}{\text d t}}
+\newcommand{\ddtt}{\frac{\text d^2}{\text d t^2}}
+\newcommand{\ddttt}{\frac{\text d^3}{\text d t^3}}
+
+\newcommand{\minof}[2]{\min\left(#1,\quad #2\right)}
+\newcommand{\maxof}[2]{\max\left(#1,\quad #2\right)}
+\newcommand{\mnm}{\text{min}}
+\newcommand{\mxm}{\text{max}}
+
+\newcommand{\anything}[6][]{{}_{#4}^{#5} #1{#6}^{#2}_{#3}}
+
+\newcommand{\user}{\breve}
+\newcommand{\drone}{\text{d}}
+\newcommand{\wayp}{\text{wp}}
+\newcommand{\glotraj}{\text{gt}}
+\newcommand{\loctraj}{\text{lt}}
+\newcommand{\grs}{\textbf{G}}
+\newcommand{\lrs}{\textbf{L}}
+\newcommand{\irs}{\textbf{I}}
+\newcommand{\norm}{\tilde}
+\newcommand{\dronetowayp}{\drone\text{-}\wayp}
+\newcommand{\desired}{\text{des}}
+\newcommand{\average}{\text{avg}}
+
+
+\newcommand{\pos}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline p}}
+\newcommand{\vel}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline v}}
+\newcommand{\acc}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline a}}
+\newcommand{\jerk}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline j}}
+\newcommand{\snap}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline s}}
+
+\newcommand{\dist}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{d}}
+\newcommand{\speed}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{v}}
+\newcommand{\scacc}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{a}}
+
+%\newcommand{\dur}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\tau}}
+\newcommand{\dur}[5][]{\anything[#1]{#2}{\Delta #3}{#4}{#5}{t}}
+\newcommand{\timepnt}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{t}}
+
+
+\newcommand{\trafo}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{T}}
+
+
+
+
+
+
+%__________________________Main_Content______________________________________________
+\newpage
+%from now on, numbering should be arabic
+\pagenumbering{arabic}
+\input{input/01_introduction}
+\input{input/02_background}
+\input{input/03_main_part_1}
+\input{input/04_main_part_2}
+\input{input/05_evaluation}
+\input{input/06_conclusion}
+
+%__________________________End_of_Thesis______________________________________________
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliography}
+%harvard citations style, please uncomment harvard package in the usepackage area
+%\bibliographystyle{agsm}
+%remove the following line when using harvard style citation
+\bibliographystyle{plain}
+%specify bibtex file here
+\bibliography{input/mybib}
+%add appendix to TOC
+\addcontentsline{toc}{chapter}{Appendices}
+\input{input/07_appendix}
+
+\end{document}

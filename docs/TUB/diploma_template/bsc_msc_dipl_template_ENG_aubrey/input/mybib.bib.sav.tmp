@@ -1,0 +1,152 @@
+% Encoding: ISO-8859-1
+
+@InProceedings{Mueller2013,
+  author          = {Mark W. Mueller and Markus Hehn and Raffaello D'Andrea},
+  title           = {A computationally efficient algorithm for state-to-state quadrocopter trajectory generation and feasibility verification},
+  year            = {2013},
+  address         = {Tokyo, Japan},
+  pages           = {3480--3486},
+  publisher       = {IEEE},
+  abstract        = {An algorithm is proposed allowing for the rapid generation and evaluation of quadrocopter state interception trajectories. These trajectories are from arbitrary initial states to final states defined by the vehicle position, velocity and acceleration with a specified end of time. Sufficient criteria are then derived allowing trajectories to be tested for feasibility with respect to thrust and body rates. It is also shown that the range of a linear combination of the vehicle state can be solved for in closed form, useful e.g. for testing that the position remains within a box. The algorithm is applied by revisiting the problem of finding a trajectory to hit a ball towards a target with a racket attached to a quadrocopter. The trajectory generator is used in a model predictive control like strategy, where thousands of trajectories are generated and evaluated at every controller update step, with the first input of the optimal trajectory being sent to the vehicle. It is shown that the method can generate and evaluate on the order of one million trajectories per second on a standard laptop computer.},
+  date            = {3-7 Nov. 2013},
+  doi             = {10.1109/IROS.2013.6696852},
+  eventdate       = {3-7 Nov. 2013},
+  eventtitleaddon = {Tokyo, Japan},
+  file            = {:Mueller2013 - A Computationally Efficient Algorithm for State to State Quadrocopter Trajectory Generation and Feasibility Verification.html:URL},
+  isbn            = {978-1-4673-6357-0},
+  issn            = {2153-0866},
+  journal         = {2013 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+  keywords        = {Trajectory, Vehicles, Heuristic algorithms, Acceleration, Vehicle dynamics, Aerodynamics, Prediction algorithms},
+}
+
+@Article{Hinton2012,
+  author        = {Geoffrey E. Hinton and Nitish Srivastava and Alex Krizhevsky and Ilya Sutskever and Ruslan R. Salakhutdinov},
+  title         = {Improving neural networks by preventing co-adaptation of feature detectors},
+  year          = {2012},
+  month         = jul,
+  abstract      = {When a large feedforward neural network is trained on a small training set, it typically performs poorly on held-out test data. This "overfitting" is greatly reduced by randomly omitting half of the feature detectors on each training case. This prevents complex co-adaptations in which a feature detector is only helpful in the context of several other specific feature detectors. Instead, each neuron learns to detect a feature that is generally helpful for producing the correct answer given the combinatorially large variety of internal contexts in which it must operate. Random "dropout" gives big improvements on many benchmark tasks and sets new records for speech and object recognition.},
+  archiveprefix = {arXiv},
+  eprint        = {1207.0580},
+  file          = {:http\://arxiv.org/pdf/1207.0580v1:PDF},
+  keywords      = {cs.NE, cs.CV, cs.LG},
+  primaryclass  = {cs.NE},
+}
+
+@Article{Cho2014,
+  author        = {Kyunghyun Cho and Bart van Merrienboer and Dzmitry Bahdanau and Yoshua Bengio},
+  title         = {On the Properties of Neural Machine Translation: Encoder-Decoder Approaches},
+  year          = {2014},
+  month         = sep,
+  abstract      = {Neural machine translation is a relatively new approach to statistical machine translation based purely on neural networks. The neural machine translation models often consist of an encoder and a decoder. The encoder extracts a fixed-length representation from a variable-length input sentence, and the decoder generates a correct translation from this representation. In this paper, we focus on analyzing the properties of the neural machine translation using two models; RNN Encoder--Decoder and a newly proposed gated recursive convolutional neural network. We show that the neural machine translation performs relatively well on short sentences without unknown words, but its performance degrades rapidly as the length of the sentence and the number of unknown words increase. Furthermore, we find that the proposed gated recursive convolutional network learns a grammatical structure of a sentence automatically.},
+  archiveprefix = {arXiv},
+  eprint        = {1409.1259},
+  file          = {:http\://arxiv.org/pdf/1409.1259v2:PDF},
+  keywords      = {cs.CL, stat.ML},
+  primaryclass  = {cs.CL},
+}
+
+@InCollection{Han1995,
+  author    = {Jun Han and Claudio Moraga},
+  booktitle = {Lecture Notes in Computer Science},
+  publisher = {Springer Berlin Heidelberg},
+  title     = {The influence of the sigmoid function parameters on the speed of backpropagation learning},
+  year      = {1995},
+  pages     = {195--201},
+  doi       = {10.1007/3-540-59497-3_175},
+}
+
+@Article{D.1966,
+  author    = {D. S. and Milton Abramowitz and Irene A. Stegun},
+  journal   = {Mathematics of Computation},
+  title     = {Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables.},
+  year      = {1966},
+  month     = {jan},
+  number    = {93},
+  pages     = {167},
+  volume    = {20},
+  doi       = {10.2307/2004284},
+  publisher = {{JSTOR}},
+}
+
+@Article{Hochreiter1997,
+  author    = {Sepp Hochreiter and Jürgen Schmidhuber},
+  journal   = {Neural Computation},
+  title     = {Long Short-Term Memory},
+  year      = {1997},
+  month     = {nov},
+  number    = {8},
+  pages     = {1735--1780},
+  volume    = {9},
+  doi       = {10.1162/neco.1997.9.8.1735},
+  publisher = {{MIT} Press - Journals},
+}
+
+@Article{schmidhuber_2021,
+  author       = {Schmidhuber, Jürgen},
+  journal      = {Jürgen Schmidhuber's AI Blog},
+  title        = {The most cited neural networks all build on work done in my labs},
+  year         = {2021},
+  note         = {URL: \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed on 04/07/2022)},
+  howpublished = {\url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html}},
+  publisher    = {IDSIA},
+  url          = {https://people.idsia.ch/~juergen/most-cited-neural-nets.html},
+}
+
+@Book{Hu2008,
+  author    = {Hu, Xiaolin and Balasubramaniam, P.},
+  publisher = {InTech},
+  title     = {Recurrent neural networks},
+  year      = {2008},
+  isbn      = {9789537619084},
+  pages     = {400},
+}
+
+@Article{ICE2020,
+  author  = {{IBM Cloud Education}},
+  journal = {IBM Cloud Learn Hub},
+  title   = {Recurrent Neural Networks},
+  year    = {2020},
+  note    = {URL: \url{https://www.ibm.com/cloud/learn/recurrent-neural-networks} (accessed on 04/07/2022)},
+  url     = {https://www.ibm.com/cloud/learn/recurrent-neural-networks},
+}
+
+@Book{2001,
+  publisher = {Wiley-IEEE Press},
+  title     = {A Field Guide to Dynamical Recurrent Networks},
+  year      = {2001},
+  isbn      = {9780780353695},
+  pages     = {464},
+}
+
+@InProceedings{pascanu2013difficulty,
+  author       = {Pascanu, Razvan and Mikolov, Tomas and Bengio, Yoshua},
+  booktitle    = {International conference on machine learning},
+  title        = {On the difficulty of training recurrent neural networks},
+  year         = {2013},
+  organization = {PMLR},
+  pages        = {1310--1318},
+}
+
+@Article{hochreiter1991untersuchungen,
+  author  = {Hochreiter, Sepp},
+  journal = {Diploma, Technische Universit{\"a}t M{\"u}nchen},
+  title   = {Untersuchungen zu dynamischen neuronalen Netzen},
+  year    = {1991},
+  number  = {1},
+  volume  = {91},
+}
+
+@InCollection{Rojas1996,
+  author    = {Ra{\'{u}}l Rojas},
+  booktitle = {Neural Networks},
+  publisher = {Springer Berlin Heidelberg},
+  title     = {The Backpropagation Algorithm},
+  year      = {1996},
+  pages     = {149--182},
+  doi       = {10.1007/978-3-642-61068-4_7},
+}
+
+@Article{Bengio1994,
+  author    = {Y. Bengio and P. Simard and P. Frasconi},
+  journal   = {{IEEE} Transactions on Neural Networks},
+  title     = {Learning long-term dependencies wit

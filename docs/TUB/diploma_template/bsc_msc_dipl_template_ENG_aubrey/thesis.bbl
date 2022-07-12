@@ -1,0 +1,142 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bengio1994}
+Y.~Bengio, P.~Simard, and P.~Frasconi.
+\newblock Learning long-term dependencies with gradient descent is difficult.
+\newblock {\em {IEEE} Transactions on Neural Networks}, 5(2):157--166, mar
+  1994.
+
+\bibitem{Brookes2020}
+Mike Brookes.
+\newblock The matrix reference manual.
+\newblock 2020.
+\newblock URL:
+  \url{http://www.ee.imperial.ac.uk/hp/staff/dmb/matrix/intro.html} (accessed
+  on 08/07/2022).
+
+\bibitem{Cho2014}
+Kyunghyun Cho, Bart van Merrienboer, Dzmitry Bahdanau, and Yoshua Bengio.
+\newblock On the properties of neural machine translation: Encoder-decoder
+  approaches.
+\newblock September 2014.
+
+\bibitem{Chung2014}
+Junyoung Chung, Caglar Gulcehre, KyungHyun Cho, and Yoshua Bengio.
+\newblock Empirical evaluation of gated recurrent neural networks on sequence
+  modeling, 2014.
+
+\bibitem{Forcada1995}
+Mikel~L. Forcada and Rafael~C. Carrasco.
+\newblock Learning the initial state of a second-order recurrent neural network
+  during regular-language inference.
+\newblock {\em Neural Computation}, 7(5):923--930, sep 1995.
+
+\bibitem{Greff2017}
+Klaus Greff, Rupesh~K. Srivastava, Jan Koutnik, Bas~R. Steunebrink, and Jurgen
+  Schmidhuber.
+\newblock {LSTM}: A search space odyssey.
+\newblock {\em {IEEE} Transactions on Neural Networks and Learning Systems},
+  28(10):2222--2232, oct 2017.
+
+\bibitem{Han1995}
+Jun Han and Claudio Moraga.
+\newblock The influence of the sigmoid function parameters on the speed of
+  backpropagation learning.
+\newblock In {\em Lecture Notes in Computer Science}, pages 195--201. Springer
+  Berlin Heidelberg, 1995.
+
+\bibitem{Hinton2012}
+Geoffrey~E. Hinton, Nitish Srivastava, Alex Krizhevsky, Ilya Sutskever, and
+  Ruslan~R. Salakhutdinov.
+\newblock Improving neural networks by preventing co-adaptation of feature
+  detectors.
+\newblock July 2012.
+
+\bibitem{hochreiter1991untersuchungen}
+Sepp Hochreiter.
+\newblock Untersuchungen zu dynamischen neuronalen netzen.
+\newblock {\em Diploma, Technische Universit{\"a}t M{\"u}nchen}, 91(1), 1991.
+
+\bibitem{Hochreiter1997}
+Sepp Hochreiter and Jürgen Schmidhuber.
+\newblock Long short-term memory.
+\newblock {\em Neural Computation}, 9(8):1735--1780, nov 1997.
+
+\bibitem{Hu2008}
+Xiaolin Hu and P.~Balasubramaniam.
+\newblock {\em Recurrent neural networks}.
+\newblock InTech, 2008.
+
+\bibitem{ICE2020}
+{IBM Cloud Education}.
+\newblock Recurrent neural networks.
+\newblock {\em IBM Cloud Learn Hub}, 2020.
+\newblock URL: \url{https://www.ibm.com/cloud/learn/recurrent-neural-networks}
+  (accessed on 04/07/2022).
+
+\bibitem{Kaiser2015}
+Lukasz Kaiser and Ilya Sutskever.
+\newblock Neural gpus learn algorithms, 2015.
+
+\bibitem{LearnedMiller}
+Erik Learned-Miller.
+\newblock Vector, matrix, and tensor derivatives.
+\newblock URL: \url{http://cs231n.stanford.edu/vecDerivs.pdf} (accessed on
+  08/07/2022).
+
+\bibitem{li2016tutorial}
+Minchen Li.
+\newblock A tutorial on backward propagation through time (bptt) in the gated
+  recurrent unit (gru) rnn.
+\newblock {\em Dept. Comput. Sci., Univ. British Columbia, Vancouver, BC,
+  Canada, Tech. Rep}, 2016.
+
+\bibitem{Minai1993}
+Ali~A. Minai and Ronald~D. Williams.
+\newblock On the derivatives of the sigmoid.
+\newblock {\em Neural Networks}, 6(6):845--853, jan 1993.
+
+\bibitem{Mueller2013}
+Mark~W. Mueller, Markus Hehn, and Raffaello D'Andrea.
+\newblock A computationally efficient algorithm for state-to-state quadrocopter
+  trajectory generation and feasibility verification.
+\newblock pages 3480--3486, Tokyo, Japan, 2013. IEEE.
+
+\bibitem{pascanu2013difficulty}
+Razvan Pascanu, Tomas Mikolov, and Yoshua Bengio.
+\newblock On the difficulty of training recurrent neural networks.
+\newblock In {\em International conference on machine learning}, pages
+  1310--1318. PMLR, 2013.
+
+\bibitem{Rojas1996}
+Ra{\'{u}}l Rojas.
+\newblock The backpropagation algorithm.
+\newblock In {\em Neural Networks}, pages 149--182. Springer Berlin Heidelberg,
+  1996.
+
+\bibitem{D.1966}
+D.~S., Milton Abramowitz, and Irene~A. Stegun.
+\newblock Handbook of mathematical functions with formulas, graphs, and
+  mathematical tables.
+\newblock {\em Mathematics of Computation}, 20(93):167, jan 1966.
+
+\bibitem{schmidhuber_2021}
+Jürgen Schmidhuber.
+\newblock The most cited neural networks all build on work done in my labs.
+\newblock {\em Jürgen Schmidhuber's AI Blog}, 2021.
+\newblock URL:
+  \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed
+  on 04/07/2022).
+
+\bibitem{Yin2017}
+Wenpeng Yin, Katharina Kann, Mo~Yu, and Hinrich Schütze.
+\newblock Comparative study of cnn and rnn for natural language processing,
+  2017.
+
+\bibitem{Zimmermann2012}
+Hans-Georg Zimmermann, Christoph Tietz, and Ralph Grothmann.
+\newblock Forecasting with recurrent neural networks: 12 tricks.
+\newblock In {\em Lecture Notes in Computer Science}, pages 687--707. Springer
+  Berlin Heidelberg, 2012.
+
+\end{thebibliography}
