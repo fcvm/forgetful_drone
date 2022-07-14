@@ -1,4 +1,4 @@
-#!/home/fm/env/pytorch/bin/python
+#!/usr/bin/env python3
 import warnings
 import ast
 
@@ -35,12 +35,14 @@ import copy
 import forgetful_ann
 import forgetful_dataset
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 
 import user_input
 
-import re
+
 
 
 def name_prefix (path: pathlib.Path) -> str:
@@ -294,8 +296,12 @@ class DAGGER:
                 self.recordings = json.load(file)
             
             if self.latest_run_id in self.recordings['run_id']:
-                msg = f"{msg_prefix}already trained on specified run \"{self.latest_run_id}\"! Do nothing!"
-                success = False
+                if self.config['learn']['num_epochs'] <= len(self.recordings['loss']['train'][-1]):
+                    msg = f"{msg_prefix}already trained on specified run \"{self.latest_run_id}\"! Do nothing!"
+                    success = False
+                else:
+                    self.num_prev_runs = 0
+                    msg = f"{msg_prefix}found #{self.num_prev_runs} previous runs"
             else:
                 self.num_prev_runs = len(self.recordings['loss']['train'])
                 msg = f"{msg_prefix}found #{self.num_prev_runs} previous runs"
@@ -435,7 +441,7 @@ class DAGGER:
 
         
 
-    def preprocessRGB (self, rgb:cv2.Mat) -> np.ndarray:
+    def preprocessRGB (self, rgb: np.ndarray) -> np.ndarray:
         rgb = cv2.resize(rgb, (
             self.config['data']['processed']['rgb']['width'], 
             self.config['data']['processed']['rgb']['height']
@@ -624,7 +630,7 @@ class DAGGER:
             ax1.tick_params(axis='y', labelcolor=color)
             fig.tight_layout()  # otherwise the right y-label is slightly clipped
             plt.savefig(fpath)
-            plt.close()
+            #plt.close()
 
         except Exception as e:
             print(f"Failed to save plot as \"{self.rel(fpath)}\", error: {e}")
@@ -648,20 +654,139 @@ class DAGGER:
                 latest_run_id=run_id
             )
 
-    def train_nontrained (self, exp_id:str) -> None:
+
+    def train_nontrained (self, exp_id:str, data_built : bool) -> None:
         self.experiment_dpath = self.PACKAGE_DPATH/self.EXPERIMENTS_DNAME/exp_id
         self.intermediate_dpath = self.experiment_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
         self.processed_dpath = self.experiment_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
         self.output_dpath = self.experiment_dpath/self.OUTPUT_DNAME
-
         self.raw_dpath = self.experiment_dpath/self.DATA_DNAME/self.RAW_DNAME
+        self.latest_run_id = sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()])[-1]
+        experiment_id = self.experiment_dpath.name
+        self.processed_fpath = self.processed_dpath/f"{experiment_id}{self.PROCESSED_FNAME_EXTENSION}"
+        self.checkpoint_fpath = self.output_dpath/self.CHECKPOINT_FNAME
 
-        for run_id in sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()]):
-            if run_id not in [x.stem for x in self.intermediate_dpath.iterdir() if x.is_dir()]:
-                self.train_ann (
-                    experiment_dpath=self.experiment_dpath,
-                    latest_run_id=run_id
+        run_ids = sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()])
+        if data_built: run_ids = [run_ids[-1]]
+        
+        for self.latest_run_id in run_ids:
+            if self.latest_run_id not in [x.stem for x in self.intermediate_dpath.iterdir() if x.is_dir()]:
+
+                print('\n\n.--- TRAIN FORGETFUL ANN\n|')
+                print(f"|  Experiment: {experiment_id}")
+                #self.createLink2Directory(self.raw_lpath, experiment_dpath, msg_prefix='|    - Raw data:          ')
+                self.initDirectory(self.raw_dpath,          msg_prefix='|    - Raw data:          ')
+                self.initDirectory(self.intermediate_dpath, msg_prefix='|    - Intermediate data: ')
+                self.initDirectory(self.processed_dpath,    msg_prefix='|    - Processed data:    ')
+                self.initDirectory(self.output_dpath,       msg_prefix='|    - Output data:       ')
+                self.initCheckpoint(                        msg_prefix='|    - Checkpoint:        ')
+                if not self.initRecordings(                 msg_prefix='|    - Recordings:        '): return
+                    
+                print('|')
+                if self.buildIntermediateData (runID=self.latest_run_id):
+                    print('|')
+                    self.buildProcessedData (RunID=self.latest_run_id)
+                    self.plotExpertInterventionShare()
+                else:
+                    print('|')
+                    print('|  Processed Data:')
+                    self.loadProcessedData()
+                    print(f'|    - Loaded #{len(self.df_processed)} sequences')
+                print('|')
+
+
+        self.dataset = forgetful_dataset.ForgetfulDataset (
+            df=self.df_processed,
+            id=experiment_id,
+            cnn_cols=self.config['data']['input']['cnn'],
+            cat_cols=self.config['data']['input']['cat'],
+            lbl_cols=self.config['data']['label'],
+            msg_pfx='|  '
+        )
+        print('|')
+
+        bs = self.config['learn']['batch_size']
+        sffl = True
+        dl = True
+        self.dataloader = torch.utils.data.DataLoader (
+            dataset=self.dataset,
+            batch_size=bs,
+            shuffle=sffl,
+            drop_last=dl
+        )
+        print(f'|  Data Loader')
+        print(f'|    - batch size: {bs}')
+        print(f'|    - shuffle: {sffl}')
+        print(f'|    - drop last: {dl}')
+        print(f'|')
+
+
+
+        log_savings = True
+        with tqdm(range(self.config['learn']['num_epochs']), desc='|  Epochs   ', position=0, ncols=NCOLS) as train_PBAR:
+            pfx = '|    - '
+            for self.epoch_i in train_PBAR:
+
+                try: 
+                    self.recordings['learn_rate'][-1][self.epoch_i]
+                    self.optimizer.step()
+                    self.lr_scheduler.step()
+                    print(self.lr_scheduler.get_last_lr())
+                    continue
+                except:
+                    pass
+                
+                self.train_one_epoch ()
+                
+                self.export_dict_as_json (
+                    dictionary=self.user_input, 
+                    fname=self.USER_INPUT_FNAME,
+                    log = log_savings,
+                    pbar=train_PBAR,
+                    msg_prefix=pfx
                 )
+                self.export_dict_as_json (
+                    dictionary=self.config, 
+                    fname=self.CONFIG_FNAME,
+                    log = log_savings,
+                    pbar=train_PBAR,
+                    msg_prefix=pfx
+                )
+                self.export_dict_as_json (
+                    dictionary=self.recordings, 
+                    fname=self.RECORDINGS_FNAME,
+                    log = log_savings,
+                    pbar=train_PBAR,
+                    msg_prefix=pfx
+                )
+                self.save_recordings_plots (
+                    log = log_savings,
+                    pbar=train_PBAR,
+                    msg_prefix=pfx
+                )
+                self.save_checkpoint (
+                    log = log_savings,
+                    pbar=train_PBAR, 
+                    msg_prefix=pfx
+                )
+                self.export_model_as_torch_script_module(
+                    scripting_mode='annotated',
+                    log = log_savings,
+                    pbar=train_PBAR, 
+                    msg_prefix=pfx
+                )
+                self.export_model_as_torch_script_module(
+                    scripting_mode='traced',
+                    log = log_savings,
+                    pbar=train_PBAR, 
+                    msg_prefix=pfx
+                )
+                log_savings = False
+
+                train_PBAR.write(f"|    [Epoch {self.epoch_i:04d}]  Loss: {self.recordings['loss']['train'][self.num_prev_runs][-1]:.10f} (train) | {'None'} (valid)  //  LR:  {self.recordings['learn_rate'][self.num_prev_runs][-1]:.10f}")      
+
+                if self.epoch_i + 1 == self.config['learn']['num_epochs']: train_PBAR.write("|", end='\n')
+        print("|_________________________________________________")
 
 
 
@@ -861,32 +986,34 @@ class DAGGER:
             ax1.tick_params(axis='y', labelcolor=color)
             #ax1.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.3e'))
 
-            ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-            color = 'tab:blue'
-            ax2.set_ylabel('Learning Rate', color=color)  # we already handled the x-label with ax1
-            
-            epoch_cnt = 1
-            for learn_rate in self.recordings['learn_rate']:
-                label = None if (epoch_cnt != 1) else\
-                    f"{self.config['learn']['lr_scheduler']['id']}, $\gamma={self.config['learn']['lr_scheduler']['gamma']}$"
-                x_axis = list(range(epoch_cnt, epoch_cnt + len(learn_rate)))
-                epoch_cnt += len(learn_rate)
-                ax2.plot(x_axis, learn_rate, color=color, label=label)
-            
-            ax2.tick_params(axis='y', labelcolor=color)
-            ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1e'))
+            plot_lr = False
+            if plot_lr:                
+                ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+                color = 'tab:blue'
+                ax2.set_ylabel('Learning Rate', color=color)  # we already handled the x-label with ax1
+                
+                epoch_cnt = 1
+                for learn_rate in self.recordings['learn_rate']:
+                    label = None if (epoch_cnt != 1) else\
+                        f"{self.config['learn']['lr_scheduler']['id']}, $\gamma={self.config['learn']['lr_scheduler']['gamma']}$"
+                    x_axis = list(range(epoch_cnt, epoch_cnt + len(learn_rate)))
+                    epoch_cnt += len(learn_rate)
+                    ax2.plot(x_axis, learn_rate, color=color, label=label)
+                
+                ax2.tick_params(axis='y', labelcolor=color)
+                ax2.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1e'))
 
             ax1.legend(loc='lower left')
-            ax2.legend(loc='upper right')
+            if plot_lr: ax2.legend(loc='upper right')
             fig.tight_layout()  # otherwise the right y-label is slightly clipped
              
             plt.savefig(fpath1)
 
             ax1.set_yscale('log')
-            ax2.set_yscale('log')
+            if plot_lr: ax2.set_yscale('log')
             
             plt.savefig(fpath2)
-            plt.close()
+            #plt.close()
 
             msg1 = f"{msg_prefix}Save plot as \"{self.rel(fpath1)}\""
             msg2 = f"{msg_prefix}Save plot as \"{self.rel(fpath2)}\""
@@ -1087,14 +1214,14 @@ if __name__ == '__main__':
     rospy.init_node('forgetful_brain')
     
     
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    #rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    #rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
 
     dagger = DAGGER (user_input.user_input)
-    #dagger.train_nontrained(exp_id='UTC_2022_6_2_19_55_10')
+    dagger.train_nontrained(exp_id='UTC_2022_7_1_7_27_56___SEQLEN_x', data_built=False)
     #dagger.train_ann(
-    #    experiment_dpath=pathlib.Path('/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/experiments/UTC_2022_6_2_18_57_40'),
+    #    experiment_dpath=pathlib.Path('/home/fm/catkin_ws/src/forgetful_drone/experiments/UTC_2022_6_13_20_21_51'),
     #    latest_run_id='0002___0_0_0_1_0_1_04.00_00.70___002'
     #)
     rospy.spin()
