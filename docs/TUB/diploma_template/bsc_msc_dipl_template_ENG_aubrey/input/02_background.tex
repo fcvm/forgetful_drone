@@ -37,8 +37,9 @@ and justifies the design choice for the GRU
 in light of standard RNNs and the more prevalent long short-term memory (LSTM).
 Moreover, it provides an insight into
 the mechanisms of the GRU that make temporal comprehension available
-as well as the training process of the GRU.
+as well as the loss backpropagation through time at the training of the GRU.
 
+\paragraph*{Recurrent neural networks} ${}$\\
 RNNs contrasts with classical feedforward ANNs,
 which forward information exclusively towards subsequent layers,
 by featuring dynamic properties 
@@ -107,32 +108,34 @@ make connections to information of inputs deep in the past
 In 1997, Hochreiter and Schmidhuber \cite{Hochreiter1997} introduced
 the long short-term memory (LSTM),
 which is today's predominant \cite{schmidhuber_2021} RNN variant.
-A standard LSTM unit 
+A standard LSTM layer
 (see, e.g., the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html}, visited on 03/07/2022
 })
 recurrently maintains a cell and a hidden state,
-i.e., the unit re-inputs the fed back cell and hidden state
-outputted one sequential step before.
-Each sequential step,
-the unit additionally inputs the current element of the given input sequence.
+i.e., the layer,
+in addition to the current data point of the input sequence,
+re-inputs the fed back cell and hidden state
+outputted at the previous sequential step.
 %The cell state is able to 
 %conserve its information content
 %over an arbitrary amount of sequential steps \cite{pascanu2013difficulty}.
-The LSTM unit implements three gating mechanism.
+Furthermore, the LSTM layer implements three gating mechanism
+that control the information flow within the layer.
 A gating mechanism is basically
 the Hadamard product of a state and a gate, which is a vector whose entries 
-are between zero and one.
-The forget gate manipulates 
-the information that are carried forward from the previous to the current cell state.
-The input gate controls the information that the
-the current cell state includes from the
-previous hidden state and the current element of the input sequence.
-Finally, its output gate regulates
-the information of the current cell state 
-that are used to infer the current hidden state. 
-All three gates are functions of 
-the previous hidden state and the current element of the input sequence.
+are within the interval from zero to one. 
+Consequently, a gate applied on a state, controls the 
+flow of the elements of the state within the range from zero to full flow.
+The forget gate of the LSTM layer controls
+the flow from the previous to the current cell state.
+The input gate controls the flow from the
+previous hidden state and the current data point of the input sequence
+to the current cell state.
+And the output gate controls
+the flow from the current cell state to current hidden state.
+%All three gates are functions of 
+%the previous hidden state and the current element of the input sequence.
 %The LSTM integrates a cell
 %as well as the input, output and forget gate.
 %While the cell conserves its state
@@ -140,24 +143,25 @@ the previous hidden state and the current element of the input sequence.
 %the three gates determine the information 
 %that flows into the cell to update the cell state
 %and out of the cell to impact the output.
-This design makes the training of the LSTM
-essentially robust to the vanishing gradient problem \cite{pascanu2013difficulty}.
-As a result, teaching the LSTM to remember long-term dependencies within inputted sequences
-is considerably simplified in comparison to standard RNNs.
+By this design of recurrent states with gated information flow,
+the training of the LSTM is essentially 
+robust to the vanishing gradient problem \cite{pascanu2013difficulty}.
+As a result, the LSTM is essentially 
+more capable of learning to remember long-term dependencies within input sequences
+than standard RNNs.
 
 
 
 
 The GRU,
-which was proposed 17 years after the LSTM,
+which was proposed 17 years after the LSTM by Cho et al. \cite{Cho2014},
 can be seen as a lighter version of the LSTM.
 It refrains from the cell state and therewith the output gate
-of the LSTM and maintains only a hidden state with two gates.
+of the LSTM and maintains only a hidden state and two gating mechanisms.
 Therewith, the GRU has less trainable parameters than the LSTM
 and is less memory efficient during inference.
 Nevertheless, it preserves the robustness with respect to the 
-"short-term memory problem" \cite{ICE2020} 
-due to the vanishing gradient affecting many standard RNNs.
+vanishing gradient problem that affects most standard RNNs \cite{ICE2020}.
 Various empirical studies show that the GRU, compared to the LSTM,
 performs equally well or even slightly better.
 Greff et al. \cite{Greff2017} evaluated 
@@ -177,10 +181,10 @@ In the field of algorithm learning,
 Kaiser and Sutskever \cite{Kaiser2015} achieved notedly better results 
 with a network based on GRU
 than with a network based on LSTM.
-In consideration of the above findings and the
+In consideration of these findings and the
 fact that the GRU has less trainable parameters
 and occupies less memory during inference,
-the GRU is chosen over the LSTM for deployment 
+the GRU is chosen over the LSTM for the deployment 
 in the ANN module of the navigation method of this thesis.
 
 

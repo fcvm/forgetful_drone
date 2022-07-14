@@ -252,4 +252,10 @@
   year    = {2016},
 }
 
+@Misc{LearnedMiller,
+  author = {Erik Learned-Miller},
+  note   = {URL: \url{http://cs231n.stanford.edu/vecDerivs.pdf} (accessed on 08/07/2022)},
+  title  = {Vector, Matrix, and Tensor Derivatives},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

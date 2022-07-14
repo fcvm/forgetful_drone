@@ -102,6 +102,11 @@ Mark~W. Mueller, Markus Hehn, and Raffaello D'Andrea.
   trajectory generation and feasibility verification.
 \newblock pages 3480--3486, Tokyo, Japan, 2013. IEEE.
 
+\bibitem{Parent}
+Rick Parent.
+\newblock {\em Computer Animation: Algorithms and Techniques}.
+\newblock Morgan Kaufmann.
+
 \bibitem{pascanu2013difficulty}
 Razvan Pascanu, Tomas Mikolov, and Yoshua Bengio.
 \newblock On the difficulty of training recurrent neural networks.

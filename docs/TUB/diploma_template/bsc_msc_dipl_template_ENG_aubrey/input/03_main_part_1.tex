@@ -1,7 +1,8 @@
 \chapter{Navigation Method}
 \label{mainone}
+\textit{
 DELETEME: In this chapter you start addressing your actual problem. Therefore, it makes often sense to make a detailed problem analysis first (if not done in introduction). You should be sure about what to do and how. As writtin in the background part, it might also make sense to include complex background information or papers you are basing on in this analysis. If you are solving a software problem, you should follow the state of the art of software development which basically includes: problem analysis, design, implementation, testing, and deployment. Maintenance is often also described but I believe this will not be required for most theses. Code should be placed in the appendix unless it is solving an essential aspect of your work.
-
+}
 
 
 
@@ -14,60 +15,21 @@ This chapter \dots
 
 
 \section{Reference systems}
-In this thesis,
-a point 
-$
-    \underline p
-$
-relates to either the global,
-%$
-%    {}_\textbf{G}\underline p 
-%    = 
-%    \begin{bmatrix}
-%        {}_\textbf{G}x & {}_\textbf{G}y & {}_\textbf{G}z
-%    \end{bmatrix}^T
-%    \in \mathbb{R}^3
-%$,
-the local
-%$
-%    {}_\textbf{L}\underline p
-%    = 
-%    \begin{bmatrix}
-%        {}_\textbf{L}x & {}_\textbf{L}y & {}_\textbf{L}z
-%    \end{bmatrix}^T
-%    \in \mathbb{R}^3
-%$ 
-or the image 
-%$
-%    {}_\textbf{I}\underline p
-%    = 
-%    \begin{bmatrix}
-%        {}_\textbf{I}x & {}_\textbf{I}y
-%    \end{bmatrix}^T
-%    \in \mathbb{R}^2
-%$ 
-reference system
+In this thesis, a point 
+$\pos[]{}{}{}{}$
+relates to either the global, the local or the image reference system
 \begin{equation}
-    {}_\textbf{G}\underline p 
-    = 
-    \begin{bmatrix}
-        {}_\textbf{G}x \\ {}_\textbf{G}y \\ {}_\textbf{G}z
-    \end{bmatrix}
-    \in \mathbb{R}^3
-    ,\quad
-    {}_\textbf{L}\underline p
-    = 
-    \begin{bmatrix}
-        {}_\textbf{L}x \\ {}_\textbf{L}y \\ {}_\textbf{L}z
-    \end{bmatrix}
-    \in \mathbb{R}^3
+    \pos[]{}{}{\grs}{} = \begin{bmatrix}
+        \x[]{}{}{\grs}{} \\ \y[]{}{}{\grs}{} \\ \z[]{}{}{\grs}{}
+    \end{bmatrix} \in \mathbb{R}^3
     ,\quad 
-    {}_\textbf{I}\underline p
-    = 
-    \begin{bmatrix}
-        {}_\textbf{I}x \\ {}_\textbf{I}y
-    \end{bmatrix}
-    \in \mathbb{R}_{[\text{-}1,1]}^2.
+    \pos[]{}{}{\lrs}{} = \begin{bmatrix}
+        \x[]{}{}{\lrs}{} \\ \y[]{}{}{\lrs}{} \\ \z[]{}{}{\lrs}{}
+    \end{bmatrix} \in \mathbb{R}^3
+    ,\quad 
+    \pos[]{}{}{\irs}{} = \begin{bmatrix}
+        \x[]{}{}{\irs}{} \\ \y[]{}{}{\irs}{}
+    \end{bmatrix} \in \left[\text -1, 1\right]^2.
 \end{equation}
 
 
@@ -75,144 +37,47 @@ The global reference system
 is fixed to an arbitrary point on the earth
 and hence quasi inertial.
 It is spanned by the orthonormal basis
-%$
-%    \left\{
-%        \underline e^\text{G}_x,
-%        \underline e^\text{G}_y,
-%        \underline e^\text{G}_z
-%    \right\}
-%$
-which,
-related to the global system,
+which, related to the global system,
 equates to the standard basis of $\mathbb{R}^3$
-%i.e., 
-%$
-%    {}_\textbf{G}\underline e^\text{G}_x 
-%    = 
-%    \begin{bmatrix}
-%        1 & 0 & 0
-%    \end{bmatrix}^T
-%$
-%,
-%$ 
-%    {}_\textbf{G}\underline e^\text{G}_y 
-%    = 
-%    \begin{bmatrix}
-%        0 & 1 & 0
-%    \end{bmatrix}^T
-%$
-%and
-%$
-%        {}_\textbf{G}\underline e^\text{G}_z 
-%        = 
-%        \begin{bmatrix}
-%            0 & 0 & 1
-%        \end{bmatrix}^T
-%$.
 \begin{equation}
     \left\{
-        \underline e^\text{G}_x,
-        \underline e^\text{G}_y,
-        \underline e^\text{G}_z
+        \unitvec[]{\text G}{x}{}{},
+        \unitvec[]{\text G}{y}{}{},
+        \unitvec[]{\text G}{z}{}{}
     \right\}
-    \quad\text{with}\quad 
-    {}_\textbf{G}\underline e^\text{G}_x 
-    = 
-    \begin{bmatrix}
-        1 \\ 0 \\ 0
-    \end{bmatrix}
-    ,\ 
-    {}_\textbf{G}\underline e^\text{G}_y 
-    = 
-    \begin{bmatrix}
-        0 \\ 1 \\ 0
-    \end{bmatrix}
-    ,\ 
-    {}_\textbf{G}\underline e^\text{G}_z 
-        = 
-        \begin{bmatrix}
-            0 \\ 0 \\ 1
-        \end{bmatrix}.
+    \quad \text{with} \quad 
+    \unitvec[]{\text G}{x}{\grs}{} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix},\ 
+    \unitvec[]{\text G}{y}{\grs}{} = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix},\ 
+    \unitvec[]{\text G}{z}{\grs}{} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}.
 \end{equation}
 
 
 The local reference system (see figure \ref{fig:local_reference_system}) is fixed to the moving drone.
-Its orthonormal basis
-%$
-%    \left\{
-%        \underline e^\text{L}_x,
-%        \underline e^\text{L}_y,
-%        \underline e^\text{L}_z
-%    \right\}
-%$
-%with
-%$
-%    {}_\textbf{L}\underline e^\text{L}_x 
-%    = 
-%    \begin{bmatrix}
-%        1 & 0 & 0
-%    \end{bmatrix}^T
-%$
-%,
-%$ 
-%    {}_\textbf{L}\underline e^\text{L}_y 
-%    = 
-%    \begin{bmatrix}
-%        0 & 1 & 0
-%    \end{bmatrix}^T
-%$
-%and
-%$
-%    {}_\textbf{L}\underline e^\text{L}_z 
-%    = 
-%    \begin{bmatrix}
-%        0 & 0 & 1
-%    \end{bmatrix}^T
-%$
+It is spanned by the orthonormal basis,
+whose origin is located at the optical center of the drone's onboard camera,
 \begin{equation}
     \left\{
-        \underline e^\text{L}_x,
-        \underline e^\text{L}_y,
-        \underline e^\text{L}_z
+        \unitvec[]{\text L}{x}{}{},
+        \unitvec[]{\text L}{y}{}{},
+        \unitvec[]{\text L}{z}{}{}
     \right\}
-    \quad\text{with}\quad 
-    {}_\textbf{L}\underline e^\text{L}_x 
-    = 
-    \begin{bmatrix}
-        1 \\ 0 \\ 0
-    \end{bmatrix}
-    ,\ 
-    {}_\textbf{L}\underline e^\text{L}_y 
-    = 
-    \begin{bmatrix}
-        0 \\ 1 \\ 0
-    \end{bmatrix}
-    ,\ 
-    {}_\textbf{L}\underline e^\text{L}_z 
-        = 
-        \begin{bmatrix}
-            0 \\ 0 \\ 1
-        \end{bmatrix}
+    \quad \text{with} \quad 
+    \unitvec[]{\text L}{x}{\lrs}{} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix},\ 
+    \unitvec[]{\text L}{y}{\lrs}{} = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix},\ 
+    \unitvec[]{\text L}{z}{\lrs}{} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}.
 \end{equation}
-origins at the optical center of the onboard camera.
 The unit vector 
-$
-    \underline e^\text{L}_x
-$ 
+$\unitvec[]{\text L}{x}{}{}$ 
 points along the optical axis of the camera
 in the flight direction of the drone.
 The unit vector
-$
-    \underline e^\text{L}_z
-$
-points in the direction of the forces generated by the rotors
-and is parallel to the vertical axis of the image plane of the camera.
+$\unitvec[]{\text L}{z}{}{}$ 
+points in the direction of the forces generated by the drone's rotors
+and is parallel to the vertical axis of the image plane of the drone's onboard camera.
 The unit vector 
-$
-    \underline e^\text{L}_y
-$
+$\unitvec[]{\text L}{y}{}{}$ 
 points to the left of the drone
-paralleling the horizontal axis of the image plane.
+and parallels the horizontal axis of the image plane.
 
 
 
@@ -220,67 +85,41 @@ paralleling the horizontal axis of the image plane.
 
 
 The image reference system (see figure \ref{fig:image_reference_system}) 
-is superimposed on the images of the onboard camera.
+is superimposed on the images of the drone's onboard camera.
 This 2-dimensional system is spanned by the orthonormal basis
 \begin{equation}
     \left\{
-        \underline e^\text{I}_x,
-        \underline e^\text{I}_y
+        \unitvec[]{\text I}{x}{}{},
+        \unitvec[]{\text I}{y}{}{}
     \right\}
-    \text{ with }
-    {}_\textbf{I}\underline e^\text{I}_x 
-    = 
-    \begin{bmatrix}
-        1 \\ 0
-    \end{bmatrix}
-    ,\ 
-    {}_\textbf{I}\underline e^\text{I}_y 
-    = 
-    \begin{bmatrix}
-        0 \\ 1
-    \end{bmatrix}
-    .
+    \quad \text{with} \quad 
+    \unitvec[]{\text I}{x}{\irs}{} = \begin{bmatrix} 1 \\ 0 \end{bmatrix},\ 
+    \unitvec[]{\text I}{y}{\irs}{} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}.
 \end{equation}
 The origin of the image reference system 
 is located at the center of the image plane.
 The unit vector 
-$
-    \underline e^\text{I}_x
-$ 
+$\unitvec[]{\text I}{x}{}{}$  
 points rightwards along the vertical axis of the image plane.
 The unit vector 
-$
-    \underline e^\text{I}_y
-$ 
+$\unitvec[]{\text I}{y}{}{}$  
 points upwards along the horizontal axis of the image plane.
-A point
-on the image plane 
+A point on the image plane 
 is bounded by the left and right
-$
-    -1 \le {}_\textbf{I}x \le 1
-$
+$ -1 \le \x[]{}{}{\irs}{} \le 1 $
 as well as the lower and upper
-$
--1 \le {}_\textbf{I}y \le 1
-$
+$ -1 \le \y[]{}{}{\irs}{} \le 1 $
 border of the image plane.
-
-
-
-The global reference system 
-is only referred to 
-by the expert system (see section)
-which makes navigation decisions based on globally consistent information
-when generating training data for the ANN module.
-The autonomous navigation method, 
-with the fully trained ANN module making the navigation decisions,
-exclusively resorts to data from onboard sensors,
-which is relative to the drone and its onboard camera.
-The method, therefore, operates only within the local and image reference system.
-
-
-
-
+%The global reference system 
+%is only referred to 
+%by the expert system (see section)
+%which makes navigation decisions based on globally consistent information
+%when generating training data for the ANN module.
+%The autonomous navigation method, 
+%with the fully trained ANN module making the navigation decisions,
+%exclusively resorts to data from onboard sensors,
+%which is relative to the drone and its onboard camera.
+%The method, therefore, operates only within the local and image reference system.
 \begin{figure}[h]
     \centering
     \subfloat[
@@ -298,17 +137,13 @@ The method, therefore, operates only within the local and image reference system
     \caption[
         The local and the image reference system
     ]{
-        The local and the image reference system. The former is
-        aligned with the drone and its onboard camera 
-        while the latter is superimposed on the images of the onboard camera.
-        For the image reference system,
-        the waypoint
-        ${}_\textbf{I}\underline p^\text{wayp} = \begin{bmatrix}
-            -0.428 & 0.136
-        \end{bmatrix}^T$
-        (orange)
-        , that belongs to the same training data sample as the underlying image,
-        is depicted.
+        The local and the image reference system. 
+        The local reference system (red) is aligned with the drone's onboard camera. 
+        The image reference system (blue) is superimposed on the images from the onboard camera.
+        The pictured, exemplary waypoint
+        $\pos[]{\wayp}{}{\irs}{} = \begin{bmatrix} -0.428 & 0.136 \end{bmatrix}^T$
+        (orange) with respect to the image reference system
+        is part of the label for the underlying image.
         \label{fig:local_and_image_reference_system}
     }
 \end{figure}
@@ -318,460 +153,292 @@ The method, therefore, operates only within the local and image reference system
 
 
 
-\subsection*{Transformation between the global and the local reference system}
-The drone position
-$
-{}_\textbf{G} \underline p^\text{drone}
-$
+\paragraph*{Transformation between the global and the local reference system} $\ $\\
+The drone's position
+$\pos[]{\drone}{}{\grs}{}$
 and quaternion orientation
-$
-{}_\textbf{G} \underline q^\text{drone}
-$
-in the global reference system
-fully determine the the transformation
-from the global to the local reference system and vice versa.
-The bijective transformation of a point 
-from the global to the local reference system
-is given by 
+$\quat[]{\drone}{}{\grs}{}$
+with respect to the global reference system
+fully determine the bidirectional transformation
+between the global and the local reference system.
+The following bases on quaternion mathematics,
+for which one can consult, e.g., \cite{Parent}.
+A point given in the coordinates of the global reference system
+can be expressed in the coordinates of the local reference system
+with the transformation
 \begin{align} \label{equ:global_to_local_transformation}
-    T_\textbf{LG}
+    \trafo[]{}{\lrs\grs}{}{}
     :\ 
-    &\mathbb{R}^3 \rightarrow \mathbb{R}^3
-    %;\
-    \nonumber \\
-    &{}_\textbf{G} \underline p 
+    \mathbb{R}^3 \rightarrow \mathbb{R}^3
+    ; \quad
+    \pos[]{}{}{\grs}{} \mapsto \pos[]{}{}{\lrs}{}
     =
-    \begin{bmatrix}
-        {}_\textbf{G} x \\ {}_\textbf{G} y \\ {}_\textbf{G} z
-    \end{bmatrix}
-    \mapsto
-    {}_\textbf{L} \underline p 
-    =
-    \begin{bmatrix}
-        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
-    \end{bmatrix}
-    =
-    \mathcal{P}
-    \left[
-        \mathrm{inv}
-        \left(
-            {}_\textbf{G} \underline q^\text{drone}
-        \right)
-        *
-        \mathcal{Q}
-        \left(
-            {}_\textbf{G} \underline p - {}_\textbf{G} \underline p^\text{drone}
-        \right)
-        *
-        {}_\textbf{G} \underline q^\text{drone}
-    \right].
+    \begin{cases}
+        \mathcal{P} \left[
+            \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
+            *
+            \mathcal{Q} \left( \pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{} \right)
+            *
+            \quat[]{\drone}{}{\grs}{}
+        \right], 
+        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        \pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{}, 
+        & \text{else}.
+    \end{cases}
 \end{align}
-The inverse transformation 
-from the local to the global reference system
-is given by 
+Reversely, a point given in the coordinates of the local reference system
+can be expressed in the coordinates of the global reference system
+with the transformation
 \begin{align} \label{eq:local_to_global_transformation}
-    T_\textbf{GL}
+    \trafo[]{}{\grs\lrs}{}{}
     :\ 
-    &\mathbb{R}^3 \rightarrow \mathbb{R}^3
-    %;\
-    \nonumber \\
-    &{}_\textbf{L} \underline p 
+    \mathbb{R}^3 \rightarrow \mathbb{R}^3
+    ; \quad
+    \pos[]{}{}{\lrs}{} \mapsto \pos[]{}{}{\grs}{}
     =
-    \begin{bmatrix}
-        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
-    \end{bmatrix}
-    \mapsto
-    {}_\textbf{G} \underline p 
-    =
-    \begin{bmatrix}
-        {}_\textbf{G} x \\ {}_\textbf{G} y \\ {}_\textbf{G} z
-    \end{bmatrix}
-    =
-    \mathcal{P}
-    \left[
-        {}_\textbf{G} \underline q^\text{drone}
-        *
-        \mathcal{Q}
-        \left(
-            {}_\textbf{G} \underline p
-        \right)
-        *
-        \mathrm{inv}
-        \left(
-            {}_\textbf{G} \underline q^\text{drone}
-        \right)
-    \right]
-    + 
-    {}_\textbf{G} \underline p^\text{drone}
-    .
+    \begin{cases}
+        \mathcal{P} \left[
+            \quat[]{\drone}{}{\grs}{}
+            *
+            \mathcal{Q} \left( \pos[]{}{}{\lrs}{} \right)
+            *
+            \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
+        \right] + \pos[]{\drone}{}{\grs}{}, 
+        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        \pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
+        & \text{else}.
+    \end{cases}
 \end{align}
-In the above transformations,
-$\mathcal{Q}$ and $\mathcal{P}$ 
-map points to their quaternion representations and vice versa
+In the two above transformations,
+the mapping $\mathcal{Q}$
+of a point to its quaternion representation 
+and the reverse mapping $\mathcal{P}$ 
+of a quaternion representation to its point  
+are given by
 \begin{align}
     \mathcal{Q}
     :\ 
-    &\mathbb{R}^3 \rightarrow \mathbb{R}^4
+    & \mathbb{R}^3 \rightarrow \mathbb{R}^4
     ;\
-    \underline p 
-    =
-    \begin{bmatrix}
-        x \\ y \\ z 
-    \end{bmatrix} 
+    \pos[]{}{}{}{} = \begin{bmatrix} \x[]{}{}{}{} \\ \y[]{}{}{}{} \\ \z[]{}{}{}{} \end{bmatrix} 
     \mapsto
-    \underline q
-    = 
-    \begin{bmatrix}
-        w \\ \underline p
-    \end{bmatrix} 
-    \text{ with }
-    w = 0
+    \quat[]{}{}{}{} = \begin{bmatrix} w \\ \underline p \end{bmatrix} 
+    \text{ with } w = 0
     \nonumber \\
     \mathcal{P}
     :\ 
     &\mathbb{R}^4 \rightarrow \mathbb{R}^3
     ;\
-    \underline q
-    = 
-    \begin{bmatrix}
-        w \\ \underline p
-    \end{bmatrix} 
+    \quat[]{}{}{}{} = \begin{bmatrix} w \\ \underline p \end{bmatrix} 
     \mapsto
-    \underline p 
-    =
-    \begin{bmatrix}
-        x \\ y \\ z 
-    \end{bmatrix}, 
+    \pos[]{}{}{}{} = \begin{bmatrix} \x[]{}{}{}{} \\ \y[]{}{}{}{} \\ \z[]{}{}{}{} \end{bmatrix}.
 \end{align}
-the operator $*$ denotes the quaternion multiplication
+Moreover, the operator $*$ denotes the multiplication of two quaternions which is given by
 \begin{align}
-    \underline q_0 * \underline q_1 
+    \quat[]{}{1}{}{} * \quat[]{}{2}{}{}
     = 
     \begin{bmatrix}
-        w_0 w_1 - \underline p_0^T \underline p_1\\ 
-        w_0 \underline p_1 + w_1 \underline p_0 + \underline p_0 \times \underline p_1
-    \end{bmatrix}
+        w_1 w_2 - \pos[]{T}{1}{}{} \pos[]{}{2}{}{}\\ 
+        w_1 \pos[]{}{2}{}{} + w_2 \pos[]{}{1}{}{} + \pos[]{}{1}{}{} \times \pos[]{}{2}{}{}
+    \end{bmatrix}.
 \end{align}
-and the inversion of a quaternion is given by
+Finally, the inversion of a quaternion is given by
 \begin{align}
-    \mathrm{inv}(\underline q) 
+    \mathrm{inv}(\quat[]{}{}{}{}) 
     = 
-    \frac
-    {1}
-    {\left\| \underline q \right\|_2}
-    \begin{bmatrix}
-        w\\ 
-        -\underline p
-    \end{bmatrix}
-    .
+    \frac{1}{\| \quat[]{}{}{}{} \|_2}
+    \begin{bmatrix} w \\ \text - \pos[]{}{}{}{} \end{bmatrix}.
 \end{align}
-%\url{https://reader.elsevier.com/reader/sd/pii/B9780124158429000022?token=80D28F49695ADE2F8FBA3717576FA6BF850872EF274529E07574A99C62EE08BB68A4FB939F4877A1FAB29C3BAB785D6D&originRegion=eu-west-1&originCreation=20220617063425}
-Both transformations are the inversion of each other,
-i.e.,
-points are transformed without forfeiting information
+Because the two above transformations are the inversion of each other,
+points can be transformed between the global and local reference system
+without information loss
 \begin{equation}
-    T_\textbf{GL} 
-    \circ 
-    T_\textbf{LG} \left(
-        {}_\textbf{G} p
-    \right)
+    \trafo[]{}{\grs\lrs}{}{} \circ \trafo[]{}{\lrs\grs}{}{} 
+    \left( \pos[]{}{}{\grs}{} \right)
     =
-    {}_\textbf{G} p
+    \pos[]{}{}{\grs}{}
     ,\quad
-    T_\textbf{LG} 
-    \circ 
-    T_\textbf{GL} \left(
-        {}_\textbf{L} p
-    \right)
+    \trafo[]{}{\lrs\grs}{}{} \circ \trafo[]{}{\grs\lrs}{}{} 
+    \left( \pos[]{}{}{\lrs}{} \right)
     =
-    {}_\textbf{L} p
-    .
+    \pos[]{}{}{\lrs}{}.
 \end{equation}
+In the above equations, the operator $\circ$ denotes the composition of two functions.
 
 
 
-\subsection*{Transformation between the local and the image reference system}
+\paragraph*{Transformation between the local and the image reference system} $\ $\\
 The horizontal
-$
-\phi^\text{user}_{z,\text{camera}}
-$
+$\ang[\user]{\camera}{z}{}{}$
 and the vertical
-$
-\phi^\text{user}_{y,\text{camera}}
-$
+$\ang[\user]{\camera}{y}{}{}$
 angle of view
-of the onboard camera,
-both specified by the user,
-fully determine 
-the transformation of a point
-from the local
-to the image reference system
+of the drone's onboard camera,
+fully determine the bidirectional transformation 
+between the local and the image reference system.
+A point given in the coordinates of the local reference system
+is expressed in the coordinates of the image reference system with the transformation
 \begin{align} \label{equ:local_to_image_transformation}
-    T_\textbf{IL}
+    \trafo[]{}{\irs\lrs}{}{}
     :\ 
-    &\mathbb{R}^3 \rightarrow \mathbb{R}_{[\text{-}1, 1]}^2
-    \nonumber \\
-    &{}_\textbf{L} \underline p 
+    \mathbb{R}^3 \rightarrow \left[ \text{-}1, 1 \right]^2
+    ; \quad
+    \pos[]{}{}{\lrs}{} \mapsto \pos[]{}{}{\irs}{}
     =
     \begin{bmatrix}
-        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
-    \end{bmatrix}
-    \mapsto
-    {}_\textbf{I} \underline p
-    =
-    \begin{bmatrix}
-        {}_\textbf{I} x \\ 
-        {}_\textbf{I} y        
-    \end{bmatrix} 
-    =
-    \begin{bmatrix}
-        \max \left\{
-            -1
-            , 
-            \min \left\{
-                - \frac
-                    {1}
-                    {\frac{1}{2}\phi^\text{user}_{z,\text{camera}}}
-                \mathrm{atan2}\left(
-                    {}_\textbf{L} y
-                    ,
-                    {}_\textbf{L} x
-                \right)
-                , 
-                1
-            \right\} 
-        \right\}
+        \max \left\{ \text -1, \min \left[
+            \frac{\text -2}{\ang[\user]{\camera}{z}{}{}}
+            \mathrm{atan2}\left( \y[]{}{}{\lrs}{}, \x[]{}{}{\lrs}{} \right), 
+            1
+        \right] \right\} 
         \\
-        \max \left\{
-            -1, 
-            \min \left\{
-                \frac
-                    {1}
-                    {\frac{1}{2}\phi^\text{user}_{y,\text{camera}}}
-                \mathrm{atan2}\left(
-                    {}_\textbf{L} z
-                    ,
-                    \left\| 
-                        {}_\textbf{L} \underline p 
-                    \right\|_2
-                \right)
-                , 
-                1
-            \right\} 
-        \right\}
+        \max \left\{ \text -1, \min \left\{
+            \frac{2}{\ang[\user]{\camera}{y}{}{}}
+            \mathrm{atan2} \left( \z[]{}{}{\lrs}{}, \| \pos[]{}{}{\lrs}{} \|_2 \right), 
+            1
+        \right\} \right\}
     \end{bmatrix}
     .
 \end{align}
-The above transformation can be interpreted as a 
-projection of a point onto the image plane
-obtained by
-normalizing the yaw
-$
-\mathrm{atan2}\left(
-    {}_\textbf{L} y
-    ,
-    {}_\textbf{L} x
-\right)
-$ 
+The above transformation
+can be interpreted as the projection of a point onto the image plane 
+of the drone's onboard camera.
+It can be devided into two steps.
+First, the vector from the optical center of the camera 
+to the point to be transformed
+is mapped to its yaw
+$\mathrm{atan2}\left( \y[]{}{}{\lrs}{}, \x[]{}{}{\lrs}{} \right)$
 and pitch 
-$
-\mathrm{atan2}\left(
-    {}_\textbf{L} z
-    ,
-    \left\| 
-        {}_\textbf{L} \underline p 
-    \right\|_2
-\right)
-$
-angle of the vector from
-$
-{}_\textbf{L} \underline 0
-$
-to
-$
-{}_\textbf{L} \underline p 
-$ 
-with the half of the horizontal 
-$
-\phi^\text{user}_{z,\text{camera}}
-$ 
+$\mathrm{atan2} \left( \z[]{}{}{\lrs}{}, \| \pos[]{}{}{\lrs}{} \|_2 \right)$
+angle, both, with respect to the image reference system.
+Second these angles are normalized by 
+the half of the horizontal 
+$\ang[\user]{\camera}{z}{}{}$ 
 and the half of the vertical
-$
-\phi^\text{user}_{y,\text{camera}}
-$ 
+$\ang[\user]{\camera}{y}{}{}$
 angle of view of the camera, respectively.
-Because the above transformation 
-is not bijective %https://en.wikipedia.org/wiki/Bijection
-and hence not invertible,
-the transformation of a point from the image to the local reference system
-requires a backprojection length $d$ as additional information
+However, these normalized angles are bounded to be in the interval from minus to plus one.
+This boundary takes into account that an
+artifical neural network,
+which inputs the images from the camera, 
+could possibly perceive only whether a point is
+out of the camera's field of view
+but not by which amount.
+As a projection from 3D to 2D, the above transformation is accompanied by information loss
+and is hence neither bijective nor invertible.
+Reversely, a point given in the coordinates of the image reference system is expressed
+in the coordinates of the local reference system with the transformation
 \begin{align} \label{eq:image_to_local_transformation}
-    T_\textbf{LI}
-    :\ 
-    & \mathbb{R}_{\ge 0}
-    , 
-    %[-1, 1]^2 \in \mathbb{R}^2 
-    \mathbb{R}_{[\text{-} 1, 1]}^2 
-    \rightarrow 
-    \mathbb{R}^3
-    \nonumber \\
-    & d, {}_\textbf{I} \underline p
+    \trafo[]{}{\lrs\irs}{}{}
+    &:\ 
+    \mathbb{R}_{\ge 0}, \left[ \text{-}1, 1 \right]^2 \rightarrow \mathbb{R}^3
+    ; \quad
+    d, \pos[]{}{}{\irs}{} \mapsto \pos[]{}{}{\lrs}{}
     =
-    \begin{bmatrix}
-        {}_\textbf{I} x \\ 
-        {}_\textbf{I} y        
-    \end{bmatrix}
-    \mapsto 
-    {}_\textbf{L} \underline p 
-    =
-    \begin{bmatrix}
-        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
-    \end{bmatrix}
-    =
-    d
-    \begin{bmatrix}
-        \cos \left(
-            {}_\textbf{L}\phi_y
-        \right)
-        \\
-        \cos \left(
-            {}_\textbf{L}\phi_y
-        \right)
-        \\
-        \sin \left(
-            {}_\textbf{L}\phi_y
-        \right)
-    \end{bmatrix}
-    \odot
-    \begin{bmatrix}
-        \cos \left(
-            {}_\textbf{L}\phi_z
-        \right)
-        \\
-        \sin \left(
-            {}_\textbf{L}\phi_z
-        \right)
-        \\
+    d \begin{bmatrix}
+        \cos \left( \ang[]{}{y}{\lrs}{} \right) \\
+        \cos \left( \ang[]{}{y}{\lrs}{} \right) \\
+        \sin \left( \ang[]{}{y}{\lrs}{} \right)
+    \end{bmatrix} \odot \begin{bmatrix}
+        \cos \left( \ang[]{}{z}{\lrs}{} \right) \\
+        \sin \left( \ang[]{}{z}{\lrs}{} \right) \\
         1
     \end{bmatrix}
     \nonumber \\
-    &\qquad \text{with }
-    {}_\textbf{L}\phi_z
+    & \qquad \text{with} \quad
+    \ang[]{}{z}{\lrs}{}
     = 
-    - \frac{1}{2} \phi_{z,\text{camera}}^\text{user} \cdot {}_\textbf{I} x
-    %\nonumber \\
-    ,\ 
-    {}_\textbf{L}\phi_y
+    \text - \frac{\ang[\user]{\camera}{z}{}{}}{2} \cdot \x[]{}{}{\irs}{}
+    ,\quad 
+    \ang[]{}{y}{\lrs}{}
     = 
-    \frac{1}{2} \phi_{y,\text{camera}}^\text{user} \cdot {}_\textbf{I} y.
+    \frac{\ang[\user]{\camera}{y}{}{}}{2} \cdot \y[]{}{}{\irs}{}.
 \end{align}
-Note that $\odot$ denotes the Hadamard product
+In the above transformation,
+the operator 
+$\odot$ 
+denotes the Hadamard product
 , i.e., the element-wise product of two equally dimensioned matrices.
-In contrast to 
-$
-T_\textbf{LG}
-$
+Because the 2D coordinates of the image reference system
+can only contain information about a points direction,
+the above transformation to 3D requires the additional input of a backprojection length $d$.
+In contrast to the transformations 
+$\trafo[]{}{\lrs\grs}{}{}$
 and 
-$
-T_\textbf{GL}
-$
-,
-the transformations between the local and the image reference system
+$\trafo[]{}{\grs\lrs}{}{}$
+between the global and the local reference system
+the transformations 
+$\trafo[]{}{\irs\lrs}{}{}$
+and 
+$\trafo[]{}{\lrs\irs}{}{}$
+between the local and the image reference system
 are not invertible.
-However,
-it is assumed that for the relevant points
-located within the field of view of the camera
-the transformations approximately invert each other
+However, for relevant points
+located within the camera's field of view
+and a relevant range of backprojection lengths,
+it is assumed that the transformations approximately invert each other
 \begin{equation}
-    T_\textbf{LI} 
-    \circ 
-    T_\textbf{IL} \left(
-        {}_\textbf{L} p
-    \right)
+    \trafo[]{}{\lrs\irs}{}{} \left[
+        d, \trafo[]{}{\irs\lrs}{}{} \left( \pos[]{}{}{\lrs}{} \right)
+    \right]
     \approx
-    {}_\textbf{L} p
+    \pos[]{}{}{\lrs}{}
     ,\quad
-    T_\textbf{IL} 
+    \trafo[]{}{\irs\lrs}{}{}
     \circ 
-    T_\textbf{LI} \left(
-        d
-        ,\ 
-        {}_\textbf{I} p
+    \trafo[]{}{\lrs\irs}{}{} \left(
+        d, \pos[]{}{}{\irs}{}
     \right)
     \approx
-    {}_\textbf{I} p
-    .
+    \pos[]{}{}{\irs}{}.
 \end{equation}
 
 
 
 
 
-\subsection*{Transformation between the global and the image reference system}
-The transformation of points between the global and the image reference frame
-are obtained by composing the transformations via the local reference system
+\paragraph*{Transformation between the global and the image reference system} $\ $\\
+The bidirectional transformations of points between the global and the image reference frame
+are the compositions of the transformations via the intermittent local reference system
 \begin{align} \label{eq:global_image_transformations}
-    T_\textbf{IG}
+    \trafo[]{}{\irs\grs}{}{}
     &=
-    T_\textbf{IL}
-    \circ
-    T_\textbf{LG}
+    \trafo[]{}{\irs\lrs}{}{} \circ \trafo[]{}{\lrs\grs}{}{}
     :\ 
-    \mathbb{R}^3
-    \rightarrow 
-    \mathbb{R}_{[\text{-} 1, 1]}^2 
+    \mathbb{R}^3 \rightarrow \left[\text{-} 1, 1\right]^2 
     \nonumber \\
-    T_\textbf{GI}
+    \trafo[]{}{\grs\irs}{}{}
     &=
-    T_\textbf{GL}
-    \circ
-    T_\textbf{LI}
+    \trafo[]{}{\grs\lrs}{}{} \circ \trafo[]{}{\lrs\irs}{}{}
     :\ 
-    \mathbb{R}_{\ge 0}
-    , 
-    \mathbb{R}_{[\text{-} 1, 1]}^2 
-    \rightarrow 
-    \mathbb{R}^3
-    .
+    \mathbb{R}_{\ge 0}, \left[\text{-} 1, 1\right]^2 \rightarrow \mathbb{R}^3.
 \end{align}
-Since
-$
-T_\textbf{LG}
-$
+Because
+$\trafo[]{}{\lrs\grs}{}{}$
 and
-$
-T_\textbf{GL}
-$
+$\trafo[]{}{\grs\lrs}{}{}$
 are the inverse of each other
 and it is assumed that
-$
-T_\textbf{IL}
-$
+$\trafo[]{}{\irs\lrs}{}{}$
 and
-$
-T_\textbf{IL}
-$
+$\trafo[]{}{\lrs\irs}{}{}$
+for the relevant range of interest
 approximately invert each other,
-the above compositions also approximately invert each other
+the above compositions also approximately invert each other for this range
 \begin{equation}
-    T_\textbf{GI} 
-    \circ 
-    T_\textbf{IG} \left(
-        {}_\textbf{G} p
-    \right)
+    \trafo[]{}{\grs\irs}{}{} \left[
+        d, \trafo[]{}{\irs\grs}{}{} \left( \pos[]{}{}{\grs}{} \right)
+    \right]
     \approx
-    {}_\textbf{G} p
+    \pos[]{}{}{\grs}{}
     ,\quad
-    T_\textbf{IG} 
+    \trafo[]{}{\irs\grs}{}{}
     \circ 
-    T_\textbf{GI} \left(
-        d
-        ,\
-        {}_\textbf{I} p
+    \trafo[]{}{\grs\irs}{}{} \left(
+        d, \pos[]{}{}{\irs}{}
     \right)
     \approx
-    {}_\textbf{I} p
-    .
+    \pos[]{}{}{\irs}{}.
 \end{equation}
 
 %\begin{figure}

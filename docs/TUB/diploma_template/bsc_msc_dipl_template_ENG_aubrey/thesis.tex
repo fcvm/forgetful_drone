@@ -107,6 +107,7 @@
 
 \newcommand{\user}{\breve}
 \newcommand{\drone}{\text{d}}
+\newcommand{\camera}{\text{cam}}
 \newcommand{\wayp}{\text{wp}}
 \newcommand{\glotraj}{\text{gt}}
 \newcommand{\loctraj}{\text{lt}}
@@ -119,11 +120,21 @@
 \newcommand{\average}{\text{avg}}
 
 
+\newcommand{\x}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{x}}
+\newcommand{\y}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{y}}
+\newcommand{\z}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{z}}
+\newcommand{\unitvec}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline e}}
+\newcommand{\zerovec}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline 0}}
+\newcommand{\onevec}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline 1}}
+
 \newcommand{\pos}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline p}}
 \newcommand{\vel}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline v}}
 \newcommand{\acc}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline a}}
 \newcommand{\jerk}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline j}}
 \newcommand{\snap}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline s}}
+
+\newcommand{\quat}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\underline q}}
+\newcommand{\ang}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\phi}}
 
 \newcommand{\dist}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{d}}
 \newcommand{\speed}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{v}}

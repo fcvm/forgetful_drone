@@ -11,7 +11,7 @@
 \contentsline {chapter}{\numberline {3}Navigation Method}{17}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Reference systems}{17}{section.3.1}%
 \contentsline {section}{\numberline {3.2}ANN module}{21}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Baseline config}{26}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.1}Baseline config}{27}{subsection.3.2.1}%
 \contentsline {section}{\numberline {3.3}Planning module}{27}{section.3.3}%
 \contentsline {section}{\numberline {3.4}Control module}{28}{section.3.4}%
 \contentsline {section}{\numberline {3.5}Expert system}{29}{section.3.5}%
@@ -29,6 +29,6 @@
 \contentsline {section}{\numberline {6.2}Conclusion}{36}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Future Work}{36}{section.6.3}%
 \contentsline {chapter}{Bibliography}{37}{section.6.3}%
-\contentsline {chapter}{Appendices}{39}{chapter*.29}%
-\contentsline {section}{Appendix A: Abbreviations}{40}{chapter*.30}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{41}{section*.31}%
+\contentsline {chapter}{Appendices}{39}{chapter*.30}%
+\contentsline {section}{Appendix A: Abbreviations}{40}{chapter*.31}%
+\contentsline {section}{Appendix B: {\LaTeX } Help}{41}{section*.32}%
