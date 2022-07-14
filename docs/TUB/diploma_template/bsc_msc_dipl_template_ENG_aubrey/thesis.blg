@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: thesis.aux
+The style file: plain.bst
+Database file #1: input/mybib.bib
+Warning--I didn't find a database entry for "oberheide:2008:cloudav"
+Warning--I didn't find a database entry for "Kaufmann2018"
+Warning--I didn't find a database entry for "jackson1986introduction"
+Warning--I didn't find a database entry for "latexcookbook2007"
+Warning--empty journal in Brookes2020
+Warning--empty journal in Cho2014
+Warning--empty journal in Hinton2012
+Warning--empty booktitle in Mueller2013
+You've used 23 entries,
+            2118 wiz_defined-function locations,
+            656 strings with 8069 characters,
+and the built_in function-call counts, 7606 in all, are:
+= -- 757
+> -- 342
+< -- 5
++ -- 141
+- -- 112
+* -- 491
+:= -- 1245
+add.period$ -- 74
+call.type$ -- 23
+change.case$ -- 124
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 297
+empty$ -- 600
+format.name$ -- 112
+if$ -- 1609
+int.to.chr$ -- 0
+int.to.str$ -- 23
+missing$ -- 20
+newline$ -- 118
+num.names$ -- 46
+pop$ -- 155
+preamble$ -- 1
+purify$ -- 102
+quote$ -- 0
+skip$ -- 229
+stack$ -- 0
+substring$ -- 443
+swap$ -- 69
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 90
+warning$ -- 4
+while$ -- 72
+width$ -- 25
+write$ -- 245
+(There were 8 warnings)

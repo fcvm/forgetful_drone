@@ -1,0 +1,22 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Information Generality}}{2}{figure.caption.8}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded RNN }}{6}{figure.caption.9}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Folded }}}{6}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Unfolded }}}{6}{subfigure.1.2}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions deployed within a standard GRU }}{10}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer operating in many-to-one mode. }}{11}{figure.caption.13}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{19}{figure.caption.14}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{19}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{19}{subfigure.1.2}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Schematic 2D example of the iterative method to update the index to the projection state }}{32}{figure.caption.27}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{45}{figure.caption.41}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{45}{figure.caption.42}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{45}{figure.caption.43}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{45}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{45}{subfigure.3.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{45}{subfigure.3.3}%

@@ -1,0 +1,2533 @@
+\chapter{Navigation Method}
+\label{mainone}
+DELETEME: In this chapter you start addressing your actual problem. Therefore, it makes often sense to make a detailed problem analysis first (if not done in introduction). You should be sure about what to do and how. As writtin in the background part, it might also make sense to include complex background information or papers you are basing on in this analysis. If you are solving a software problem, you should follow the state of the art of software development which basically includes: problem analysis, design, implementation, testing, and deployment. Maintenance is often also described but I believe this will not be required for most theses. Code should be placed in the appendix unless it is solving an essential aspect of your work.
+
+
+
+
+
+
+In order to investigate the effect of temporal comprehension in machine-learning-based, autonomous navigation of drones,
+this master thesis extends the navigation method of Kaufmann, Loquercio et. al [?] is minimally adjusted and extended with a recurrent convolutional neural network.
+This chapter \dots
+
+
+
+\section{Reference systems}
+In this thesis,
+a point 
+$
+    \underline p
+$
+relates to either the global,
+%$
+%    {}_\textbf{G}\underline p 
+%    = 
+%    \begin{bmatrix}
+%        {}_\textbf{G}x & {}_\textbf{G}y & {}_\textbf{G}z
+%    \end{bmatrix}^T
+%    \in \mathbb{R}^3
+%$,
+the local
+%$
+%    {}_\textbf{L}\underline p
+%    = 
+%    \begin{bmatrix}
+%        {}_\textbf{L}x & {}_\textbf{L}y & {}_\textbf{L}z
+%    \end{bmatrix}^T
+%    \in \mathbb{R}^3
+%$ 
+or the image 
+%$
+%    {}_\textbf{I}\underline p
+%    = 
+%    \begin{bmatrix}
+%        {}_\textbf{I}x & {}_\textbf{I}y
+%    \end{bmatrix}^T
+%    \in \mathbb{R}^2
+%$ 
+reference system
+\begin{equation}
+    {}_\textbf{G}\underline p 
+    = 
+    \begin{bmatrix}
+        {}_\textbf{G}x \\ {}_\textbf{G}y \\ {}_\textbf{G}z
+    \end{bmatrix}
+    \in \mathbb{R}^3
+    ,\quad
+    {}_\textbf{L}\underline p
+    = 
+    \begin{bmatrix}
+        {}_\textbf{L}x \\ {}_\textbf{L}y \\ {}_\textbf{L}z
+    \end{bmatrix}
+    \in \mathbb{R}^3
+    ,\quad 
+    {}_\textbf{I}\underline p
+    = 
+    \begin{bmatrix}
+        {}_\textbf{I}x \\ {}_\textbf{I}y
+    \end{bmatrix}
+    \in \mathbb{R}_{[\text{-}1,1]}^2.
+\end{equation}
+
+
+The global reference system
+is fixed to an arbitrary point on the earth
+and hence quasi inertial.
+It is spanned by the orthonormal basis
+%$
+%    \left\{
+%        \underline e^\text{G}_x,
+%        \underline e^\text{G}_y,
+%        \underline e^\text{G}_z
+%    \right\}
+%$
+which,
+related to the global system,
+equates to the standard basis of $\mathbb{R}^3$
+%i.e., 
+%$
+%    {}_\textbf{G}\underline e^\text{G}_x 
+%    = 
+%    \begin{bmatrix}
+%        1 & 0 & 0
+%    \end{bmatrix}^T
+%$
+%,
+%$ 
+%    {}_\textbf{G}\underline e^\text{G}_y 
+%    = 
+%    \begin{bmatrix}
+%        0 & 1 & 0
+%    \end{bmatrix}^T
+%$
+%and
+%$
+%        {}_\textbf{G}\underline e^\text{G}_z 
+%        = 
+%        \begin{bmatrix}
+%            0 & 0 & 1
+%        \end{bmatrix}^T
+%$.
+\begin{equation}
+    \left\{
+        \underline e^\text{G}_x,
+        \underline e^\text{G}_y,
+        \underline e^\text{G}_z
+    \right\}
+    \quad\text{with}\quad 
+    {}_\textbf{G}\underline e^\text{G}_x 
+    = 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0
+    \end{bmatrix}
+    ,\ 
+    {}_\textbf{G}\underline e^\text{G}_y 
+    = 
+    \begin{bmatrix}
+        0 \\ 1 \\ 0
+    \end{bmatrix}
+    ,\ 
+    {}_\textbf{G}\underline e^\text{G}_z 
+        = 
+        \begin{bmatrix}
+            0 \\ 0 \\ 1
+        \end{bmatrix}.
+\end{equation}
+
+
+The local reference system (see figure \ref{fig:local_reference_system}) is fixed to the moving drone.
+Its orthonormal basis
+%$
+%    \left\{
+%        \underline e^\text{L}_x,
+%        \underline e^\text{L}_y,
+%        \underline e^\text{L}_z
+%    \right\}
+%$
+%with
+%$
+%    {}_\textbf{L}\underline e^\text{L}_x 
+%    = 
+%    \begin{bmatrix}
+%        1 & 0 & 0
+%    \end{bmatrix}^T
+%$
+%,
+%$ 
+%    {}_\textbf{L}\underline e^\text{L}_y 
+%    = 
+%    \begin{bmatrix}
+%        0 & 1 & 0
+%    \end{bmatrix}^T
+%$
+%and
+%$
+%    {}_\textbf{L}\underline e^\text{L}_z 
+%    = 
+%    \begin{bmatrix}
+%        0 & 0 & 1
+%    \end{bmatrix}^T
+%$
+\begin{equation}
+    \left\{
+        \underline e^\text{L}_x,
+        \underline e^\text{L}_y,
+        \underline e^\text{L}_z
+    \right\}
+    \quad\text{with}\quad 
+    {}_\textbf{L}\underline e^\text{L}_x 
+    = 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0
+    \end{bmatrix}
+    ,\ 
+    {}_\textbf{L}\underline e^\text{L}_y 
+    = 
+    \begin{bmatrix}
+        0 \\ 1 \\ 0
+    \end{bmatrix}
+    ,\ 
+    {}_\textbf{L}\underline e^\text{L}_z 
+        = 
+        \begin{bmatrix}
+            0 \\ 0 \\ 1
+        \end{bmatrix}
+\end{equation}
+origins at the optical center of the onboard camera.
+The unit vector 
+$
+    \underline e^\text{L}_x
+$ 
+points along the optical axis of the camera
+in the flight direction of the drone.
+The unit vector
+$
+    \underline e^\text{L}_z
+$
+points in the direction of the forces generated by the rotors
+and is parallel to the vertical axis of the image plane of the camera.
+The unit vector 
+$
+    \underline e^\text{L}_y
+$
+points to the left of the drone
+paralleling the horizontal axis of the image plane.
+
+
+
+
+
+
+The image reference system (see figure \ref{fig:image_reference_system}) 
+is superimposed on the images of the onboard camera.
+This 2-dimensional system is spanned by the orthonormal basis
+\begin{equation}
+    \left\{
+        \underline e^\text{I}_x,
+        \underline e^\text{I}_y
+    \right\}
+    \text{ with }
+    {}_\textbf{I}\underline e^\text{I}_x 
+    = 
+    \begin{bmatrix}
+        1 \\ 0
+    \end{bmatrix}
+    ,\ 
+    {}_\textbf{I}\underline e^\text{I}_y 
+    = 
+    \begin{bmatrix}
+        0 \\ 1
+    \end{bmatrix}
+    .
+\end{equation}
+The origin of the image reference system 
+is located at the center of the image plane.
+The unit vector 
+$
+    \underline e^\text{I}_x
+$ 
+points rightwards along the vertical axis of the image plane.
+The unit vector 
+$
+    \underline e^\text{I}_y
+$ 
+points upwards along the horizontal axis of the image plane.
+A point
+on the image plane 
+is bounded by the left and right
+$
+    -1 \le {}_\textbf{I}x \le 1
+$
+as well as the lower and upper
+$
+-1 \le {}_\textbf{I}y \le 1
+$
+border of the image plane.
+
+
+
+The global reference system 
+is only referred to 
+by the expert system (see section)
+which makes navigation decisions based on globally consistent information
+when generating training data for the ANN module.
+The autonomous navigation method, 
+with the fully trained ANN module making the navigation decisions,
+exclusively resorts to data from onboard sensors,
+which is relative to the drone and its onboard camera.
+The method, therefore, operates only within the local and image reference system.
+
+
+
+
+\begin{figure}[h]
+    \centering
+    \subfloat[
+        Local reference system
+    ]{
+        \label{fig:local_reference_system}
+        \includegraphics[width=0.441\textwidth]{own/local_reference_system.pdf}
+    }                
+    \subfloat[
+        Image reference system
+    ]{
+        \label{fig:image_reference_system}
+        \includegraphics[width=0.5\textwidth]{own/image_reference_system.pdf}
+    }
+    \caption[
+        The local and the image reference system
+    ]{
+        The local and the image reference system. The former is
+        aligned with the drone and its onboard camera 
+        while the latter is superimposed on the images of the onboard camera.
+        For the image reference system,
+        the waypoint
+        ${}_\textbf{I}\underline p^\text{wayp} = \begin{bmatrix}
+            -0.428 & 0.136
+        \end{bmatrix}^T$
+        (orange)
+        , that belongs to the same training data sample as the underlying image,
+        is depicted.
+        \label{fig:local_and_image_reference_system}
+    }
+\end{figure}
+%https://www.researchgate.net/figure/Pin-hole-camera-model-terminology-The-optical-center-pinhole-is-placed-at-the-origin_fig10_317498100
+
+
+
+
+
+\subsection*{Transformation between the global and the local reference system}
+The drone position
+$
+{}_\textbf{G} \underline p^\text{drone}
+$
+and quaternion orientation
+$
+{}_\textbf{G} \underline q^\text{drone}
+$
+in the global reference system
+fully determine the the transformation
+from the global to the local reference system and vice versa.
+The bijective transformation of a point 
+from the global to the local reference system
+is given by 
+\begin{align} \label{equ:global_to_local_transformation}
+    T_\textbf{LG}
+    :\ 
+    &\mathbb{R}^3 \rightarrow \mathbb{R}^3
+    %;\
+    \nonumber \\
+    &{}_\textbf{G} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{G} x \\ {}_\textbf{G} y \\ {}_\textbf{G} z
+    \end{bmatrix}
+    \mapsto
+    {}_\textbf{L} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
+    \end{bmatrix}
+    =
+    \mathcal{P}
+    \left[
+        \mathrm{inv}
+        \left(
+            {}_\textbf{G} \underline q^\text{drone}
+        \right)
+        *
+        \mathcal{Q}
+        \left(
+            {}_\textbf{G} \underline p - {}_\textbf{G} \underline p^\text{drone}
+        \right)
+        *
+        {}_\textbf{G} \underline q^\text{drone}
+    \right].
+\end{align}
+The inverse transformation 
+from the local to the global reference system
+is given by 
+\begin{align} \label{eq:local_to_global_transformation}
+    T_\textbf{GL}
+    :\ 
+    &\mathbb{R}^3 \rightarrow \mathbb{R}^3
+    %;\
+    \nonumber \\
+    &{}_\textbf{L} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
+    \end{bmatrix}
+    \mapsto
+    {}_\textbf{G} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{G} x \\ {}_\textbf{G} y \\ {}_\textbf{G} z
+    \end{bmatrix}
+    =
+    \mathcal{P}
+    \left[
+        {}_\textbf{G} \underline q^\text{drone}
+        *
+        \mathcal{Q}
+        \left(
+            {}_\textbf{G} \underline p
+        \right)
+        *
+        \mathrm{inv}
+        \left(
+            {}_\textbf{G} \underline q^\text{drone}
+        \right)
+    \right]
+    + 
+    {}_\textbf{G} \underline p^\text{drone}
+    .
+\end{align}
+In the above transformations,
+$\mathcal{Q}$ and $\mathcal{P}$ 
+map points to their quaternion representations and vice versa
+\begin{align}
+    \mathcal{Q}
+    :\ 
+    &\mathbb{R}^3 \rightarrow \mathbb{R}^4
+    ;\
+    \underline p 
+    =
+    \begin{bmatrix}
+        x \\ y \\ z 
+    \end{bmatrix} 
+    \mapsto
+    \underline q
+    = 
+    \begin{bmatrix}
+        w \\ \underline p
+    \end{bmatrix} 
+    \text{ with }
+    w = 0
+    \nonumber \\
+    \mathcal{P}
+    :\ 
+    &\mathbb{R}^4 \rightarrow \mathbb{R}^3
+    ;\
+    \underline q
+    = 
+    \begin{bmatrix}
+        w \\ \underline p
+    \end{bmatrix} 
+    \mapsto
+    \underline p 
+    =
+    \begin{bmatrix}
+        x \\ y \\ z 
+    \end{bmatrix}, 
+\end{align}
+the operator $*$ denotes the quaternion multiplication
+\begin{align}
+    \underline q_0 * \underline q_1 
+    = 
+    \begin{bmatrix}
+        w_0 w_1 - \underline p_0^T \underline p_1\\ 
+        w_0 \underline p_1 + w_1 \underline p_0 + \underline p_0 \times \underline p_1
+    \end{bmatrix}
+\end{align}
+and the inversion of a quaternion is given by
+\begin{align}
+    \mathrm{inv}(\underline q) 
+    = 
+    \frac
+    {1}
+    {\left\| \underline q \right\|_2}
+    \begin{bmatrix}
+        w\\ 
+        -\underline p
+    \end{bmatrix}
+    .
+\end{align}
+%\url{https://reader.elsevier.com/reader/sd/pii/B9780124158429000022?token=80D28F49695ADE2F8FBA3717576FA6BF850872EF274529E07574A99C62EE08BB68A4FB939F4877A1FAB29C3BAB785D6D&originRegion=eu-west-1&originCreation=20220617063425}
+Both transformations are the inversion of each other,
+i.e.,
+points are transformed without forfeiting information
+\begin{equation}
+    T_\textbf{GL} 
+    \circ 
+    T_\textbf{LG} \left(
+        {}_\textbf{G} p
+    \right)
+    =
+    {}_\textbf{G} p
+    ,\quad
+    T_\textbf{LG} 
+    \circ 
+    T_\textbf{GL} \left(
+        {}_\textbf{L} p
+    \right)
+    =
+    {}_\textbf{L} p
+    .
+\end{equation}
+
+
+
+\subsection*{Transformation between the local and the image reference system}
+The horizontal
+$
+\phi^\text{user}_{z,\text{camera}}
+$
+and the vertical
+$
+\phi^\text{user}_{y,\text{camera}}
+$
+angle of view
+of the onboard camera,
+both specified by the user,
+fully determine 
+the transformation of a point
+from the local
+to the image reference system
+\begin{align} \label{equ:local_to_image_transformation}
+    T_\textbf{IL}
+    :\ 
+    &\mathbb{R}^3 \rightarrow \mathbb{R}_{[\text{-}1, 1]}^2
+    \nonumber \\
+    &{}_\textbf{L} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
+    \end{bmatrix}
+    \mapsto
+    {}_\textbf{I} \underline p
+    =
+    \begin{bmatrix}
+        {}_\textbf{I} x \\ 
+        {}_\textbf{I} y        
+    \end{bmatrix} 
+    =
+    \begin{bmatrix}
+        \max \left\{
+            -1
+            , 
+            \min \left\{
+                - \frac
+                    {1}
+                    {\frac{1}{2}\phi^\text{user}_{z,\text{camera}}}
+                \mathrm{atan2}\left(
+                    {}_\textbf{L} y
+                    ,
+                    {}_\textbf{L} x
+                \right)
+                , 
+                1
+            \right\} 
+        \right\}
+        \\
+        \max \left\{
+            -1, 
+            \min \left\{
+                \frac
+                    {1}
+                    {\frac{1}{2}\phi^\text{user}_{y,\text{camera}}}
+                \mathrm{atan2}\left(
+                    {}_\textbf{L} z
+                    ,
+                    \left\| 
+                        {}_\textbf{L} \underline p 
+                    \right\|_2
+                \right)
+                , 
+                1
+            \right\} 
+        \right\}
+    \end{bmatrix}
+    .
+\end{align}
+The above transformation can be interpreted as a 
+projection of a point onto the image plane
+obtained by
+normalizing the yaw
+$
+\mathrm{atan2}\left(
+    {}_\textbf{L} y
+    ,
+    {}_\textbf{L} x
+\right)
+$ 
+and pitch 
+$
+\mathrm{atan2}\left(
+    {}_\textbf{L} z
+    ,
+    \left\| 
+        {}_\textbf{L} \underline p 
+    \right\|_2
+\right)
+$
+angle of the vector from
+$
+{}_\textbf{L} \underline 0
+$
+to
+$
+{}_\textbf{L} \underline p 
+$ 
+with the half of the horizontal 
+$
+\phi^\text{user}_{z,\text{camera}}
+$ 
+and the half of the vertical
+$
+\phi^\text{user}_{y,\text{camera}}
+$ 
+angle of view of the camera, respectively.
+Because the above transformation 
+is not bijective %https://en.wikipedia.org/wiki/Bijection
+and hence not invertible,
+the transformation of a point from the image to the local reference system
+requires a backprojection length $d$ as additional information
+\begin{align} \label{eq:image_to_local_transformation}
+    T_\textbf{LI}
+    :\ 
+    & \mathbb{R}_{\ge 0}
+    , 
+    %[-1, 1]^2 \in \mathbb{R}^2 
+    \mathbb{R}_{[\text{-} 1, 1]}^2 
+    \rightarrow 
+    \mathbb{R}^3
+    \nonumber \\
+    & d, {}_\textbf{I} \underline p
+    =
+    \begin{bmatrix}
+        {}_\textbf{I} x \\ 
+        {}_\textbf{I} y        
+    \end{bmatrix}
+    \mapsto 
+    {}_\textbf{L} \underline p 
+    =
+    \begin{bmatrix}
+        {}_\textbf{L} x \\ {}_\textbf{L} y \\ {}_\textbf{L} z
+    \end{bmatrix}
+    =
+    d
+    \begin{bmatrix}
+        \cos \left(
+            {}_\textbf{L}\phi_y
+        \right)
+        \\
+        \cos \left(
+            {}_\textbf{L}\phi_y
+        \right)
+        \\
+        \sin \left(
+            {}_\textbf{L}\phi_y
+        \right)
+    \end{bmatrix}
+    \odot
+    \begin{bmatrix}
+        \cos \left(
+            {}_\textbf{L}\phi_z
+        \right)
+        \\
+        \sin \left(
+            {}_\textbf{L}\phi_z
+        \right)
+        \\
+        1
+    \end{bmatrix}
+    \nonumber \\
+    &\qquad \text{with }
+    {}_\textbf{L}\phi_z
+    = 
+    - \frac{1}{2} \phi_{z,\text{camera}}^\text{user} \cdot {}_\textbf{I} x
+    %\nonumber \\
+    ,\ 
+    {}_\textbf{L}\phi_y
+    = 
+    \frac{1}{2} \phi_{y,\text{camera}}^\text{user} \cdot {}_\textbf{I} y.
+\end{align}
+Note that $\odot$ denotes the Hadamard product
+, i.e., the element-wise product of two equally dimensioned matrices.
+In contrast to 
+$
+T_\textbf{LG}
+$
+and 
+$
+T_\textbf{GL}
+$
+,
+the transformations between the local and the image reference system
+are not invertible.
+However,
+it is assumed that for the relevant points
+located within the field of view of the camera
+the transformations approximately invert each other
+\begin{equation}
+    T_\textbf{LI} 
+    \circ 
+    T_\textbf{IL} \left(
+        {}_\textbf{L} p
+    \right)
+    \approx
+    {}_\textbf{L} p
+    ,\quad
+    T_\textbf{IL} 
+    \circ 
+    T_\textbf{LI} \left(
+        d
+        ,\ 
+        {}_\textbf{I} p
+    \right)
+    \approx
+    {}_\textbf{I} p
+    .
+\end{equation}
+
+
+
+
+
+\subsection*{Transformation between the global and the image reference system}
+The transformation of points between the global and the image reference frame
+are obtained by composing the transformations via the local reference system
+\begin{align} \label{eq:global_image_transformations}
+    T_\textbf{IG}
+    &=
+    T_\textbf{IL}
+    \circ
+    T_\textbf{LG}
+    :\ 
+    \mathbb{R}^3
+    \rightarrow 
+    \mathbb{R}_{[\text{-} 1, 1]}^2 
+    \nonumber \\
+    T_\textbf{GI}
+    &=
+    T_\textbf{GL}
+    \circ
+    T_\textbf{LI}
+    :\ 
+    \mathbb{R}_{\ge 0}
+    , 
+    \mathbb{R}_{[\text{-} 1, 1]}^2 
+    \rightarrow 
+    \mathbb{R}^3
+    .
+\end{align}
+Since
+$
+T_\textbf{LG}
+$
+and
+$
+T_\textbf{GL}
+$
+are the inverse of each other
+and it is assumed that
+$
+T_\textbf{IL}
+$
+and
+$
+T_\textbf{IL}
+$
+approximately invert each other,
+the above compositions also approximately invert each other
+\begin{equation}
+    T_\textbf{GI} 
+    \circ 
+    T_\textbf{IG} \left(
+        {}_\textbf{G} p
+    \right)
+    \approx
+    {}_\textbf{G} p
+    ,\quad
+    T_\textbf{IG} 
+    \circ 
+    T_\textbf{GI} \left(
+        d
+        ,\
+        {}_\textbf{I} p
+    \right)
+    \approx
+    {}_\textbf{I} p
+    .
+\end{equation}
+
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{own/global_via_local_to_image_transformation_2d.pdf}
+%    \caption[
+%        Schematic 2D depiction
+%        of the transformation of the waypoint 
+%        from the global via the local to the image reference system.
+%    ]{
+%        Schematic 2D depiction
+%        of the transformation of the waypoint 
+%        from the global ${}_\textbf{G}\square$ 
+%        via the local ${}_\textbf{L}\square$ 
+%        to the image ${}_\textbf{I}\square$ reference system.
+%        Unit vectors 
+%        $\underline e_\square \in \mathbb{R}^3,\ \left\|\underline e_\square \right\|_2 = 1$ 
+%        spanning the individual reference systems,
+%        points $\underline p^\square \in \mathbb{R}^3$,
+%        quaternions $\underline q^\square \in \mathbb{R}^4$
+%        and angles $\phi_\square^\square  \in \mathbb{R}$
+%        relative to the global, local or image reference system
+%        are colored in green, red or blue, respectively.
+%        %Unit vectors are drawn
+%        %with a greater linewidth and lower opacity 
+%        %than the positions, quaternions and angles.
+%        The z unit vectors 
+%        ${}_\textbf{G} e^\text{G}_z$
+%        and
+%        $\ {}_\textbf{L} e^\text{L}_z$ 
+%        of the global and local reference system,
+%        the y unit vector 
+%        ${}_\textbf{I} e^\text{I}_y$ 
+%        of the image reference system
+%        and the pitch angle 
+%        $\phi^\text{user}_{y,\text{camera}}$
+%        of view of the camera
+%        are not pictured
+%        in this 2D representation.
+%        %but point in the direction of the reader.
+%        The field of view (FOV) of the onboard camera of the drone
+%        is marked with a low-opaque orange.
+%
+%        The global position
+%        ${}_\textbf{G}\underline p^\text{drone}$
+%        and quaternion orientation
+%        ${}_\textbf{G}\underline q^\text{drone}$
+%        of the drone,
+%        the yaw
+%        $\phi^\text{user}_{z,\text{camera}}$
+%        and pitch
+%        $\phi^\text{user}_{y,\text{camera}}$ 
+%        angle of view of the camera
+%        as well as the global position of the waypoint
+%        ${}_\textbf{G}\underline p^\text{wayp}$
+%        are known.
+%        First, the local position of the waypoint
+%        ${}_\textbf{L}\underline p^\text{wayp}$
+%        is computed by applying the transformation
+%        $T_\textbf{LG}$
+%        (equation \ref{equ:global_to_local_transformation}).
+%        Second, 
+%        ${}_\textbf{L}\underline p^\text{wayp}$
+%        is transformed with 
+%        $T_\textbf{IL}$
+%        (equation \ref{equ:local_to_image_transformation})
+%        yielding 
+%        the position of the waypoint
+%        ${}_\textbf{I}\underline p^\text{wayp}$ 
+%        with respect to the image reference system.
+%        $T_\textbf{LG}$ is fully determined by 
+%        ${}_\textbf{G}\underline p^\text{drone}$ 
+%        and 
+%        ${}_\textbf{G}\underline q^\text{drone}$.
+%        $T_\textbf{IL}$ is fully determined by
+%        $\phi^\text{user}_{z,\text{camera}}$
+%        and
+%        $\phi^\text{user}_{y,\text{camera}}$.
+%        \label{fig:trafo}
+%    }
+%\end{figure}
+
+
+
+\section{ANN module} \label{sec:ann_module}
+The function of the ANN module is to 
+make navigation decisions
+on the basis of the images from the onboard camera and other, user-switchable inputs.
+Fed to the planning module, 
+these navigation decisions effectively
+lead the drone through the racetrack.
+
+
+
+%The current navigation decision is infered
+%from the current RGB image of the onboard camera
+%and optionally, the current data of the onboard IMU sensor.
+
+
+The current, preprocessed RGB image 
+is a mandatory component of the input to the ANN module
+\begin{equation}
+    \underline{\underline{\underline I}}^\text{preproc}
+    \in 
+    %\left\{
+    %    0,\dots,I_\text{max}
+    %\right\}
+    \left\{
+        \frac{i}{I_\text{max}^\text{raw}}
+    \right\}
+    _{
+        i \in 
+        \left\{
+            0,\dots,I_\text{max}^\text{raw}
+        \right\}
+    }
+    ^{
+        I_\text{C} \times    
+        I_\text{H}^\text{preproc} \times 
+        I_\text{W}^\text{preproc}
+    }
+    %\text{ with } I_\text{C} = 3.
+\end{equation}
+with the number of channels
+$I_\text{C} = 3$
+for RGB.
+The preprocessing of the raw RGB image entails two steps.
+First, 
+the pixel intensities are normalized by the full intensity 
+$I_\text{max}^\text{raw} = 255$
+with the aim to accelerate the training of the ANN.
+Second, the image is sized down with a user-specied 
+factor preserving its aspect ratio
+to the height 
+$
+    I_\text{H}^\text{preproc} 
+    = 
+    \left\lfloor
+    s^\text{user}_\text{rgb-resize}
+    \cdot
+    I_\text{H}^\text{raw}
+    \right\rfloor
+$
+and width
+$
+    I_\text{W}^\text{preproc} 
+    = 
+    \left\lfloor
+    s^\text{user}_\text{rgb-resize}
+    \cdot
+    I_\text{W}^\text{raw}
+    \right\rfloor
+$.
+By this,
+the occupation of GPU memory at the training of the ANN
+can be reduced if necessary.
+
+In addition to the RGB image, 
+the user may enable the current data of the onboard IMU 
+\begin{equation}
+    \left(
+        {}_\textbf{L}\underline a^\text{imu}
+        ,\ 
+        {}_\textbf{L}\underline \omega^\text{imu}
+    \right)
+\end{equation}
+as optional input component.
+The IMU data comprises the current measurements of
+the linear acceleration
+$
+    {}_\textbf{L}\underline a^\text{imu} \in \mathbb{R}^3
+$
+and the angular velocity
+$   
+    {}_\textbf{L}\underline \omega^\text{imu} \in \mathbb{R}^3
+$
+of the drone with respect to the local reference system (see section XXX).
+Further optional components of the input are
+the durations
+$
+    \Delta t^\text{rgb}
+$
+and
+$
+\Delta t^\text{imu}
+$
+elapsed between the previous and the current RGB image and IMU data, respectively.
+
+
+
+
+
+In order to achieve a high degree of flexibility for potential studies,
+the ANN module itself is designed modularly
+from the CNN, the CAT, the GRU, the FC and the HEAD sub-modules
+(see figure XXX).
+While the sequence of these sub-modules cannot be changed,
+the user may individually switch on/off the inner sub-modules,
+i.e.,
+the CAT, the GRU and the FC.
+The outer sub-modules,
+i.e.,
+the CNN and the HEAD,
+are mandatory,
+in order to ensure the mapping of the minimum input of an RGB image to an output.
+
+
+\subsection*{CNN}
+The convolutional neural network (CNN) sub-module
+extracts a batch of visual features 
+from the pixel data of a batch of images
+\begin{align} \label{eq:CNN}
+    \underline{\underline{ \mathcal{F} }}^\text{cnn}
+    :\ 
+    & 
+    \mathbb{R}^{
+        N^\text{cnn}_\text{batch} 
+        \times
+        N^\text{cnn}_\text{channel}
+        \times
+        N^\text{cnn}_\text{height}
+        \times
+        N^\text{cnn}_\text{width}
+    } 
+    \rightarrow 
+    \mathbb{R}^{
+        N^\text{cnn}_\text{batch}
+        \times
+        N^\text{cnn}_\text{out}
+    }
+    \nonumber \\
+    %;\quad
+    &\underline{\underline{\underline{\underline x}}}
+    \mapsto 
+    \underline{\underline{ \mathcal{F} }}^\text{cnn} \left(
+        \underline{\underline{\underline{\underline x}}}
+    \right)
+    .
+\end{align}
+The batch size 
+$
+    N^\text{cnn}_\text{batch}
+$,
+the number of channels
+$
+    N^\text{cnn}_\text{channel}
+$
+as well as the image height 
+$
+    N^\text{cnn}_\text{height}
+$
+and width
+$
+    N^\text{cnn}_\text{width}
+$
+of the CNN
+adapt to the dimensions of the inputted batch of images
+$
+    \underline{\underline{\underline{\underline x}}}
+$,
+whereas the output size
+$
+    N^\text{cnn}_\text{out}
+$
+of the CNN
+is fixed by the design of the CNN, 
+more specifically, by its last layer.
+The training data is generally sequential,
+i.e., the images are present in batches of sequences
+\begin{equation}
+    \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}
+    \in
+    \mathbb{R}^{
+        N^\text{batch} 
+        \times
+        N^\text{seq}
+        \times
+        N^\text{C}
+        \times
+        N^\text{H}
+        \times
+        N^\text{W}
+    }
+\end{equation}
+with the sequence lenght $N^\text{seq}$.
+These batches of sequences must be
+vectorized along their two first dimensions
+\begin{equation}
+    \mathrm{vec} \left(
+        \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}   
+    \right)
+    \in
+    \mathbb{R}^{
+        N^\text{batch} 
+        \cdot
+        N^\text{seq}
+        \times
+        N^\text{C}
+        \times
+        N^\text{H}
+        \times
+        N^\text{W}
+    }
+\end{equation}
+before they are processed by the CNN.
+Afterwards the sequences are restored 
+by de-vectorizing the direct output of the CNN backbone 
+\begin{equation}
+    \underline{\underline{\underline{x}}}^\text{cnn}
+    =
+    \mathrm{vec}^{-1} \left(
+        \underline{\underline{ \mathcal{F} }}^\text{cnn} \left(
+            \mathrm{vec} \left(
+                \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}   
+            \right)
+        \right)
+    \right)
+    \in
+    \mathbb{R}^{
+        N^\text{batch} 
+        \times
+        N^\text{seq}
+        \times
+        N^\text{cnn}_\text{out}
+    }.
+\end{equation}
+
+\subsection*{CAT}
+The CAT sub-module concatenates
+each corresponding pair of sequential feature matrices,
+sampled from 
+the
+batch outputted by the CNN sub-module
+and the batch of optional inputs,
+along their feature axis
+\begin{align} \label{eq:cat}
+    \mathcal{F}^\text{cat}
+    :\ 
+    & \left(
+        \mathbb{R}^{
+            N^\text{seq}
+            \times
+            N^\text{cnn}_{\text{out}}
+        }
+        ,\ 
+        \mathbb{R}^{
+            N^\text{seq}
+            \times
+            N^\text{input}_{\text{opt}}
+        }
+    \right)
+    \rightarrow 
+    \mathbb{R}^{
+            N^\text{seq}
+            \times
+            \left(
+                N^\text{cnn}_{\text{out}}
+                + 
+                N^\text{input}_{\text{opt}}
+            \right)
+        }
+    \nonumber \\ &
+    \left(
+        \underline{\underline{x}}_{i}
+        ,\ 
+        \underline{\underline{y}}_{i}
+    \right)
+    \mapsto
+    \begin{bmatrix}
+        \underline{\underline{x}}_{i} & \underline{\underline{y}}_{i}
+    \end{bmatrix} 
+    ,\qquad
+    i \in \left\{
+        1, \dots, N^\text{batch}
+    \right\}.
+\end{align}
+If the user deactivates all optional input, i.e.,
+$
+    N^\text{input}_{\text{opt}} = 0
+$,
+the CAT sub-module recedes to 
+the identity map
+of the output of the CNN sub-module.
+Either way, 
+the CAT sub-module has zero trainable parameters
+\begin{equation}
+    N^\text{cat}_\text{param} = 0.
+\end{equation}
+
+
+%The user specifies a subset of all possible optional inputs.
+\subsection*{GRU}
+The GRU sub-module consists of multiple layers of 
+gated recurrent units (GRU) \cite{Cho2014}.
+%RNN
+
+The input to a single unit is
+a batch of sequences of feature vectors
+\begin{equation}
+    \left(
+        \underline x_k
+    \right)_{
+        k \in \left\{
+            1, \dots, N^\text{seq}
+        \right\}
+        ,
+        j
+    }
+    ,\quad
+    j \in \left\{
+        1, \dots, N^\text{batch}
+    \right\}
+\end{equation}
+and a batch of the hidden states
+previously inferenced by the unit
+\begin{equation}
+    \underline h_{0,j}
+    ,\quad
+    j \in \left\{
+        1, \dots, N^\text{batch}
+    \right\}.
+\end{equation}
+
+
+-----------------------
+
+The $i$-th gated recurrent unit 
+%$
+%    i 
+%    \in 
+%    \left\{
+%        1, \dots, N^\text{gru}_\text{unit}
+%    \right\}
+%$
+maps the $k$-th feature vector of
+the $j$-th sequence 
+%$
+%    j 
+%    \in 
+%    \left\{
+%        1, \dots, N^\text{batch}
+%    \right\}
+%$
+of its input batch, i.e.,
+$\underline x_{k,j}$,
+and the $j$-th previous hidden state
+of its hidden batch,
+i.e., $\underline h_{k-1,j}$,
+to the $j$-th current hidden state of its output batch,
+i.e., $\underline h_{k,j}$,
+by averaging
+its new gate 
+$\mathcal{F}^\text{gru}_{\text{new},i}$
+and its previous hidden state,
+weighted with its update gate
+$\mathcal{F}^\text{gru}_{\text{upd},i}$
+\begin{align} \label{eq:gru_hidden}
+    \forall \quad &
+    i \in \left\{
+        1, \dots, N^\text{gru}_\text{unit}
+    \right\}
+    ,\ 
+    j \in \left\{
+        1, \dots, N^\text{batch}
+    \right\}
+    ,\ 
+    k \in \left\{
+        1, \dots, N^\text{seq}
+    \right\}
+    :
+    \nonumber \\ &
+    \mathcal{F}^\text{gru}_{\text{hidden},i}
+    :\
+    \left(
+        \mathbb{R}^{
+            N^\text{gru}_{\text{in}, i}
+        }
+        ,\ 
+        \left[
+            -1, 1
+        \right]^{
+            N^\text{gru}_{\text{hidden}}
+        }
+    \right)
+    \rightarrow 
+    \left[
+        -1, 1
+    \right]^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    \nonumber \\ & \quad
+    \chi
+    :=
+    \left(
+        \underline x_{k,j}
+        ,\ 
+        \underline h_{k-1,j}
+    \right)
+    \mapsto
+    \nonumber \\ & \qquad \qquad
+    \underline h_{k,j}
+    =
+    \left[
+        1 
+        -
+        \mathcal{F}^\text{gru}_{\text{upd},i} \left(
+            \chi
+        \right)
+    \right]
+    \odot
+    \mathcal{F}^\text{gru}_{\text{new},i} \left(
+        \chi
+    \right)
+    %\nonumber \\ & \qquad 
+    +
+    \mathcal{F}^\text{gru}_{\text{upd},i} \left(
+        \chi
+    \right)
+    \odot
+    \underline h_{k-1,j}
+    .
+\end{align}
+In addition to the update and new gate,
+a gated recurrent unit also incorporates
+the reset gate which is used to compute the new gate.
+These three gates
+follow the mappings
+\begin{align} \label{eq:gru_reset}
+    \forall \quad &
+    i \in \left\{
+        1, \dots, N^\text{gru}_\text{unit}
+    \right\}
+    ,\ 
+    j \in \left\{
+        1, \dots, N^\text{batch}
+    \right\}
+    ,\ 
+    k \in \left\{
+        1, \dots, N^\text{seq}
+    \right\}
+    :
+    \nonumber \\ &
+    \mathcal{F}^\text{gru}_{\text{reset},i}
+    ,\ 
+    \mathcal{F}^\text{gru}_{\text{upd},i}
+    ,\ 
+    \mathcal{F}^\text{gru}_{\text{new},i}
+    :\
+    \left(
+        \mathbb{R}^{
+            N^\text{gru}_{\text{in},i}
+        }
+        ,\ 
+        \left[
+            -1, 1
+        \right]^{
+            N^\text{gru}_{\text{hidden}}
+        }
+    \right)
+    \rightarrow
+    \left[
+        0, 1   
+    \right]^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,\ 
+    \left[
+        0, 1   
+    \right]^{
+        N^\text{gru}_{\text{hidden}}
+    },\ 
+    \left[
+        -1, 1   
+    \right]^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    \nonumber \\ & \quad
+    \chi
+    :=
+    \left(
+        \underline x_{k,j}
+        ,\ 
+        \underline h_{k-1,j}
+    \right)
+    \mapsto
+    \nonumber \\ & \qquad\qquad
+        \sigma \fullmoon \left(
+            \underline{\underline A}^\text{reset}_{x,i}
+            \underline x_{k,j}
+            +
+            \underline b^\text{reset}_{x,i}
+            +
+            \underline{\underline A}^\text{reset}_{h,i}
+            \underline h_{k-1,j}
+            +
+            \underline b^\text{reset}_{h,i}
+        \right)
+    ,
+    \nonumber \\ & \qquad\qquad
+        \sigma \fullmoon \left(
+            \underline{\underline A}^\text{upd}_{x,i}
+            \underline x_{k,j}
+            +
+            \underline b^\text{upd}_{x,i}
+            +
+            \underline{\underline A}^\text{upd}_{h,i}
+            \underline h_{k-1,j}
+            +
+            \underline b^\text{upd}_{h,i}
+        \right)
+    ,
+    \nonumber \\ & \qquad\qquad
+        \tanh \fullmoon \left[
+            \underline{\underline A}^\text{new}_{x,i}
+            \underline x_{k,j}
+            +
+            \underline b^\text{new}_{x,i}
+            %\nonumber \\ & \qquad \qquad \qquad \qquad \qquad \qquad \quad 
+            +
+            \mathcal{F}^\text{gru}_\text{reset} \left(
+                \chi
+            \right)
+            \odot
+            \left(
+                \underline{\underline A}^\text{new}_{h,i}
+                \underline h_{k-1,j}
+                +
+                \underline b^\text{new}_{h,i}
+            \right)
+        \right]
+    .
+\end{align}
+The reset gate linearly transforms the feature vector and the previous hidden state
+with the matrices of trainable weights and the vectors of trainable biases
+\begin{align}
+    \underline{\underline A}^\text{reset}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{in},i}
+    }
+    ,
+    &\underline{\underline A}^\text{reset}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    \nonumber \\
+    \underline{b}^\text{reset}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    &\underline{b}^\text{reset}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+\end{align}
+and applies the standard sigmoid function \cite{Han1995}
+\begin{equation}
+    \sigma
+    :\ 
+    \mathbb{R}
+    \rightarrow
+    \left[
+        0,1
+    \right]
+    ;\ 
+    x \mapsto \frac{1}{1 + e^{-x}}
+\end{equation}
+elementwise (denoted with $\fullmoon$) to the result.
+The update gate differs to the reset gate only in the fact
+that it has own trainable weights and biases
+\begin{align}
+    \underline{\underline A}^\text{upd}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{in},i}
+    }
+    ,
+    &\underline{\underline A}^\text{upd}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    \nonumber \\
+    \underline{b}^\text{upd}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    &\underline{b}^\text{upd}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    .
+\end{align}
+The new gate also linearly transforms the feature vector and the previous hidden state
+with its own weights and biases
+\begin{align}
+    \underline{\underline A}^\text{new}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{in},i}
+    }
+    ,
+    &\underline{\underline A}^\text{new}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+        \times
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    \nonumber \\
+    \underline{b}^\text{new}_{x,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    ,
+    &\underline{b}^\text{new}_{h,i}
+    &\in \mathbb{R}^{
+        N^\text{gru}_{\text{hidden}}
+    }
+    .
+\end{align}
+In contrast to the other two gates,
+the new gate, before building the sum of both linear transformations,
+mitigates the contribution of the linear transformation of the 
+hidden state by the Hadamard product with the reset gate.
+Moreover, the hyperbolic tangent \cite{D.1966}
+\begin{equation}
+    \tanh
+    :\ 
+    \mathbb{R}
+    \rightarrow
+    \left[
+        -1,1
+    \right]
+    ;\ 
+    x 
+    \mapsto 
+    \frac{
+        e^x - e^{-x}
+    }{
+        e^x + e^{-x}
+    }
+\end{equation}
+and not the sigmoid function 
+is applied element-wise.
+
+
+
+applies the following maps
+For the computation of the current batch of hidden states,
+the unit intermittently maps its input to three gates.
+The reset gate is computed by 
+applying the sigmoid function
+$
+\sigma(x) = \frac{1}{1+\exp(-x)}
+$
+to the individual elements of the sum
+of the biased linear transformations
+to the inputs and the previous hidden states
+and the subsequent
+
+
+This multi-layer gated recurrent unit (GRU)
+uses feedback connection to process the time series data
+thereby inttroducing temporal understanding in the decision making.
+
+
+
+\subsection*{FC}
+The FC sub-module comprises multiple fully connected layers
+applied to a batch of features.
+Each layer 
+$
+    i 
+    \in 
+    \left\{
+        1, \dots, N^\text{fc}_\text{layer}
+    \right\}
+$ 
+applies
+an activation function,
+a dropout
+and a biased linear transformation
+on each element
+$
+    j
+    \in 
+    \left\{
+        1, \dots, N^\text{batch}
+    \right\}
+$
+of a batch
+\begin{align} \label{eq:FC}
+    \mathcal{F}^\text{fc}_i
+    :\ &
+    \mathbb{R}^{
+        %N^\text{batch} 
+        %\times
+        N^\text{fc}_{\text{in}, i}
+    }
+    \rightarrow 
+    \mathbb{R}^{
+            %N^\text{batch} 
+            %\times
+            N^\text{fc}_\text{out}
+        }
+    \nonumber \\ &
+    %;\quad
+    \underline{x}_j%^\text{fc}_\text{in}
+    \mapsto
+    %\underline{\underline{x}}^\text{fc}_\text{out}
+    %=
+    \underline{\underline A}^\text{fc}_i
+    \left(
+        \underline{\delta}^\text{fc}
+        \odot
+        f^\text{fc} \fullmoon \left(
+            \underline{x}_j%^\text{fc}_\text{in}
+        \right)
+    \right)
+    + \underline b^\text{fc}_i
+    %
+    %\nonumber \\ &
+    %x_{kl}
+    %\mapsto
+    %\sum_l \delta_{kl} f(x_{kl}) a_{lm} + b_m 
+    .
+\end{align}
+The activation function 
+$
+    f^\text{fc}: \mathbb{R} \rightarrow \mathbb{R}
+$
+is applied element-wise (denoted with $\fullmoon$) on the input
+and is chosen by the user from the non-linear activations
+provided by PyTorch\footnote{
+    \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
+}.
+The dropout\cite{Hinton2012} decreases the overfitting of the ANN module on the training data set
+by enforcing the neurons to learn the detection of stand-alone features
+whose informative value is independent from
+the relation to other detected features.
+The dropout is accomplished
+by the Hadamard product (denoted with $\odot$)
+with the vector
+\begin{equation}
+    \underline{\delta}^\text{fc}
+    =
+    \left[
+        \delta^\text{fc}_i
+    \right]_{
+        i \in \left\{
+            1, \dots, N^\text{fc}_{\text{in}, i}
+        \right\}
+    }
+\end{equation}
+of independent, scaled Bernoulli random variables
+that are resampled for every function call
+with the probabilities
+\begin{equation}
+    P \left(
+        \delta^\text{fc}_i = 0
+    \right)
+    = p^\text{fc}
+    ,\quad
+    P \left(
+        \delta^\text{fc}_i = \frac{1}{1-p^\text{fc}}
+    \right)
+    = 1 - p^\text{fc}
+    .
+\end{equation}
+During training,
+the dropout probability $p^\text{fc} \in [0,1]$ equates to value specified by the user,
+whereas during evaluation,
+it is null $p^\text{fc} = 0$
+whereby the dropout becomes an identity operation.
+The linear transformation
+consist of the linear map given by the matrix of trainable weights
+\begin{equation}
+    \underline{\underline A}^\text{fc}_i 
+    \in 
+    \mathbb{R}^{
+        N^\text{fc}_{\text{in}, i}
+        \times
+        N^\text{fc}_\text{out}
+    }
+\end{equation}
+and the addition of the vector of trainable biases
+\begin{equation}
+    \underline b^\text{fc}_i 
+    \in \mathbb{R}^{
+        N^\text{fc}_\text{out}
+    }.
+\end{equation}
+A single layer, thus,
+has
+$
+    \left(
+        N^\text{fc}_{\text{in}, i} + 1
+    \right)
+    \cdot
+    N^\text{fc}_\text{out}
+$
+trainable parameters.
+The user specifies the number of layers
+$
+    N^\text{fc}_\text{layer}
+$
+of the FC, the width 
+$
+    N^\text{fc}_\text{out}
+$,
+i.e., the number of outputted features,
+which is shared by all layers of the FC,
+the activation function 
+$
+    f^\text{fc}: \mathbb{R} \rightarrow \mathbb{R}
+$
+and the dropout probability
+$
+    p^\text{fc} \in [0,1]
+$.
+The number of inputted features
+of a layer
+adapts to the given input
+$
+    N^\text{fc}_{\text{in}, i} 
+    = 
+    \begin{cases}
+        \dim \left(
+            \underline{x}_j
+        \right)
+        ,\quad 
+        \text{if } i = 1
+        \\
+        N^\text{fc}_\text{out}
+        ,\quad 
+        \text{else} 
+    \end{cases}
+$.
+For 
+$
+    N^\text{fc}_\text{layer} \ge 1
+$,
+the FC sub-module hence has
+a total of 
+$
+    \left(
+        N^\text{fc}_{\text{in}, i} + 1
+    \right)
+    %\cdot
+    N^\text{fc}_\text{out}
+    +
+    \left(
+        N^\text{fc}_\text{layer} - 1
+    \right)
+    %\cdot
+    \left(
+        N^\text{fc}_\text{out} + 1
+    \right)
+    %\cdot
+    N^\text{fc}_\text{out}
+$
+trainable parameters.
+
+\subsection*{HEAD}
+The HEAD sub-module is mandatory
+since it produces 
+the final output of the entire ANN module
+which is,
+depending on the user's selection,
+either a navigation decision
+or a control command.
+A navigation decision 
+\begin{equation} \label{eq:navigation_decision}
+    (
+        v_\text{norm},
+        \ 
+        {}_\textbf{I} \underline p^\text{wayp}
+    )   
+\end{equation}
+consists of a normalized speed 
+$v_\text{norm} \in [0, 1]$
+and a waypoint
+${}_\textbf{I} \underline p^\text{wayp} \in [-1, 1]^2$
+in the image reference system
+(see figure \ref{fig:image_reference_system}).
+A control command 
+\begin{equation}
+    (
+        {}_\textbf{I} \underline \omega^\text{cmd},\ 
+        {}_\textbf{I} \underline{\dot\omega}^\text{cmd},\ 
+        c^\text{cmd}
+    )
+\end{equation}
+comprises the desired angular velocity
+${}_\textbf{I} \underline \omega^\text{cmd}$
+(also referred to as body rates)
+and acceleration
+$
+{}_\textbf{I} \underline{\dot\omega}^\text{cmd}
+$
+of the drone body
+as well as the desired collective thrust 
+$c^\text{drone}$
+of the drone rotors.
+In the limited scope of this master's thesis,
+the option to output control commands
+is only implemented but not tested in experiments.
+The mapping of the HEAD entails 
+an activation function and a biased linear transformation
+which are deployed to each feature vector
+of the input batch
+\begin{align} \label{eq:head}
+    \mathcal{F}^\text{head}
+    :\ &
+    \mathbb{R}^{
+        N^\text{head}_\text{in}
+    }
+    \rightarrow 
+    \mathbb{R}^{
+            N^\text{head}_\text{out}
+        }
+    \nonumber \\ &
+    \underline{x}_j
+    \mapsto
+    \underline{\underline A}^\text{head}
+    \left(
+        f^\text{head} \fullmoon \left(
+            \underline{x}_j
+        \right)
+    \right)
+    + \underline b^\text{head}
+    ,\quad
+    j
+    \in 
+    \left\{
+        1, \dots, N^\text{batch}
+    \right\}
+    .
+\end{align}
+This structure is similar to a layer of the FC sub-module
+(see equation \ref{eq:FC}),
+leaving out the dropout functionality.
+While the number of input features is adaptive
+\begin{equation}
+    N^\text{head}_\text{in}
+    =
+    \dim \left(
+        \underline{x}_j
+    \right),
+\end{equation}
+the number of output features is determined by 
+the user-selected output
+\begin{equation}
+    N^\text{head}_\text{out}
+    = 
+    \begin{cases}
+        3
+        ,\quad 
+        \text{if navigation decision} 
+        \\
+        7
+        ,\quad 
+        \text{if control command} 
+    \end{cases}.
+\end{equation}
+The total number of trainable parameters of the HEAD sub-module is
+\begin{equation}
+    N^\text{head}_\text{params} 
+    = 
+    \left(
+        N^\text{head}_\text{in} + 1
+    \right)
+    %\cdot
+    N^\text{head}_\text{out}
+\end{equation}
+
+
+\subsection{Baseline config}
+
+
+
+%CNN: torch vision model, pretrained, trainable, adapt to any RGB size
+%CAT: CNN output , CAT input , one vector
+%GRU: hidden size, num_layers, bias, dropout
+%FC: width, num_layers, act fct, bias
+%HEAD: output size, act fct, bias
+%GRAPH
+%
+%loss optimzer learnrate
+
+
+-resize image dims by a factor
+-cnn backbone
+-cat cnn output with optional inputs
+-multilayer gru if data sequential
+-multilayer fc
+-head
+
+
+
+
+\subsection*{Output}
+
+
+
+
+
+
+
+
+
+
+\section{Planning module}
+%back-projection the image coordinates along the camera projection ray
+%-prediction horizon proportional to the platforms predicted speed
+%speed rescaled by user spec max speed
+%- aggressiveness of flight 
+%state interception traj 
+%- computationally efficient min jerk traj
+%traj(time) -> ref states
+
+
+
+
+%The planning module translates the navigation decisions of the ANN module into local trajectories
+%from the current state of the drone to the waypoint.
+%In case,
+%the ANN module outputs control command instead of navigation decisions,
+%the commands are bypassed the planning module
+%and directly forwarded to the control module.
+
+The task of the planning module is to translate the current navigation decision
+\begin{equation}
+    (
+        \speed[\norm]{\drone}{\desired}{}{}
+        ,\ 
+        \pos[]{\wayp}{}{\irs}{}
+    )
+\end{equation}
+into a local trajectory 
+that leads the drone to the position indicated by
+$
+    \pos[]{\wayp}{}{\irs}{}
+$
+with a speed depending on
+$
+    \speed[\norm]{\drone}{\desired}{}{}
+$.
+While at testing, the navigation decisions are exclusively made by 
+the ANN module (see equation \ref{eq:navigation_decision}),
+at training,
+individual decisions may have been corrected by
+the expert system (see equation \ref{eq:nav_dec_by_expert}).
+Besides the current navigation decision, 
+the planning module additionally requires the input of the current
+state of the drone comprising
+the position, the velocity and the acceleration
+\begin{equation}
+    \pos[]{\drone}{}{\grs}{}
+    ,\ 
+    \vel[]{\drone}{}{\grs}{}
+    ,\ 
+    \acc[]{\drone}{}{\grs}{}.
+\end{equation}
+The drone state either corresponds to the ground-truth state in simulation or,
+in real-world, is obtained by a state estimation system.
+
+
+First,
+the normalized, desired speed component of the navigation decision is rescaled
+\begin{equation}
+    \speed[]{\drone}{\desired}{}{}
+    = 
+    \maxof{
+        \speed[\user]{\drone}{\mnm}{}{}
+    }{
+        \speed[\user]{\drone}{\mxm}{}{}
+        \cdot 
+        \speed[\norm]{\drone}{\desired}{}{}
+    }
+\end{equation}
+with the user-specified
+minimum 
+$
+    \speed[\user]{\drone}{\mnm}{}{}
+$
+and
+maximum speed
+$
+\speed[\user]{\drone}{\mxm}{}{}
+$.
+Second,
+the waypoint component of the navigation decision
+is transformed
+according to equation \ref{eq:global_image_transformations}
+from the image to the global reference system
+\begin{equation}
+    \pos[]{\wayp}{}{\grs}{}
+    = 
+    \trafo[]{}{\grs\irs}{}{} \left(
+        \dist[]{\dronetowayp}{}{}{}
+        ,\ 
+        \pos[]{\wayp}{}{\irs}{}
+    \right)
+    .
+\end{equation}
+Thereby, the distance 
+$
+    \dist[]{\dronetowayp}{}{}{}
+$
+from the drone to the waypoint is
+used as the backprojection length in equation \ref{eq:image_to_local_transformation}.
+The distance is computed by integrating the rescaled speed over the 
+duration
+$
+    \dur[\user]{\dronetowayp}{}{}{}
+$
+\begin{equation}
+    \dist[]{\dronetowayp}{}{}{}
+    = 
+    \maxof{
+        \dist[\user]{\dronetowayp}{\mnm}{}{}
+    }{
+        \minof{
+            \speed[]{\drone}{\desired}{}{}
+            \cdot
+            \dur[\user]{\dronetowayp}{}{}{}
+        }{
+            \dist[\user]{\dronetowayp}{\mxm}{}{}
+        }
+    }
+\end{equation}
+with the user-specified minimum 
+$
+    \dist[\user]{\dronetowayp}{\mnm}{}{}
+$
+and
+maximum distance
+$
+    \dist[\user]{\dronetowayp}{\mxm}{}{}
+$.
+Third,
+the local trajectory
+\begin{align}
+    \pos[]{\loctraj}{}{\grs}{}%(\timepnt[]{}{}{}{})
+    :\ 
+    &\mathbb{R}_{[0, \dur[]{\loctraj}{}{}{}]} \rightarrow \mathbb{R}^3
+    ;\quad
+    %\nonumber \\
+    \timepnt[]{}{}{}{}
+    \mapsto
+    \pos[]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+\end{align}
+from the current drone state to the waypoint
+is generated according to
+the algorithm of Mueller et. al. \cite{Mueller2013} which
+minimizes the jerk of the trajectory
+\begin{align}
+    &\qquad \min 
+    \int_0^{\dur[]{\loctraj}{}{}{}}
+        \left\|
+            \pos[\dddot]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+        \right\|^2_2
+    \text d \timepnt[]{}{}{}{}
+    \nonumber \\
+    \text{s.t.}\quad
+    & \pos[]{\loctraj}{}{\grs}{}(0) = \pos[]{\drone}{}{\grs}{}
+    \qquad\qquad \pos[]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) = \pos[]{\wayp}{}{\grs}{}
+    \nonumber \\
+    & \pos[\dot]{\loctraj}{}{\grs}{}(0) = \vel[]{\drone}{}{\grs}{}
+    \qquad\qquad \pos[\dot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}
+    \nonumber \\
+    & \pos[\ddot]{\loctraj}{}{\grs}{}(0) = \acc[]{\drone}{}{\grs}{}
+    \qquad\qquad \pos[\ddot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}
+    .
+\end{align}
+The above optimization problem is 
+computed in closed solution,
+which was derived with Pontryagin's maximum principle.
+Further, the dynamic constraints of the drone are only taken into account
+at a subsequent feasibility check.
+Thus, the algorithm is
+characterized by a low computational complexity 
+and can be executed at the higher frequencies required by the navigation method of this thesis.
+The duration of the local trajectory is given by the quotient
+of the distance from the drone to the waypoint and 
+the average speed of the trajectory
+\begin{equation}
+    \dur[]{\loctraj}{}{}{}
+    = 
+    \frac{
+        \dist[]{\dronetowayp}{}{}{}
+    }{
+        \speed[]{\loctraj}{\average}{}{}
+    }.
+\end{equation}
+The average speed is yielded by upper-bounding
+the denormalized speed 
+by 
+the current speed of the drone 
+plus a user-specified maximum speed increment
+\begin{equation}
+    \speed[]{\loctraj}{\average}{}{}
+    = 
+    \minof{
+        \speed[]{\drone}{\desired}{}{}
+    }{
+        %\speed[]{\drone}{}{}{} 
+        \left\|
+            \vel[]{\drone}{}{\grs}{}
+        \right\|_2
+        + 
+        \speed[\user]{\drone}{\Delta}{}{}
+    }
+\end{equation}
+in order to prevent too steep speed increases.
+
+
+\section{Control module}
+
+
+Publish reference state from local trajectory to autopilot
+\begin{equation}
+    t^\text{loctraj} = t - t^\text{loctraj}_0 + T^\text{mainloop}
+\end{equation}
+Sample reference state
+\begin{equation}
+    \underline p^\text{ref} = \underline p^\text{loctraj}(t^\text{loctraj})
+    ,\ \dots,\ 
+    \underline j^\text{ref} = \underline j^\text{loctraj}(t^\text{loctraj})
+    ,\ 
+    \phi_z^\text{ref} 
+    = 
+    \mathrm{atan2}\left(
+        v_y^\text{loctraj}(t^\text{loctraj})
+        ,
+        v_x^\text{loctraj}(t^\text{loctraj})
+    \right)
+\end{equation}
+
+
+track the ref states -> lo2w level control commands
+control scheme by Faessler et al. [5]
+
+
+
+\section*{Training data generation}
+
+
+
+\section{Expert system} \label{sec:expert_system}
+
+The training data for the ANN module is automatically generated.
+For this, a slightly extended version of the expert system by Kaufmann et al. \cite{Kaufmann2018}  
+(they referred to it as expert policy) is implemented.
+In the context of machine learning, 
+an expert system is a program that imitates a human expert
+in order to solve a \textbf{problem}. 
+It comprises two main components: a \textbf{knowledge base} 
+that stores known facts and rules, and an
+\textbf{inference engine} which, by applying the rules to the known facts,
+generates new facts \cite{jackson1986introduction}.
+
+\subsection*{Problem}
+At training data generation (see XXX),
+the expert system undertakes the task
+of the ANN module by
+either making navigation decisions
+\begin{equation} \label{eq:nav_dec_by_expert}
+    (v_\text{norm},\ {}_\textbf{I} \underline p^\text{wayp})   
+\end{equation}
+instead of the fully untrained ANN module
+or correcting the false navigation decisions of the partly trained ANN module.
+
+
+%In contrast to the ANN module,
+%the expert system derives its navigation decisions 
+%not from onboard sensor data but from its knowledge base.
+%The task of the ANN module 
+%is to infer navigation decisions,
+%i.e., the inputs of the planning module,
+%from onboard sensor data.
+%In order to make meaningful decisions
+%that successfully guide the drone through the racetrack,
+%the ANN module must be previously trained on training data 
+%of sufficient quantity and quality.
+%To guarantee both,
+%the training data is automatically generated 
+%while the drone is flying through the racetrack.
+%At training data generation (see XXX),
+%the expert system undertakes the task
+%of the completely untrained or yet insufficiently trained ANN module
+%to make navigation decisions.
+
+
+\subsection*{Knowledge Base}
+The expert system makes navigation decisions on its knowledge base
+which consists of the following facts (\textbf{F*}) and rules (\textbf{R*}).
+\begin{itemize}
+    \item [\textbf{F1}] Current drone position and orientation
+    in the global reference frame
+    \begin{equation}
+        {}_\textbf{G} \underline p^\text{drone} \in \mathbb{R}^3,
+        \quad 
+        {}_\textbf{G} \underline q_\text{drone} \in \mathbb{R}^4.
+    \end{equation}
+    In simulation,
+    ${}_\textbf{G} \underline p^\text{drone}$ 
+    and 
+    ${}_\textbf{G} \underline q_\text{drone}$
+    comply with their ground-truth values,
+    whereas in real-world experiments
+    they can only be estimated.
+
+    \item [\textbf{F2}] The center points of the gates,
+    i.e., the waypoints of the racetrack, 
+    in the global reference system
+    \begin{equation}
+        \left( {}_\textbf{G} \underline p^\text{gate}_{i}  \in \mathbb{R}^3\right)
+        _{i \in \left\{0, ..., N^\text{gate} - 1 \right\}}
+    \end{equation}
+    as well as the initial index to the currently targeted gate
+    \begin{equation}
+        i_\text{curr} = i_\text{curr}^\text{init}
+        \in \left\{0, ..., N^\text{gate} - 1 \right\}.
+    \end{equation}
+    \item [\textbf{F3}] Positions and velocities 
+    in the global reference frame
+    from the sampled states of the global trajectory,
+    i.e., the previously computed minimum-snap trajectory [?] 
+    traversing through the center points of the gates
+    \begin{equation}
+        \left( {}_\textbf{G} \underline p^\text{traj}_i \in \mathbb{R}^3 \right)
+        _{i \in \{0, ..., N^\text{traj}-1\}},
+        \quad
+        \left( {}_\textbf{G} \underline v^\text{traj}_i \in \mathbb{R}^3 \right)
+        _{i \in \{0, ..., N^\text{traj}-1\}}.
+    \end{equation}
+
+    \item [\textbf{R1}] If the drone is closer to the currently targeted gate
+    than a user-specified distance
+    \begin{equation}
+        \left\| {}_\textbf{G} \underline p^\text{gate}_{i_\text{curr}} - {}_\textbf{G}\underline p^\text{drone} \right\|_2 
+        < d^\text{user}_\text{drone-curr},
+    \end{equation}
+    increment the index to the currently targeted gate
+    \begin{align}
+        i_\text{curr} &\leftarrow (i_\text{curr} + 1) \bmod N^\text{gate}. 
+        %\\
+        %i_\text{last} &\leftarrow (i_\text{curr} - 1 + N_\text{gate}) \bmod N_\text{gate}.
+    \end{align}
+    
+    
+    \item [\textbf{R2}] Update the index $i_\text{proj} \in \{0, ..., N^\text{traj}-1\}$ to the projection state,
+    i.e., the state of the global trajectory
+    onto which the current drone position is projected,
+    with the following iterative method.
+    \begin{enumerate}
+        \item Decrement the index to the projection state 
+        to compute the index to the previous state of the global trajectory
+        \begin{equation}
+            i_\text{prev} = (i_\text{proj} - 1 + N^\text{traj}) \bmod N^\text{traj}.
+        \end{equation}
+        \item Starting from the previous state, 
+        compute the vector to the projection state
+        \begin{equation} \label{eq:vec_prev_state_2_proj_state}
+            {}_\textbf{G} \underline a 
+            = 
+            {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}}
+            - 
+            {}_\textbf{G} \underline p^\text{traj}_{i_\text{prev}}
+        \end{equation}
+        and the vector to the current drone position
+        \begin{equation} \label{eq:vec_prev_state_2_drone}
+            {}_\textbf{G} \underline b 
+            = 
+            {}_\textbf{G} \underline p^\text{drone}
+            - 
+            {}_\textbf{G} \underline p^\text{traj}_{i_\text{prev}}.
+        \end{equation}
+        \item If the scalar product of the vectors ${}_\textbf{G} \underline a$ and ${}_\textbf{G} \underline b$, 
+        both normalized by the length of ${}_\textbf{G} \underline a$,
+        is less than 1
+        \begin{align} \label{eq:norm_dot_prod_criterion}
+            \frac{{}_\textbf{G} \underline a ^T {}_\textbf{G} \underline b}{{}_\textbf{G} \underline a ^T {}_\textbf{G} \underline a} < 1,
+        \end{align}
+        go to the next step. 
+        Else, increment the index to the projection state
+        \begin{equation}
+            i_\text{proj} \leftarrow (i_\text{proj} + 1) \bmod N^\text{traj}
+            %(j_\text{proj} + 1) \bmod N_\text{traj} \mapsto j_\text{proj}
+        \end{equation}
+        and go back to step 1.
+        \item If the drone is 
+        within a user-specified distance to the projection state 
+        \begin{equation} \label{eq:dist_drone_proj_criterion}
+            \left\| 
+                {}_\textbf{G} \underline p^\text{drone} 
+                - 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+            \right\|_2 
+            \le 
+            d^\text{user}_\text{drone-proj},
+        \end{equation}
+        the index $i_\text{proj}$ to the projection state is found.
+        Else, set the index 
+        to the state of the global trajectory
+        which has the minimum distance to the current drone position
+        \begin{equation} \label{eq:proj_idx_with_min_dist}
+            \underset{i_\text{proj}}{\mathrm{argmin}}\ 
+            \left\| 
+                {}_\textbf{G} \underline p^\text{drone} 
+                - 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+            \right\|_2.
+        \end{equation}
+        Due to this step,
+        the expert system does not require to know
+        the initial index $j^\text{init}_\text{proj} \in \{0, ..., N_\text{traj}-1\}$ 
+        to the projection state.
+        
+
+    \end{enumerate}
+    Figure \ref{fig:expert_system_projection} 
+    schematically illustrates the above method with a 2D example.
+    
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.9\textwidth]{own/expert_state_projection_3d.pdf}
+        \caption[
+            Schematic 2D example 
+            of the iterative method 
+            to update the index to the projection state
+        ]{
+            Schematic 2D example 
+            of the iterative method 
+            to update the index to the projection state.
+            
+            The positions of the states (blue points)
+            sampled from the global trajectory (blue dotted line),
+            the old index to the projection state (green circle)
+            and the current position of the drone (orange circle) are known.
+            At each iteration of the method,
+            the vector from the previous state 
+            to the projection state 
+            (green arrows, equation \ref{eq:vec_prev_state_2_proj_state})
+            and the vector from the previous state to the drone position (orange arrows, equation \ref{eq:vec_prev_state_2_drone})
+            are computed. 
+            Then, the normalized dot product criterion (annotations, equation \ref{eq:norm_dot_prod_criterion}) is checked. 
+            For iteration \#0-2, the criterion is not fullfilled.
+            Thus, the index to the projection state is incremented
+            and another iteration is started.
+            At iteration \#3 the criterion is finally met and the 
+            new index to the projection state (green star) is identified -
+            assuming the distance criterion (equation \ref{eq:dist_drone_proj_criterion}) is also true. 
+            Note that finding the index to the projection state 
+            only with the minimum distance criterion (equation \ref{eq:proj_idx_with_min_dist}) would have failed here,
+            since the state that is closest to the drone (blue square) 
+            belongs to a later or earlier part of the global trajectory which intersects the current part.
+            %Moreover, it justifies the higher effort of the method
+            %compared to identifying the projection state
+            %solely based on minimum distance (see equation \ref{eq:proj_idx_with_min_dist}).
+            %The latter, more intuitive, approach may fail 
+            %if the global trajectory intersects itself,
+            %as is the case with figure 8 racetracks, for example.
+        \label{fig:expert_system_projection}}
+    \end{figure}
+
+
+    
+    \item [\textbf{R3}] 
+    Update the index 
+    $i_\text{speed} \in \{0, ..., N^\text{traj}-1\}$ 
+    to the speed state,
+    i.e., the state of the global trajectory
+    that is the basis for the normalized speed
+    $v_\text{norm}$  decision,
+    by iteratively finding the first state of the global trajectory 
+    that follows the projection state
+    with a specific distance.
+    \begin{enumerate}
+        \item Initialize the searched index with the index to the projection state
+        \begin{equation}
+            i_\text{speed} = i_\text{proj}.
+        \end{equation}
+        \item Increment the searched index
+        \begin{equation}
+            i_\text{speed} \leftarrow (i_\text{speed} + 1) \bmod N^\text{traj}.
+        \end{equation}
+        \item If the speed state is further 
+        from the projection state than a user-specified distance
+        \begin{equation}
+            \left\| 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{speed}} 
+                - 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+            \right\|_2
+            > 
+            d^\text{user}_\text{proj-speed}.
+        \end{equation}
+        the searched index is found.
+        Else, go back to step 2.
+    \end{enumerate}
+
+
+    \item [\textbf{R4}] 
+    Update the index 
+    $i_\text{wayp} \in \{0, ..., N^\text{traj}-1\}$ 
+    to the waypoint state,
+    i.e., the state of the global trajectory
+    that is the basis for the image waypoint
+    ${}_\textbf{I} \underline p^\text{wayp}$  decision,
+    by iteratively finding the first state of the global trajectory 
+    that follows the projection state
+    with a specific distance.
+    \begin{enumerate}
+        \item Set the distance from the projection state to the waypoint state
+        by choosing the shorter distance from the drone to
+        either the currently targeted gate
+        or the lastly targeted gate,
+        however, it must be greater than a user-specified distance
+        \begin{align}
+            d_\text{proj-wayp} 
+            = 
+            \max 
+            \left\{
+                d^\text{user}_\text{proj-wayp, min}, 
+                \min 
+                \left\{
+                    \substack{
+                        \left\| 
+                            {}_\textbf{G} \underline p^\text{gate}_{i_\text{last}}
+                            -
+                            {}_\textbf{G} \underline p^\text{drone}
+                        \right\|_2,
+                    \\
+                        \left\| 
+                        {}_\textbf{G} \underline p^\text{gate}_{i_\text{curr}}
+                        -
+                        {}_\textbf{G} \underline p^\text{drone}
+                        \right\|_2 
+                    }
+                \right\} 
+            \right\}
+            .
+        \end{align}
+        \item Initialize the searched index with the index to the projection state
+        \begin{equation}
+            i_\text{wayp} = i_\text{proj}.
+        \end{equation}
+        \item Increment the searched index
+        \begin{equation}
+            i_\text{wayp} \leftarrow (i_\text{wayp} + 1) \bmod N^\text{traj}.
+        \end{equation}
+        \item If the waypoint state is further from the projection state 
+        than the distance computed in step 1
+        \begin{equation}
+            \left\| 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{wayp}} 
+                - 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+            \right\|_2
+            > 
+            d_\text{proj-wayp},
+        \end{equation}
+        the searched index is found.
+        Else, go back to step 3.
+    \end{enumerate}
+
+
+    
+
+
+    \item [\textbf{R4}] Compute the normalized speed decision
+    as the Frobenius norm of the velocity at the speed state
+    normalized by the maximum speed of all states of the global trajectory
+    \begin{equation}
+        v_\text{norm} 
+        = 
+        \frac{
+            \left\| 
+                {}_\textbf{G} \underline v^\text{traj}_{i_\text{speed}} 
+            \right\|_2
+        }
+        {
+            \underset{i}{\mathrm{argmax}}\  
+            \left\| 
+                {}_\textbf{G} \underline v^\text{traj}_i
+            \right\|_2
+        }  
+        \in [0,1].
+    \end{equation}
+
+
+    
+    
+    
+    \item [\textbf{R4}] Compute the image waypoint decision
+    by transforming the waypoint state 
+    from the global 
+    via the local
+    to the image reference system
+    \begin{equation}
+        {}_\textbf{I} \underline p^\text{wayp}
+        =
+        T_\textbf{IL} \left( 
+            T_\textbf{LG} \left( 
+                {}_\textbf{G} \underline p^\text{traj}_{i_\text{wayp}} 
+            \right)
+        \right) \in \mathbb{R}^2.
+    \end{equation}
+
+    
+    
+
+    
+
+\end{itemize}
+
+
+
+
+
+\subsection*{Inference Engine}
+\begin{itemize}
+	\item Implemented as a set of functions within a C++ ros node, that fetches the known facts via ROS topics or computes and store them as internal variables.
+	\item The user can de-/activate the expert system as functional part of the navigation method.
+\end{itemize} 
+is build and send to the planning module as input.
+In addition, it is used as label for the current training sample.
+The features of the training samples are ... .
+
+
+
+\section{Training procedure}
+
+
+\section{Test procedure}
+
+
+
+
+
+
+
+
