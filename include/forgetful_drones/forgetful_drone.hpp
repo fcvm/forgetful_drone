@@ -374,8 +374,6 @@ private:// ROS PARAMETERS //
     const double p_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD {};
     
 
-const bool p_TEST_ENABLED {};
-void test();
 
 void performFlightMission_TrainingDataGeneration();
 void performFlightMission_NavigationByBrain();

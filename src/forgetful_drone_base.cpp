@@ -14,14 +14,12 @@ namespace forgetful_drone {
 
 ForgetfulDrone::ForgetfulDrone(const ros::NodeHandle& rnh, const ros::NodeHandle& pnh)
     :
-    m_rosRNH {rnh},
-    m_rosPNH {pnh},
+    m_rosRNH {rnh}, m_rosPNH {pnh},
     
     m_rosSUB_GROUND_TRUTH_ODOMETRY {m_rosRNH.subscribe("ground_truth/odometry", 1, &ForgetfulDrone::ROSCB_GROUND_TRUTH_ODOMETRY, this)},
     m_rosSUB_GROUND_TRUTH_IMU {m_rosRNH.subscribe("ground_truth/imu", 1, &ForgetfulDrone::ROSCB_GROUND_TRUTH_IMU, this)},
     m_rosSUB_AUTOPILOT_FEEDBACK {m_rosRNH.subscribe("autopilot/feedback", 1, &ForgetfulDrone::ROSCB_AUTOPILOT_FEEDBACK, this)},
     m_rosSUB_CONTROL_COMMAND {m_rosRNH.subscribe("control_command", 1, &ForgetfulDrone::ROSCB_CONTROL_COMMAND, this)},
-    
     m_rosSUB_FLIGHTMARE_RGB {m_rosRNH.subscribe("/flightmare/rgb", 1, &ForgetfulDrone::ROSCB_FLIGHTMARE_RGB, this)},
     
     m_rosPUB_RVIZ_NAVIGATION_POINTS {m_rosRNH.advertise<visualization_msgs::Marker>("rviz/navigation_points", 0)},
@@ -36,7 +34,6 @@ ForgetfulDrone::ForgetfulDrone(const ros::NodeHandle& rnh, const ros::NodeHandle
     m_rosPUB_AUTOPILOT_REFERENCE_STATE {m_rosRNH.advertise<quadrotor_msgs::TrajectoryPoint>("autopilot/reference_state", 1)},
     m_rosPUB_RVIZ_LOCAL_TRAJECTORY {m_rosRNH.advertise<visualization_msgs::Marker>("rviz/local_trajectory", 1)},
     m_rosPUB_AUTOPILOT_POSE_COMMAND {m_rosRNH.advertise<geometry_msgs::PoseStamped>("autopilot/pose_command", 1)},
-
 
     m_rosSVC_BRAIN_TRAIN_ANN {m_rosRNH.serviceClient<std_srvs::Empty/*forgetful_drones::TrainBrain*/>("brain/train_ann")},
     m_rosSVC_SIMULATOR_BUILD {m_rosRNH.serviceClient<fdBS>("simulator/build")},
@@ -75,32 +72,42 @@ ForgetfulDrone::ForgetfulDrone(const ros::NodeHandle& rnh, const ros::NodeHandle
     m_RGBCnt {0},
     m_RunLapCnt {-1}
 {
-    bool init_successful {true};
-        if (!initROSParameters()) init_successful = false;
-        if (!initExperimentID()) init_successful = false;
-        if (!initTrafoArf2Wrf()) init_successful = false;
-        if (!initBrain()) init_successful = false;
-    if (!init_successful) {
-        ROSERROR("Initialization failed. Shut ROS down.");
+    //bool init_successful {true};
+    //    if (!initROSParameters()) init_successful = false;
+    //    if (!initExperimentID()) init_successful = false;
+    //    if (!initTrafoArf2Wrf()) init_successful = false;
+    //    if (!initBrain()) init_successful = false;
+    //if (!init_successful) {
+    //    ROSERROR("Initialization failed. Shut ROS down.");
+    //    ros::shutdown();
+    //}
+
+    if (initROSParameters() &&
+        initExperimentID() &&
+        initTrafoArf2Wrf() &&
+        initBrain()
+    ) {
+        ROSINFO("Initialization succeeded");
+        ros::Duration(3.0).sleep();
+    } else {
+        ROSERROR("Initialization failed, shut ROS down");
         ros::shutdown();
     }
     
-    constexpr double wt {3.0};
-    ROSINFO("Initialized node");
-    ros::Duration(wt).sleep();
+    //constexpr double wt {3.0};
+    //ROSINFO("Initialized node");
+    //ros::Duration(wt).sleep();
 
-    if (p_TEST_ENABLED) test();
-    else {
-        switch (p_FLIGHTMISSION) {
-            case 0: performFlightMission_GlobalTrajectoryTracking(); break;
-            case 1: performFlightMission_NavigationByExpert(); break;
-            case 2: performFlightMission_NavigationByBrain(); break;
-            case 3: performFlightMission_TrainingDataGeneration(); break;
-            case 4: performFlightMission_DAGGER(); break;
-            default: 
-                ROSERROR("No implementation for " << GET_VAR_REP(p_FLIGHTMISSION)); 
-                ros::shutdown(); break;
-        }
+    
+    switch (p_FLIGHTMISSION) {
+        case 0: performFlightMission_GlobalTrajectoryTracking(); break;
+        case 1: performFlightMission_NavigationByExpert(); break;
+        case 2: performFlightMission_NavigationByBrain(); break;
+        case 3: performFlightMission_TrainingDataGeneration(); break;
+        case 4: performFlightMission_DAGGER(); break;
+        default: 
+            ROSERROR("No implementation for " << GET_VAR_REP(p_FLIGHTMISSION)); 
+            ros::shutdown(); break;
     }
 }
 
@@ -194,7 +201,6 @@ bool ForgetfulDrone::initROSParameters () {
     std::vector <std::pair<const char*, const bool*>> kd_bool {
         //{"DYNAMIC_GATES_ON" , &m_DYNAMIC_GATES_ON},
         {"RVIZ_LOCTRAJ_ELAPSEDDISPLAYED", &p_RVIZ_LOCAL_TRAJECTORY_DISPLAY_ELAPSED_ENABLED},
-        {"DRONE_TEST_ENABLED", &p_TEST_ENABLED},
         {"RVIZ_LABELEDRGB_SAVED", &p_RVIZ_LABELEDRGB_SAVED},
         {"RVIZ_LABELEDRGB_ENABLED", &p_RVIZ_LABELEDRGB_ENABLED},
     };
@@ -405,15 +411,7 @@ bool ForgetfulDrone::initTrafoArf2Wrf () {
 
 
 
-void ForgetfulDrone::test () {
-    // set logger level to Debug
-    namespace rc = ros::console;
-    if (rc::set_logger_level(ROSCONSOLE_DEFAULT_NAME, rc::levels::Debug)) rc::notifyLoggerLevelsChanged();
 
-    ROSDEBUG("--- Testing Network in C++ ---");
-
-
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
