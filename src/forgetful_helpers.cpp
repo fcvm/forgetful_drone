@@ -599,7 +599,7 @@ void runForgetfulSimulator () {
 }
 
 
-void checkROSTimerPeriodTime (
+void checkROSTimerPeriod (
     const std::string& tag,
     const ros::TimerEvent& te,
     const double& period
@@ -611,18 +611,17 @@ void checkROSTimerPeriodTime (
 }
 
 
-void createDirectory (
-    const std::string& tag,
-    const std::string& dir_path
-) {
-    if (std::experimental::filesystem::create_directories(dir_path)) {
-        ROS_INFO_STREAM(tag << "Created directory \"" << dir_path << "\"");
+bool createDir (const std::string& tag, const std::string& path) {
+    if (std::experimental::filesystem::create_directories (path)) {
+        ROS_INFO_STREAM (tag << "Created directory \"" << path << "\"");
+        return true;
     } else {
-        ROS_ERROR_STREAM(tag << "Failed to create directory \"" << dir_path << "\"");
+        ROS_ERROR_STREAM(tag << "Failed to create directory \"" << path << "\"");
+        return false;
     }
 }
 
-bool isDirectory (const std::string& path) {
+bool isDir (const std::string& path) {
     return std::experimental::filesystem::is_directory(path);
 }
 
@@ -633,15 +632,17 @@ bool isFile (const std::string& path) {
 
 
 
-void copyFile (
+bool copyFile (
     const std::string& tag,
-    const std::string& src_path,
-    const std::string& dst_path
+    const std::string& src,
+    const std::string& dst
 ) {
-    if (std::experimental::filesystem::copy_file(src_path, dst_path)) {
-        ROS_INFO_STREAM(tag << "Copied file from \"" << src_path << "\" to \"" << dst_path << "\"");
+    if (std::experimental::filesystem::copy_file (src, dst)) {
+        ROS_INFO_STREAM(tag << "Copied file \"" << src << "\" to \"" << dst << "\"");
+        return true;
     } else {
-        ROS_INFO_STREAM(tag << "Failed to copy file from \"" << src_path << "\" to \"" << dst_path << "\"");
+        ROS_INFO_STREAM(tag << "Failed to copy file \"" << src << "\" to \"" << dst << "\"");
+        return false;
     }
 }
 
@@ -657,13 +658,8 @@ void saveCVMat (
 }
 
 
-bool isEmpty (
-    const std::string& tag,
-    const cv::Mat& cv_mat
-) {
-    const int& xPx_N = cv_mat.cols;
-    const int& yPx_N = cv_mat.rows;
-    if (xPx_N * yPx_N == 0) {
+bool isEmpty (const std::string& tag, const cv::Mat& cv_mat) {
+    if (cv_mat.cols * cv_mat.rows == 0) {
         ROS_WARN_STREAM(tag << "Detected empty image");
         return true;
     }

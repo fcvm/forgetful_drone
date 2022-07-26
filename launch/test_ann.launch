@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Arguments -->
+        <!-- Gazebo/RotorS -->
+            <arg name="debug" default="false"/>
+            <arg name="paused" default="true"/>
+            <arg name="gui" default="false"/>
+            <arg name="verbose" default="false"/>
+            <!--<arg name="world_name" default="$(find rotors_gazebo)/worlds/basic.world"/>-->
+            <!--<arg name="world_name" value="$(find forgetful_drones)/gazebo/worlds/RotorS.world" />-->
+            <arg name="world_name" value="$(find forgetful_drones)/gazebo/worlds/RotorS.world" />
+            
+            <arg name="quad_name" default="hummingbird"/>
+            <!--<arg name="model" default="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>-->
+            <!--<arg name="model" default="$(find rotors_description)/urdf/hummingbird_rgbcamera300200.gazebo"/>-->
+            <arg name="model" default="$(find forgetful_drones)/gazebo/drone/vehicles/hummingbird_rgbcamera300200.gazebo"/>
+            <!--<arg name="model" default="$(find rotors_description)/urdf/mav_with_vi_sensor.gazebo"/-->
+            <arg name="custom_models" default="$(find forgetful_drones)/gazebo"/>
+            <arg name="enable_logging" default="false"/>
+            <arg name="enable_ground_truth" default="true"/>
+            <arg name="enable_mavlink_interface" default="false"/>
+            <arg name="wait_to_record_bag" default="false"/>
+            <arg name="x_init" default="0.0"/>
+            <arg name="y_init" default="22.0"/>
+
+        <!-- Autopilot -->
+            <!--<arg name="enable_command_feedthrough" default="false"/>-->
+            <arg name="enable_command_feedthrough" default="true"/>
+
+        <!-- RPG Flightmare Unity Render -->>
+            <arg name="use_unity_editor" default="false" />
+            <arg name="unity_scene_index" default="-1" />
+            
+
+    
+    
+    
+    
+
+    <!-- Gazebo with RotorS empty world -->
+        <env name="GAZEBO_MODEL_PATH"
+        value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models:$(arg custom_models)"/>
+        <env name="GAZEBO_RESOURCE_PATH"
+        value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="world_name" value="$(arg world_name)" />
+            <arg name="debug" value="$(arg debug)" />
+            <arg name="paused" value="$(arg paused)" />
+            <arg name="gui" value="$(arg gui)" />
+            <arg name="verbose" value="$(arg verbose)"/>
+        </include>
+    
+
+    
+
+    
+    <group ns="$(arg quad_name)">
+
+        <!-- Send the URDF of the drone to the ROS parameter server, 
+            to be able to spawn the drone in Gazebo from within a ROS node. -->
+        <param name="robot_description" 
+            command="$(find xacro)/xacro '$(arg model)'
+            enable_logging:=$(arg enable_logging)
+            enable_ground_truth:=$(arg enable_ground_truth)
+            enable_mavlink_interface:=$(arg enable_mavlink_interface)
+            log_file:=$(arg quad_name)
+            wait_to_record_bag:=$(arg wait_to_record_bag)
+            mav_name:=$(arg quad_name)
+            namespace:=$(arg quad_name)"
+        /> 
+
+        <!-- RPG RotorS Interface -->
+        <node pkg="rpg_rotors_interface" type="rpg_rotors_interface" name="rpg_rotors_interface" output="screen" >
+            <rosparam file="$(find rpg_rotors_interface)/parameters/rpg_rotors_interface.yaml" />
+            <remap from="odometry" to="ground_truth/odometry" />
+            <remap from="rpg_rotors_interface/arm" to="bridge/arm" />
+        </node>
+        
+        <!-- Autopilot -->
+        <node pkg="autopilot" type="autopilot" name="autopilot" output="screen">
+            <rosparam file="$(find state_predictor)/parameters/hummingbird.yaml" />
+            <rosparam file="$(find rpg_rotors_interface)/parameters/position_controller.yaml" />
+            <rosparam file="$(find rpg_rotors_interface)/parameters/autopilot.yaml" />
+            <param name="position_controller/use_rate_mode" value="true" />
+            <param name="velocity_estimate_in_world_frame" value="false" />
+            <param name="state_estimate_timeout" value="0.1"/>
+            <param name="control_command_delay" value="0.05"/>
+            <param name="enable_command_feedthrough" value="$(arg enable_command_feedthrough)" />
+            <remap from="autopilot/state_estimate" to="ground_truth/odometry" />
+        </node>
+        
+        <!-- Joy 
+        <node pkg="joy" type="joy_node" name="joy_node">
+            <param name="autorepeat_rate" value="10"/>
+        </node>
+        -->
+
+        <!-- Manual Flight Assistant 
+        <node pkg="manual_flight_assistant" type="manual_flight_assistant"
+                name="manual_flight_assistant" output="screen">
+            <rosparam file="$(find rpg_rotors_interface)/parameters/manual_flight_assistant.yaml"/>
+        </node>
+        -->
+
+        <!-- -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+        
+        <!-- RVIZ -->
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find forgetful_drones)/rviz/default.rviz"></node>
+        
+
+        <!-- FORGETFUL DRONES -->
+            <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml"/>
+            
+            <param name="MISSION" value="2"/>
+            <param name="ANN_TORCH_INTERFACE" value="1"/>
+            <param name="ANN_TORCH_DEVICE" value="1"/>
+            
+            <node 
+                pkg="forgetful_drones" 
+                type="forgetful_drone" 
+                name="forgetful_drone" 
+                output="screen">
+            </node>
+            
+            <node
+                pkg="forgetful_drones" 
+                type="forgetful_simulator" 
+                name="forgetful_simulator" 
+                output="screen"
+            />
+            <node 
+                pkg="flightrender" 
+                type="ForgetfulDrone_Flightmare.x86_64" 
+                name="forgetful_flightmare_render">
+            </node>
+    </group>
+
+</launch>
+

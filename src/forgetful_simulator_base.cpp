@@ -13,7 +13,7 @@ namespace forgetful_drone {
 
 ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::NodeHandle& pnh, const bool& as_ros_node)
     :
-    m_AsRosNode {as_ros_node},
+    m_runAsROSNode {as_ros_node},
 
     // ROS node handles
         m_rosRNH {rnh}, 
@@ -68,31 +68,28 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
     m_SimulationRunning {false},
     m_UnityBridgePtr {nullptr}
 {
-    ROSINFO("Construct ForgetfulSimulator instance");
-    // Set logger level to Debug
-    //namespace rc = ros::console;
-    //if (rc::set_logger_level(ROSCONSOLE_DEFAULT_NAME, rc::levels::Debug))
-    //    rc::notifyLoggerLevelsChanged();
-
     // Seed random engine
-    m_RandEngine.seed(ros::WallTime::now().toNSec());
+    m_RandEngine.seed (ros::WallTime::now().toNSec());
+
+
     
     // Init flightmare image publishers
-    image_transport::ImageTransport IT(m_rosPNH);
-    m_rosPUB_FLIGHTMARE_RGB = IT.advertise("/flightmare/rgb", 1);
-        //m_rosPUB_FLIGHTMARE_DEPTH = IT.advertise("/flightmare/depth", 1);
-        //m_rosPUB_FLIGHTMARE_SEGMENTATION = IT.advertise("/flightmare/segmentation", 1);
-        //m_rosPUB_FLIGHTMARE_OPTICALFLOW = IT.advertise("/flightmare/opticalflow", 1);
+    image_transport::ImageTransport IT (m_rosPNH);
+    m_rosPUB_FLIGHTMARE_RGB = IT.advertise ("/flightmare/rgb", 1);
+    //m_rosPUB_FLIGHTMARE_DEPTH = IT.advertise("/flightmare/depth", 1);
+    //m_rosPUB_FLIGHTMARE_SEGMENTATION = IT.advertise("/flightmare/segmentation", 1);
+    //m_rosPUB_FLIGHTMARE_OPTICALFLOW = IT.advertise("/flightmare/opticalflow", 1);
     
-    bool init_successful {true};
-    if (!initROSParameters()) init_successful = false;
-    if (!init_successful) {
-        ROSERROR("Initialization failed. Shut ROS down.");
+
+    if (initROSParameters ()) {
+        ROSINFO("Init succeeded");
+    } else {
+        ROSERROR("Init failed, terminate ROS");
         ros::shutdown();
     }
 
     // Init main loop timer
-    if (m_AsRosNode) {
+    if (m_runAsROSNode) {
         double rate = p_MAIN_LOOP_FREQ;
         m_rosTMR_MAIN_LOOP = m_rosRNH.createTimer (
             /*rate*/ ros::Rate(rate),//1 / p_MAIN_LOOP_FREQ,
@@ -116,7 +113,6 @@ ForgetfulSimulator::~ForgetfulSimulator () {}
 
 
 bool ForgetfulSimulator::initROSParameters () {
-    ROSINFO("Fetch ROS parameters");
 
     // ROS param keys and destinations of type bool
     std::vector <std::pair<const char*, const bool*>> kd_bool {
@@ -280,9 +276,11 @@ void ForgetfulSimulator::buildSimulation_setTrackPoses () {
 
 
 bool ForgetfulSimulator::startSimulation () {
-    if (m_SimulationRunning) {ROSWARN("Tried to start simulation which is already running."); return true;}
-    
+    if (m_SimulationRunning) {ROSWARN("Tried to start simulation which is already running"); return true;}
+
+    std::cout << std::endl;
     ROSINFO("Start simulation");
+    std::cout << std::endl;
 
     
     // Gazebo
@@ -323,7 +321,7 @@ bool ForgetfulSimulator::startSimulation () {
 
 
     
-    if (m_AsRosNode) m_rosTMR_MAIN_LOOP.start();
+    if (m_runAsROSNode) m_rosTMR_MAIN_LOOP.start();
     m_SimulationRunning = true;
     return true;
 }
@@ -351,7 +349,7 @@ bool ForgetfulSimulator::stopSimulation() {
         }
     } 
 
-    if (m_AsRosNode) m_rosTMR_MAIN_LOOP.stop();
+    if (m_runAsROSNode) m_rosTMR_MAIN_LOOP.stop();
     m_SimulationRunning = false;
     return true;
 }
@@ -381,7 +379,7 @@ void ForgetfulSimulator::spinOnce (const ros::TimerEvent& te) {
 }
 
 void ForgetfulSimulator::ROSCB_MAIN_LOOP (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
     
     if ((!m_SimulationRunning) || (!m_UnityConnected)) return;
 
@@ -514,20 +512,20 @@ bool ForgetfulSimulator::buildSimulation_RequestValid (const fdBSReq& req) {
 }
 
 void ForgetfulSimulator::buildSimulation_logRequest () {
-    ROSINFO("Simulation configuration:" << std::endl
-        << " - " << std::get<0>(h_REQUEST[0]) << ": " << std::get<0>(h_UNITY_SCENES[m_UnitySceneIdx])           << m_ReqLogRand[0] << std::endl
-        << " - " << std::get<0>(h_REQUEST[1]) << ": " << std::get<0>(h_SCENE_SITES[m_SceneSiteIdx])             << m_ReqLogRand[1] << std::endl
-        << " - " << std::get<0>(h_REQUEST[2]) << ": " << std::get<0>(h_TRACK_TYPES[m_TrackTypeIdx])             << m_ReqLogRand[2] << std::endl
-        << " - " << std::get<0>(h_REQUEST[3]) << ": " << std::get<0>(h_TRACK_GENERATIONS[m_TrackGenerationIdx]) << m_ReqLogRand[3] << std::endl
-        << " - " << std::get<0>(h_REQUEST[4]) << ": " << std::get<0>(h_TRACK_DIRECTIONS[m_TrackDirectionIdx])   << m_ReqLogRand[4] << std::endl
-        << " - " << std::get<0>(h_REQUEST[5]) << ": " << std::get<0>(h_GATE_TYPES[m_GateTypeIdx])               << m_ReqLogRand[5]);
+    std::cout << std::endl;
+    ROSINFO("Build simulation:" << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[0]) << ": " << std::get<0>(h_UNITY_SCENES[m_UnitySceneIdx])           << m_ReqLogRand[0] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[1]) << ": " << std::get<0>(h_SCENE_SITES[m_SceneSiteIdx])             << m_ReqLogRand[1] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[2]) << ": " << std::get<0>(h_TRACK_TYPES[m_TrackTypeIdx])             << m_ReqLogRand[2] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[3]) << ": " << std::get<0>(h_TRACK_GENERATIONS[m_TrackGenerationIdx]) << m_ReqLogRand[3] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[4]) << ": " << std::get<0>(h_TRACK_DIRECTIONS[m_TrackDirectionIdx])   << m_ReqLogRand[4] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[5]) << ": " << std::get<0>(h_GATE_TYPES[m_GateTypeIdx])               << m_ReqLogRand[5]);
+    std::cout << std::endl;
 }
 
 
 
 bool ForgetfulSimulator::buildSimulation (const fdBSReq& req) {
-    ROSINFO("Initialize Simulation");
-
     buildSimulation_resetMembers ();
     buildSimulation_handleRandRequest (req);
     if (!buildSimulation_RequestValid (req)) return false;

@@ -94,7 +94,7 @@ public:
 
 
 /*ROS*/ private:
-    const bool m_AsRosNode {};
+    const bool m_runAsROSNode {};
 
     ros::NodeHandle m_rosRNH; // resolved to the node's namespace.
     ros::NodeHandle m_rosPNH; // resolved to: <node's namespace>/<node's name>.

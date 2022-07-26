@@ -46,9 +46,9 @@ ForgetfulDrone::ForgetfulDrone(const ros::NodeHandle& rnh, const ros::NodeHandle
 
 
     m_AutopilotState {quadrotor_msgs::AutopilotFeedback::OFF},
-    m_ExpertOutput {0.0, 0.0, 0.0},
+    m_ExpOutput {0.0, 0.0, 0.0},
     m_BrainOutput {0.0, 0.0, 0.0},
-    m_NavigatorInput {0.0, 0.0, 0.0},
+    m_NavInput {0.0, 0.0, 0.0},
     m_GloTraj {},
     m_TrackWaypoints {},
     m_GloTrajExpertStateIdx {0},
@@ -63,54 +63,42 @@ ForgetfulDrone::ForgetfulDrone(const ros::NodeHandle& rnh, const ros::NodeHandle
     m_Dist2LastWaypoint {0.0},
     
 
-    m_NavigatorENABLED {false},
-    m_DataSavingENABLED {false},
-    m_LocTrajSubseqInfeasibleCnt {0},
+    m_NavEnabled {false},
+    m_SavEnabled {false},
+    m_LocTrajSuccInfeasCnt {0},
     m_LocTrajStartTime {},
     m_LocTraj {Vec3(), Vec3(), Vec3(), Vec3()},
-    m_MainLoopIterCnt {0},
+    m_MainIterCnt {0},
     m_LocTrajFeasibleCnt {0},
     m_TotalRunCnt {0},
     m_RGBCnt {0},
-    m_RunLapCnt {-1}
+    m_LapCnt {-1}
 {
-    //bool init_successful {true};
-    //    if (!initROSParameters()) init_successful = false;
-    //    if (!initExperimentID()) init_successful = false;
-    //    if (!initTrafoArf2Wrf()) init_successful = false;
-    //    if (!initBrain()) init_successful = false;
-    //if (!init_successful) {
-    //    ROSERROR("Initialization failed. Shut ROS down.");
-    //    ros::shutdown();
-    //}
-
-    if (initROSParameters() &&
-        initExperimentID() &&
-        initTrafoArf2Wrf() &&
-        initBrain()
+    if (initROSParameters () &&
+        initTrafoArf2Wrf () &&
+        initExperiment () &&
+        initANN ()
     ) {
-        ROSINFO("Initialization succeeded");
+        ROSINFO("Init succeeded");
         ros::Duration(3.0).sleep();
     } else {
-        ROSERROR("Initialization failed, shut ROS down");
+        ROSERROR("Init failed, terminate ROS");
         ros::shutdown();
     }
-    
-    //constexpr double wt {3.0};
-    //ROSINFO("Initialized node");
-    //ros::Duration(wt).sleep();
 
     
-    switch (p_FLIGHTMISSION) {
-        case 0: performFlightMission_GlobalTrajectoryTracking(); break;
-        case 1: performFlightMission_NavigationByExpert(); break;
-        case 2: performFlightMission_NavigationByBrain(); break;
-        case 3: performFlightMission_TrainingDataGeneration(); break;
-        case 4: performFlightMission_DAGGER(); break;
+    logMissionInfo ();
+    switch (p_MISSION) {
+        //case 0: runMission_trackGloTraj(); break;
+        case 1: runMission_testExp (); break;
+        case 2: runMission_testANN (); break;
+        case 3: runMission_genTrainData (); break;
+        case 4: runMission_DAGGER (); break;
         default: 
-            ROSERROR("No implementation for " << GET_VAR_REP(p_FLIGHTMISSION)); 
+            ROSERROR("No implementation for " << GET_VAR_REP(p_MISSION)); 
             ros::shutdown(); break;
     }
+    logMissionResult ();
 }
 
 
@@ -143,9 +131,11 @@ std::string ForgetfulDrone::ConfigFpath () {
 std::string ForgetfulDrone::ScriptModuleFpath () {
     return OutputDpath() + "/" + std::string(h_SCRIPTMODULE_FNAME);
 }
-std::string ForgetfulDrone::ParametersFpath (const bool& src_not_dst) {
-    if (src_not_dst) return ROS_PACKAGE_PATH + "/" + std::string(h_PARAMETERS_DNAME) + "/" + std::string(h_PARAMETERS_FNAME);
-    else return ConfigDpath() + "/" + std::string(h_PARAMETERS_FNAME);
+std::string ForgetfulDrone::ParamsFpath (const bool& src_not_dst) {
+    if (src_not_dst) 
+        return ROS_PACKAGE_PATH + "/" + std::string(h_PARAMS_DNAME) + "/" + std::string(h_PARAMS_FNAME);
+    else 
+        return ConfigDpath() + "/" + std::string(h_PARAMS_FNAME);
 }
 
 
@@ -175,13 +165,21 @@ std::string ForgetfulDrone::RunDPath () {
 }
 
 
-bool ForgetfulDrone::initBrain () {
-    const char* torch_interface_name = std::get<0>(h_BRAIN_TORCHINTERFACES[p_TORCHINTERFACE_IDX]);
-    ROSINFO("Interface torch with: " << torch_interface_name);
+bool ForgetfulDrone::initANN () {
+    if (p_MISSION == 0 || p_MISSION == 1) {
+        ROSINFO("Skip ANN init (not required for flight mission \"" << h_MISSIONS[p_MISSION] << "\")");
+        return true;
+    }
     
-    if (p_TORCHINTERFACE_IDX == 0) return initBrain_Python();
-    else if (p_TORCHINTERFACE_IDX == 1) return initBrain_Cpp();
-    else return false;
+    ROSINFO("Torch interface: " << std::get<0>(h_TORCH_INTERFACES.at(p_TORCH_INTERFACE_IDX)));
+    
+    switch (p_TORCH_INTERFACE_IDX) {
+        case 0: return initBrain_Python();
+        case 1: return initBrain_Cpp();
+        default: 
+            ROSERROR("No implementation for " << GET_VAR_REP(p_TORCH_INTERFACE_IDX)); 
+            return false;
+    }
 }
 
 
@@ -197,8 +195,6 @@ bool ForgetfulDrone::initBrain_Python () {
 
 
 bool ForgetfulDrone::initROSParameters () { 
-    ROSINFO("Fetch ROS parameters");
-
     // ROS param keys and destinations of type bool
     std::vector <std::pair<const char*, const bool*>> kd_bool {
         //{"DYNAMIC_GATES_ON" , &m_DYNAMIC_GATES_ON},
@@ -212,16 +208,16 @@ bool ForgetfulDrone::initROSParameters () {
         {"CONFIG_NUMRUNS" , &p_CONFIG_NUMRUNS},
         {"GLOTRAJ_POLYNOMIALORDER" , &p_GLOBAL_TRAJECTORY_POLYNOMIAL_ORDER},
         {"GLOTRAJ_CONTINUITYORDER", &p_GLOBAL_TRAJECTORY_CONTINUITY_ORDER},
-        {"NAV_REPLANNING_MAINLOOPITERSCNT" , &p_NAV_REPLANNING_MAINLOOPITERSCNT},
-        {"NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT", &p_NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT},
+        {"NAV_REPLANNING_MAINLOOPITERSCNT" , &p_NAV_REPLAN_ITER_CNT},
+        {"NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT", &p_NAV_LOC_TRAJ_FEAS_MAX_SUCC_FAILS_CNT},
         {"RUN_NUMLAPS", &p_RUN_NUMLAPS},
         {"WAYPARRIV_MAXDURATION", &p_WPARR_MAXDUR},
-        {"DRONE_FLIGHTMISSION", &p_FLIGHTMISSION},
-        {"DRONE_BRAIN_TORCHINTERFACE", &p_TORCHINTERFACE_IDX},
-        {"DRONE_BRAIN_TORCHDEVICE", &p_BRAIN_TORCHDEVICE},
+        {"MISSION", &p_MISSION},
+        {"ANN_TORCH_INTERFACE", &p_TORCH_INTERFACE_IDX},
+        {"ANN_TORCH_DEVICE", &p_TORCH_DEVICE},
         
         {"DRONE_DAGGER_FIRSTRUN_NUMLAPS", &p_DAGGER_FIRSTRUN_NUMLAPS},
-        {"DRONE_FLIGHTMISSION_DAGGER_NUM_EPOCHS", &p_DAGGER_NUM_EPOCHS},
+        {"MISSION_DAGGER_NUM_EPOCHS", &p_DAGGER_NUM_EPOCHS},
     };
 
     // ROS param keys and destinations of type double
@@ -236,9 +232,9 @@ bool ForgetfulDrone::initROSParameters () {
         {"WAYPARRIV_THRESHOLDDIST", &p_WAYPOINT_ARRIVAL_THRESHOLD_DISTANCE},
         {"EXPERT_MINWAYPHORIZON", &p_EXPERT_MIN_HORIZON},
         {"EXPERT_SPEEDHORIZON", &p_EXPERT_SPEED_HORIZON},
-        {"NAV_REFSTATE_MAXDIVERGENCE", &p_NAV_REFSTATE_MAXDIVERGENCE},
+        {"NAV_MAX_DIV", &p_NAV_MAX_DIV},
         {"EXPERT_PROJECTIONMAXDIVERGENCE", &p_EXPERT_PROJECTION_MAX_DIVERGENCE_FROM_GLOBAL_TRAJECTORY},
-        {"DRONE_MAINLOOP_FREQ", &p_MAIN_LOOP_FREQUENCY},
+        {"MAIN_FREQ", &p_MAIN_FREQ},
         {"NAV_LOCTRAJ_MINSPEED", &p_LOCAL_TRAJECTORY_MIN_SPEED},
         {"NAV_LOCTRAJ_MAXSPEEDINCREMENT", &p_LOCAL_TRAJECTORY_MAX_SPEED_INCREMENT},
         {"NAV_LOCTRAJ_DURATION", &p_LOCAL_TRAJECTORY_DURATION},
@@ -253,150 +249,152 @@ bool ForgetfulDrone::initROSParameters () {
         {"NAV_INPUTPERTURBATION_ELEMENTWISEAMP", &p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP},
         {"RVIZ_LOCTRAJ_SAMPLINGDURATION", &p_RVIZ_LOCAL_TRAJECTORY_DURATION},
         {"RVIZ_LOCTRAJ_SAMPLINGFREQUENCY", &p_RVIZ_LOCAL_TRAJECTORY_SAMPLING_FREQUENCY},
-        {"DRONE_FLIGHTMISSION_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD", &p_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD},
+        {"MISSION_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD", &p_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD},
     };
 
-    // ROS param keys and destinations of type string
-    std::vector <std::pair<const char*, const std::string*>> kd_str
-    {        
-        {"DRONE_EXPERIMENT_ID", &p_EXPERIMENT_ID},
+    // String
+    std::vector <std::pair<const char*, const std::string*>> kd_str {        
+        {"MISSION_EXPERIMENT_ID", &p_EXPERIMENT_ID},
     };
     
     
     return true
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_UNITYSCENES",      p_FLIGHTMISSION_UNITYSCENES,      m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_SCENESITES",       p_FLIGHTMISSION_SCENESITES,       m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_TRACKTYPES",       p_FLIGHTMISSION_TRACKTYPES,       m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_TRACKGENERATIONS", p_FLIGHTMISSION_TRACKGENERATIONS, m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_TRACKDIRECTIONS",  p_FLIGHTMISSION_TRACKDIRECTIONS,  m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_FLIGHTMISSION_GATETYPES",        p_FLIGHTMISSION_GATETYPES,        m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_AUTOPILOT_REFFRAME_WRF",         p_AUTOPILOT_REFFRAME_WRF,         m_rosRNH, false)
-    && fetchROSArrayParameter("NAV_LOCTRAJ_MAXSPEEDS",                p_LOCTRAJ_MAXSPEEDS,              m_rosRNH, false)
-    && fetchROSArrayParameter("DRONE_DAGGER_MARGINS",                 p_DAGGERMARGINS,                  m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_SCENES",           p_SCENES,             m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_SITES",            p_SITES,              m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_TRACK_TYPES",            p_TRACK_TYPES,              m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_TRACK_GENS",      p_TRACK_GENS,        m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_TRACK_DIRECS",       p_TRACK_DIRECS,         m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_GATES",             p_GATES,               m_rosRNH, false)
+    && fetchROSArrayParameter("ARF_POSE_WRF",   p_ARF_POSE_WRF,   m_rosRNH, false)
+    && fetchROSArrayParameter("MISSION_MAX_SPEEDS",          p_LOCTRAJ_MAXSPEEDS,        m_rosRNH, false)
+    && fetchROSArrayParameter("DRONE_DAGGER_MARGINS",           p_DAGGERMARGINS,            m_rosRNH, false)
     && fetchROSParameters(m_rosRNH, kd_bool, kd_int, kd_dbl, kd_str, /*log_enabled*/ false);
 }
 
 
 
 bool ForgetfulDrone::initBrain_Cpp () {
-    // params from json file
+
+    int 
+        rgb_height, 
+        rgb_width, 
+        gru_nlayers, 
+        gru_hsize;
+    std::vector<std::string> opt_inputs;
+    std::vector<bool> opt_mask;
+    
+
+    /* fetch params from json file */ 
     try {
         std::ifstream ifs (ConfigFpath());
         nlohmann::json jf = nlohmann::json::parse(ifs);
+
+        rgb_height = jf["data"]["processed"]["rgb"]["height"];
+        rgb_width = jf["data"]["processed"]["rgb"]["width"];
         
         nlohmann::json val = jf["ann"]["gru"]["hidden_size"];
-        if (val.is_null()) const_cast<int&>(p_ANN_GRU_HIDDENSIZE) = 1;
-        else const_cast<int&>(p_ANN_GRU_HIDDENSIZE) = val;
+        if (val.is_null()) gru_hsize = 1; else gru_hsize = val;
 
         val = jf["ann"]["gru"]["num_layers"];
-        if (val.is_null()) const_cast<int&>(p_ANN_GRU_NUMLAYERS) = 1;
-        else const_cast<int&>(p_ANN_GRU_NUMLAYERS) = val;
+        if (val.is_null()) gru_nlayers = 1; else gru_nlayers = val;
 
-        const_cast<int&>(p_DATA_PROCESSED_RGB_HEIGHT) = jf["data"]["processed"]["rgb"]["height"];
-        const_cast<int&>(p_DATA_PROCESSED_RGB_WIDTH) = jf["data"]["processed"]["rgb"]["width"];
-    }
-    catch(const std::exception& e) {
+        opt_inputs = static_cast<std::vector<std::string>>(jf["data"]["input"]["cat"]);
+        for (const std::string& OI : h_ANN_OPT_INPUTS) {
+            bool found {false};
+            for (const std::string& oi : opt_inputs) {
+                if (OI == oi) {
+                    found = true;
+                    break;
+                }
+            }
+            opt_mask.push_back(found);
+        }
+        //std::cout << std::endl << std::endl << std::endl << opt_mask << std::endl << std::endl<< std::endl;
+
+
+
+
+    } catch(const std::exception& e) {
         ROSERROR(e.what());
         return false;
     }
 
-    // deserialize the ScriptModule
-    try {
-        m_TorchDevice = std::get<1>(h_BRAIN_TORCHDEVICES[p_BRAIN_TORCHDEVICE]);
-        ROSINFO("Use torch device: " << std::get<0>(h_BRAIN_TORCHDEVICES[p_BRAIN_TORCHDEVICE]));
-
-        m_TorchTensorOptions = torch::TensorOptions()
-            .dtype(torch::kFloat32)
-            .layout(torch::kStrided)
-            //.device(torch::Device(m_TorchDevice, 0))
-            .requires_grad(false);
-
-        m_TorchScriptModule = torch::jit::load (ScriptModuleFpath());
-        m_TorchScriptModule.to(torch::Device(m_TorchDevice, 0));
-
-        m_ANNGRUHiddenState = std::vector<float>(
-            p_ANN_GRU_NUMLAYERS * h_BATCHSIZE * p_ANN_GRU_HIDDENSIZE, 0.0);
-    }
-    catch (const c10::Error& e) {
-        ROSERROR("Error loading model: " << e.what());
-        return false;
-    }
-    catch(const std::exception& e) {
-        ROSERROR(e.what());
-        return false;
-    }
-
-    return true;
+    return m_ANN.init(
+        rgb_height,
+        rgb_width,
+        opt_mask,
+        gru_nlayers,
+        gru_hsize,
+        true,
+        ScriptModuleFpath()
+    );    
 }
 
 
 
 bool ForgetfulDrone::checkPaths () {
-    bool successful {true};
-
-    auto is_dir = [&successful] (const std::string& path) {
-        if (!isDirectory(path)) {
-            ROSERROR("Experiment ID was specified but \"" << path << "\" is not a directory");
-            successful = false;
+    auto is_dir = [this] (const std::string& path) {
+        if (isDir(path)) return true;
+        else {
+            ROSERROR("Existing experiment \"" << p_EXPERIMENT_ID <<"\" misses directory \"" << path << "\"");
+            return false;
         }
     };
 
-    auto is_file = [&successful] (const std::string& path) {
-        if (!isFile(path)) {
-            ROSERROR("Experiment ID was specified but \"" << path << "\" is not a file");
-            successful = false;
+    auto is_file = [this] (const std::string& path) {
+        if (isFile(path)) return true; 
+        else {
+            ROSERROR("Existing experiment \"" << p_EXPERIMENT_ID <<"\" misses file \"" << path << "\"");
+            return false;
         }
     };
 
-    is_dir(ExperimentDpath());
-    is_dir(DataDpath());
-    is_dir(RawDpath());
-    is_dir(ConfigDpath());
-    is_dir(OutputDpath());
-
-    is_file(ConfigFpath());
-    is_file(ScriptModuleFpath());
-
-    return successful;
+    return
+        is_dir(ExperimentDpath()) &&
+        is_dir(DataDpath()) &&
+        is_dir(RawDpath()) &&
+        is_dir(ConfigDpath()) &&
+        is_dir(OutputDpath()) &&
+        is_file(ConfigFpath()) &&
+        is_file(ScriptModuleFpath());
 }
 
 
-bool ForgetfulDrone::initExperimentID () {
-    try {
-        if (p_EXPERIMENT_ID == "") {
-            const_cast<bool&>(p_EXPERIMENT_NEW) = true;
-            const_cast<std::string&>(p_EXPERIMENT_ID) = getUTCDateTimeString();
-            ROSINFO("Start new experiment: " << p_EXPERIMENT_ID);
-
-            initExperimentDirectory();
-        }
-        else {
-            ROSINFO("Continue experiment: " << p_EXPERIMENT_ID);
-            const_cast<bool&>(p_EXPERIMENT_NEW) = false;
-
-            if (!checkPaths()) return false;
-        }
-        m_rosRNH.setParam("EXPERIMENT_DPATH", ExperimentDpath());
-    } 
-    catch (const std::exception& e) {
-        ROSERROR(e.what());
-        return false;
+bool ForgetfulDrone::initExperiment () {
+    if (p_MISSION == 0 || p_MISSION == 1) {
+        ROSINFO("Skip Experiment init (not required for flight mission \"" << h_MISSIONS[p_MISSION] << "\")");
+        return true;
     }
-    
-    return true;
+
+    bool succeeded {true};
+    if (p_EXPERIMENT_ID == "") {
+        if (p_MISSION == 2) {
+            ROSERROR("No experiment specified (but required for flight mission \"" << h_MISSIONS[p_MISSION] << "\")");
+            return false;
+        }
+        const_cast<std::string&>(p_EXPERIMENT_ID) = getUTCDateTimeString();
+        ROSINFO("Experiment: " << p_EXPERIMENT_ID << "   (new)");
+        succeeded = initExperimentDir();
+    } else {
+        ROSINFO("Experiment: " << p_EXPERIMENT_ID << "   (existing)");
+        succeeded = checkPaths();
+    }
+
+    m_rosRNH.setParam("EXPERIMENT_DPATH", ExperimentDpath());
+    return succeeded;
 }
 
 bool ForgetfulDrone::initTrafoArf2Wrf () {
     // transformation from autopilot to world reference frame
     try {
         geometry_msgs::Pose p;
-        p.position.x = p_AUTOPILOT_REFFRAME_WRF[0];
-        p.position.y = p_AUTOPILOT_REFFRAME_WRF[1];
-        p.position.z = p_AUTOPILOT_REFFRAME_WRF[2];
-        p.orientation.w = p_AUTOPILOT_REFFRAME_WRF[3];
-        p.orientation.x = p_AUTOPILOT_REFFRAME_WRF[4];
-        p.orientation.y = p_AUTOPILOT_REFFRAME_WRF[5];
-        p.orientation.z = p_AUTOPILOT_REFFRAME_WRF[6];
+        p.position.x = p_ARF_POSE_WRF[0];
+        p.position.y = p_ARF_POSE_WRF[1];
+        p.position.z = p_ARF_POSE_WRF[2];
+        p.orientation.w = p_ARF_POSE_WRF[3];
+        p.orientation.x = p_ARF_POSE_WRF[4];
+        p.orientation.y = p_ARF_POSE_WRF[5];
+        p.orientation.z = p_ARF_POSE_WRF[6];
         tf::poseMsgToKindr(p, &const_cast<kindr::minimal::QuatTransformation&>(p_T_WRF_ARF));
     } 
     catch(const std::exception& e) {
@@ -485,14 +483,14 @@ void ForgetfulDrone::rvizLabeledCamFrame() {
 
     // Add expert output
     constexpr double alpha = 0.8;
-    xPx = static_cast<int>(xPx_N * (1.0 + m_ExpertOutput.x()) / 2.0);
-    yPx = static_cast<int>(yPx_N * (1.0 - m_ExpertOutput.y()) / 2.0);
+    xPx = static_cast<int>(xPx_N * (1.0 + m_ExpOutput.x()) / 2.0);
+    yPx = static_cast<int>(yPx_N * (1.0 - m_ExpOutput.y()) / 2.0);
     cv::circle(m_RGBData, cv::Point(xPx, yPx), 0, cv::Scalar(255, 0, 0), 12, 8, 0);
     cv::Mat roi = m_RGBData(cv::Rect(xPx_N - 200, yPx_N - 50, 190, 40));
     cv::Mat color = cv::Mat(roi.size(), CV_8UC3, cv::Scalar(125, 125, 125));
     cv::addWeighted(color, alpha, roi, 1.0 - alpha, 0.0, roi); // grey box
     cv::putText(m_RGBData, 
-        ("Expert " + std::to_string(m_ExpertOutput.z()).substr(0, 5)).c_str(), 
+        ("Expert " + std::to_string(m_ExpOutput.z()).substr(0, 5)).c_str(), 
         cv::Point2f(xPx_N - 190, yPx_N - 23), 
         cv::FONT_ITALIC, 0.7, cv::Scalar(255, 0, 0, 255));
 
@@ -518,9 +516,9 @@ void ForgetfulDrone::rvizLabeledCamFrame() {
         cv::FONT_ITALIC, 0.7, cv::Scalar(0, 0, 255, 255));
 
     // --- Add brain decision / expert intervention bar
-    int total_cnt = m_ExpertInterventionsCnt + m_BrainDecisionsCnt;
+    int total_cnt = m_ExpDecCnt + m_ANNDecCnt;
     if (total_cnt != 0) {
-        double exp_share = (double)m_ExpertInterventionsCnt / (double)total_cnt;
+        double exp_share = (double)m_ExpDecCnt / (double)total_cnt;
         double brain_share = 1.0 - exp_share;
         int total_width = xPx_N - 20;
             // - brain
@@ -730,7 +728,7 @@ void ForgetfulDrone::flyDroneToInitPose () {
 
 void ForgetfulDrone::initMainLoopTimer (void (forgetful_drone::ForgetfulDrone::*callback)(const ros::TimerEvent&)) {
     m_rosTMR_MAINLOOP = m_rosRNH.createTimer(
-        /*rate*/ ros::Rate(p_MAIN_LOOP_FREQUENCY), 
+        /*rate*/ ros::Rate(p_MAIN_FREQ), 
         /*callback*/ callback, /*obj*/ this, 
         /*oneshot*/ false, /*autostart*/ false
     );
@@ -739,50 +737,96 @@ void ForgetfulDrone::initMainLoopTimer (void (forgetful_drone::ForgetfulDrone::*
 
 
 
-void ForgetfulDrone::performFlightMission_NavigationByExpert () {
-    ROSDEBUG_FUNCTION_ENTERED();
+void ForgetfulDrone::runMission_testExp () {
 
     m_TotalRunCnt = 0;
-    m_SimulatorPtr = nullptr;
-    logFlightMissionInfo();
-    initMainLoopTimer(&ForgetfulDrone::ROSCB_NAVIGATION_BY_EXPERT);
+    initMainLoopTimer (&ForgetfulDrone::ROSCB_testExp);
 
-    m_RunNumLaps = p_RUN_NUMLAPS;
+    bool drone_launched {false};
 
-    m_TotalRunCnt = 0;
-    do {
-        reset4NewRun();
-        logRunInfo(
-            m_TotalRunCnt, p_CONFIG_NUMRUNS,
-            p_UNITY_SCENE, p_SCENE_SITE,
-            p_RACETRACK_TYPE, p_GATE_TYPE,
-            p_INTERMEDIATE_TARGET_LOSS_GAP_TYPE,
-            p_INTERMEDIATE_TARGET_LOSS_DIRECTION
-        );
-        do {
-            buildSimulation(
-                p_RACETRACK_TYPE,
-                p_UNITY_SCENE,
-                p_SCENE_SITE,
-                p_GATE_TYPE,
-                p_INTERMEDIATE_TARGET_LOSS_DIRECTION,
-                p_INTERMEDIATE_TARGET_LOSS_GAP_TYPE
-            );
-            ros::Duration(1.0).sleep();
-        } while (!computeGlobalTrajectory());
+
+    for (const int& unity_scene : p_SCENES)
+    for (const int& scene_site : p_SITES)
+    for (const int& track_type : p_TRACK_TYPES)
+    for (const int& track_generation : p_TRACK_GENS)
+    for (const int& track_direction : p_TRACK_DIRECS)
+    for (const int& gate_type : p_GATES) 
+    for (const double& loctraj_maxspeed: p_LOCTRAJ_MAXSPEEDS) {
         
-        startSimulation();
-        rvizGloTraj();
-            if (m_TotalRunCnt == 0) launchDroneOffGround();
-            else flyDroneToInitPose();
-            runNavigation ();
-        stopSimulation();
-        flyDroneAboveTrack();
+
+        m_UnitySceneIdx = static_cast<uint8_t>(unity_scene);
+        m_SceneSiteIdx = static_cast<uint8_t>(scene_site);
+        m_TrackTypeIdx = static_cast<uint8_t>(track_type);
+        m_TrackGenerationIdx = static_cast<uint8_t>(track_generation);
+        m_TrackDirectionIdx = static_cast<uint8_t>(track_direction);
+        m_GateTypeIdx = static_cast<uint8_t>(gate_type);
+        m_LocTrajMaxSpeed = loctraj_maxspeed;
+        
+        m_RunNumLaps = p_RUN_NUMLAPS;
+        
+        reset4NewRun();
+
+        do {
+            buildSimulation ();
+            setTrackWaypoints ();
+            ros::Duration(1.0).sleep ();
+        } while (!compGloTraj ());
+
+        initWaypointIndices ();
+        setExpertMaxHorizon ();
+        startSimulation ();
+        rvizGloTraj ();
+
+        if (!drone_launched) {
+            launchDroneOffGround ();
+            drone_launched = true;
+        }
+        flyDroneToInitPose ();
+
+        bool track_completed = runNavigation();
+        stopSimulation ();
+        flyDroneAboveTrack ();
+
         m_TotalRunCnt++;
-    } while (m_TotalRunCnt < p_CONFIG_NUMRUNS);
-    
+    }
+
     landDroneOnGround();
-    logFlightMissionResults();
+    drone_launched = false;
+    ROSINFO("Flight mission \"" << h_MISSIONS[p_MISSION] << "\" completed");
+
+    
+    //do {
+    //    reset4NewRun();
+    //    logRunInfo(
+    //        m_TotalRunCnt, p_CONFIG_NUMRUNS,
+    //        p_UNITY_SCENE, p_SCENE_SITE,
+    //        p_RACETRACK_TYPE, p_GATE_TYPE,
+    //        p_INTERMEDIATE_TARGET_LOSS_GAP_TYPE,
+    //        p_INTERMEDIATE_TARGET_LOSS_DIRECTION
+    //    );
+    //    do {
+    //        buildSimulation(
+    //            p_RACETRACK_TYPE,
+    //            p_UNITY_SCENE,
+    //            p_SCENE_SITE,
+    //            p_GATE_TYPE,
+    //            p_INTERMEDIATE_TARGET_LOSS_DIRECTION,
+    //            p_INTERMEDIATE_TARGET_LOSS_GAP_TYPE
+    //        );
+    //        ros::Duration(1.0).sleep();
+    //    } while (!compGloTraj());
+    //    
+    //    startSimulation();
+    //    rvizGloTraj();
+    //        if (m_TotalRunCnt == 0) launchDroneOffGround();
+    //        else flyDroneToInitPose();
+    //        runNavigation ();
+    //    stopSimulation();
+    //    flyDroneAboveTrack();
+    //    m_TotalRunCnt++;
+    //} while (m_TotalRunCnt < p_CONFIG_NUMRUNS);
+    //
+    //landDroneOnGround();
 }
 
 
@@ -791,24 +835,23 @@ void ForgetfulDrone::performFlightMission_NavigationByExpert () {
 
 
 
-void ForgetfulDrone::performFlightMission_NavigationByBrain () {
-    logFlightMissionInfo();
-    initMainLoopTimer(std::get<1>(h_BRAIN_TORCHINTERFACES[p_TORCHINTERFACE_IDX]));
+void ForgetfulDrone::runMission_testANN () {
+    initMainLoopTimer (std::get<1>(h_TORCH_INTERFACES[p_TORCH_INTERFACE_IDX]));
 
     m_TotalRunCnt = 0;
-    m_SimulatorPtr = nullptr;
-    int TotalRunSuccessfulCnt = 0;
     bool drone_launched {false};
 
-    for (const int& unity_scene : p_FLIGHTMISSION_UNITYSCENES)
-    for (const int& scene_site : p_FLIGHTMISSION_SCENESITES)
-    for (const int& track_type : p_FLIGHTMISSION_TRACKTYPES)
-    for (const int& track_generation : p_FLIGHTMISSION_TRACKGENERATIONS)
-    for (const int& track_direction : p_FLIGHTMISSION_TRACKDIRECTIONS)
-    for (const int& gate_type : p_FLIGHTMISSION_GATETYPES) 
-    for (const double& loctraj_maxspeed: p_LOCTRAJ_MAXSPEEDS) {
-        
+    for (const int& unity_scene : p_SCENES)
+    for (const int& scene_site : p_SITES)
+    for (const int& track_type : p_TRACK_TYPES)
+    for (const int& track_generation : p_TRACK_GENS)
+    for (const int& track_direction : p_TRACK_DIRECS)
+    for (const int& gate_type : p_GATES) 
+    for (const double& loctraj_maxspeed: p_LOCTRAJ_MAXSPEEDS) 
+    
+    {
 
+        
         m_UnitySceneIdx = static_cast<uint8_t>(unity_scene);
         m_SceneSiteIdx = static_cast<uint8_t>(scene_site);
         m_TrackTypeIdx = static_cast<uint8_t>(track_type);
@@ -849,8 +892,8 @@ void ForgetfulDrone::performFlightMission_NavigationByBrain () {
             flyDroneToInitPose();
 
 
-            if (!p_EXPERIMENT_NEW) {
-                if (p_TORCHINTERFACE_IDX == 0) {
+            if (true /*!p_EXPERIMENT_NEW*/) {
+                if (p_TORCH_INTERFACE_IDX == 0) {
                     std_msgs::String lc_msg; lc_msg.data = p_EXPERIMENT_ID;
                     m_rosPUB_BRAIN_LOADCHECKPOINT.publish(lc_msg);
                     ros::Duration(1.0).sleep();
@@ -859,12 +902,8 @@ void ForgetfulDrone::performFlightMission_NavigationByBrain () {
                     m_rosPUB_BRAIN_ENABLEINFERENCE.publish(ei_msg);
                     ros::Duration(1.0).sleep();
                 }
-                if (p_TORCHINTERFACE_IDX == 1) {
-                    m_TorchScriptModule = torch::jit::load (ScriptModuleFpath());
-                    m_TorchScriptModule.to(torch::Device(m_TorchDevice, 0));
-
-                    m_ANNGRUHiddenState = std::vector<float>(
-                        p_ANN_GRU_NUMLAYERS * h_BATCHSIZE * p_ANN_GRU_HIDDENSIZE, 0.0);
+                if (p_TORCH_INTERFACE_IDX == 1) {
+                    m_ANN.initHiddenState();
                 }
             }
             
@@ -883,16 +922,17 @@ void ForgetfulDrone::performFlightMission_NavigationByBrain () {
     }
     
     landDroneOnGround(); drone_launched = false;
-    ROSINFO("Completed flight mission: " << h_FLIGHTMISSIONS[p_FLIGHTMISSION] << ": " << TotalRunSuccessfulCnt << "/" << m_TotalRunCnt << "runs were successful.");
+    ROSINFO("Completed flight mission: " << h_MISSIONS[p_MISSION] << ": " << TotalRunSuccessfulCnt << "/" << m_TotalRunCnt << "runs were successful.");
 }
 
 
-void ForgetfulDrone::initExperimentDirectory () {
-    createDirectory (ROS_LOG_PREFIX, ExperimentDpath());
-    createDirectory (ROS_LOG_PREFIX, RawDpath());
-    createDirectory (ROS_LOG_PREFIX, ConfigDpath());
 
-    copyFile(ROS_LOG_PREFIX, ParametersFpath(true), ParametersFpath(false));
+bool ForgetfulDrone::initExperimentDir () {
+    return 
+        createDir (ROS_LOG_PREFIX, ExperimentDpath()) &&
+        createDir (ROS_LOG_PREFIX, RawDpath()) &&
+        createDir (ROS_LOG_PREFIX, ConfigDpath()) &&
+        copyFile (ROS_LOG_PREFIX, ParamsFpath(true), ParamsFpath(false));
 }
 
 
@@ -910,8 +950,8 @@ void ForgetfulDrone::initRunDirectory () {
     m_RunDataFpath = m_RunDpath + '/' + h_DATA_FNAME;
 
 
-    createDirectory (ROS_LOG_PREFIX, m_RunDpath);
-    createDirectory (ROS_LOG_PREFIX, m_RunRGBDpath);
+    createDir (ROS_LOG_PREFIX, m_RunDpath);
+    createDir (ROS_LOG_PREFIX, m_RunRGBDpath);
 
     std::ofstream ofs;
     const char delimiter = ',';
@@ -958,7 +998,7 @@ void ForgetfulDrone::createRunConfigDirectory () {
         //m_RunConfigDpath + "/" + h_RUN_LABELEDIMAGES_DNAME,
     };
     for (const std::string& dir_path : dpaths) {
-        createDirectory (ROS_LOG_PREFIX, dir_path);
+        createDir (ROS_LOG_PREFIX, dir_path);
     }
 }
 
@@ -983,7 +1023,7 @@ void ForgetfulDrone::initRunDaggerDirectory () {
         m_RunDaggerLabeledFramesDpath,
     };
     for (const std::string& dir_path : dpaths) {
-        createDirectory (ROS_LOG_PREFIX, dir_path);
+        createDir (ROS_LOG_PREFIX, dir_path);
     }
 
 
@@ -1040,7 +1080,7 @@ void ForgetfulDrone::createRunDirectory (
         m_RunConfigDpath + "/labeled_images"
     };
     for (const std::string& dir_path : dir_paths) {
-        createDirectory(ROS_LOG_PREFIX, dir_path);
+        createDir(ROS_LOG_PREFIX, dir_path);
     }    
 }
 
@@ -1050,12 +1090,12 @@ void ForgetfulDrone::logRunInfo (const bool& num_runs_known) {
     std::stringstream ss;
     if (num_runs_known) {
         const size_t num_run_configurations 
-            = p_FLIGHTMISSION_UNITYSCENES.size()
-            * p_FLIGHTMISSION_SCENESITES.size()
-            * p_FLIGHTMISSION_TRACKTYPES.size()
-            * p_FLIGHTMISSION_TRACKGENERATIONS.size()
-            * p_FLIGHTMISSION_TRACKDIRECTIONS.size()
-            * p_FLIGHTMISSION_GATETYPES.size();
+            = p_SCENES.size()
+            * p_SITES.size()
+            * p_TRACK_TYPES.size()
+            * p_TRACK_GENS.size()
+            * p_TRACK_DIRECS.size()
+            * p_GATES.size();
         ss << "Run " << m_TotalRunCnt + 1 << "/" << num_run_configurations << ": ";
     } else {
         ss << "Run " << m_TotalRunCnt + 1 << "/?: ";
@@ -1103,26 +1143,30 @@ void ForgetfulDrone::logRunInfo (
     ROSINFO(ss.str());
 }
 
-void ForgetfulDrone::logFlightMissionInfo () const {
-    ROSINFO("Start flight mission: " << h_FLIGHTMISSIONS[p_FLIGHTMISSION]);
+void ForgetfulDrone::logMissionInfo () const {
+    std::cout << std::endl << std::endl;
+    ROSINFO("Start flight mission: " << h_MISSIONS[p_MISSION]);
+    std::cout << std::endl << std::endl;
 }
 
-void ForgetfulDrone::logFlightMissionResults () const {
-    ROSINFO("Finished flight mission: " << h_FLIGHTMISSIONS[p_FLIGHTMISSION]);
+void ForgetfulDrone::logMissionResult () const {
+    std::cout << std::endl << std::endl;
+    ROSINFO("Completed flight mission: " << h_MISSIONS[p_MISSION]);
+    std::cout << std::endl << std::endl;
 }
 
 
 void ForgetfulDrone::reset4NewRun () {
-    m_ExpertInterventionsCnt = 0;
-    m_BrainDecisionsCnt = 0;
-    m_RunLapCnt = -1;
-    m_MainLoopIterCnt = 0;
-    m_LocTrajSubseqInfeasibleCnt = 0;
+    m_ExpDecCnt = 0;
+    m_ANNDecCnt = 0;
+    m_LapCnt = -1;
+    m_MainIterCnt = 0;
+    m_LocTrajSuccInfeasCnt = 0;
     m_LocTrajFeasibleCnt = 0;
     m_LocTraj = {Vec3(), Vec3(), Vec3(), Vec3()};
     m_LocTrajStartTime = {};
     m_RGBCnt = 0;
-    m_DataSavingENABLED = false;
+    m_SavEnabled = false;
 }
 
 void ForgetfulDrone::buildSimulation (
@@ -1201,15 +1245,10 @@ void ForgetfulDrone::buildSimulation () {
                 srv.request.gate_type = m_GateTypeIdx;
 
 
-    if (m_SimulatorPtr) {
-        while (!m_SimulatorPtr->init(srv)) {
-            ros::Duration(1.0).sleep();
-        }
-    } else {
-        m_rosSVC_SIMULATOR_BUILD = m_rosRNH.serviceClient<fdBS>("simulator/build");
-        while (!callROSService<fdBS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_BUILD, srv)) {
-            ros::Duration(1.0).sleep();
-        }
+
+    m_rosSVC_SIMULATOR_BUILD = m_rosRNH.serviceClient<fdBS>("simulator/build");
+    while (!callROSService<fdBS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_BUILD, srv)) {
+        ros::Duration(1.0).sleep();
     }
 
     m_GateInitPoses = srv.response.gate_init_poses;
@@ -1323,15 +1362,10 @@ void ForgetfulDrone::startSimulation (ForgetfulSimulator& fs) {
 void ForgetfulDrone::startSimulation () {
     fdStartS srv;
 
-    if (m_SimulatorPtr) {
-        while (!m_SimulatorPtr->start(srv)) {
-            ros::Duration(1.0).sleep();
-        }
-    } else {
-        m_rosSVC_SIMULATOR_START = m_rosRNH.serviceClient<fdStartS>("simulator/start", 1);
-        while (!callROSService<fdStartS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_START, srv)) {
-            ros::Duration(1.0).sleep();
-        }
+
+    m_rosSVC_SIMULATOR_START = m_rosRNH.serviceClient<fdStartS>("simulator/start", 1);
+    while (!callROSService<fdStartS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_START, srv)) {
+        ros::Duration(1.0).sleep();
     }
 }
 
@@ -1349,16 +1383,11 @@ void ForgetfulDrone::stopSimulation (ForgetfulSimulator& fs) {
 void ForgetfulDrone::stopSimulation () {
     fdStopS srv;
     
-    if (m_SimulatorPtr) {
-        while (!m_SimulatorPtr->stop(srv)) {
-            ros::Duration(1.0).sleep();
-        }
-    } else {
-        m_rosSVC_SIMULATOR_STOP = m_rosRNH.serviceClient<fdStopS>("simulator/stop", 1);
-        while (!callROSService<fdStopS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_STOP, srv)) {
-            ros::Duration(1.0).sleep();
-        }
+    m_rosSVC_SIMULATOR_STOP = m_rosRNH.serviceClient<fdStopS>("simulator/stop", 1);
+    while (!callROSService<fdStopS>(ROS_LOG_PREFIX, m_rosSVC_SIMULATOR_STOP, srv)) {
+        ros::Duration(1.0).sleep();
     }
+
 }
 
 
@@ -1377,22 +1406,22 @@ bool ForgetfulDrone::runNavigation () {
         rate.sleep();
         ros::Duration time_passed = ros::Time::now() - m_WpArrLastTime;
         int time_left = p_WPARR_MAXDUR - static_cast<int>(time_passed.toSec());
-        ROSINFO(" - Time left to pass waypoint: " << time_left << "/" << p_WPARR_MAXDUR << " s");
+        ROSINFO("   - " << time_left << "/" << p_WPARR_MAXDUR << " s left to pass target gate");
         
         if (time_left < 0) {
             ROSERROR("No waypoint passed in " << p_WPARR_MAXDUR << " s -> abort run");
             switchNavigator (false);
             break;
         }
-    } while (m_RunLapCnt < m_RunNumLaps && m_NavigatorENABLED);
+    } while (m_LapCnt < m_RunNumLaps && m_NavEnabled);
 
-    m_DataSavingENABLED = false;
+    m_SavEnabled = false;
     
     m_rosTMR_MAINLOOP.stop();
     t1.detach();
     t1.~thread();
 
-    if (m_NavigatorENABLED) {
+    if (m_NavEnabled) {
         ROSINFO("Run " << m_TotalRunCnt + 1 << " succeeded");
         switchNavigator (false);
         return true;
@@ -1404,22 +1433,20 @@ bool ForgetfulDrone::runNavigation () {
 
 
 
-void ForgetfulDrone::performFlightMission_DAGGER () {
-    logFlightMissionInfo();
+void ForgetfulDrone::runMission_DAGGER () {
+    initMainLoopTimer (&ForgetfulDrone::ROSCB_DAGGER_PYTHON);
+    
     m_TotalRunCnt = 0;
-    m_SimulatorPtr = nullptr;
-    initMainLoopTimer(&ForgetfulDrone::ROSCB_DAGGER_PYTHON);
-
-
     bool drone_launched {false};
 
-    for (const int& unity_scene : p_FLIGHTMISSION_UNITYSCENES)
-    for (const int& scene_site : p_FLIGHTMISSION_SCENESITES)
-    for (const int& track_type : p_FLIGHTMISSION_TRACKTYPES)
-    for (const int& track_generation : p_FLIGHTMISSION_TRACKGENERATIONS)
-    for (const int& track_direction : p_FLIGHTMISSION_TRACKDIRECTIONS)
-    for (const int& gate_type : p_FLIGHTMISSION_GATETYPES) 
+    for (const int& unity_scene : p_SCENES)
+    for (const int& scene_site : p_SITES)
+    for (const int& track_type : p_TRACK_TYPES)
+    for (const int& track_generation : p_TRACK_GENS)
+    for (const int& track_direction : p_TRACK_DIRECS)
+    for (const int& gate_type : p_GATES) 
     for (const double& loctraj_maxspeed: p_LOCTRAJ_MAXSPEEDS)
+
     for (const double& dagger_margin: p_DAGGERMARGINS) {
         
 
@@ -1464,7 +1491,7 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
             );
             reset4NewRun();
 
-            if (isDirectory(RunDPath())) {
+            if (isDir(RunDPath())) {
                 std::string fpath = OutputDpath() + "/" + h_RECORDINGS_FNAME;
                 std::ifstream ifs (fpath);
                 nlohmann::json jf = nlohmann::json::parse(ifs);
@@ -1491,7 +1518,7 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
                 buildSimulation ();
                 setTrackWaypoints ();
                 ros::Duration(1.0).sleep ();
-            } while (!computeGlobalTrajectory ());
+            } while (!compGloTraj ());
 
             initWaypointIndices ();
             setExpertMaxHorizon ();
@@ -1505,7 +1532,7 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
             flyDroneToInitPose ();
 
             if (m_TotalRunCnt > 0) {
-                if (p_TORCHINTERFACE_IDX == 0) {
+                if (p_TORCH_INTERFACE_IDX == 0) {
                     
                     std_msgs::String lc_msg; lc_msg.data = p_EXPERIMENT_ID;
                     m_rosPUB_BRAIN_LOADCHECKPOINT.publish(lc_msg);
@@ -1516,12 +1543,8 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
                     m_rosPUB_BRAIN_ENABLEINFERENCE.publish(ei_msg);
                     ros::Duration(1.0).sleep();
                 }
-                if (p_TORCHINTERFACE_IDX == 1) {
-                    m_TorchScriptModule = torch::jit::load (ScriptModuleFpath());
-                    m_TorchScriptModule.to(torch::Device(m_TorchDevice, 0));
-
-                    m_ANNGRUHiddenState = std::vector<float>(
-                        p_ANN_GRU_NUMLAYERS * h_BATCHSIZE * p_ANN_GRU_HIDDENSIZE, 0.0);
+                if (p_TORCH_INTERFACE_IDX == 1) {
+                    m_ANN.initHiddenState();
                 }
             }
 
@@ -1567,14 +1590,12 @@ void ForgetfulDrone::performFlightMission_DAGGER () {
 
     landDroneOnGround();
     drone_launched = false;
-    ROSINFO("Completed flight mission: " << h_FLIGHTMISSIONS[p_FLIGHTMISSION]);
+    ROSINFO("Completed flight mission: " << h_MISSIONS[p_MISSION]);
 }
 
 
-void ForgetfulDrone::performFlightMission_TrainingDataGeneration () {
-    logFlightMissionInfo();
+void ForgetfulDrone::runMission_genTrainData () {
     m_TotalRunCnt = 0;
-    m_SimulatorPtr = nullptr;
     m_RunNumLaps = p_RUN_NUMLAPS;
     initMainLoopTimer(&ForgetfulDrone::ROSCB_TRAINING_DATA_GENERATION);
 
@@ -1654,7 +1675,7 @@ void ForgetfulDrone::performFlightMission_TrainingDataGeneration () {
                 gap_str
             );
             ros::Duration(1.0).sleep();
-        } while (!computeGlobalTrajectory());
+        } while (!compGloTraj());
 
         startSimulation();
         rvizGloTraj();
@@ -1672,7 +1693,6 @@ void ForgetfulDrone::performFlightMission_TrainingDataGeneration () {
     }
     
     landDroneOnGround();
-    logFlightMissionResults();
 }
 
 
@@ -1686,61 +1706,78 @@ void ForgetfulDrone::performFlightMission_TrainingDataGeneration () {
 
 
 
-void ForgetfulDrone::ROSCB_NAVIGATION_BY_EXPERT (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY);
+void ForgetfulDrone::ROSCB_testExp (const ros::TimerEvent& te) {
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ);
     
-    runWaypointUpdater();
-    runExpert();
-    m_NavigatorInput = m_ExpertOutput;
+    updTrackStatus();
+    fetchRGBData();
+    runExp();
+    m_NavInput = m_ExpOutput;
+    
     bool _;
-    runNavigator(_, &ForgetfulDrone::doNothing);
+    runNav (_, &ForgetfulDrone::doNothing);
+
+    if (p_RVIZ_LABELEDRGB_ENABLED) rvizLabeledCamFrame();
 }
 
-void ForgetfulDrone::ROSCB_NAVIGATIONBYANN_CPP (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY);
+void ForgetfulDrone::ROSCB_testANN_cpp (const ros::TimerEvent& te) {
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ);
     
-    runWaypointUpdater();
+    updTrackStatus();
 
-    setRGBData();
-    setIMUData();
+    fetchRGBData();
+    fetchIMUData();
     
-    runBrain();
-    m_NavigatorInput = m_BrainOutput;
+    //runBrain();
+    std::vector<double> opt_input = {
+        m_RGBTimeIncrement,
+        m_IMUTimeIncrement,
+        m_IMUData[0],
+        m_IMUData[1],
+        m_IMUData[2],
+        m_IMUData[3],
+        m_IMUData[4],
+        m_IMUData[5],
+        m_LocTrajMaxSpeed,
+    };
+
+    m_BrainOutput = m_ANN.inferNavigationDecision(m_RGBData, opt_input);
+    m_NavInput = m_BrainOutput;
 
     bool _;
-    runNavigator(_, &ForgetfulDrone::doNothing);
+    runNav(_, &ForgetfulDrone::doNothing);
 
     if (p_RVIZ_LABELEDRGB_ENABLED) rvizLabeledCamFrame();
 }
 
 void ForgetfulDrone::ROSCB_NAVIGATION_BY_ANN_PYTHON (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY);
-    runWaypointUpdater();
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ);
+    updTrackStatus();
     
-    setRGBData();
-    setIMUData();
+    fetchRGBData();
+    fetchIMUData();
     
     triggerBrain();
-    m_NavigatorInput = m_BrainOutput;
+    m_NavInput = m_BrainOutput;
 
     bool _;
-    runNavigator(_, &ForgetfulDrone::doNothing);
+    runNav(_, &ForgetfulDrone::doNothing);
     
     if (p_RVIZ_LABELEDRGB_ENABLED) rvizLabeledCamFrame();
 }
 
 void ForgetfulDrone::ROSCB_TRAINING_DATA_GENERATION (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY);
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ);
     
-    runWaypointUpdater();
-    runExpert();
-    m_NavigatorInput = m_ExpertOutput;
+    updTrackStatus();
+    runExp();
+    m_NavInput = m_ExpOutput;
     runDataSaver(true);
     bool _;
-    runNavigator(_, &ForgetfulDrone::doNothing);
+    runNav(_, &ForgetfulDrone::doNothing);
 }
 
-void ForgetfulDrone::setRGBData () {
+void ForgetfulDrone::fetchRGBData () {
     m_RGBMtx.lock ();
         m_RGBData = m_RGBPtr->image.clone();
         m_RGBTimeIncrement = m_RGBPtr->header.stamp.toSec() - m_RGBLastStampTime;
@@ -1748,7 +1785,7 @@ void ForgetfulDrone::setRGBData () {
     m_RGBMtx.unlock ();
 }
 
-void ForgetfulDrone::setIMUData () {
+void ForgetfulDrone::fetchIMUData () {
     m_IMUMtx.lock();
         m_IMUData = {
             m_IMUPtr->linear_acceleration.x,
@@ -1780,20 +1817,20 @@ void ForgetfulDrone::setCtrlCmdData () {
 
 
 void ForgetfulDrone::ROSCB_DAGGER_PYTHON (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY); // or m_SimulatorPtr->spinOnce (te);
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ); 
 
-    runWaypointUpdater();
+    updTrackStatus();
 
-    setRGBData();
-    setIMUData();
+    fetchRGBData();
+    fetchIMUData();
     setCtrlCmdData();
 
     triggerBrain();
-    m_NavigatorInput = m_BrainOutput;
+    m_NavInput = m_BrainOutput;
     
-    runExpert();
+    runExp();
     bool exp_intervened {false};
-    runNavigator(exp_intervened, &ForgetfulDrone::interveneBrainDecisionWithExpert);
+    runNav(exp_intervened, &ForgetfulDrone::doExpIntervention);
 
     runDataSaver(exp_intervened);
     
@@ -1802,19 +1839,19 @@ void ForgetfulDrone::ROSCB_DAGGER_PYTHON (const ros::TimerEvent& te) {
 
 
 void ForgetfulDrone::ROSCB_DAGGER_FIRST_RUN (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQUENCY); // or m_SimulatorPtr->spinOnce (te);
+    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_FREQ); 
 
-    runWaypointUpdater();
+    updTrackStatus();
 
-    setRGBData();
-    setIMUData();
+    fetchRGBData();
+    fetchIMUData();
     setCtrlCmdData();
 
-    m_NavigatorInput = {0.0, 0.0, 0.0};
+    m_NavInput = {0.0, 0.0, 0.0};
     
-    runExpert();
+    runExp();
     bool exp_intervened {false};
-    runNavigator(exp_intervened, &ForgetfulDrone::interveneBrainDecisionWithExpert_firstRun);
+    runNav(exp_intervened, &ForgetfulDrone::interveneBrainDecisionWithExpert_firstRun);
 
     runDataSaver(exp_intervened);
     
@@ -1855,17 +1892,20 @@ void ForgetfulDrone::switchDynamicGates( const bool& Enabled )
 
 
 
-bool ForgetfulDrone::computeGlobalTrajectory () {
-    // Compute global trajectory
-    ROSINFO("Compute Global Trajectory:\n"
-        << " - #Waypoints: " << static_cast<int>(m_TrackWaypoints.size()) << "\n"
-        << " - Poly.Order: " << p_GLOBAL_TRAJECTORY_POLYNOMIAL_ORDER << "\n"
-        << " - Cont.Order: " << p_GLOBAL_TRAJECTORY_CONTINUITY_ORDER << "\n"
-        << " - Max.Speed: " << p_GLOBAL_TRAJECTORY_MAX_SPEED << " m/s\n"
-        << " - Max.Thrust: " << p_GLOBAL_TRAJECTORY_MAX_THRUST << " m/s^2\n"
-        << " - Max.RP-Rate: " << p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE << " 1/s\n"
-        << " - Sampl.Time: " << 1 / p_MAIN_LOOP_FREQUENCY << " s"
+bool ForgetfulDrone::compGloTraj () {
+
+    std::cout << std::endl;
+    ROSINFO("Compute Global Trajectory" << std::endl
+        << "\t\t- # WAYPOINTS:        " << static_cast<int>(m_TrackWaypoints.size()) << std::endl
+        << "\t\t- POLYNOMIAL ORDER:   " << p_GLOBAL_TRAJECTORY_POLYNOMIAL_ORDER << std::endl
+        << "\t\t- CONTINUITY ORDER:   " << p_GLOBAL_TRAJECTORY_CONTINUITY_ORDER << std::endl
+        << "\t\t- MAX. SPEED:         " << p_GLOBAL_TRAJECTORY_MAX_SPEED << " m/s" << std::endl
+        << "\t\t- MAX. THRUST:        " << p_GLOBAL_TRAJECTORY_MAX_THRUST << " m/s^2" << std::endl
+        << "\t\t- MAX. RP-RATE:       " << p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE << " Hz" << std::endl
+        << "\t\t- SAMPLING TIME:      " << 1 / p_MAIN_FREQ << " s"
     );
+    std::cout << std::endl;
+
     std::shared_ptr<ForgetfulGlobalTrajectory<long double>> gt_ptr
         = std::make_shared<ForgetfulGlobalTrajectory<long double>>(
             m_TrackWaypoints, 
@@ -1874,7 +1914,7 @@ bool ForgetfulDrone::computeGlobalTrajectory () {
             p_GLOBAL_TRAJECTORY_MAX_SPEED, 
             p_GLOBAL_TRAJECTORY_MAX_THRUST, 
             p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE, 
-            1 / p_MAIN_LOOP_FREQUENCY,
+            1 / p_MAIN_FREQ,
             3, 
             p_GLOBAL_TRAJECTORY_NON_DIMENSIONAL_TEMPORAL_RANGE, 
             p_GLOBAL_TRAJECTORY_NON_DIMENSIONAL_SPATIAL_RANGE, 
@@ -1905,16 +1945,16 @@ bool ForgetfulDrone::computeGlobalTrajectory () {
         m_Expert_MinSpeed = std::min(m_Expert_MinSpeed, speed);
     }
 
-
-    ROSINFO("Global Trajectory:"
-        << " - #States " << static_cast<int>(m_GloTraj.size()) << "\n"
-        << " - Duration " << static_cast<int>(m_GloTraj.size()) / p_MAIN_LOOP_FREQUENCY << " s\n"
-        << " - Speed Range [" << static_cast<double>(gt_ptr->m_Traj_MinSpeed) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxSpeed) << "] m/s\n"
-        << " - Thrust Range [" << static_cast<double>(gt_ptr->m_Traj_MinThrust) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxThrust) << "] m/s^2\n"
-        << " - RP-Rate Range [" << static_cast<double>(gt_ptr->m_Traj_MinRollPitchRate) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxRollPitchRate) << "] 1/s"
+    std::cout << std::endl;
+    ROSINFO("Computed Global Trajectory" << std::endl
+        << "\t\t- # STATES:      " << static_cast<int>(m_GloTraj.size()) << std::endl
+        << "\t\t- DURATION:      " << static_cast<int>(m_GloTraj.size()) / p_MAIN_FREQ << " s" << std::endl
+        << "\t\t- SPEED RANGE:   [" << static_cast<double>(gt_ptr->m_Traj_MinSpeed) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxSpeed) << "] m/s" << std::endl
+        << "\t\t- THRUST RANGE:  [" << static_cast<double>(gt_ptr->m_Traj_MinThrust) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxThrust) << "] m/s^2" << std::endl
+        << "\t\t- RP-RATE RANGE: [" << static_cast<double>(gt_ptr->m_Traj_MinRollPitchRate) << ", " << static_cast<double>(gt_ptr->m_Traj_MaxRollPitchRate) << "] 1/s"
     );
+    std::cout << std::endl;
 
-    // return whether computation was successful
     return true;
 }
 
@@ -1945,7 +1985,7 @@ void ForgetfulDrone::rvizGloTraj()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void ForgetfulDrone::runWaypointUpdater () {
+void ForgetfulDrone::updTrackStatus () {
     // Distance from reference state to current and last gate waypoint.
     m_Dist2CurrWaypoint = (m_RefStatePos_WRF - m_TrackWaypoints[m_CurrWaypointIdx]).norm();
     m_Dist2LastWaypoint = (m_RefStatePos_WRF - m_TrackWaypoints[m_LastWaypointIdx]).norm();
@@ -1967,8 +2007,8 @@ void ForgetfulDrone::runWaypointUpdater_updateWaypointIndices()
     ROSINFO("Pass gate " << m_LastWaypointIdx + 1 << "/" << m_TrackWaypoints.size());
 
     if (m_CurrWaypointIdx == 0) {
-        m_RunLapCnt++;
-        ROSINFO("Start lap " << m_RunLapCnt + 1 << "/" << m_RunNumLaps);
+        m_LapCnt++;
+        ROSINFO("Start lap " << m_LapCnt + 1 << "/" << m_RunNumLaps);
     }
 }
 
@@ -1991,37 +2031,32 @@ void ForgetfulDrone::runWaypointUpdater_rvizCurrWaypoint () {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void ForgetfulDrone::doNothing (Eigen::Vector3d& _0, double& _1, bool& _2) {
-    return;
-}
+void ForgetfulDrone::doNothing (Eigen::Vector3d& _0, double& _1, bool& _2) {}
 
-void ForgetfulDrone::interveneBrainDecisionWithExpert (Eigen::Vector3d& target_pos_ARF, double& speed_to_target, bool& exp_intervened) {
-
+void ForgetfulDrone::doExpIntervention (Eigen::Vector3d& wayp_ARF, double& speed, bool& exp_intervened) {
     // Set position of reference state in world RF
-    geometry_msgs::Pose target_pose_ARF;
-        target_pose_ARF.position = GMPoint__from__EV3d (target_pos_ARF);
-        target_pose_ARF.orientation.w = 1.0;
-        target_pose_ARF.orientation.x = 0.0;
-        target_pose_ARF.orientation.y = 0.0;
-        target_pose_ARF.orientation.z = 0.0;
+    geometry_msgs::Pose pose_ARF;
+        pose_ARF.position = GMPoint__from__EV3d (wayp_ARF);
+        pose_ARF.orientation.w = 1.0;
+        pose_ARF.orientation.x = 0.0;
+        pose_ARF.orientation.y = 0.0;
+        pose_ARF.orientation.z = 0.0;
     kindr::minimal::QuatTransformation ARF_TRF; 
-    tf::poseMsgToKindr (target_pose_ARF, &ARF_TRF);
-    Eigen::Vector3d target_pos_WRF = (p_T_WRF_ARF * ARF_TRF).getPosition();
+    tf::poseMsgToKindr (pose_ARF, &ARF_TRF);
+    Eigen::Vector3d wayp_WRF = (p_T_WRF_ARF * ARF_TRF).getPosition();
     
     double dist_2_glotraj; size_t _;
-    findDistance2GlobalTrajectory(target_pos_WRF, dist_2_glotraj, _);
+    compDist2GloTraj(wayp_WRF, dist_2_glotraj, _);
     
     if (dist_2_glotraj > m_DaggerMargin * (m_LocTrajMaxSpeed / 5.0 + 1.0/5.0)) {
-        m_NavigatorInput = m_ExpertOutput;
-        processNavigatorInput(target_pos_ARF, speed_to_target);
-        if (m_RunLapCnt >= 0) {
-            m_ExpertInterventionsCnt++;
+        m_NavInput = m_ExpOutput;
+        processNavigatorInput(wayp_ARF, speed);
+        if (m_LapCnt >= 0) {
+            m_ExpDecCnt++;
             exp_intervened = true;
         }
     } else {
-        if (m_RunLapCnt >= 0) {
-            m_BrainDecisionsCnt++;
-        }
+        if (m_LapCnt >= 0) m_ANNDecCnt++;
     }
 }
 
@@ -2040,53 +2075,57 @@ void ForgetfulDrone::interveneBrainDecisionWithExpert_firstRun (Eigen::Vector3d&
     Eigen::Vector3d target_pos_WRF = (p_T_WRF_ARF * ARF_TRF).getPosition();
     
     double dist_2_glotraj; size_t _;
-    findDistance2GlobalTrajectory(target_pos_WRF, dist_2_glotraj, _);
+    compDist2GloTraj(target_pos_WRF, dist_2_glotraj, _);
     
     if (dist_2_glotraj > m_DaggerMargin * (m_LocTrajMaxSpeed / 5.0 + 1.0/5.0)) {
-        m_NavigatorInput = m_ExpertOutput + Eigen::Vector3d::Ones() * p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP * std::sin(0.5*ros::WallTime::now().toSec());
+        m_NavInput = m_ExpOutput + Eigen::Vector3d::Ones() * p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP * std::sin(0.5*ros::WallTime::now().toSec());
         processNavigatorInput(target_pos_ARF, speed_to_target);
-        m_ExpertInterventionsCnt++;
+        m_ExpDecCnt++;
         exp_intervened = true;
     } else {
-        m_BrainDecisionsCnt++;
+        m_ANNDecCnt++;
     }
 }
 
-void ForgetfulDrone::runNavigator (bool& intervened, void (forgetful_drone::ForgetfulDrone::*intervention_fct)(Eigen::Vector3d& _0, double& _1, bool& _2)) {
-    if (!m_NavigatorENABLED) {
-        ROSINFO("Wait for enabled Navigator."); ros::Duration(1.0).sleep();
+void ForgetfulDrone::runNav (
+    bool& intervened, 
+    void (forgetful_drone::ForgetfulDrone::*intervention_fct)(Eigen::Vector3d& _0, double& _1, bool& _2)
+) {
+    if (!m_NavEnabled) {
+        ROSINFO("Navigator disabled, waiting ..."); 
+        ros::Duration(1.0).sleep();
         return;
     }
 
-    double div_from_refstate = (m_RefState_ARF.position - m_T_ARF_DRF.getPosition()).norm();
-    if (p_NAV_REFSTATE_MAXDIVERGENCE < div_from_refstate) {
-        ROSERROR("Drone position estimate diverged " << div_from_refstate << ">" << p_NAV_REFSTATE_MAXDIVERGENCE << "(max) m from autopilot reference position.");
-        switchNavigator(false);
+    double div = (m_RefState_ARF.position - m_T_ARF_DRF.getPosition()).norm();
+    if (p_NAV_MAX_DIV < div) {
+        ROSERROR ("Drone diverged " << div << ">" << p_NAV_MAX_DIV << "(max) m from reference state");
+        switchNavigator (false);
         return;
     }
 
-    if (m_MainLoopIterCnt % p_NAV_REPLANNING_MAINLOOPITERSCNT == 0) {
+    if (m_MainIterCnt % p_NAV_REPLAN_ITER_CNT == 0) {
 
         // Compute goal position and speed to reach goal position from navigator input
-        Eigen::Vector3d target_pos_ARF; double speed_to_target;
-        processNavigatorInput(target_pos_ARF, speed_to_target);
+        Eigen::Vector3d wayp_ARF; 
+        double speed;
+        processNavigatorInput(wayp_ARF, speed);
 
 
-        (this->*intervention_fct)(target_pos_ARF, speed_to_target, intervened);
+        (this->*intervention_fct)(wayp_ARF, speed, intervened);
 
 
-        // Compute local trajectory
-        if (computeLocalTrajectory (target_pos_ARF, speed_to_target)) {
-            m_LocTrajSubseqInfeasibleCnt = 0;
+        if (compLocTraj (wayp_ARF, speed)) {
+            m_LocTrajSuccInfeasCnt = 0;
             m_LocTrajStartTime = ros::Time::now();
             rvizLocTraj();
         } 
         else {
-            if (m_LocTrajSubseqInfeasibleCnt < p_NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT) {
-                m_LocTrajSubseqInfeasibleCnt ++;
+            if (m_LocTrajSuccInfeasCnt < p_NAV_LOC_TRAJ_FEAS_MAX_SUCC_FAILS_CNT) {
+                m_LocTrajSuccInfeasCnt ++;
             } 
             else {
-                ROSERROR(p_NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT
+                ROSERROR(p_NAV_LOC_TRAJ_FEAS_MAX_SUCC_FAILS_CNT
                     << "(max) subsequent local trajectories been infeasible.");
                 switchNavigator(false);
                 return;
@@ -2095,9 +2134,10 @@ void ForgetfulDrone::runNavigator (bool& intervened, void (forgetful_drone::Forg
     }
     
 
-    publishReferenceState2Autopilot();
-    rvizReferenceState();
-    m_MainLoopIterCnt++;
+    pubRefState();
+    rvizRefState();
+    
+    m_MainIterCnt++;
 }
 
 
@@ -2111,7 +2151,7 @@ void ForgetfulDrone::runNavigator (bool& intervened, void (forgetful_drone::Forg
 
 
 
-void ForgetfulDrone::rvizReferenceState () {
+void ForgetfulDrone::rvizRefState () {
     rvizState(
         m_RefStatePos_WRF, m_RefState_ARF.acceleration, 
         VisPosTypes::REFERENCE, m_rosPUB_RVIZ_NAVIGATION_POINTS);
@@ -2119,7 +2159,7 @@ void ForgetfulDrone::rvizReferenceState () {
 
 void ForgetfulDrone::switchNavigator (const bool& enabled) {
 
-    std::string last_state = m_NavigatorENABLED? "ENABLED" : "DISABLED";
+    std::string last_state = m_NavEnabled? "ENABLED" : "DISABLED";
 
     auto pubCurrPoseAsAutopilotRefState = [this] () {
         // To use autopilot in REFERENCE_CONTROL state,
@@ -2133,13 +2173,13 @@ void ForgetfulDrone::switchNavigator (const bool& enabled) {
 
     auto switchENABLED = [last_state, pubCurrPoseAsAutopilotRefState, this] () {
         pubCurrPoseAsAutopilotRefState();
-        m_NavigatorENABLED = true;
+        m_NavEnabled = true;
         ROSINFO("Switch navigator from " << last_state << " to " << "ENABLED");
         ros::Duration(1.0).sleep();
     };
 
     auto switchDISABLED = [last_state, pubCurrPoseAsAutopilotRefState, this] () {
-        m_NavigatorENABLED = false;
+        m_NavEnabled = false;
         pubCurrPoseAsAutopilotRefState();
         ROSINFO("Switch navigator from " << last_state << " to " << "DISABLED");
         ros::Duration(1.0).sleep();
@@ -2149,10 +2189,10 @@ void ForgetfulDrone::switchNavigator (const bool& enabled) {
 }
 
 
-void ForgetfulDrone::publishReferenceState2Autopilot()
+void ForgetfulDrone::pubRefState()
 {
     // Get time of current state of current local trajectory
-    const double t = (ros::Time::now() - m_LocTrajStartTime).toSec() + 1 / p_MAIN_LOOP_FREQUENCY;
+    const double t = (ros::Time::now() - m_LocTrajStartTime).toSec() + 1 / p_MAIN_FREQ;
     
     // Set reference state from local trajectory
     m_RefState_ARF = quadrotor_common::TrajectoryPoint();
@@ -2223,7 +2263,7 @@ void ForgetfulDrone::rvizLocTraj()
 }
 
 
-bool ForgetfulDrone::computeLocalTrajectory (
+bool ForgetfulDrone::compLocTraj (
     /*Target position in reference frame of autopilot*/ const Eigen::Vector3d& target_pos_ARF, 
     /*Desired speed on way to target position*/ const double& speed_to_target
 ) {
@@ -2313,10 +2353,10 @@ void ForgetfulDrone::processNavigatorInput (
     Eigen::Vector3d& OUT_GoalPos_ARF, 
     double& OUT_Speed2Goal 
 ) {
-    //ROSDEBUG("Navigator Input: [" << m_NavigatorInput.transpose() << "]");
-    const double& GoalX_IRF = m_NavigatorInput.x();
-    const double& GoalY_IRF = m_NavigatorInput.y();
-    const double& NormSpeed2Goal = m_NavigatorInput.z();
+    //ROSDEBUG("Navigator Input: [" << m_NavInput.transpose() << "]");
+    const double& GoalX_IRF = m_NavInput.x();
+    const double& GoalY_IRF = m_NavInput.y();
+    const double& NormSpeed2Goal = m_NavInput.z();
 
     
 
@@ -2391,7 +2431,7 @@ Eigen::Vector3d ForgetfulDrone::XYZ_ARF_From_XYZ_DRF (const Eigen::Vector3d& pos
 
 
 
-void ForgetfulDrone::runExpert () {
+void ForgetfulDrone::runExp () {
     // Horizon: Distance 2 the closer one of current/last gate but within specified range
     double horizon = std::min(m_Dist2CurrWaypoint, m_Dist2LastWaypoint);
     horizon = capMinMax<double>(horizon, p_EXPERT_MIN_HORIZON, m_Expert_MaxHorizon);
@@ -2406,7 +2446,7 @@ void ForgetfulDrone::runExpert () {
     double norm_speed_2_target = m_GloTraj[m_GT_SpeedState_i].velocity.norm() / m_Expert_MaxSpeed;
 
 
-    m_ExpertOutput = {
+    m_ExpOutput = {
         target_pos_IRF.x(), target_pos_IRF.y(), norm_speed_2_target
     };
 }
@@ -2422,94 +2462,94 @@ void ForgetfulDrone::triggerBrain () {
 
 
 
-void ForgetfulDrone::runBrain () {
-    if (isEmpty(ROS_LOG_PREFIX, m_RGBData)) return;
-    
-    //ROSDEBUG("Resize camera frame.");
-    cv::Mat bgr_resized;
-    cv::resize(
-        m_RGBData, 
-        bgr_resized, 
-        cv::Size(p_DATA_PROCESSED_RGB_WIDTH, p_DATA_PROCESSED_RGB_HEIGHT)
-    );
-
-    //ROSDEBUG(GET_VAR_REP(bgr_resized.rows));
-    //ROSDEBUG(GET_VAR_REP(bgr_resized.cols));
-    
-
-    //ROSDEBUG("Convert camera frame from BGR to RGB.");
-    cv::Mat rgb_resized;
-    cv::cvtColor(
-        bgr_resized, 
-        rgb_resized, 
-        cv::COLOR_BGR2RGB
-    );
-
-    cv::Mat rgb_resized_normalized;
-    rgb_resized.convertTo(rgb_resized_normalized, CV_32F, 1.0 / 255);
-
-
-    at::Tensor x_rgb = torch::from_blob(
-        rgb_resized_normalized.data,
-        {h_SEQUENCE_LENGTH, h_BATCHSIZE, rgb_resized_normalized.rows, rgb_resized_normalized.cols, rgb_resized_normalized.channels()},
-        m_TorchTensorOptions
-    );
-    x_rgb = x_rgb.permute({0, 1, 4, 2, 3});
-    x_rgb = x_rgb.to(torch::Device(m_TorchDevice, 0));
-
-    
-    
-    //ROSDEBUG("Create tensor from IMU data.");
-    double cat_data[9] = {
-        m_RGBTimeIncrement,
-        m_IMUTimeIncrement,
-        m_IMUData[0],
-        m_IMUData[1],
-        m_IMUData[2],
-        m_IMUData[3],
-        m_IMUData[4],
-        m_IMUData[5],
-        m_LocTrajMaxSpeed,
-    };
-
-    at::Tensor x_cat = torch::from_blob(
-        cat_data,
-        {h_SEQUENCE_LENGTH, h_BATCHSIZE, 8},
-        m_TorchTensorOptions
-    );
-    x_cat = x_cat.to(torch::Device(m_TorchDevice, 0));
-
-    //ROSDEBUG("Create tensor from hidden state.");
-    at::Tensor h = torch::from_blob(
-        m_ANNGRUHiddenState.data(), 
-        {p_ANN_GRU_NUMLAYERS, h_BATCHSIZE, p_ANN_GRU_HIDDENSIZE},
-        m_TorchTensorOptions
-    );
-    h = h.to(torch::Device(m_TorchDevice, 0));
-
-    //ROSDEBUG("Create input vector from image, imu and hidden state tensor.");
-    std::vector<torch::jit::IValue> input {x_rgb, x_cat, h};
-
-    //ROSDEBUG("Compute output of ANN.");
-    //at::Tensor Output = m_TorchScriptModule.forward(input).toTensor().cpu();
-    auto output = m_TorchScriptModule.forward(input).toTuple();
-
-    //ROSDEBUG("Identitfy prediction and hidden state from output.");
-    torch::Tensor output_x = output->elements()[0].toTensor().cpu();
-    torch::Tensor output_h = output->elements()[1].toTensor().cpu().view(
-        {p_ANN_GRU_NUMLAYERS * h_BATCHSIZE * p_ANN_GRU_HIDDENSIZE}); 
-
-    auto acc_h = output_h.accessor<float, 1>();
-    for (int i = 0; i < acc_h.size(0); i++) {
-        m_ANNGRUHiddenState[i] = acc_h[i];
-    }
-    //ROSDEBUG(GET_VAR_REP(m_ANNGRUHiddenState));
-        
-    
-    auto acc_x = output_x.accessor<float, 2>();
-    m_BrainOutput = {acc_x[0][0], acc_x[0][1], acc_x[0][2]};
-    //ROSDEBUG(GET_VAR_REP(m_BrainOutput.transpose()));
-}
+//void ForgetfulDrone::runBrain () {
+//    if (isEmpty(ROS_LOG_PREFIX, m_RGBData)) return;
+//    
+//    //ROSDEBUG("Resize camera frame.");
+//    cv::Mat bgr_resized;
+//    cv::resize(
+//        m_RGBData, 
+//        bgr_resized, 
+//        cv::Size(p_DATA_PROCESSED_RGB_WIDTH, p_DATA_PROCESSED_RGB_HEIGHT)
+//    );
+//
+//    //ROSDEBUG(GET_VAR_REP(bgr_resized.rows));
+//    //ROSDEBUG(GET_VAR_REP(bgr_resized.cols));
+//    
+//
+//    //ROSDEBUG("Convert camera frame from BGR to RGB.");
+//    cv::Mat rgb_resized;
+//    cv::cvtColor(
+//        bgr_resized, 
+//        rgb_resized, 
+//        cv::COLOR_BGR2RGB
+//    );
+//
+//    cv::Mat rgb_resized_normalized;
+//    rgb_resized.convertTo(rgb_resized_normalized, CV_32F, 1.0 / 255);
+//
+//
+//    at::Tensor x_rgb = torch::from_blob(
+//        rgb_resized_normalized.data,
+//        {h_SEQUENCE_LENGTH, h_BATCHSIZE, rgb_resized_normalized.rows, rgb_resized_normalized.cols, rgb_resized_normalized.channels()},
+//        m_TorchTensorOptions
+//    );
+//    x_rgb = x_rgb.permute({0, 1, 4, 2, 3});
+//    x_rgb = x_rgb.to(torch::Device(m_TorchDevice, 0));
+//
+//    
+//    
+//    //ROSDEBUG("Create tensor from IMU data.");
+//    double cat_data[9] = {
+//        m_RGBTimeIncrement,
+//        m_IMUTimeIncrement,
+//        m_IMUData[0],
+//        m_IMUData[1],
+//        m_IMUData[2],
+//        m_IMUData[3],
+//        m_IMUData[4],
+//        m_IMUData[5],
+//        m_LocTrajMaxSpeed,
+//    };
+//
+//    at::Tensor x_cat = torch::from_blob(
+//        cat_data,
+//        {h_SEQUENCE_LENGTH, h_BATCHSIZE, 8},
+//        m_TorchTensorOptions
+//    );
+//    x_cat = x_cat.to(torch::Device(m_TorchDevice, 0));
+//
+//    //ROSDEBUG("Create tensor from hidden state.");
+//    at::Tensor h = torch::from_blob(
+//        m_ANNGRUHiddenState.data(), 
+//        {p_ANN_GRU_NUMLAYERS, h_BATCHSIZE, p_ANN_GRU_HIDDENSIZE},
+//        m_TorchTensorOptions
+//    );
+//    h = h.to(torch::Device(m_TorchDevice, 0));
+//
+//    //ROSDEBUG("Create input vector from image, imu and hidden state tensor.");
+//    std::vector<torch::jit::IValue> input {x_rgb, x_cat, h};
+//
+//    //ROSDEBUG("Compute output of ANN.");
+//    //at::Tensor Output = m_TorchScriptModule.forward(input).toTensor().cpu();
+//    auto output = m_TorchScriptModule.forward(input).toTuple();
+//
+//    //ROSDEBUG("Identitfy prediction and hidden state from output.");
+//    torch::Tensor output_x = output->elements()[0].toTensor().cpu();
+//    torch::Tensor output_h = output->elements()[1].toTensor().cpu().view(
+//        {p_ANN_GRU_NUMLAYERS * h_BATCHSIZE * p_ANN_GRU_HIDDENSIZE}); 
+//
+//    auto acc_h = output_h.accessor<float, 1>();
+//    for (int i = 0; i < acc_h.size(0); i++) {
+//        m_ANNGRUHiddenState[i] = acc_h[i];
+//    }
+//    //ROSDEBUG(GET_VAR_REP(m_ANNGRUHiddenState));
+//        
+//    
+//    auto acc_x = output_x.accessor<float, 2>();
+//    m_BrainOutput = {acc_x[0][0], acc_x[0][1], acc_x[0][2]};
+//    //ROSDEBUG(GET_VAR_REP(m_BrainOutput.transpose()));
+//}
 
 
 
@@ -2595,7 +2635,7 @@ void ForgetfulDrone::findMinDistanceStateIdx (
     }
 }
 
-void ForgetfulDrone::findDistance2GlobalTrajectory (
+void ForgetfulDrone::compDist2GloTraj (
     const Eigen::Vector3d position,
     double& min_dist,
     size_t& min_dist_state_idx
@@ -2747,12 +2787,12 @@ ForgetfulDrone::rvizExpertAndHorizonState
 
 void ForgetfulDrone::runDataSaver (const bool& expert_intervened) {
     // Start saving data only after passing the first gate.
-    if (!m_DataSavingENABLED && m_CurrWaypointIdx == 0) {
-        m_DataSavingENABLED = true;
+    if (!m_SavEnabled && m_CurrWaypointIdx == 0) {
+        m_SavEnabled = true;
         ROSINFO("Enable data saving");
     }
             
-    if (m_DataSavingENABLED) {
+    if (m_SavEnabled) {
         saveTrainSample (expert_intervened);
     }
 }
@@ -2781,9 +2821,9 @@ void ForgetfulDrone::saveTrainSample (const bool& expert_intervened) {
         << m_IMUData[4] << delimiter
         << m_IMUData[5] << delimiter
         << m_LocTrajMaxSpeed << delimiter
-        << m_ExpertOutput.x() << delimiter
-        << m_ExpertOutput.y() << delimiter
-        << m_ExpertOutput.z() << delimiter
+        << m_ExpOutput.x() << delimiter
+        << m_ExpOutput.y() << delimiter
+        << m_ExpOutput.z() << delimiter
         << m_CtrlCmdData[0] << delimiter
         << m_CtrlCmdData[1] << delimiter
         << m_CtrlCmdData[2] << delimiter
@@ -2816,9 +2856,7 @@ void ForgetfulDrone::updateFailedRunsFile () {
 
 
 
-void ForgetfulDrone::performFlightMission_GlobalTrajectoryTracking () {
-    ROSDEBUG_FUNCTION_ENTERED();
-}
+void ForgetfulDrone::runMission_trackGloTraj () {}
 
 
 
@@ -2882,7 +2920,7 @@ void generateRacetrackData()
                     // COmpute Traj
                     //ros::Duration(5.0).sleep();
                     std::vector<quadrotor_common::TrajectoryPoint> 
-                    GlobalTrajectory = computeGlobalTrajectory(Waypoints);
+                    GlobalTrajectory = compGloTraj(Waypoints);
                     
 
                     std::string OutFilePath = InOutDirPath +"/global_trajectory.txt";
@@ -2908,7 +2946,7 @@ void generateRacetrackData()
 
 /*
 std::vector<quadrotor_common::TrajectoryPoint> 
-computeGlobalTrajectory(
+compGloTraj(
     std::vector<
         Eigen::Vector3d, 
         Eigen::aligned_allocator<Eigen::Vector3d>
@@ -2980,7 +3018,7 @@ computeGlobalTrajectory(
     //    p_GLOBAL_TRAJECTORY_MAX_SPEED,
     //    p_GLOBAL_TRAJECTORY_MAX_THRUST,
     //    p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE,
-    //    1 / p_MAIN_LOOP_FREQUENCY
+    //    1 / p_MAIN_FREQ
     //    );
     
 
@@ -3148,7 +3186,7 @@ computeGlobalTrajectory(
 //        p_GLOBAL_TRAJECTORY_MAX_SPEED,
 //        p_GLOBAL_TRAJECTORY_MAX_THRUST,
 //        p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE,
-//        1 / p_MAIN_LOOP_FREQUENCY
+//        1 / p_MAIN_FREQ
 //        );
 //    */
 //
@@ -3179,7 +3217,7 @@ computeGlobalTrajectory(
 //            p_GLOBAL_TRAJECTORY_MAX_SPEED,
 //            p_GLOBAL_TRAJECTORY_MAX_THRUST,
 //            p_GLOBAL_TRAJECTORY_MAX_ROLL_PITCH_RATE,
-//            p_MAIN_LOOP_FREQUENCY
+//            p_MAIN_FREQ
 //            );
 //        
 //  
@@ -3232,7 +3270,7 @@ computeGlobalTrajectory(
 //            "\tminimum speed: %1.1f m/s\n",            
 //        ros::this_node::getName().c_str(),
 //        static_cast<int>( m_GloTraj.size() ),
-//        m_GloTraj.size() * 1 / p_MAIN_LOOP_FREQUENCY,
+//        m_GloTraj.size() * 1 / p_MAIN_FREQ,
 //        m_Expert_MaxSpeed, m_Expert_MinSpeed
 //        );
 //

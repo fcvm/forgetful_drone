@@ -347,7 +347,7 @@ void runForgetfulSimulator();
 
 
 
-void checkROSTimerPeriodTime (
+void checkROSTimerPeriod (
     const std::string& tag,
     const ros::TimerEvent& te,
     const double& period
@@ -370,16 +370,16 @@ template<typename T> bool callROSService (
 }
 
 
-bool isDirectory (const std::string& dir_path);
+bool isDir (const std::string& dir_path);
 
 bool isFile (const std::string& dir_path);
 
-void createDirectory (
+bool createDir (
     const std::string& tag,
     const std::string& dir_path
 );
 
-void copyFile (
+bool copyFile (
     const std::string& tag,
     const std::string& src_path,
     const std::string& dst_path

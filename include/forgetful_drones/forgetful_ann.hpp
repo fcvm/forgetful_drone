@@ -4,52 +4,113 @@
 #include "forgetful_drones/forgetful_helpers.hpp"
 
 
+namespace forgetful_drone {
+
+class ForgetfulANN {
+
+    public: 
+
+        ForgetfulANN () 
+            :
+            m_RGBHeight {},
+            m_RGBWidth {},
+            m_OPTMask {},
+            m_OPTSize {},
+            m_GRUNumLayers {},
+            m_GRUHiddenSize {},
+            m_TorchDevice {},
+            m_TorchTensorOptions {}
+        {};
 
 
-class ForgetfulBrain {
+    private:
+
+        static constexpr uint BATCH_SIZE = 1;
+        static constexpr uint SEQUENCE_LENGTH = 1;
+        static constexpr std::array<std::tuple<const char*, c10::DeviceType>, 2> h_BRAIN_TORCHDEVICES {
+            std::make_tuple("CPU", torch::kCPU),
+            std::make_tuple("CUDA", torch::kCUDA),
+        };
+
+        const uint m_RGBHeight;
+        const uint m_RGBWidth;
+        const std::vector<bool> m_OPTMask;
+        const uint m_OPTSize;
+        const uint m_GRUNumLayers;
+        const uint m_GRUHiddenSize;
+        const c10::DeviceType m_TorchDevice;
+        const torch::TensorOptions m_TorchTensorOptions;
+    
+        torch::jit::script::Module m_TorchScriptModule;
+        std::vector<float> m_GRUHiddenState;
+
     public:
-        ForgetfulBrain (
-            const std::string& torch_scriptmodulefpath,
-            const bool& torch_cuda,
+
+        bool init (
             const uint& rgb_height,
             const uint& rgb_width,
-            const uint& opt_size,
-            const uint& gru_hiddensize, 
-            const uint& gru_numlayers
-        )
-            :
-            m_TorchDevice {torch_cuda? torch::kCUDA : torch::kCPU},
-            m_TorchTensorOptions {torch::TensorOptions()
-                .dtype(torch::kFloat32)
-                .layout(torch::kStrided)
-                .requires_grad(false)
-            },
-            m_RGBHeight {rgb_height},
-            m_RGBWidth {rgb_width},
-            m_OPTSize {opt_size},
-            m_GRUNumLayers {gru_numlayers},
-            m_GRUHiddenSize {gru_hiddensize}
-        {
+            const std::vector<bool>& opt_mask,
+            const uint& gru_num_layers, 
+            const uint& gru_hidden_size,
+            const uint& torch_device,
+            const std::string& script_module_fpath
+        ) {
+            const_cast<uint&>(m_RGBHeight) = rgb_height;
+            const_cast<uint&>(m_RGBWidth) = rgb_width;
+
+            const_cast<std::vector<bool>&>(m_OPTMask) = opt_mask;
+            const_cast<uint&>(m_OPTSize) = 0;
+            for (const bool& x : m_OPTMask) if (x) const_cast<uint&>(m_OPTSize) +=1;
+
+            const_cast<uint&>(m_GRUNumLayers) = gru_num_layers;
+            const_cast<uint&>(m_GRUHiddenSize) = gru_hidden_size;
+            initHiddenState ();
+
+            const_cast<c10::DeviceType&>(m_TorchDevice) 
+                = std::get<1>(h_BRAIN_TORCHDEVICES[torch_device]);
+            const_cast<torch::TensorOptions&>(m_TorchTensorOptions)
+                = torch::TensorOptions()
+                    .dtype(torch::kFloat32)
+                    .layout(torch::kStrided)
+                    .requires_grad(false);
+
             try {
-                m_TorchScriptModule = torch::jit::load(torch_scriptmodulefpath);
+                m_TorchScriptModule = torch::jit::load(script_module_fpath);
                 m_TorchScriptModule.to(torch::Device(m_TorchDevice, 0));
             } catch (const c10::Error& e) {
                 ROSERROR("Error loading model: " << e.what());
+                return false;
             } catch(const std::exception& e) {
                 ROSERROR(e.what());
+                return false;
             }
 
+            std::cout << std::endl;
+            ROSINFO("Forgetful ANN" << std::endl
+                << "\t\t- SCRIPT MODULE:   " << script_module_fpath << std::endl
+                << "\t\t- TORCH DEVICE:    " << std::get<0>(h_BRAIN_TORCHDEVICES[torch_device]) << std::endl
+                << "\t\t- RGB SIZE:        " <<  m_RGBHeight << " x " << m_RGBWidth << std::endl
+                << "\t\t- OPT MASK:        " <<  m_OPTMask << std::endl
+                << "\t\t- GRU # LAYERS:    " << m_GRUNumLayers << std::endl
+                << "\t\t- GRU HIDDEN SIZE: " << m_GRUHiddenSize
+            );
+            std::cout << std::endl;
+
+            return true;
+        }
+
+        void initHiddenState () {
             m_GRUHiddenState = std::vector<float>(
                 m_GRUNumLayers * BATCH_SIZE * m_GRUHiddenSize, 0.0);
-        }
+        };
 
 
         Eigen::Vector3d inferNavigationDecision (
             const cv::Mat& raw_rgb,
-            const std::vector<float>& opt_input
+            const std::vector<double>& opt_input
         ) {
             at::Tensor x_rgb = tensorFromRGB (preprocessRGB (raw_rgb));
-            at::Tensor x_opt = tensorFromOpt (opt_input);
+            at::Tensor x_opt = tensorFromOpt (preprocessOPT (opt_input));
             at::Tensor h = tensorFromHidden ();
 
             std::vector<torch::jit::IValue> input {x_rgb, x_opt, h};
@@ -67,22 +128,8 @@ class ForgetfulBrain {
             return {acc_x[0][0], acc_x[0][1], acc_x[0][2]};
         };
 
-
+    
     private:
-        static constexpr uint BATCH_SIZE = 1;
-        static constexpr uint SEQUENCE_LENGTH = 1;
-
-        const uint m_RGBHeight;
-        const uint m_RGBWidth;
-        const uint m_OPTSize;
-        const uint m_GRUNumLayers;
-        const uint m_GRUHiddenSize;
-        const c10::DeviceType m_TorchDevice;
-        const torch::TensorOptions m_TorchTensorOptions;
-        
-        torch::jit::script::Module m_TorchScriptModule;
-        std::vector<float> m_GRUHiddenState;
-
 
         cv::Mat preprocessRGB (const cv::Mat& raw) {
             cv::Mat resized; cv::resize(
@@ -104,6 +151,19 @@ class ForgetfulBrain {
             return normalized;
         }
 
+        std::vector<double> preprocessOPT (const std::vector<double>& in) {
+            
+            std::vector<double> out; out.reserve(m_OPTSize);
+            
+            for (size_t i = 0; i < in.size(); i++) {
+                if (m_OPTMask[i]) out.push_back(in[i]);
+            }
+
+            return out;
+        };
+
+
+
         at::Tensor tensorFromRGB (const cv::Mat& in) {
             at::Tensor out = torch::from_blob(
                 in.data,
@@ -115,9 +175,9 @@ class ForgetfulBrain {
             return out.to(torch::Device(m_TorchDevice, 0));
         }
 
-        at::Tensor tensorFromOpt (const std::vector<float>& in) {
+        at::Tensor tensorFromOpt (const std::vector<double>& in) {
             at::Tensor out = torch::from_blob(
-                const_cast<std::vector<float>&>(in).data(),
+                const_cast<std::vector<double>&>(in).data(),
                 {SEQUENCE_LENGTH, BATCH_SIZE, (signed long) in.size()},
                 m_TorchTensorOptions
             );
@@ -136,6 +196,7 @@ class ForgetfulBrain {
         }
 
 
-
-
 };
+
+
+}

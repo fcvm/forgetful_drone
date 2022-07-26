@@ -53,7 +53,7 @@
 #include "forgetful_drones/forgetful_simulator.hpp"
 
 
-
+#include "forgetful_drones/forgetful_ann.hpp"
 
 
 namespace forgetful_drone {
@@ -159,11 +159,10 @@ private:// CONST MEMBER VARIABLES //
     void ROSCB_FLIGHTMARE_RGB (const sensor_msgs::ImageConstPtr& msg);
 
 
-    ForgetfulSimulator* m_SimulatorPtr {nullptr};
     uint8_t m_AutopilotState;
-    Eigen::Vector3d m_ExpertOutput;
+    Eigen::Vector3d m_ExpOutput;
     Eigen::Vector3d m_BrainOutput;
-    Eigen::Vector3d m_NavigatorInput;
+    Eigen::Vector3d m_NavInput;
     std::vector< quadrotor_common::TrajectoryPoint > m_GloTraj;
     std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_TrackWaypoints;
     size_t m_GloTrajExpertStateIdx;
@@ -176,20 +175,20 @@ private:// CONST MEMBER VARIABLES //
     size_t m_LastWaypointIdx;
     double m_Dist2CurrWaypoint;
     double m_Dist2LastWaypoint;
-    bool m_NavigatorENABLED;
-    bool m_DataSavingENABLED;
-    int m_LocTrajSubseqInfeasibleCnt;
+    bool m_NavEnabled;
+    bool m_SavEnabled;
+    int m_LocTrajSuccInfeasCnt;
     ros::Time m_LocTrajStartTime;
     RQTG::RapidTrajectoryGenerator m_LocTraj;
-    unsigned int m_MainLoopIterCnt;
+    unsigned int m_MainIterCnt;
     unsigned int m_LocTrajFeasibleCnt;
     int m_TotalRunCnt;
     int m_DaggerRepCnt;
     unsigned int m_RGBCnt;
-    int m_RunLapCnt;
+    int m_LapCnt;
     int m_RunNumLaps;
-    int m_ExpertInterventionsCnt;
-    int m_BrainDecisionsCnt;
+    int m_ExpDecCnt;
+    int m_ANNDecCnt;
     int m_ConfigCnt;
     int m_ConfigMarginCnt;
     float m_DaggerMargin;
@@ -224,28 +223,28 @@ private:// CONST MEMBER VARIABLES //
             
 
 
-    void setRGBData ();
-    void setIMUData ();
+    void fetchRGBData ();
+    void fetchIMUData ();
     void setCtrlCmdData ();
 
 
     
 
     ros::Timer m_rosTMR_MAINLOOP;
-    void ROSCB_NAVIGATION_BY_EXPERT (const ros::TimerEvent& te);
+    void ROSCB_testExp (const ros::TimerEvent& te);
     void ROSCB_TRAINING_DATA_GENERATION (const ros::TimerEvent& te);
-    void ROSCB_NAVIGATIONBYANN_CPP (const ros::TimerEvent& te);
+    void ROSCB_testANN_cpp (const ros::TimerEvent& te);
     void ROSCB_NAVIGATION_BY_ANN_PYTHON (const ros::TimerEvent& te);
     void ROSCB_DAGGER_PYTHON (const ros::TimerEvent& te);
     void ROSCB_DAGGER_FIRST_RUN (const ros::TimerEvent& te);
 
 
-            void runWaypointUpdater();
-            void runExpert();
+            void updTrackStatus();
+            void runExp();
             void triggerBrain();
             void runDataSaver (const bool& expert_intervened);
             void runBrain();
-            void runNavigator(bool& intervened, void (forgetful_drone::ForgetfulDrone::*intervention_fct)(Eigen::Vector3d& _0, double& _1, bool& _2));
+            void runNav(bool& intervened, void (forgetful_drone::ForgetfulDrone::*intervention_fct)(Eigen::Vector3d& _0, double& _1, bool& _2));
 
             void runWaypointUpdater_updateWaypointIndices();
             bool computeGlobalTrajAsCircuit();
@@ -254,7 +253,7 @@ private:// CONST MEMBER VARIABLES //
                     double& min_dist,
                     size_t& min_dist_state_idx
                 );
-                void findDistance2GlobalTrajectory (
+                void compDist2GloTraj (
                     const Eigen::Vector3d position,
                     double& min_dist,
                     size_t& min_dist_state_idx
@@ -265,10 +264,10 @@ private:// CONST MEMBER VARIABLES //
             void findHorizonState( const double& Horizon );
             void rvizExpertAndHorizonState();
             void runWaypointUpdater_rvizCurrWaypoint();
-            void rvizReferenceState();
+            void rvizRefState();
 
             void processNavigatorInput (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal);
-            void interveneBrainDecisionWithExpert (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
+            void doExpIntervention (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
             void interveneBrainDecisionWithExpert_firstRun (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
             void doNothing (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
             Eigen::Vector3d XYZ_DRF_From_XYDist_IRF( 
@@ -277,7 +276,7 @@ private:// CONST MEMBER VARIABLES //
                 const double& Dist_IRF 
                 );
             Eigen::Vector3d XYZ_ARF_From_XYZ_DRF( const Eigen::Vector3d& XYZ_DRF );
-            bool computeLocalTrajectory(
+            bool compLocTraj(
             const Eigen::Vector3d& GoalPos_DRF,
             const double& Speed2Goal
             );
@@ -289,10 +288,9 @@ private:// CONST MEMBER VARIABLES //
 
         void rvizLocTraj();
 
-        void publishReferenceState2Autopilot();
+        void pubRefState();
 
-    torch::jit::script::Module m_TorchScriptModule;
-    std::vector<double> m_GRUHiddenState;
+
 
 
 
@@ -333,19 +331,19 @@ private:// ROS PARAMETERS //
     //const double m_DRONE_CAMERA_HALF_PITCH_AOV;
     const double p_EXPERT_SPEED_HORIZON {};
     //const double m_ROSParam_NominalExpertLoopTime;
-    const double p_NAV_REFSTATE_MAXDIVERGENCE {};
+    const double p_NAV_MAX_DIV {};
     const double p_EXPERT_PROJECTION_MAX_DIVERGENCE_FROM_GLOBAL_TRAJECTORY {};
 
 
 
     /////
-    const int p_NAV_REPLANNING_MAINLOOPITERSCNT {};
-    const int p_NAV_LOCTRAJ_FEASIBILITY_MAXSUCCESSIVEFAILSCNT {};
+    const int p_NAV_REPLAN_ITER_CNT {};
+    const int p_NAV_LOC_TRAJ_FEAS_MAX_SUCC_FAILS_CNT {};
 
     const int p_REPEATED_SETUP_RUN_N {};
 
     const double p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP {};
-    const double p_MAIN_LOOP_FREQUENCY {};
+    const double p_MAIN_FREQ {};
     
     const double p_LOCAL_TRAJECTORY_MIN_SPEED {};
     const double p_LOCAL_TRAJECTORY_MAX_SPEED_INCREMENT {};
@@ -365,8 +363,8 @@ private:// ROS PARAMETERS //
     const double p_RVIZ_LOCAL_TRAJECTORY_SAMPLING_FREQUENCY {};
 
     
-    const int p_BRAIN_TORCHDEVICE {};
-    const int p_TORCHINTERFACE_IDX {};
+    const int p_TORCH_DEVICE {};
+    const int p_TORCH_INTERFACE_IDX {};
 
 
     const int p_DAGGER_FIRSTRUN_NUMLAPS {};
@@ -375,11 +373,11 @@ private:// ROS PARAMETERS //
     
 
 
-void performFlightMission_TrainingDataGeneration();
-void performFlightMission_NavigationByBrain();
-void performFlightMission_NavigationByExpert();
-void performFlightMission_GlobalTrajectoryTracking();
-void performFlightMission_DAGGER();
+void runMission_genTrainData();
+void runMission_testANN();
+void runMission_testExp();
+void runMission_trackGloTraj();
+void runMission_DAGGER();
 
 void waitForAutopilotState(
     const uint8_t& ap_state,
@@ -391,7 +389,7 @@ void flyDroneToInitPose();
 void flyDroneAboveTrack();
 //void flyDroneBetweenLastAndSecLastGate();
 void landDroneOnGround();
-bool computeGlobalTrajectory();
+bool compGloTraj();
 void precomputeGloTrajForExpert();
 void rvizGloTraj();
 
@@ -401,12 +399,9 @@ void initMainLoopTimer (void (forgetful_drone::ForgetfulDrone::*callback)(const 
 private:// ANN PARAMETERS //
 ///////////////////////////
 
-const int p_ANN_GRU_HIDDENSIZE {};
-const int p_ANN_GRU_NUMLAYERS {};
-const int p_DATA_PROCESSED_RGB_HEIGHT {};
-const int p_DATA_PROCESSED_RGB_WIDTH {};
+ForgetfulANN m_ANN;
 
-std::vector<float> m_ANNGRUHiddenState;
+
 
 
 
@@ -449,20 +444,19 @@ std::string m_RunDaggerLabeledFramesDpath;
 
 
 
-const bool p_EXPERIMENT_NEW {};
 const std::string m_EXPERIMENT_DPATH {};
 const std::string p_RAW_DPATH {};
 const std::string p_CONFIG_DPATH {}, p_OUTPUT_DPATH {};
 
-const int p_FLIGHTMISSION {};
+const int p_MISSION {};
 const std::string p_EXPERIMENT_ID {};
-const std::vector<int> p_FLIGHTMISSION_UNITYSCENES {};
-const std::vector<int> p_FLIGHTMISSION_SCENESITES {};
-const std::vector<int> p_FLIGHTMISSION_TRACKTYPES {};
-const std::vector<int> p_FLIGHTMISSION_TRACKGENERATIONS {};
-const std::vector<int> p_FLIGHTMISSION_TRACKDIRECTIONS {};
-const std::vector<int> p_FLIGHTMISSION_GATETYPES {};
-const std::vector<double> p_AUTOPILOT_REFFRAME_WRF {};
+const std::vector<int> p_SCENES {};
+const std::vector<int> p_SITES {};
+const std::vector<int> p_TRACK_TYPES {};
+const std::vector<int> p_TRACK_GENS {};
+const std::vector<int> p_TRACK_DIRECS {};
+const std::vector<int> p_GATES {};
+const std::vector<double> p_ARF_POSE_WRF {};
 const std::vector<double> p_LOCTRAJ_MAXSPEEDS {};
 const std::vector<double> p_DAGGERMARGINS {};
 
@@ -496,8 +490,8 @@ void logRunInfo (
     const int& rep_i = -1,
     const int& rep_n = -1
 ) const;
-void logFlightMissionInfo () const;
-void logFlightMissionResults () const;
+void logMissionInfo () const;
+void logMissionResult () const;
 void reset4NewRun ();
 void buildSimulation (
     const std::string& racetrack_type,
@@ -517,7 +511,7 @@ void insertGapWaypoint ();
 void insertITLWaypoint ();
 void startSimulation (ForgetfulSimulator& fs); void startSimulation ();
 bool runNavigation ();
-void initExperimentDirectory ();
+bool initExperimentDir ();
 void createRunDirectory (
     const int& scene_idx,
     const int& site_idx,
@@ -536,12 +530,12 @@ void stopSimulation (ForgetfulSimulator& fs); void stopSimulation ();
 
 bool initROSParameters ();
 
-bool initBrain ();
+bool initANN ();
 bool initBrain_Python ();
 bool initBrain_Cpp ();
 
 bool checkPaths ();
-bool initExperimentID ();
+bool initExperiment ();
 bool initTrafoArf2Wrf ();
 
 std::string ExperimentDpath();
@@ -554,7 +548,7 @@ std::string RunID ();
 std::string RunDPath ();
 std::string ConfigFpath ();
 std::string ScriptModuleFpath ();
-std::string ParametersFpath (const bool& src_not_dst);
+std::string ParamsFpath (const bool& src_not_dst);
 
 
 
@@ -565,8 +559,8 @@ static constexpr const char* h_DATA_DNAME = "data";
 static constexpr const char* h_RAW_DNAME = "raw";
 static constexpr const char* h_CONFIG_DNAME = "config";
 static constexpr const char* h_OUTPUT_DNAME = "output";
-static constexpr const char* h_PARAMETERS_DNAME = "parameters";
-static constexpr const char* h_PARAMETERS_FNAME = "forgetful_drone.yaml";
+static constexpr const char* h_PARAMS_DNAME = "parameters";
+static constexpr const char* h_PARAMS_FNAME = "forgetful_drone.yaml";
 static constexpr const char* h_RUN_DNAME_PREFIX = "run";
 static constexpr const char* h_RUN_IMAGES_DNAME = "rgb";
 static constexpr const char* h_CAMFRAME_FEXT = ".jpg";
@@ -587,30 +581,37 @@ static constexpr int h_SEQUENCE_LENGTH = 1;
 
 
 
-static constexpr std::array<const char*, 5> h_FLIGHTMISSIONS {
-    "GLOBAL_TRAJECTORY_TRACKING",
-    "NAVIGATION_BY_EXPERT",
-    "NAVIGATION_BY_ANN",
+static constexpr std::array<const char*, 5> h_MISSIONS {
+    "TRACK_GLOBAL_TRAJECTORY",
+    "TEST_EXPERT",
+    "TEST_ANN",
     "TRAINING_DATA_GENERATION",
     "DAGGER"
 };
 
 //&ForgetfulDrone::ROSCB_NAVIGATION_BY_ANN_PYTHON
 //void (forgetful_drone::ForgetfulDrone::*callback)(const ros::TimerEvent&)
-//static constexpr std::array<const char*, 2> h_BRAIN_TORCHINTERFACES {
+//static constexpr std::array<const char*, 2> h_TORCH_INTERFACES {
 //    "PYTHON",
 //    "CPP",
 //};
 static constexpr std::array<std::tuple<const char*, 
-    void (forgetful_drone::ForgetfulDrone::*)(const ros::TimerEvent&)>, 2> h_BRAIN_TORCHINTERFACES {
+    void (forgetful_drone::ForgetfulDrone::*)(const ros::TimerEvent&)>, 2> h_TORCH_INTERFACES {
     std::make_tuple("PYTHON", &ForgetfulDrone::ROSCB_NAVIGATION_BY_ANN_PYTHON),
-    std::make_tuple("CPP", &ForgetfulDrone::ROSCB_NAVIGATIONBYANN_CPP),
+    std::make_tuple("CPP", &ForgetfulDrone::ROSCB_testANN_cpp),
 };
 
 
-static constexpr std::array<std::tuple<const char*, c10::DeviceType>, 2> h_BRAIN_TORCHDEVICES {
-    std::make_tuple("CPU", torch::kCPU),
-    std::make_tuple("CUDA", torch::kCUDA),
+const std::vector<std::string> h_ANN_OPT_INPUTS {
+    "rgb_dt",
+    "imu_dt",
+    "imu_linacc_x",
+    "imu_linacc_y",
+    "imu_linacc_z",
+    "imu_angvel_x",
+    "imu_angvel_y",
+    "imu_angvel_z",
+    "max_speed",
 };
 
 const std::vector<std::string> h_UNITY_SCENES {
@@ -681,8 +682,7 @@ size_t m_GT_HorizonState_i;
 size_t m_GT_SpeedState_i;
 
 
-c10::DeviceType m_TorchDevice;
-torch::TensorOptions m_TorchTensorOptions;
+
 
 
 
@@ -736,6 +736,6 @@ friend bool fetchROSParameters (
 
 
 void generateRacetrackData();
-std::vector<quadrotor_common::TrajectoryPoint> computeGlobalTrajectory
+std::vector<quadrotor_common::TrajectoryPoint> compGloTraj
 (std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> Waypoints);
 }
