@@ -115,8 +115,8 @@
             <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml"/>
             
             <param name="MISSION" value="2"/>
-            <param name="ANN_TORCH_INTERFACE" value="1"/>
-            <param name="ANN_TORCH_DEVICE" value="1"/>
+            <param name="TORCH_INTERFACE" value="1"/>
+            <param name="TORCH_DEVICE" value="1"/>
             
             <node 
                 pkg="forgetful_drones" 

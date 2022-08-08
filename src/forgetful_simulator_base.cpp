@@ -379,7 +379,7 @@ void ForgetfulSimulator::spinOnce (const ros::TimerEvent& te) {
 }
 
 void ForgetfulSimulator::ROSCB_MAIN_LOOP (const ros::TimerEvent& te) {
-    checkROSTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
+    checkTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
     
     if ((!m_SimulationRunning) || (!m_UnityConnected)) return;
 

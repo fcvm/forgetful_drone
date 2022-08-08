@@ -55,6 +55,10 @@
 
 #include "forgetful_drones/forgetful_ann.hpp"
 
+#include "forgetful_drones/String.h"
+#include "forgetful_drones/Int.h"
+#include "forgetful_drones/Float.h"
+
 
 namespace forgetful_drone {
 namespace RQTG = RapidQuadrocopterTrajectoryGenerator;
@@ -115,34 +119,43 @@ private:// CONST MEMBER VARIABLES //
     ros::NodeHandle m_rosRNH; // ROS node handle that is resolved to the node's namespace.
     ros::NodeHandle m_rosPNH; // ROS node handle that is resolved to the namespace: <node's namespace>/<node's name>.
 
-    ros::Subscriber m_rosSUB_GROUND_TRUTH_ODOMETRY;
-    ros::Subscriber m_rosSUB_GROUND_TRUTH_IMU;
-    ros::Subscriber m_rosSUB_AUTOPILOT_FEEDBACK;
-    ros::Subscriber m_rosSUB_CONTROL_COMMAND;
-    ros::Subscriber m_rosSUB_BRAIN_OUTPUT;
-    ros::Subscriber m_rosSUB_FLIGHTMARE_RGB;
+    ros::Subscriber m_SUB__gtOdometry;
+    ros::Subscriber m_SUB__gtIMU;
+    ros::Subscriber m_SUB__apFeedback;
+    ros::Subscriber m_SUB__CtrlCmd;
+    ros::Subscriber m_SUB__RGB;
 
-    ros::Publisher m_rosPUB_RVIZ_NAVIGATION_POINTS;
-    ros::Publisher m_rosPUB_RVIZ_RGB_LABELED;
-    ros::Publisher m_rosPUB_RVIZ_GLOBAL_TRAJECTORY;
+    ros::Publisher m_PUB__rvNavPoints;
+    ros::Publisher m_PUB__rvLblRGB;
+    ros::Publisher m_PUB__rvGloTraj;
     //ros::Publisher m_ROSPUB_SIMULATOR_DYNAMIC_GATES_SWITCH;
-    ros::Publisher m_rosPUB_AUTOPILOT_OFF;
-    ros::Publisher m_rosPUB_AUTOPILOT_START;
-    ros::Publisher m_rosPUB_AUTOPILOT_LAND;
-    ros::Publisher m_rosPUB_BRIDGE_ARM;
+    ros::Publisher m_PUB__apOff;
+    ros::Publisher m_PUB__apStart;
+    ros::Publisher m_PUB__apLand;
+    ros::Publisher m_PUB__bridgeArm;
     //ros::Publisher m_ROSPUB_NAVIGATOR_STATE_SWITCH;
-    ros::Publisher m_rosPUB_AUTOPILOT_REFERENCE_STATE;
-    ros::Publisher m_rosPUB_RVIZ_LOCAL_TRAJECTORY;
-    ros::Publisher m_rosPUB_AUTOPILOT_POSE_COMMAND;
-    ros::Publisher m_rosPUB_BRAIN_ENABLEINFERENCE;
-    ros::Publisher m_rosPUB_BRAIN_TRIGGERINFERENCE;
-    ros::Publisher m_rosPUB_BRAIN_LOADCHECKPOINT;
+    ros::Publisher m_PUB__apRefState;
+    ros::Publisher m_PUB__rvLocTraj;
+    ros::Publisher m_PUB__apPoseCmd;
 
-    ros::ServiceClient m_rosSVC_BRAIN_TRAIN_ANN;
-    ros::ServiceClient m_rosSVC_SIMULATOR_BUILD;
-    ros::ServiceClient m_rosSVC_SIMULATOR_START;
-    ros::ServiceClient m_rosSVC_SIMULATOR_STOP;
+
+    ros::ServiceClient m_SCL__simBuild;
+    ros::ServiceClient m_SCL__simStart;
+    ros::ServiceClient m_SCL__simStop;
     //ros::ServiceClient m_rosSVC_RVIZ_LOAD_CONFIG;
+
+
+
+
+    // Forgetful Brain
+    ros::ServiceClient  m_SCL__fbExpment;
+    ros::ServiceClient  m_SCL__fbBuild;
+    ros::ServiceClient  m_SCL__fbTrain;
+    ros::ServiceClient  m_SCL__fbInfer;
+    ros::Publisher      m_PUB__fbTrigger;
+    ros::Subscriber     m_SUB__fbOutput;
+
+
 
 
 
@@ -155,69 +168,72 @@ private:// CONST MEMBER VARIABLES //
     void ROSCB_GROUND_TRUTH_IMU (const sensor_msgs::ImuConstPtr& msg);
     void ROSCB_AUTOPILOT_FEEDBACK (const quadrotor_msgs::AutopilotFeedback::ConstPtr& msg);
     void ROSCB_CONTROL_COMMAND (const quadrotor_msgs::ControlCommand::ConstPtr& msg);
-    void ROSCB_BRAIN_OUTPUT (const geometry_msgs::PointConstPtr& msg);
+    void CB__fbOutput (const geometry_msgs::PointConstPtr& msg);
     void ROSCB_FLIGHTMARE_RGB (const sensor_msgs::ImageConstPtr& msg);
 
 
     uint8_t m_AutopilotState;
-    Eigen::Vector3d m_ExpOutput;
+    Eigen::Vector3d m_ExpOut;
     Eigen::Vector3d m_BrainOutput;
     Eigen::Vector3d m_NavInput;
     std::vector< quadrotor_common::TrajectoryPoint > m_GloTraj;
-    std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_TrackWaypoints;
-    size_t m_GloTrajExpertStateIdx;
+    std::vector< Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > m_GloTrajWayps;
+    size_t m_ExpStateIdx;
     double m_Expert_MaxSpeed;
     double m_Expert_MinSpeed;
-    kindr::minimal::QuatTransformation m_T_WRF_DRF;
-    kindr::minimal::QuatTransformation m_T_ARF_DRF;
+    kindr::minimal::QuatTransformation m_WRF_LRF;
+    kindr::minimal::QuatTransformation m_ARF_LRF;
     Eigen::Vector3d m_RefStatePos_WRF;
-    size_t m_CurrWaypointIdx;
-    size_t m_LastWaypointIdx;
-    double m_Dist2CurrWaypoint;
-    double m_Dist2LastWaypoint;
+    size_t m_CurrGateIdx;
+    size_t m_LastGateIdx;
+    double m_CurrGateDist;
+    double m_LastGateDist;
     bool m_NavEnabled;
-    bool m_SavEnabled;
-    int m_LocTrajSuccInfeasCnt;
-    ros::Time m_LocTrajStartTime;
+    bool m_SaveEnabled;
+    int m_LocTraj_SuccInfeasCnt;
+    ros::Time m_LocTraj_t0;
     RQTG::RapidTrajectoryGenerator m_LocTraj;
     unsigned int m_MainIterCnt;
     unsigned int m_LocTrajFeasibleCnt;
-    int m_TotalRunCnt;
-    int m_DaggerRepCnt;
+    int m_RunIdx;
+    bool m_DroneLaunched;
+    int m_RunRepIdx;
+    int m_RunRepSuccCnt;
     unsigned int m_RGBCnt;
-    int m_LapCnt;
+    int m_LapIdx;
     int m_RunNumLaps;
     int m_ExpDecCnt;
     int m_ANNDecCnt;
     int m_ConfigCnt;
     int m_ConfigMarginCnt;
     float m_DaggerMargin;
+    bool m_NavInputDisturbed;
 
 
-    uint8_t m_UnitySceneIdx;
-    uint8_t m_SceneSiteIdx;
+    uint8_t m_SceneIdx;
+    uint8_t m_SiteIdx;
     uint8_t m_TrackTypeIdx;
-    uint8_t m_TrackGenerationIdx;
-    uint8_t m_TrackDirectionIdx;
-    uint8_t m_GateTypeIdx;
-    double m_LocTrajMaxSpeed;
+    uint8_t m_TrackGenIdx;
+    uint8_t m_TrackDirecIdx;
+    uint8_t m_GateIdx;
+    double m_MaxSpeed;
 
 
 
 
 
     sensor_msgs::ImuConstPtr m_IMUPtr;
-    std::array<double, 6> m_IMUData;
+    std::array<double, 6> m_IMU;
     double m_IMULastStampTime;
-    double m_IMUTimeIncrement;
+    double m_IMU_dt;
     cv_bridge::CvImageConstPtr /*cv::Mat*/ m_RGBPtr;
-    cv::Mat m_RGBData;
-    double m_RGBTimeIncrement;
+    cv::Mat m_RGB;
+    double m_RGB_dt;
     double m_RGBLastStampTime;
-    void rvizLabeledCamFrame();
+    void rvizLblRGB();
     //quadrotor_msgs::AutopilotFeedback m_AutopilotFeedback;
     quadrotor_msgs::ControlCommand::ConstPtr /*quadrotor_msgs::ControlCommand*/ m_CtrlCmdPtr;
-    std::array<double, 7> m_CtrlCmdData;
+    std::array<double, 7> m_CtrlCmd;
 
     
             
@@ -225,7 +241,19 @@ private:// CONST MEMBER VARIABLES //
 
     void fetchRGBData ();
     void fetchIMUData ();
-    void setCtrlCmdData ();
+    void fetchCtrlCmdData ();
+
+
+    
+    double readExpIvShare (const int& run_idx);
+    bool BuildRecorded (const std::string& run_id);
+
+    
+    
+    json openJSON (const std::string& path);
+
+    void addRacingRecord (const std::string& run_id, const bool& completed);
+    bool RacingRecorded (const std::string& run_id);
 
 
     
@@ -233,57 +261,51 @@ private:// CONST MEMBER VARIABLES //
     ros::Timer m_rosTMR_MAINLOOP;
     void ROSCB_testExp (const ros::TimerEvent& te);
     void ROSCB_TRAINING_DATA_GENERATION (const ros::TimerEvent& te);
-    void ROSCB_testANN_cpp (const ros::TimerEvent& te);
-    void ROSCB_NAVIGATION_BY_ANN_PYTHON (const ros::TimerEvent& te);
-    void ROSCB_DAGGER_PYTHON (const ros::TimerEvent& te);
-    void ROSCB_DAGGER_FIRST_RUN (const ros::TimerEvent& te);
+    void CB_Racing_Cpp (const ros::TimerEvent& te);
+    void CB_Racing_Python (const ros::TimerEvent& te);
+    void CB_DAGGER_Python (const ros::TimerEvent& te);
 
 
-            void updTrackStatus();
+            void runStatusTracker();
             void runExp();
             void triggerBrain();
             void runDataSaver (const bool& expert_intervened);
+            void saveOdometry ();
             void runBrain();
             void runNav(bool& intervened, void (forgetful_drone::ForgetfulDrone::*intervention_fct)(Eigen::Vector3d& _0, double& _1, bool& _2));
 
-            void runWaypointUpdater_updateWaypointIndices();
+            void updStatus();
             bool computeGlobalTrajAsCircuit();
-            void findExpertStateWithProjection();
-                void findMinDistanceStateIdx(
-                    double& min_dist,
-                    size_t& min_dist_state_idx
-                );
-                void compDist2GloTraj (
+            void findExpState();
+                void minDist2GloTraj (
                     const Eigen::Vector3d position,
                     double& min_dist,
                     size_t& min_dist_state_idx
                 );
-            Eigen::Vector3d PosDRF_From_PosWRF( const Eigen::Vector3d& PosWRF );
-            Eigen::Vector2d PosIRF_From_PosDRF( const Eigen::Vector3d& PosDRF );
+            Eigen::Vector3d LRF___WRF( const Eigen::Vector3d& PosWRF );
+            Eigen::Vector2d IRF___LRF( const Eigen::Vector3d& PosDRF );
             void findSpeedState();
-            void findHorizonState( const double& Horizon );
-            void rvizExpertAndHorizonState();
-            void runWaypointUpdater_rvizCurrWaypoint();
+            void findWaypState( const double& Horizon );
+            void rvizExpAndWaypState();
+            void rvizCurrGate();
             void rvizRefState();
 
-            void processNavigatorInput (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal);
-            void doExpIntervention (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
-            void interveneBrainDecisionWithExpert_firstRun (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
-            void doNothing (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
-            Eigen::Vector3d XYZ_DRF_From_XYDist_IRF( 
+            void procNavInput (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal);
+            void expIntervention (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
+            void noIntervention (Eigen::Vector3d& OUT_GoalPos_DRF, double& OUT_Speed2Goal, bool& exp_intervened);
+            Eigen::Vector3d LRF____IRF( 
                 const double& X_IRF, 
                 const double& Y_IRF, 
                 const double& Dist_IRF 
                 );
-            Eigen::Vector3d XYZ_ARF_From_XYZ_DRF( const Eigen::Vector3d& XYZ_DRF );
+            Eigen::Vector3d ARF___LRF( const Eigen::Vector3d& XYZ_DRF );
             bool compLocTraj(
             const Eigen::Vector3d& GoalPos_DRF,
             const double& Speed2Goal
             );
             bool checkFeasibility (RQTG::RapidTrajectoryGenerator& lt);
 
-            void updateFailedRunsFile ();
-            void saveTrainSample (const bool& expert_intervened);
+
     
 
         void rvizLocTraj();
@@ -300,19 +322,19 @@ private:// ROS PARAMETERS //
 ///////////////////////////
 
     //const bool m_DYNAMIC_GATES_ON;
-    const bool p_RVIZ_LABELEDRGB_SAVED {};
-    const bool p_RVIZ_LABELEDRGB_ENABLED {};
+    const bool p_RVIZ_LBLRGB_SAVE {};
+    const bool p_RVIZ_LBLRGB_ENABLED {};
 
 
-    const int p_CONFIG_NUMRUNS {};
+    const int p_NRUNREPS {};
     
     const int p_GLOBAL_TRAJECTORY_POLYNOMIAL_ORDER {};
     const int p_GLOBAL_TRAJECTORY_CONTINUITY_ORDER {};
     const int p_RUN_NUMLAPS {};
     
 
-    const double p_DRONE_CAMERA_HALF_YAW_AOV {};
-    const double p_DRONE_CAMERA_HALF_PITCH_AOV {};
+    const double p_CAM_HALFYAWAOV {};
+    const double p_CAM_HALFPITCHAOV {};
     
     const int p_WPARR_MAXDUR {};
 
@@ -325,31 +347,31 @@ private:// ROS PARAMETERS //
     const double p_GLOBAL_TRAJECTORY_MAX_SPEED {};
     const double p_GLOBAL_TRAJECTORY_NON_DIMENSIONAL_TEMPORAL_RANGE {};
     const double p_GLOBAL_TRAJECTORY_NON_DIMENSIONAL_SPATIAL_RANGE {};
-    const double p_WAYPOINT_ARRIVAL_THRESHOLD_DISTANCE {};
+    const double p_GATE_THRESH_DIST {};
     const double p_EXPERT_MIN_HORIZON {};
     //const double m_DRONE_CAMERA_HALF_YAW_AOV;
     //const double m_DRONE_CAMERA_HALF_PITCH_AOV;
     const double p_EXPERT_SPEED_HORIZON {};
     //const double m_ROSParam_NominalExpertLoopTime;
     const double p_NAV_MAX_DIV {};
-    const double p_EXPERT_PROJECTION_MAX_DIVERGENCE_FROM_GLOBAL_TRAJECTORY {};
+    const double p_EXP_THRESHOLD_DIV {};
 
 
 
     /////
     const int p_NAV_REPLAN_ITER_CNT {};
-    const int p_NAV_LOC_TRAJ_FEAS_MAX_SUCC_FAILS_CNT {};
+    const int p_LOCTRAJ_MAXSUCCINFEASCNT {};
 
     const int p_REPEATED_SETUP_RUN_N {};
 
-    const double p_NAV_INPUTPERTURBATION_ELEMENTWISEAMP {};
+    const double p_NAV_INPUTDISTURBAMP {};
     const double p_MAIN_FREQ {};
     
-    const double p_LOCAL_TRAJECTORY_MIN_SPEED {};
+    const double p_LOCTRAJ_MINSPEED {};
     const double p_LOCAL_TRAJECTORY_MAX_SPEED_INCREMENT {};
-    const double p_LOCAL_TRAJECTORY_DURATION {};
-    const double p_LOCAL_TRAJECTORY_MIN_DISTANCE {};
-    const double p_LOCAL_TRAJECTORY_MAX_DISTANCE {};
+    const double p_LOCTRAJ_DUR {};
+    const double p_LOCTRAJ_MINDIST {};
+    const double p_LOCTRAJ_MAXDIST {};
     const double p_LOCAL_TRAJECTORY_MAX_ALTITUDE {};
     const double p_LOCAL_TRAJECTORY_MIN_ALTITUDE {};
     const double p_LOCAL_TRAJECTORY_MIN_THRUST {};
@@ -368,13 +390,12 @@ private:// ROS PARAMETERS //
 
 
     const int p_DAGGER_FIRSTRUN_NUMLAPS {};
-    const int p_DAGGER_NUM_EPOCHS {};
-    const double p_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD {};
+    const int p_DAGGER_NEPOCHS {};
+    const double p_EIS_THRSH {};
     
 
 
-void runMission_genTrainData();
-void runMission_testANN();
+void runMission_Racing();
 void runMission_testExp();
 void runMission_trackGloTraj();
 void runMission_DAGGER();
@@ -382,16 +403,14 @@ void runMission_DAGGER();
 void waitForAutopilotState(
     const uint8_t& ap_state,
     const bool& exit_state = false) const;
-void launchDroneOffGround();
+void launchDrone();
 
-void flyDroneToPose(const geometry_msgs::Pose& target_pose) const;
+void flyDroneTo(const geometry_msgs::Pose& target_pose) const;
 void flyDroneToInitPose();
 void flyDroneAboveTrack();
-//void flyDroneBetweenLastAndSecLastGate();
-void landDroneOnGround();
-bool compGloTraj();
-void precomputeGloTrajForExpert();
-void rvizGloTraj();
+void landDrone();
+bool compGloTraj ();
+void rvizGloTraj ();
 
 void initMainLoopTimer (void (forgetful_drone::ForgetfulDrone::*callback)(const ros::TimerEvent&));
 
@@ -413,13 +432,13 @@ std::vector<geometry_msgs::Pose, std::allocator<geometry_msgs::Pose>> m_GateInit
 geometry_msgs::Pose m_DroneInitPose;
 
 
-double m_Expert_MaxHorizon;
+double m_ExpMaxHor;
 
 
 
 
 
-const kindr::minimal::QuatTransformation p_T_WRF_ARF {};
+const kindr::minimal::QuatTransformation p_WRF_ARF {};
 
 
 
@@ -431,11 +450,13 @@ std::mutex m_CtrlCmdMtx;
 
 std::string m_RunConfigDpath;
 
-std::string m_RunID;
 std::string m_RunDpath;
-std::string m_RunRGBDpath;
-std::string m_RunDataFpath;
+std::string m_exp_dat_raw_rid_rgb_;
+std::string m_exp_dat_raw_rid_lbl_;
+std::string m_exp_dat_raw_rid_TXT;
 std::string m_RunDaggerLabeledFramesDpath;
+
+std::string m_exp_rac_RID;
 
 //std::string m_RunCountString;
 
@@ -457,7 +478,7 @@ const std::vector<int> p_TRACK_GENS {};
 const std::vector<int> p_TRACK_DIRECS {};
 const std::vector<int> p_GATES {};
 const std::vector<double> p_ARF_POSE_WRF {};
-const std::vector<double> p_LOCTRAJ_MAXSPEEDS {};
+const std::vector<double> p_MAXSPEEDS {};
 const std::vector<double> p_DAGGERMARGINS {};
 
 
@@ -477,244 +498,123 @@ const std::string p_INTERMEDIATE_TARGET_LOSS_GAP_TYPE {};
 
 
 bool verifyStringParameters () const;
-void logRunInfo (const bool& num_runs_known);
-void logRunInfo (
-    const int& run_cnt,
-    const int& run_n,
-    const std::string& unity_scene,
-    const std::string& scene_site,
-    const std::string& racetrack_type,
-    const std::string& gate_type,
-    const std::string& gap_type = "",
-    const std::string& direction = "",
-    const int& rep_i = -1,
-    const int& rep_n = -1
-) const;
-void logMissionInfo () const;
-void logMissionResult () const;
-void reset4NewRun ();
-void buildSimulation (
-    const std::string& racetrack_type,
-    const std::string& unity_scene,
-    const std::string& scene_site,
-    const std::string& gate_type,
-    const std::string& itl_direction,
-    const std::string& itl_gap_type
-);
+void logRunInfo ();
 
-void buildSimulation (ForgetfulSimulator& fs); void buildSimulation ();
+void logMissionInfo (const bool& start) const;
+void newRunReset ();
+
+void buildSimulation ();
 void setTrackWaypoints ();
-void initWaypointIndices ();
-void setExpertMaxHorizon ();
+void initGateIdc ();
+void findExpMaxHor ();
 void insertGapWaypoint ();
 
-void insertITLWaypoint ();
-void startSimulation (ForgetfulSimulator& fs); void startSimulation ();
-bool runNavigation ();
-bool initExperimentDir ();
-void createRunDirectory (
-    const int& scene_idx,
-    const int& site_idx,
-    const int& gate_idx,
-    const int& rep_idx = -1,
-    const int& dir_idx = -1,
-    const int& gap_idx = -1
-);
-void createRunConfigDirectory ();
 
 
-void initRunDirectory ();
+bool startNavigation ();
 
-void initRunDaggerDirectory ();
-void stopSimulation (ForgetfulSimulator& fs); void stopSimulation ();
 
-bool initROSParameters ();
+void initRacingPaths ();
+void initRawRunPaths ();
+
+void startSim ();
+void stopSimulation ();
+
+
 
 bool initANN ();
-bool initBrain_Python ();
-bool initBrain_Cpp ();
+bool initANN_Python ();
+bool initANN_Cpp ();
 
-bool checkPaths ();
 bool initExperiment ();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Init
 bool initTrafoArf2Wrf ();
+bool initROSParameters ();
 
-std::string ExperimentDpath();
-std::string DataDpath();
-std::string RawDpath();
-std::string ConfigDpath();
-std::string OutputDpath();
-
-std::string RunID ();
-std::string RunDPath ();
-std::string ConfigFpath ();
-std::string ScriptModuleFpath ();
-std::string ParamsFpath (const bool& src_not_dst);
-
-
-
-
-
-static constexpr const char* h_EXPERIMENTS_DNAME = "experiments";
-static constexpr const char* h_DATA_DNAME = "data";
-static constexpr const char* h_RAW_DNAME = "raw";
-static constexpr const char* h_CONFIG_DNAME = "config";
-static constexpr const char* h_OUTPUT_DNAME = "output";
-static constexpr const char* h_PARAMS_DNAME = "parameters";
-static constexpr const char* h_PARAMS_FNAME = "forgetful_drone.yaml";
-static constexpr const char* h_RUN_DNAME_PREFIX = "run";
-static constexpr const char* h_RUN_IMAGES_DNAME = "rgb";
-static constexpr const char* h_CAMFRAME_FEXT = ".jpg";
-static constexpr const char* h_DATA_FNAME = "data.txt";
-static constexpr const char* h_IMU_FNAME = "imu.txt";
-static constexpr const char* h_CONTROLCOMMAND_FNAME = "control_command.txt";
-static constexpr const char* h_WAYPOINTSPEED_FNAME = "waypoint_speed.txt";
-static constexpr const char* h_RUN_LABELEDIMAGES_DNAME = "labeled_images";
-static constexpr const char* h_RUN_DAGGER_DNAME_PREFIX = "dagger";
-static constexpr const char* h_RECORDINGS_FNAME = "recordings.json";
-static constexpr const char* h_FAILEDRUNS_FNAME = "failed_runs.txt";
-static constexpr const char* h_CONFIG_FNAME = "config.json";
-static constexpr const char* h_SCRIPTMODULE_FNAME = "model_scripted_with_annotation.pt";
-
-
-static constexpr int h_BATCHSIZE = 1;
-static constexpr int h_SEQUENCE_LENGTH = 1;
-
-
-
-static constexpr std::array<const char*, 5> h_MISSIONS {
-    "TRACK_GLOBAL_TRAJECTORY",
-    "TEST_EXPERT",
-    "TEST_ANN",
-    "TRAINING_DATA_GENERATION",
+static constexpr std::array <const char*, 5> h_MISSIONS {
+    "RACING_GLOBAL_TRAJECTORY",
+    "RACING_EXPERT",
+    "RACING_ANN",
     "DAGGER"
 };
 
-//&ForgetfulDrone::ROSCB_NAVIGATION_BY_ANN_PYTHON
-//void (forgetful_drone::ForgetfulDrone::*callback)(const ros::TimerEvent&)
-//static constexpr std::array<const char*, 2> h_TORCH_INTERFACES {
-//    "PYTHON",
-//    "CPP",
-//};
-static constexpr std::array<std::tuple<const char*, 
+
+
+// Paths
+std::string RunID ();
+std::string _exp_ ();
+std::string _exp_cnf_ ();
+std::string _exp_cnf_YML (const bool& src);
+std::string _exp_cnf_CNF ();
+std::string _exp_dat_ ();
+std::string _exp_dat_raw_ ();
+std::string _exp_dat_raw_rid_ ();
+std::string _exp_dat_raw_rid_rgb_ ();
+std::string _exp_dat_raw_rid_lbl_ ();
+std::string _exp_dat_raw_rid_TXT ();
+std::string _exp_out_ ();
+std::string _exp_out_BRC ();
+std::string _exp_out_TRC ();
+std::string _exp_out_CPT ();
+std::string _exp_out_ANT ();
+std::string _exp_out_TRA ();
+std::string _exp_rac_ ();
+std::string _exp_rac_RRC ();
+std::string _exp_rac_RID ();
+
+
+
+// Brain
+    //static constexpr int h_BATCHSIZE = 1;
+    //static constexpr int h_SEQUENCE_LENGTH = 1;
+
+static constexpr std::array <const char*, 9> h_OPTINPUTS {
+    "rgb_dt", "imu_dt",
+    "imu_linacc_x", "imu_linacc_y", "imu_linacc_z",
+    "imu_angvel_x", "imu_angvel_y", "imu_angvel_z",
+    "max_speed"
+};
+static constexpr std::array <std::tuple <const char*, 
     void (forgetful_drone::ForgetfulDrone::*)(const ros::TimerEvent&)>, 2> h_TORCH_INTERFACES {
-    std::make_tuple("PYTHON", &ForgetfulDrone::ROSCB_NAVIGATION_BY_ANN_PYTHON),
-    std::make_tuple("CPP", &ForgetfulDrone::ROSCB_testANN_cpp),
+    std::make_tuple ("PYTHON", &ForgetfulDrone::CB_Racing_Python),
+    std::make_tuple ("CPP", &ForgetfulDrone::CB_Racing_Cpp),
 };
 
 
-const std::vector<std::string> h_ANN_OPT_INPUTS {
-    "rgb_dt",
-    "imu_dt",
-    "imu_linacc_x",
-    "imu_linacc_y",
-    "imu_linacc_z",
-    "imu_angvel_x",
-    "imu_angvel_y",
-    "imu_angvel_z",
-    "max_speed",
-};
-
-const std::vector<std::string> h_UNITY_SCENES {
-    "spaceship_interior",
-    "destroyed_city",
-    "industrial_park",
-    "polygon_city",
-    "desert_mountain",
-};
-const std::vector<std::string> h_SCENE_SITES {
-    "a",
-    "b",
-    "c",
-};
-const std::vector<std::string> h_TRACK_TYPES {
-    "figure8_determinstic",
-    "figure8_randomized",
-    "circuit_randomized",
-    "sprint_randomized",
-    "intermediate_target_loss_randomized",
-};
-const std::vector<std::string> h_GATE_TYPES {
-    "tub_dai",
-    "thu_dme",
-};
-const std::vector<std::string> m_ITL_GAP_TYPE_STRS {
-    "narrow",
-    "wide",
-};
-const std::vector<std::string> m_ITL_DIRECTION_STRS {
-    "clockwise",
-    "counterclockwise",
-};
-const std::unordered_map<std::string, uint8_t> m_STR2VAL_MAP {
-
-    {h_TRACK_TYPES[0], BDRSR::FIGURE8_DETERMINISTIC},
-    {h_TRACK_TYPES[1], BDRSR::FIGURE8_RANDOMIZED},
-    {h_TRACK_TYPES[2], BDRSR::CIRCUIT_RANDOMIZED},
-    {h_TRACK_TYPES[3], BDRSR::SPRINT_RANDOMIZED},
-    {h_TRACK_TYPES[4], BDRSR::INTERMEDIATE_TARGET_LOSS},
-
-    {h_UNITY_SCENES[0], BDRSR::SPACESHIP_INTERIOR},
-    {h_UNITY_SCENES[1], BDRSR::DESTROYED_CITY},
-    {h_UNITY_SCENES[2], BDRSR::INDUSTRIAL_PARK},
-    {h_UNITY_SCENES[3], BDRSR::POLYGON_CITY},
-    {h_UNITY_SCENES[4], BDRSR::DESERT_MOUNTAIN},
-
-    {h_SCENE_SITES[0], BDRSR::SITE_A},
-    {h_SCENE_SITES[1], BDRSR::SITE_B},
-    {h_SCENE_SITES[2], BDRSR::SITE_C},
-
-    {h_GATE_TYPES[0], BDRSR::TUB_DAI_GATE},
-    {h_GATE_TYPES[1], BDRSR::THU_DME_GATE},
-
-    {m_ITL_GAP_TYPE_STRS[0], BDRSR::NARROW_GAP},
-    {m_ITL_GAP_TYPE_STRS[1], BDRSR::WIDE_GAP},
-
-    {m_ITL_DIRECTION_STRS[0], true},
-    {m_ITL_DIRECTION_STRS[1], false},
-};
-
-
+// RVIZ
 double m_ActualNormSpeed;
 
 
+// Expert
+size_t m_WaypStateIdx;
+size_t m_SpeedStateIdx;
 
-size_t m_GT_HorizonState_i;
-size_t m_GT_SpeedState_i;
-
-
-
-
-
-
-
-
-
-
-
+// Navigator
 quadrotor_common::TrajectoryPoint m_RefState_ARF;
+void switchNav (const bool& enabled);
+
+// Status Tracker
+ros::Time m_LastGateTime;
 
 
-bool m_GT_CompFailed;
-
-ros::Time m_WpArrLastTime;
-
-
-//////////////////////
-private:// METHODS //
-////////////////////
-
-//void switchDynamicGates( const bool& SwitchOn );
-void switchNavigator( const bool& SwitchOn );
-
-void resetRVIZ();
-
-
-
-public:
-    
-    
-private:
-    void gGT_computePreliminaryTemporalCoordinates();
 
 
 
@@ -733,9 +633,4 @@ friend bool fetchROSParameters (
 
 
 };
-
-
-void generateRacetrackData();
-std::vector<quadrotor_common::TrajectoryPoint> compGloTraj
-(std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> Waypoints);
 }

@@ -95,6 +95,7 @@ class ForgetfulANN (torch.nn.Module):
     def __init__ (
         self, 
         input_config: Dict [str, Dict [str, Any]],
+        log_on : bool = True,
         *args, **kwargs
     ) -> None:
     
@@ -133,7 +134,7 @@ class ForgetfulANN (torch.nn.Module):
             activation_function_id=self.config['head']['activation_function_id'],
             bias=self.config['head']['bias'])
         self.addToConsoleRepresentation('|_________________________________________________')
-        print(self.console_representation)
+        if log_on: print(self.console_representation)
 
 
     def initConfiguration (self, input_config: Dict [str, Dict [str, Any]]) -> Dict [str, Dict [str, Any]]:
@@ -155,10 +156,8 @@ class ForgetfulANN (torch.nn.Module):
 
 
     def addToConsoleRepresentation (self, text: str) -> None:
-        try:
-            self.console_representation += text + '\n'
-        except:
-            self.console_representation = text + '\n'
+        try: self.console_representation += text + '\n'
+        except: self.console_representation = text + '\n'
 
     def exportInputConfigAsJSON (self, dirpath: pathlib.Path) -> None:
         filename = "forgetfulAnn_inputConfig.json"

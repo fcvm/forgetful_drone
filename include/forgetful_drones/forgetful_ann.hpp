@@ -36,6 +36,7 @@ class ForgetfulANN {
         const uint m_RGBWidth;
         const std::vector<bool> m_OPTMask;
         const uint m_OPTSize;
+        float* m_optPtr;
         const uint m_GRUNumLayers;
         const uint m_GRUHiddenSize;
         const c10::DeviceType m_TorchDevice;
@@ -75,8 +76,8 @@ class ForgetfulANN {
                     .requires_grad(false);
 
             try {
-                m_TorchScriptModule = torch::jit::load(script_module_fpath);
-                m_TorchScriptModule.to(torch::Device(m_TorchDevice, 0));
+                m_TorchScriptModule = torch::jit::load (script_module_fpath);
+                m_TorchScriptModule.to (torch::Device (m_TorchDevice, 0));
             } catch (const c10::Error& e) {
                 ROSERROR("Error loading model: " << e.what());
                 return false;
@@ -90,7 +91,7 @@ class ForgetfulANN {
                 << "\t\t- SCRIPT MODULE:   " << script_module_fpath << std::endl
                 << "\t\t- TORCH DEVICE:    " << std::get<0>(h_BRAIN_TORCHDEVICES[torch_device]) << std::endl
                 << "\t\t- RGB SIZE:        " <<  m_RGBHeight << " x " << m_RGBWidth << std::endl
-                << "\t\t- OPT MASK:        " <<  m_OPTMask << std::endl
+                << "\t\t- OPT MASK:        " <<  m_OPTMask << ",      size: " <<  m_OPTSize << std::endl
                 << "\t\t- GRU # LAYERS:    " << m_GRUNumLayers << std::endl
                 << "\t\t- GRU HIDDEN SIZE: " << m_GRUHiddenSize
             );
@@ -100,99 +101,108 @@ class ForgetfulANN {
         }
 
         void initHiddenState () {
-            m_GRUHiddenState = std::vector<float>(
+            m_GRUHiddenState = std::vector <float> (
                 m_GRUNumLayers * BATCH_SIZE * m_GRUHiddenSize, 0.0);
         };
 
+        template <size_t N>
+        Eigen::Vector3d forward (const cv::Mat& rgb_raw, const float (&inp_opt)[N]) {
 
-        Eigen::Vector3d inferNavigationDecision (
-            const cv::Mat& raw_rgb,
-            const std::vector<double>& opt_input
-        ) {
-            at::Tensor x_rgb = tensorFromRGB (preprocessRGB (raw_rgb));
-            at::Tensor x_opt = tensorFromOpt (preprocessOPT (opt_input));
+            at::Tensor x_rgb = tensorFromRGB (preprocessRGB (rgb_raw));
+            preprocessOPT (inp_opt); at::Tensor x_opt = tensorFromOpt ();
             at::Tensor h = tensorFromHidden ();
 
-            std::vector<torch::jit::IValue> input {x_rgb, x_opt, h};
-            auto output = m_TorchScriptModule.forward(input).toTuple();
+            std::vector <torch::jit::IValue> input {x_rgb, x_opt, h};
+            auto output = m_TorchScriptModule.forward (input).toTuple ();
+            free (m_optPtr);
+            
 
-            torch::Tensor output_x = output->elements()[0].toTensor().cpu();
-            torch::Tensor output_h = output->elements()[1].toTensor().cpu().view(
+
+            torch::Tensor output_x = output->elements () [0].toTensor ().cpu ().view ({3});
+            torch::Tensor output_h = output->elements () [1].toTensor ().cpu ().view (
                 {m_GRUNumLayers * BATCH_SIZE * m_GRUHiddenSize}
             );
 
-            auto acc_h = output_h.accessor<float, 1>();
-            for (int i = 0; i < acc_h.size(0); i++) m_GRUHiddenState[i] = acc_h[i];
+            auto acc_h = output_h.accessor <float, 1> ();
+            for (int i = 0; i < acc_h.size (0); i++) m_GRUHiddenState [i] = acc_h [i];
                 
-            auto acc_x = output_x.accessor<float, 2>();
-            return {acc_x[0][0], acc_x[0][1], acc_x[0][2]};
+            //auto acc_x = output_x.accessor <float, 2> ();
+            //Eigen::Vector3d out {acc_x [0] [0], acc_x [0] [1], acc_x [0] [2]};
+
+            auto acc_x = output_x.accessor <float, 1> ();
+            return {(double) acc_x [0], (double) acc_x [1], (double) acc_x [2]};
         };
 
     
     private:
 
         cv::Mat preprocessRGB (const cv::Mat& raw) {
-            cv::Mat resized; cv::resize(
+
+            //ROSINFO (GET_VAR_REP (raw.rows) << " x " << GET_VAR_REP (raw.cols));
+    
+            cv::Mat resized; cv::resize (
                 raw, 
                 resized, 
-                cv::Size(m_RGBWidth, m_RGBHeight)
+                cv::Size (m_RGBWidth, m_RGBHeight)
             );
 
-            cv::Mat converted; cv::cvtColor(
+            //ROSINFO (GET_VAR_REP (resized.rows) << " x " << GET_VAR_REP (resized.cols));
+
+            cv::Mat converted; cv::cvtColor (
                 resized, 
                 converted, 
                 cv::COLOR_BGR2RGB
             );
 
-            cv::Mat normalized; converted.convertTo(
+
+            cv::Mat normalized; converted.convertTo (
                 normalized, CV_32F, 1.0 / 255
             );
 
             return normalized;
         }
 
-        std::vector<double> preprocessOPT (const std::vector<double>& in) {
-            
-            std::vector<double> out; out.reserve(m_OPTSize);
-            
-            for (size_t i = 0; i < in.size(); i++) {
-                if (m_OPTMask[i]) out.push_back(in[i]);
-            }
+        template <size_t N>
+        void preprocessOPT (const float (&in)[N]) {
+            m_optPtr = (float *) malloc (m_OPTSize * sizeof (*m_optPtr));
 
-            return out;
+            size_t j = 0;
+            for (size_t i = 0; i < N; i++) 
+                if (m_OPTMask [i])
+                    m_optPtr [j++] = in [i];
         };
 
 
 
         at::Tensor tensorFromRGB (const cv::Mat& in) {
-            at::Tensor out = torch::from_blob(
+            at::Tensor out = torch::from_blob (
                 in.data,
-                {SEQUENCE_LENGTH, BATCH_SIZE, in.rows, in.cols, in.channels()},
+                {SEQUENCE_LENGTH, BATCH_SIZE, in.rows, in.cols, in.channels ()},
                 m_TorchTensorOptions
             );
-            out = out.permute({0, 1, 4, 2, 3});
+            out = out.permute ({0, 1, 4, 2, 3});
             
-            return out.to(torch::Device(m_TorchDevice, 0));
+            return out.to (torch::Device (m_TorchDevice, 0));
         }
 
-        at::Tensor tensorFromOpt (const std::vector<double>& in) {
-            at::Tensor out = torch::from_blob(
-                const_cast<std::vector<double>&>(in).data(),
-                {SEQUENCE_LENGTH, BATCH_SIZE, (signed long) in.size()},
+        at::Tensor tensorFromOpt () {
+            at::Tensor out = torch::from_blob (
+                m_optPtr,
+                {SEQUENCE_LENGTH, BATCH_SIZE, m_OPTSize},
                 m_TorchTensorOptions
             );
             
-            return out.to(torch::Device(m_TorchDevice, 0));
+            return out.to (torch::Device (m_TorchDevice, 0));
         }
 
         at::Tensor tensorFromHidden () {
-            at::Tensor out = torch::from_blob(
-                m_GRUHiddenState.data(), 
+            at::Tensor out = torch::from_blob (
+                m_GRUHiddenState.data (),
                 {m_GRUNumLayers, BATCH_SIZE, m_GRUHiddenSize},
                 m_TorchTensorOptions
             );
             
-            return out.to(torch::Device(m_TorchDevice, 0));
+            return out.to (torch::Device (m_TorchDevice, 0));
         }
 
 
