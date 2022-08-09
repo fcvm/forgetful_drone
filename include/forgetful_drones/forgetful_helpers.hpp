@@ -76,6 +76,7 @@ public:
 
     Pose();
     Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori);
+    Pose(const geometry_msgs::Pose& pose);
 
     geometry_msgs::Point position_as_geometry_msg() const;
     geometry_msgs::Quaternion orientation_as_geometry_msg() const;
@@ -137,17 +138,15 @@ GMPoint__from__EV3d
 ( const Eigen::Vector3d& IN );
 
 
-Eigen::Vector3d
-EV3d_From_GMP
-( const geometry_msgs::Point& IN );
+Eigen::Vector3d EV3d___GMP (const geometry_msgs::Point& p);
+Eigen::Vector3f EV3f___GMP (const geometry_msgs::Point& p);
 
 Eigen::Vector3d
 EV3d_From_GMV3
 ( const geometry_msgs::Vector3& IN );
 
-Eigen::Quaterniond
-EQd_From_GMQ
-( const geometry_msgs::Quaternion& IN );
+Eigen::Quaternionf EQf___GMQ (const geometry_msgs::Quaternion& q);
+Eigen::Quaterniond EQd___GMQ (const geometry_msgs::Quaternion& q);
 
 geometry_msgs::Quaternion
 GMQ_From_EQd

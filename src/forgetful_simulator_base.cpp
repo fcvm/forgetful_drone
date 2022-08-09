@@ -22,7 +22,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
     // ROS publishers
         m_rosPUB_RVIZ_GATES {m_rosRNH.advertise<visualization_msgs::MarkerArray>("rviz/gates", 1, true)},
         m_rosPUB_RVIZ_DRONE {m_rosRNH.advertise<visualization_msgs::MarkerArray>("rviz/drone", 1, true)},
-        //m_ROSPub_GazeboSetModelState( m_rosRNH.advertise<gazebo_msgs::ModelState>("/gazebo/set_model_state", 0) ), //DYNGATES
+        m_ROSPub_GazeboSetModelState {m_rosRNH.advertise <gazebo_msgs::ModelState> ("/gazebo/set_model_state", 0)},
         m_rosPUB_FLIGHTMARE_RGB {},
         //m_rosPUB_FLIGHTMARE_DEPTH {},
         //m_rosPUB_FLIGHTMARE_SEGMENTATION {},
@@ -38,6 +38,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
         m_rosSVC_GAZEBO_SPAWN_URDF_MODEL {m_rosRNH.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_urdf_model")},
         m_rosSVC_GAZEBO_DELETE_MODEL {m_rosRNH.serviceClient<gazebo_msgs::DeleteModel>("/gazebo/delete_model")},
         m_rosSVC_GAZEBO_SPAWN_SDF_MODEL {m_rosRNH.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_sdf_model")},
+        m_rosSVC_GAZEBO_GET_MODEL_STATE {m_rosRNH.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state")},
         m_rosSVC_RVIZ_LOAD_CONFIG {m_rosRNH.serviceClient<rviz::SendFilePath>("rviz/load_config")},
         //m_ROSSrvCl_GazeboResetSimulation( m_rosRNH.serviceClient<std_srvs::Empty>("/gazebo/reset_simulation") ),
 
@@ -45,6 +46,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
         m_rosSVS_SIMULATOR_BUILD {m_rosRNH.advertiseService("simulator/build", &ForgetfulSimulator::ROSCB_SIMULATOR_BUILD, this)},
         m_rosSVS_SIMULATOR_START {m_rosRNH.advertiseService("simulator/start", &ForgetfulSimulator::ROSCB_SIMULATOR_START, this)},
         m_rosSVS_SIMULATOR_STOP {m_rosRNH.advertiseService("simulator/stop", &ForgetfulSimulator::ROSCB_SIMULATOR_STOP, this)},
+        m_rosSVS_SIMULATOR_TELEPORT {m_rosRNH.advertiseService("simulator/teleport_drone", &ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT, this)},
 
     // ROS timers
         //m_ROSTimer_SimulatorLoop( m_rosRNH.createTimer(ros::Duration(m_SimulatorLoopTime), &ForgetfulSimulator::ROSTimerFunc_SimulatorLoop, this, false, false) ), // DYNGATES
@@ -433,6 +435,44 @@ bool ForgetfulSimulator::ROSCB_SIMULATOR_STOP (fdStopSReq& req, fdStopSRes& res)
     return stopSimulation();
 }
 
+
+bool ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req, std_srvs::Empty::Response& res) {
+    gazebo_msgs::GetModelState srv;
+    srv.request.model_name = h_DRONE_MODEL_NAME;
+
+    if (!callRosSrv (ROS_LOG_PREFIX, m_rosSVC_GAZEBO_GET_MODEL_STATE, srv)) return false;
+    forgetful_drone::Pose p0 (srv.response.pose);
+    const forgetful_drone::Pose& p1 = m_GazeboDroneInitPose;
+    
+    gazebo_msgs::ModelState msg;
+    msg.model_name = h_DRONE_MODEL_NAME;
+    
+    ros::Rate r (10.0);
+    for (float t = 0; t <= 1; t += 1.0 / 100 ) {
+        ROSINFO (t);
+        
+        forgetful_drone::Pose pt {
+            p0.position * (1 - t) + p1.position * (t),
+            p0.orientation.slerp (t, p1.orientation)
+        };
+        msg.pose = pt.as_geometry_msg ();
+        m_ROSPub_GazeboSetModelState.publish (msg);
+        r.sleep ();
+    }
+    return true;
+
+
+
+
+    //ROSINFO("Gazebo: delete drone");
+//
+    //gazebo_msgs::DeleteModel srv;
+    //srv.request.model_name = h_DRONE_MODEL_NAME;
+    //if (!m_rosSVC_GAZEBO_DELETE_MODEL.call (srv)) return false;
+//
+    //m_GazeboDroneSpawned = false;    
+    //return true;
+}
 
 
 
@@ -2106,7 +2146,7 @@ void ForgetfulSimulator::startSimulation_spawnRVizGates()
 
 
 
-void ForgetfulSimulator::startSimulation_spawnGazeboDrone() {
+void ForgetfulSimulator::startSimulation_spawnGazeboDrone () {
     ROSINFO("Gazebo: spawn drone");
 
     gazebo_msgs::SpawnModel srv;
@@ -2196,7 +2236,7 @@ void ForgetfulSimulator::startSimulation_deleteGazeboModelsExceptDrone () {
                 ROSERROR("Gazebo: failed to delete \"" << model_name << "\"");
             }
         }
-    }    
+    }
 }
 
 

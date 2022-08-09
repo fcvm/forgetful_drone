@@ -23,6 +23,7 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_SCL__simBuild {m_rosRNH.serviceClient<fdBS>("simulator/build")},
     m_SCL__simStart {m_rosRNH.serviceClient<fdStartS>("simulator/start")},
     m_SCL__simStop {m_rosRNH.serviceClient<fdStopS>("simulator/stop")},
+    m_SCL__simTeleport {m_rosRNH.serviceClient<std_srvs::Empty>("simulator/teleport_drone")},
     
     // Forgetful Brain
     m_SUB__fbOutput         {m_rosRNH.subscribe("brain/output", 1, &ForgetfulDrone::CB__fbOutput, this)},
@@ -578,7 +579,23 @@ void ForgetfulDrone::rvizLblRGB() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool ForgetfulDrone::wait4APState (const uint8_t& state, const bool& enter, const double& dur) const {
+    
+    auto cond = [this, state, enter] () {
+        return enter? (m_AutopilotState != state) : (m_AutopilotState == state);
+    };
 
+    ros::Rate Rate (100.0);
+    double t0 = ros::Time::now ().toSec ();
+    while (cond ()) {
+        ros::spinOnce (); 
+        Rate.sleep ();
+        
+        if (ros::Time::now ().toSec () - t0 > dur) return false;
+    }
+
+    return true;
+}
 void ForgetfulDrone::waitForAutopilotState (const uint8_t& state, const bool& exit) const {
     //std::string aps_string;
     //switch (state)
@@ -601,8 +618,8 @@ void ForgetfulDrone::waitForAutopilotState (const uint8_t& state, const bool& ex
     }
 }
 
-void ForgetfulDrone::launchDrone () {
-    if (m_DroneLaunched) return;
+bool ForgetfulDrone::launchDrone () {
+    if (m_DroneLaunched) return true;
 
     std::string m = "Launch drone off ground";
     playAudio (m); ROSINFO (m);
@@ -611,57 +628,82 @@ void ForgetfulDrone::launchDrone () {
     m_PUB__apOff.publish (std_msgs::Empty ());
     std_msgs::Bool msg; msg.data = true; m_PUB__bridgeArm.publish (msg);
     m_PUB__apStart.publish (std_msgs::Empty ());
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::BREAKING);
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
+    
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::BREAKING, true, 10.0)) return false;
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::HOVER, true, 5.0)) return false;
+    //waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::BREAKING);
+    //waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
     
     m_DroneLaunched = true;
 
     m = "Drone launched"; 
     playAudio (m); ROSINFO (m);
     ros::Duration(1.0).sleep();
+
+    return true;
 }
 
-void ForgetfulDrone::landDrone () {
-    if (!m_DroneLaunched) return;
+bool ForgetfulDrone::landDrone () {
+    if (!m_DroneLaunched) return true;
 
     std::string m = "Land drone on ground";
     playAudio (m); ROSINFO (m);
 
-    m_PUB__apLand.publish( std_msgs::Empty ());    
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::OFF);
-    std_msgs::Bool msg; msg.data = false; m_PUB__bridgeArm.publish (msg);
+    m_PUB__apLand.publish (std_msgs::Empty ());
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::OFF, true, 60.0)) return false;  
+    
     
     m_DroneLaunched = false;
 
     m = "Drone landed"; 
     playAudio (m); ROSINFO (m);
     ros::Duration (1.0).sleep();
+
+    return true;
 }
 
 
-void ForgetfulDrone::flyDroneTo (const geometry_msgs::Pose& p) const {
+bool ForgetfulDrone::flyDroneTo (const geometry_msgs::Pose& p, const double& max_dur) const {
     std::ostringstream m_p; m_p
         << std::setprecision (3)
         << " x:" << p.position.x 
         << " y:" << p.position.y 
         << " z:" << p.position.z 
-        << " yaw:" << Yaw_From_EQd (EQd_From_GMQ (p.orientation));
+        << " yaw:" << Yaw_From_EQd (EQd___GMQ (p.orientation));
     
     ROSINFO ("  - Fly drone to" << m_p.str ());
     
+
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::HOVER, true, 5.0)) return false;
     geometry_msgs::PoseStamped msg; msg.pose = p;
     m_PUB__apPoseCmd.publish (msg);
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::HOVER, false, 5.0)) return false;
+    if (!wait4APState (quadrotor_msgs::AutopilotFeedback::HOVER, true, max_dur)) return false;
 
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER, true);
-    waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
+    //waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
+    //waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER, true);
+    //waitForAutopilotState (quadrotor_msgs::AutopilotFeedback::HOVER);
     
     ROSINFO ("  - Drone arrived at" << m_p.str ());
+    return true;
 }
 
+bool ForgetfulDrone::carryDroneBack () {
+    std::string m {"Carry drone back"};
+    ROSINFO (m); playAudio (m);
+    std::cout << std::endl;
+    
+    std_msgs::Bool msg; msg.data = false; m_PUB__bridgeArm.publish (msg);
+    m_PUB__apOff.publish (std_msgs::Empty ());
+    m_DroneLaunched = false;
+    
+    std_srvs::Empty srv;
+    return callRosSrv (ROS_LOG_PREFIX, m_SCL__simTeleport, srv);
+}
 
-void ForgetfulDrone::flyDroneAboveTrack () {
-    ROSINFO ("Fly drone above racetrack");
+bool ForgetfulDrone::flyDroneAboveTrack () {
+    std::string m {"Fly drone above racetrack"};
+    ROSINFO (m); playAudio (m);
 
     // find indices of the two closest gates
     Eigen::Vector3d p = m_ARF_LRF.getPosition ();
@@ -683,30 +725,36 @@ void ForgetfulDrone::flyDroneAboveTrack () {
 
     // fly drone between the two closest gates
     p = (m_GloTrajWayps [imin] + m_GloTrajWayps [jmin]) / 2;
-    flyDroneTo (GMPose___EV3d_EQd (p, q));
+    if (!flyDroneTo (GMPose___EV3d_EQd (p, q), 120.0)) return false;
 
     // fly drone upwards above the track
     p.z () += 6.0;
-    flyDroneTo (GMPose___EV3d_EQd (p, q));
+    if (!flyDroneTo (GMPose___EV3d_EQd (p, q), 60.0)) return false;
 
     std::cout << std::endl;
+    return true;
 }
 
 
 
 
-void ForgetfulDrone::flyDroneToInitPose () {
-    ROSINFO ("Fly drone to init pose");
+bool ForgetfulDrone::flyDroneToInitPose (const bool& from_above) {
+    std::string m {"Fly drone to start"};
+    ROSINFO (m); playAudio (m);
 
-    // fly drone above start position
-    geometry_msgs::Pose p = m_DroneInitPose;
-    p.position.z += 6.0;
-    flyDroneTo (p);
+    if (from_above) {
+        // fly drone above start position
+        geometry_msgs::Pose p = m_DroneInitPose;
+        p.position.z += 6.0;
+        if (!flyDroneTo (p, 300.0)) return false;
+    }
+
 
     // fly drone down to start position
-    flyDroneTo (m_DroneInitPose);
+    if (!flyDroneTo (m_DroneInitPose, 60.0)) return false;
 
     std::cout << std::endl;
+    return true;
 }
 
 
@@ -718,7 +766,7 @@ void ForgetfulDrone::flyDroneToInitPose () {
 
 void ForgetfulDrone::initMainLoopTimer (void (forgetful_drone::ForgetfulDrone::*callback)(const ros::TimerEvent&)) {
     m_rosTMR_MAINLOOP = m_rosRNH.createTimer(
-        /*rate*/ ros::Rate(p_MAIN_FREQ), 
+        /*rate*/ ros::Rate (p_MAIN_FREQ), 
         /*callback*/ callback, /*obj*/ this, 
         /*oneshot*/ false, /*autostart*/ false
     );
@@ -888,7 +936,7 @@ void ForgetfulDrone::setTrackWaypoints () {
     m_GloTrajWayps.clear(); 
     m_GloTrajWayps.reserve(m_GateInitPoses.size());
     for (const geometry_msgs::Pose& pose : m_GateInitPoses) {
-        m_GloTrajWayps.push_back(EV3d_From_GMP(pose.position));
+        m_GloTrajWayps.push_back(EV3d___GMP(pose.position));
     }
 
     if (m_TrackTypeIdx == 1) // Gap
@@ -943,14 +991,14 @@ void ForgetfulDrone::findExpMaxHor () {
 void ForgetfulDrone::startSim () {
     fdStartS srv; 
     while (!callRosSrv <fdStartS> (ROS_LOG_PREFIX, m_SCL__simStart, srv)) 
-        ros::Duration(1.0).sleep();
+        ros::Duration (1.0).sleep();
 }
 
 
 void ForgetfulDrone::stopSimulation () {
     fdStopS srv;
     while (!callRosSrv <fdStopS> (ROS_LOG_PREFIX, m_SCL__simStop, srv))
-        ros::Duration(1.0).sleep();
+        ros::Duration (1.0).sleep();
 }
 
 
@@ -975,7 +1023,8 @@ bool ForgetfulDrone::startNavigation () {
             ROS_LOG_PREFIX << "   - " << t_left << " s left to pass target gate");
         
         if (t_left < 0) {
-            ROSERROR ("No waypoint passed in " << p_WPARR_MAXDUR << " s -> abort run");
+            std::ostringstream oss; oss << "No waypoint passed in " << p_WPARR_MAXDUR << " s -> abort run";
+            ROSERROR (oss.str()); playAudio (oss.str ());
             switchNav (false);
             break;
         }
@@ -1050,8 +1099,12 @@ void ForgetfulDrone::runMission_testExp () {
         rvizGloTraj ();
 
         
-        launchDrone (); 
-        flyDroneToInitPose ();
+        if (!launchDrone ()) {
+            ROS_WARN ("Drone failed to launch -> skip run");
+        }
+        if (!flyDroneToInitPose (true)) {
+            ROS_WARN ("Drone failed to arrive at start -> skip run");
+        }
 
         bool track_completed = startNavigation();
         stopSimulation ();
@@ -1134,8 +1187,18 @@ void ForgetfulDrone::runMission_Racing () {
             startSim ();
             // rvizGloTraj ();
             
-            launchDrone (); 
-            flyDroneToInitPose ();
+            if (!launchDrone ()) {
+                ROS_WARN ("Drone failed to launch -> repeat run");
+                stopSimulation ();
+                m_RunRepIdx--;
+                continue;
+            }
+            if (!flyDroneToInitPose (false)) {
+                ROS_WARN ("Drone failed to arrive at start -> repeat run");
+                stopSimulation ();
+                m_RunRepIdx--;
+                continue;
+            }
 
             
             if (p_TORCH_INTERFACE_IDX == 0) {
@@ -1151,10 +1214,14 @@ void ForgetfulDrone::runMission_Racing () {
 
             bool track_completed = startNavigation ();
             stopSimulation ();
-            flyDroneAboveTrack ();
 
+            if (!carryDroneBack ()) {
+                ROS_ERROR ("Failed to carry drone back");
+                ros::shutdown ();
+            }
+            
             if (track_completed) {
-                //...
+                playAudio ("Run successful");
                 m_RunRepSuccCnt++;
             }
             
@@ -1241,8 +1308,14 @@ void ForgetfulDrone::runMission_DAGGER () {
             startSim ();
             rvizGloTraj ();
 
-            launchDrone ();
-            flyDroneToInitPose ();
+            if (!launchDrone ()) {
+                ROS_WARN ("Drone failed to launch -> repeat run");
+                continue;
+            }
+            if (!flyDroneToInitPose (true)) {
+                ROS_WARN ("Drone failed to arrive at start -> repeat run");
+                continue;
+            }
 
             if (m_RunIdx > 0) {
                 if (p_TORCH_INTERFACE_IDX == 0) {

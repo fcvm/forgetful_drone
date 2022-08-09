@@ -7,16 +7,28 @@
 
 
 
-namespace forgetful_drone
-{
+namespace forgetful_drone {
 
-Pose::Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori)
-    : position{pos}, orientation{ori}
+
+Pose::Pose (const Eigen::Vector3f pos, const Eigen::Quaternionf ori)
+    : 
+    position {pos}, 
+    orientation {ori}
     {}
 
-Pose::Pose()
-    : position{0.0, 0.0, 0.0}, orientation{1.0, 0.0, 0.0, 0.0}
+Pose::Pose ()
+    : 
+    position {0.0, 0.0, 0.0}, 
+    orientation {1.0, 0.0, 0.0, 0.0}
     {}
+
+Pose::Pose (const geometry_msgs::Pose& pose)
+    : 
+    position {EV3f___GMP (pose.position)}, 
+    orientation {EQf___GMQ (pose.orientation)}
+    {}
+
+
 
 geometry_msgs::Point Pose::position_as_geometry_msg() const
 {
@@ -145,27 +157,13 @@ geometry_msgs::Point GMPoint__from__EV3d (const Eigen::Vector3d& v) {
     return p;
 }
 
+Eigen::Vector3d EV3d_From_GMV3 (const geometry_msgs::Vector3& IN) {return {IN.x, IN.y, IN.z };}
 
-Eigen::Vector3d
-EV3d_From_GMP
-( const geometry_msgs::Point& IN )
-{
-    return {IN.x, IN.y, IN.z };
-}
+Eigen::Vector3d EV3d___GMP (const geometry_msgs::Point& p) {return {p.x, p.y, p.z};}
+Eigen::Vector3f EV3f___GMP (const geometry_msgs::Point& p) {return {p.x, p.y, p.z};}
+Eigen::Quaterniond EQd___GMQ (const geometry_msgs::Quaternion& q) {return {q.w, q.x, q.y, q.z};}
+Eigen::Quaternionf EQf___GMQ (const geometry_msgs::Quaternion& q) {return {q.w, q.x, q.y, q.z};}
 
-Eigen::Vector3d
-EV3d_From_GMV3
-( const geometry_msgs::Vector3& IN )
-{
-    return {IN.x, IN.y, IN.z };
-}
-
-
-
-
-Eigen::Quaterniond EQd_From_GMQ (const geometry_msgs::Quaternion& in) {
-    return {in.w, in.x, in.y, in.z};
-}
 
 geometry_msgs::Quaternion
 GMQ_From_EQd
