@@ -1752,7 +1752,8 @@ void ForgetfulDrone::runNav (
 
     double div = (m_RefState_ARF.position - m_ARF_LRF.getPosition ()).norm ();
     if (div > p_NAV_MAX_DIV) {
-        ROSERROR ("Drone diverged from reference state");
+        std::string m {"Drone diverged from reference state"};
+        ROSERROR (m); playAudio (m);
         switchNav (false);
         return;
     }
@@ -1777,7 +1778,8 @@ void ForgetfulDrone::runNav (
                 ROSWARN ("# successive infeasible local trajectories: " << ++m_LocTraj_SuccInfeasCnt 
                     << " {1, " << p_LOCTRAJ_MAXSUCCINFEASCNT << "}");
             } else {
-                ROSERROR ("Max. number of successively infeasible local trajectories reached");
+                std::string m {"Max. number of successively infeasible local trajectories reached"};
+                ROSERROR (m); playAudio (m);
                 switchNav (false);
                 return;
             }

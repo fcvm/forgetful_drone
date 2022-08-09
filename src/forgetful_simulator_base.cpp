@@ -448,8 +448,8 @@ bool ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req
     msg.model_name = h_DRONE_MODEL_NAME;
     
     ros::Rate r (10.0);
-    for (float t = 0; t <= 1; t += 1.0 / 100 ) {
-        ROSINFO (t);
+    for (float t = 0; t <= 1; t += 5.0 / 100 ) {
+        std::cout << ".";
         
         forgetful_drone::Pose pt {
             p0.position * (1 - t) + p1.position * (t),
@@ -459,6 +459,7 @@ bool ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req
         m_ROSPub_GazeboSetModelState.publish (msg);
         r.sleep ();
     }
+    std::cout << std::endl;
     return true;
 
 
