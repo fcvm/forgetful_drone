@@ -1958,6 +1958,76 @@ class ForgetfulBrain:
                 self.buildRun (_raw_run_.name)
 
 
+    def initExp_resetTraining (self, id) -> None:
+        self.log ('INIT EXPERIMENT', 0)
+        
+        self.expID = id
+        self.log (f"ID: {self.expID}", 1)
+
+        if not self._exp_cnf_CNF ().is_file ():
+            raise ValueError ("No config provided")
+
+        self.log (f"Load existing - reset training", 1)
+        
+        LOGLVL = 2
+        PMN = True
+        
+        # ASSERT DIRS/FILES  EXIST
+        for isdir in [True, False]:
+            for path in self._exExp_ (isdir=isdir):
+                self.asrPath (path, isdir=isdir, exists=True)
+
+        # LOAD FILES
+        self._cnf = ConfigFile (                    # configuration File
+            self._exp_cnf_CNF (), 
+            None,
+            new=False
+        )
+        self.log_load (
+            self._cnf.load (pmn=PMN), LOGLVL)
+        
+        self._prc = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_PRC (), 
+            self._exp_out_tmp_PRC (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_load (
+            self._prc.load (pmn=PMN), LOGLVL)
+
+        self._bldRec = RecordsFile (                # data building recordings
+            self._exp_out_BRC (), 
+            self._exp_out_tmp_BRC (),
+            RunRecord.id
+        )
+        self.log_load (
+            self._bldRec.load (pmn=PMN), LOGLVL)
+
+        self._trnRec = RecordsFile (                # training recordings
+            self._exp_out_TRC (), 
+            self._exp_out_tmp_TRC (),
+            EpochRecord.id
+        )
+        self.log_create (
+            self._trnRec.save (pmn=PMN), LOGLVL)
+
+        # INIT MODEL ETC
+        self.initModelEtc ()
+
+        # SAVE CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_CPT (),
+            self._exp_out_tmp_CPT ()
+        )
+        self._cpt.set (
+            0,
+            self.model,
+            self.optim,
+            self.loss
+        )
+        self.log_create (
+            self._cpt.save (pmn=PMN), LOGLVL)
+
+
 
 
 
