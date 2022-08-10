@@ -16,12 +16,15 @@
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <std_msgs/Empty.h>
+#include <std_srvs/Empty.h>
 #include <rviz/SendFilePath.h>
 
 // gazebo_ros
 #include <gazebo_msgs/SpawnModel.h>
 #include <gazebo_msgs/ModelStates.h>
 #include <gazebo_msgs/DeleteModel.h>
+#include <gazebo_msgs/GetModelState.h>
+#include <gazebo_msgs/ModelState.h>
 
 // standard libraries
 #include <assert.h>
@@ -105,7 +108,7 @@ public:
     //image_transport::Publisher m_ITPub_DepthImg;
     //image_transport::Publisher m_ITPub_SegmentationImg;
     //image_transport::Publisher m_ITPub_OpticalFlowImg;
-    //ros::Publisher m_ROSPub_GazeboSetModelState; // gazebo_msgs::ModelState >> "/gazebo/set_model_state"
+    ros::Publisher m_ROSPub_GazeboSetModelState;
 
     ros::Subscriber m_ROS_SUB_GROUND_TRUTH_ODOMETRY;
     //ros::Subscriber m_ROSSub_DynamicGatesSwitch;
@@ -114,12 +117,14 @@ public:
     ros::ServiceClient m_rosSVC_GAZEBO_SPAWN_URDF_MODEL;
     ros::ServiceClient m_rosSVC_GAZEBO_DELETE_MODEL; // gazebo_msgs::DeleteModel -> "/gazebo/delete_model"
     ros::ServiceClient m_rosSVC_GAZEBO_SPAWN_SDF_MODEL; // gazebo_msgs::SpawnModel -> "/gazebo/spawn_sdf_model"
+    ros::ServiceClient m_rosSVC_GAZEBO_GET_MODEL_STATE;
     ros::ServiceClient m_rosSVC_RVIZ_LOAD_CONFIG;
     //ros::ServiceClient m_ROSSrvCl_GazeboResetSimulation; // std_srvs::Empty -> "/gazebo/reset_simulation"
 
     ros::ServiceServer m_rosSVS_SIMULATOR_BUILD;
     ros::ServiceServer m_rosSVS_SIMULATOR_START;
     ros::ServiceServer m_rosSVS_SIMULATOR_STOP;
+    ros::ServiceServer m_rosSVS_SIMULATOR_TELEPORT;
     
     //ros::Timer m_ROSTimer_SimulatorLoop;
     ros::Timer m_rosTMR_MAIN_LOOP;
@@ -379,11 +384,13 @@ private:
 
 
 
+
 /*ROS Callbacks*/ private:
 
     bool ROSCB_SIMULATOR_BUILD (fdBSReq& req, fdBSRes& res);
     bool ROSCB_SIMULATOR_START (fdStartSReq& req, fdStartSRes& res);
     bool ROSCB_SIMULATOR_STOP (fdStopSReq& req, fdStopSRes& res);
+    bool ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     void ROSCB_GROUND_TRUTH_ODOMETRY (const nav_msgs::Odometry::ConstPtr& msg);
     void ROSCB_MAIN_LOOP (const ros::TimerEvent& te);
 

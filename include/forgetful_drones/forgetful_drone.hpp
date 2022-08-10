@@ -142,6 +142,7 @@ private:// CONST MEMBER VARIABLES //
     ros::ServiceClient m_SCL__simBuild;
     ros::ServiceClient m_SCL__simStart;
     ros::ServiceClient m_SCL__simStop;
+    ros::ServiceClient m_SCL__simTeleport;
     //ros::ServiceClient m_rosSVC_RVIZ_LOAD_CONFIG;
 
 
@@ -403,12 +404,14 @@ void runMission_DAGGER();
 void waitForAutopilotState(
     const uint8_t& ap_state,
     const bool& exit_state = false) const;
-void launchDrone();
+bool wait4APState (const uint8_t& ap_state, const bool& enter, const double& dur) const;
+bool launchDrone();
 
-void flyDroneTo(const geometry_msgs::Pose& target_pose) const;
-void flyDroneToInitPose();
-void flyDroneAboveTrack();
-void landDrone();
+bool flyDroneTo(const geometry_msgs::Pose& target_pose, const double& max_dur) const;
+bool flyDroneToInitPose (const bool& from_above);
+bool flyDroneAboveTrack ();
+bool carryDroneBack ();
+bool landDrone();
 bool compGloTraj ();
 void rvizGloTraj ();
 
