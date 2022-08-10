@@ -2,9 +2,6 @@
 
 // forgetful_drone
 #include "forgetful_drones/forgetful_helpers.hpp"
-#include "forgetful_drones/BuildDroneRacingSimulation.h"
-#include "forgetful_drones/StartDroneRacingSimulation.h"
-#include "forgetful_drones/StopDroneRacingSimulation.h"
 #include "forgetful_drones/BuildSimulation.h"
 #include <minkindr_conversions/kindr_msg.h>
 #include <minkindr_conversions/kindr_tf.h>
@@ -403,14 +400,6 @@ private:
     bool startSimulation();
     bool stopSimulation();
 
-    
-    //bool buildSimulation_OLD(
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_UnityScene_type UnityScene,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackSite_type& SceneSite,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RaceGateType_type& RaceGateType,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackClockwise_type& RacetrackClockwise,
-    //const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackMode_type& RacetrackMode);
 
     void plotTracks (
         const std::string& title,
@@ -456,9 +445,6 @@ private:
     );
 
 
-
-    //void computeRaceTrack_Figure8(const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType);
-    void computeRaceTrack_IntermediateTargetLoss(const bool& IsClockwise, const int& Mode);
     
     void startSimulation_launchUnity ();
     void startSimulation_addUnityGates();

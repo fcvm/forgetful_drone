@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <Eigen/Dense>
 #include <rapid_trajectories/Vec3.h>
 #include <nav_msgs/Odometry.h>
@@ -53,8 +51,10 @@
 
 
 
-namespace forgetful_drone
-{
+namespace forgetful_drone {
+
+// using ...
+
 using fdBS = forgetful_drones::BuildSimulation;
 using fdBSReq = forgetful_drones::BuildSimulation::Request;
 using fdBSRes = forgetful_drones::BuildSimulation::Response;
@@ -67,6 +67,9 @@ using fdStopS = forgetful_drones::StopSimulation;
 using fdStopSReq = forgetful_drones::StopSimulation::Request;
 using fdStopSRes = forgetful_drones::StopSimulation::Response;
 
+
+
+// classes
 
 class Pose {
 public:

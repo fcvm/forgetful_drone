@@ -1,16 +1,181 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 import numpy as np
-from numpy.core.fromnumeric import size
-from tensorflow.python.ops.gen_control_flow_ops import switch
+from typing import List
+
+
+
+AX_Z = np.array ([0, 0, 1.0])
+
+FIG8_DET_X = [-20.45, -12.55, -4.15, 3.45, 11.95, 21.85, 24.25, 19.25, 10.55, 2.85, -4.95, -12.95, -21.05, -24.25]
+FIG8_DET_Y = [-8.65, -11.15, -5.35, 4.25, 11.15, 6.85, -1.75, -9.55, -10.65, -5.95, 4.65, 9.65, 6.65, -1.00]
+FIG8_DET_Z = [2.0] * len (FIG8_DET_X)
+FIG8_DET_YAW = [1.13, -1.57, 1, 0.99, 0.0, -1.03, 1.53, 0.57, 0.67, -1.53, -0.77, 0.07]
+
+
+
+class Pos:
+    @staticmethod
+    def fromXYZ (x: float, y: float, z: float): 
+        return np.array ([x, y, z], dtype=np.float)
+
+    @staticmethod
+    def assertPos (p: np.ndarray) -> None:
+        if not p.shape == (3,): raise ValueError (f"v.shape: {p.shape} != (3,)")
+
+    
+class Quat:
+
+    @staticmethod
+    def assertFloat (x: float) -> None:
+        if not type (x) == float: raise ValueError (f"type (x): {type (x)} != float")
+    def assertVec (v: np.ndarray) -> None:
+        if not v.shape == (3,): raise ValueError (f"v.shape: {v.shape} != (3,)")
+    def assertQuat (q: np.ndarray) -> None:
+        if not q.shape == (4,): raise ValueError (f"q.shape: {q.shape} != (4,)")
+
+    @staticmethod
+    def fromWXYZ (w: float, x: float, y: float, z: float) -> np.ndarray:
+        Quat.assertFloat (w)
+        Quat.assertFloat (x)
+        Quat.assertFloat (y)
+        Quat.assertFloat (z)
+        return np.array ([w, x, y, z], dtype=np.float)
+
+    @staticmethod
+    def fromAngAx (ang: float, ax : np.ndarray) -> np.ndarray:
+        Quat.assertFloat (ang)
+        Quat.assertVec (ax)
+        return np.array ([
+            np.cos (ang/2.0),
+            np.sin (ang/2.0) * ax [0],
+            np.sin (ang/2.0) * ax [1],
+            np.sin (ang/2.0) * ax [2]
+        ], dtype=np.float)
+
+    @staticmethod
+    def fromVec (v: np.ndarray) -> np.ndarray:
+        Quat.assertVec (v)
+        return np.array ([0, v [0], v [1], v [2]], dtype=np.float)
+
+    @staticmethod
+    def multiply (q1: np.ndarray, q2: np.ndarray):
+        Quat.assertQuat (q1)
+        Quat.assertQuat (q2)
+        w1 = q1 [0]; p1 = q1 [1:]
+        w2 = q2 [0]; p2 = q2 [1:]
+        w = w1 * w2 - np.inner (p1, p2)
+        p = w1 * p2 + w2 * p1 + np.cross (p1, p2)
+        return np.array ([w, p [0], p [1], p [2]])
+
+    @staticmethod
+    def invert (q: np.ndarray):
+        Quat.assertQuat (q)
+        return np.array ([q [0], -q [1], -q [2], -q [3]]) / np.linalg.norm (q)
+    
+
+    @staticmethod
+    def rotateVec (v: np.ndarray, q: np.ndarray):
+        Quat.assertVec (v)
+        Quat.assertQuat (q)
+        return Quat.multiply (
+            Quat.multiply (
+                q, 
+                Quat.fromVec (v)
+            ), 
+            Quat.invert (q)
+        ) [1:]
+
+    @staticmethod
+    def yaw (q: np.ndarray) -> float:
+        Quat.assertQuat (q)
+        return np.arctan2 (
+            2.0 * (q [3] * q [0] + q [1] * q [2]), 
+            - 1.0 + 2.0 * (q [0] * q [0] + q [1] * q [1])
+        )
+
+    @staticmethod 
+    def unitAng (q : np.ndarray, ax : int) -> float:
+        if ax not in [0, 1, 2]: raise ValueError (f"Axis index: {ax} != 0, 1, 2")
+        return 2 * np.arctan2 (q [1 + ax], q [0])
+    
+   
+class Pose:
+    def __init__ (self, p : np.ndarray = None, q : np.ndarray = None) -> None:
+        if p is None : p = Pos.fromXYZ (0, 0, 0)
+        if q is None : q = Quat.fromWXYZ (0, 0, 0, 0)
+        Pos.assertPos (p)
+        Quat.assertQuat (q)
+        self.p = p
+        self.q = q
+
+
+
+class Racetrack: 
+    def __init__ (self, gate_poses : List [Pose]) -> None:
+        self.gateWidth = 3.35
+        self.gateMinHeight = 3.7
+        self.gateYawTwist = np.pi / 2
+        
+        self.randMaxScale = 1.2
+
+        self.gatePoses = gate_poses
+
+    
+    def compDronePose (self, gate_poses : List [Pose]) -> Pose:
+        front = gate_poses [-2] 
+        back = gate_poses [-3]
+        drone = Pose ()
+
+        drone.q = Quat.multiply (
+            front.q,
+            Quat.fromAngAx (self.gateYawTwist, AX_Z)
+        )
+        
+        drone.p = (front.p + back.p) / 2
+        ldv = np.array ([
+            np.cos (Quat.unitAng (front.q, 2) - self.gateYawTwist),
+            np.sin (Quat.unitAng (front.q, 2) - self.gateYawTwist),
+        ])
+        opm = np.outer (ldv, ldv) / np.inner (ldv, ldv)
+        p0 = np.array ([front.p [0], front.p [1]])
+        p = np.array ([drone.p [0], drone.p [1]])
+        drone.p [: 2] = opm * (p - p0) + p0
+
+        return drone
+
+
+    def compRandTrack (self) -> None:
+        pass
+
+
+
+
+
+fig8_det_poses = []
+for x, y, z, yaw in zip(FIG8_DET_X, FIG8_DET_Y, FIG8_DET_Z, FIG8_DET_YAW):
+    fig8_det_poses.append(
+        Pose (
+            Pos.fromXYZ (x, y, z),
+            Quat.fromAngAx (yaw, AX_Z)
+        )
+    )
+
+
+fig8 = Racetrack (fig8_det_poses)
+
+
+
 
 RAND_MaxScale = 1.2
 
 #%% Data
 
 # gate dimensions (unity prefab) (ignoring the feet)
-RPG_GateWidth = 3.35
-RPG_GateMinHeight = 3.7
+gate_width = 3.35
+gate_minHeight = 3.7
+
+
 
 
 # gate positions in deterministic figure 8 racetrack (rpg code) (last element: drone starting position)
@@ -52,8 +217,8 @@ else:
 # compute racetrack dimensions (minimum, x-/y-axis aligned recktangle, that encloses racetrack)
 #RacetrackDimX = RacetrackDimX + RPG_GateWidth + 2*RAND_MaxAxialShift
 #RacetrackDimY = RacetrackDimY + RPG_GateWidth + 2*RAND_MaxAxialShift
-det_RacetrackDimX = det_RacetrackDimX + RPG_GateWidth
-det_RacetrackDimY = det_RacetrackDimY + RPG_GateWidth
+det_RacetrackDimX = det_RacetrackDimX + gate_width
+det_RacetrackDimY = det_RacetrackDimY + gate_width
 
 
 np.set_printoptions(precision=2)
@@ -65,7 +230,7 @@ print("\tyaw:", GatesYaw)
 print("Minimum, x-/y-axis aligned rectangle enclosing race track [DET.]")
 print("\tx:", det_RacetrackDimX)
 print("\ty:", det_RacetrackDimY)
-print("\tz:", RPG_GateMinHeight)
+print("\tz:", gate_minHeight)
 
 
 
@@ -80,31 +245,31 @@ RAND_MaxScale = 1.2
 # Min sized racetrack
 min_GatesMinX = (det_GatesX - RAND_MaxAxialShift) * RAND_MinScale
 min_GatesMaxX = (det_GatesX + RAND_MaxAxialShift) * RAND_MinScale
-min_RacetrackDimX = max(min_GatesMaxX) - min(min_GatesMinX) + RPG_GateWidth
+min_RacetrackDimX = max(min_GatesMaxX) - min(min_GatesMinX) + gate_width
 
 min_GatesMinY = (det_GatesY - RAND_MaxAxialShift) * RAND_MinScale
 min_GatesMaxY = (det_GatesY + RAND_MaxAxialShift) * RAND_MinScale
-min_RacetrackDimY = max(min_GatesMaxY) - min(min_GatesMinY) + RPG_GateWidth
+min_RacetrackDimY = max(min_GatesMaxY) - min(min_GatesMinY) + gate_width
 
 print("Minimum, x-/y-axis aligned rectangle enclosing race track [MIN. RAND.]")
 print("\tx:", min_RacetrackDimX)
 print("\ty:", min_RacetrackDimY)
-print("\tz:", (RPG_GateMinHeight+2*RAND_MaxAxialShift)*RAND_MinScale)
+print("\tz:", (gate_minHeight+2*RAND_MaxAxialShift)*RAND_MinScale)
 
 
 # Max sized racetrack
 max_GatesMinX = (det_GatesX - RAND_MaxAxialShift) * RAND_MaxScale
 max_GatesMaxX = (det_GatesX + RAND_MaxAxialShift) * RAND_MaxScale
-max_RacetrackDimX = max(max_GatesMaxX) - min(max_GatesMinX) + RPG_GateWidth
+max_RacetrackDimX = max(max_GatesMaxX) - min(max_GatesMinX) + gate_width
 
 max_GatesMinY = (det_GatesY - RAND_MaxAxialShift) * RAND_MaxScale
 max_GatesMaxY = (det_GatesY + RAND_MaxAxialShift) * RAND_MaxScale
-max_RacetrackDimY = max(max_GatesMaxY) - min(max_GatesMinY) + RPG_GateWidth
+max_RacetrackDimY = max(max_GatesMaxY) - min(max_GatesMinY) + gate_width
 
 print("Minimum, x-/y-axis aligned rectangle enclosing race track [MIN. RAND.]")
 print("\tx:", max_RacetrackDimX)
 print("\ty:", max_RacetrackDimY)
-print("\tz:", (RPG_GateMinHeight+2*RAND_MaxAxialShift)*RAND_MaxScale)
+print("\tz:", (gate_minHeight+2*RAND_MaxAxialShift)*RAND_MaxScale)
 
 
 
@@ -130,7 +295,7 @@ max_ObstR = det_ObstR * RAND_MaxScale
 #%% Plot Deterministic
 
 plot_labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "Start"]
-gate_radius = RPG_GateWidth/2
+gate_radius = gate_width/2
 fig, ax = plt.subplots(1, 1)
 
 
@@ -232,7 +397,7 @@ for i in range(np.size(det_GatesX) -1):
     for j in range(np.size(arc_x)):
         ax.add_patch(Arc(
                 (arc_x[j], arc_y[j]),
-                RPG_GateWidth, RPG_GateWidth,
+                gate_width, gate_width,
                 theta1=arc_theta1[j], theta2=arc_theta2[j],
                 color='green', linestyle='dashed', linewidth=1, clip_on=False, fill=False))
 
@@ -329,7 +494,7 @@ for i in range(np.size(det_GatesX) -1):
     for j in range(np.size(arc_x)):
         ax.add_patch(Arc(
                 (arc_x[j], arc_y[j]),
-                RPG_GateWidth, RPG_GateWidth,
+                gate_width, gate_width,
                 theta1=arc_theta1[j], theta2=arc_theta2[j],
                 color='green', linestyle='dashed', linewidth=1, clip_on=False, fill=False))
 

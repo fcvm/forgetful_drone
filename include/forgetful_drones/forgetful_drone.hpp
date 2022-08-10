@@ -4,20 +4,13 @@
 #include <experimental/filesystem>
 
 #include <ros/ros.h>
-#include "forgetful_drones/BuildDroneRacingSimulation.h"
-#include "forgetful_drones/StartDroneRacingSimulation.h"
-#include "forgetful_drones/StopDroneRacingSimulation.h"
-#include "forgetful_drones/TrainBrain.h"
 #include <std_msgs/Bool.h>
 #include <std_msgs/Empty.h>
 #include <std_msgs/Float64.h>
 #include <std_srvs/Empty.h>
 #include <Eigen/Dense>
 #include <ros/package.h>
-#include "forgetful_drones/FlyDroneThroughRaceTrack.h"
-#include "forgetful_drones/FlyDroneProvidingNetworkOutput.h"
 #include "forgetful_drones/NavigatorState.h"
-#include "forgetful_drones/ComputeGlobalTrajectory.h"
 #include <quadrotor_msgs/AutopilotFeedback.h>
 #include <ros/console.h>
 #include <sensor_msgs/Image.h>
@@ -62,8 +55,7 @@
 
 namespace forgetful_drone {
 namespace RQTG = RapidQuadrocopterTrajectoryGenerator;
-using BDRS = forgetful_drones::BuildDroneRacingSimulation;
-using BDRSR = forgetful_drones::BuildDroneRacingSimulationRequest;
+
 
 class ForgetfulDrone{
 
