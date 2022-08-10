@@ -931,7 +931,7 @@ class ForgetfulBrain:
         )
         self.log_load (
             self._cpt.load (pmn=PMN), LOGLVL)
-        self.log (f"# epochs: {self._cpt.get () ['epoch']}", LOGLVL + 1)
+        self.log (f"last epoch idx: {self._cpt.get () ['epoch']}", LOGLVL + 1)
         self.loadCheckpoint ()
         
 
