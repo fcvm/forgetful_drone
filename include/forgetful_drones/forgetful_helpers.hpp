@@ -46,6 +46,7 @@
 #include "forgetful_drones/BuildSimulation.h"
 #include "forgetful_drones/StartSimulation.h"
 #include "forgetful_drones/StopSimulation.h"
+#include "forgetful_drones/LoadRacetrack.h"
 
 
 
@@ -66,6 +67,10 @@ using fdStartSRes = forgetful_drones::StartSimulation::Response;
 using fdStopS = forgetful_drones::StopSimulation;
 using fdStopSReq = forgetful_drones::StopSimulation::Request;
 using fdStopSRes = forgetful_drones::StopSimulation::Response;
+
+using fdLR = forgetful_drones::LoadRacetrack;
+using fdLRReq = forgetful_drones::LoadRacetrack::Request;
+using fdLRRes = forgetful_drones::LoadRacetrack::Response;
 
 
 
@@ -186,7 +191,7 @@ writeStringToFile
 
 
 void 
-deleteDirectoryContents
+delDirContents
 ( const std::string& dir_path );
 
 

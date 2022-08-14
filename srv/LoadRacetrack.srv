@@ -1,0 +1,38 @@
+uint8 RANDOM_CHOICE=255
+
+uint8 unity_scene
+    uint8 unity_scene_SPACESHIP_INTERIOR=0
+    uint8 unity_scene_DESTROYED_CITY=1
+    uint8 unity_scene_INDUSTRIAL_PARK=2
+    uint8 unity_scene_POLYGON_CITY=3
+    uint8 unity_scene_DESERT_MOUNTAIN=4
+
+uint8 scene_site
+    uint8 scene_site_A=0
+    uint8 scene_site_B=1
+    uint8 scene_site_C=2
+
+uint8 track_type
+    uint8 track_type_FIGURE8=0
+    uint8 track_type_GAP=1
+    uint8 track_type_RANDOM_CIRCUIT=2
+    uint8 track_type_RANDOM_SPRINT=3
+
+uint8 track_generation
+    uint8 track_generation_DETERMINISTIC = 0
+    uint8 track_generation_RANDOMIZED = 1
+
+uint8 track_direction
+    uint8 track_direction_CLOCKWISE = 0
+    uint8 track_direction_COUNTERCLOCKWISE = 1
+
+uint8 gate_type
+    uint8 gate_type_RPG=0
+    uint8 gate_type_TUB_DAI=1
+    uint8 gate_type_THU_DME=2
+
+uint8 track_idx
+---
+
+geometry_msgs/Pose drone_init_pose
+geometry_msgs/Pose[] gate_init_poses

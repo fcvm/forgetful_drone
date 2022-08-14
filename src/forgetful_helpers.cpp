@@ -263,19 +263,13 @@ getFileNamesInDir
     return OUT_Filenames;
 }
 
-void 
-writeStringToFile
-( const std::string& Cont, const std::string& Dest )
-{
-    std::ofstream( Dest.c_str() ) << Cont;
+void writeStringToFile (const std::string& m, const std::string& p) {
+    std::ofstream (p.c_str()) << m;
 }
 
-void 
-deleteDirectoryContents
-( const std::string& dir_path )
-{
-    for (const auto& entry : std::experimental::filesystem::directory_iterator(dir_path)) 
-        std::experimental::filesystem::remove_all( entry.path() );
+void delDirContents (const std::string& p) {
+    for (const auto& e : std::experimental::filesystem::directory_iterator (p)) 
+        std::experimental::filesystem::remove_all (e.path());
 }
 
 

@@ -135,6 +135,7 @@ private:// CONST MEMBER VARIABLES //
     ros::ServiceClient m_SCL__simStart;
     ros::ServiceClient m_SCL__simStop;
     ros::ServiceClient m_SCL__simTeleport;
+    ros::ServiceClient m_SCL__simLoad;
     //ros::ServiceClient m_rosSVC_RVIZ_LOAD_CONFIG;
 
 
@@ -498,6 +499,7 @@ void logRunInfo ();
 void logMissionInfo (const bool& start) const;
 void newRunReset ();
 
+void buildSimulation (const int& track_idx);
 void buildSimulation ();
 void setTrackWaypoints ();
 void initGateIdc ();

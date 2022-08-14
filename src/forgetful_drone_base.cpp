@@ -24,6 +24,8 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_SCL__simStart {m_rosRNH.serviceClient<fdStartS>("simulator/start")},
     m_SCL__simStop {m_rosRNH.serviceClient<fdStopS>("simulator/stop")},
     m_SCL__simTeleport {m_rosRNH.serviceClient<std_srvs::Empty>("simulator/teleport_drone")},
+    m_SCL__simLoad {m_rosRNH.serviceClient<fdLR>("simulator/load_racetrack")},
+    
     
     // Forgetful Brain
     m_SUB__fbOutput         {m_rosRNH.subscribe("brain/output", 1, &ForgetfulDrone::CB__fbOutput, this)},
@@ -116,6 +118,7 @@ ForgetfulDrone::~ForgetfulDrone () {}
 
 std::string ForgetfulDrone::RunID () {
     std::string runidx = p_MISSION == 3? asSeqNo (4, m_RunIdx) + "___" : "";
+
     std::ostringstream oss; 
     oss
         << runidx
@@ -129,6 +132,8 @@ std::string ForgetfulDrone::RunID () {
         << asFixedFloat (5, 2, m_DaggerMargin)  << "___"
         << asSeqNo (3, m_RunRepIdx);
     return oss.str();
+
+
 }
 
 std::string ForgetfulDrone::_exp_ () {return ROS_PACKAGE_PATH + "/experiments/" + p_EXPERIMENT_ID;}
@@ -909,6 +914,25 @@ void ForgetfulDrone::newRunReset () {
 
 
 
+void ForgetfulDrone::buildSimulation (const int& track_idx) {
+    fdLR srv;   srv.request.unity_scene = m_SceneIdx;
+                srv.request.scene_site = m_SiteIdx;
+                srv.request.track_type = m_TrackTypeIdx;
+                srv.request.track_generation = m_TrackGenIdx;
+                srv.request.track_direction = m_TrackDirecIdx;
+                srv.request.gate_type = m_GateIdx;
+
+                srv.request.track_idx = track_idx;
+
+    while (!callRosSrv <fdLR> (ROS_LOG_PREFIX, m_SCL__simLoad, srv)) {
+        ros::Duration (1.0).sleep ();
+    }
+
+    m_GateInitPoses = srv.response.gate_init_poses;
+    m_DroneInitPose = srv.response.drone_init_pose;
+}
+
+
 
 
 void ForgetfulDrone::buildSimulation () {
@@ -919,9 +943,6 @@ void ForgetfulDrone::buildSimulation () {
                 srv.request.track_direction = m_TrackDirecIdx;
                 srv.request.gate_type = m_GateIdx;
 
-
-
-    m_SCL__simBuild = m_rosRNH.serviceClient<fdBS>("simulator/build");
     while (!callRosSrv<fdBS>(ROS_LOG_PREFIX, m_SCL__simBuild, srv)) {
         ros::Duration(1.0).sleep();
     }
@@ -1177,7 +1198,7 @@ void ForgetfulDrone::runMission_Racing () {
             initRacingPaths (); //initRawRunPaths
             
             //do {
-                buildSimulation ();
+                buildSimulation (m_RunRepIdx);
                 setTrackWaypoints ();
                 //ros::Duration(1.0).sleep ();
             //} while (!compGloTraj ());
