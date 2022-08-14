@@ -4,7 +4,7 @@ for EXP_ID in [
     #'UTC_2022_06_13_10_13_56',
     #'UTC_2022_06_22_21_15_38',
     #'UTC_2022_07_01_07_27_56',
-    #'UTC_2022_07_01_07_27_56___SEQLEN_2',
+    'UTC_2022_07_01_07_27_56___SEQLEN_2',
     #'UTC_2022_07_01_07_27_56___SEQLEN_5',
     #'UTC_2022_07_01_07_27_56___SEQLEN_10',
     #'UTC_2022_07_01_07_27_56___SEQLEN_25',
@@ -15,4 +15,4 @@ for EXP_ID in [
 ]:
 
     fb.initExp (EXP_ID)
-    fb.startTrain (500)
+    fb.startTrain (500, reset_lrsched=False)

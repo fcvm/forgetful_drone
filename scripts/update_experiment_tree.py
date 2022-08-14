@@ -131,4 +131,4 @@ for EXP_ID in [
         fb.rebuildRuns ()
 
     fb.initExp (EXP_ID)
-    fb.startTrain (1)
+    fb.startTrain (1, reset_lrsched=False)

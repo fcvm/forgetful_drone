@@ -15,4 +15,4 @@ for EXP_ID in [
 ]:
 
     fb.initExp_resetTraining (EXP_ID)
-    fb.startTrain (1000)
+    fb.startTrain (1000, reset_lrsched=True)

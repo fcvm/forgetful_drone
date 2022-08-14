@@ -503,7 +503,7 @@ class ForgetfulBrain:
         return fdsrv.StringResponse ()
 
     def cb_startTrain (self, req : fdsrv.IntRequest) -> fdsrv.IntResponse:
-        self.startTrain (num_epochs=req.data)
+        self.startTrain (num_epochs=req.data, reset_lrsched=True)
         return fdsrv.IntResponse ()
 
     def cb_startInfer (self, req : fdsrv.FloatRequest) -> fdsrv.FloatResponse: 
@@ -932,7 +932,7 @@ class ForgetfulBrain:
         self.log_load (
             self._cpt.load (pmn=PMN), LOGLVL)
         self.log (f"last epoch idx: {self._cpt.get () ['epoch']}", LOGLVL + 1)
-        self.loadCheckpoint ()
+        self.loadCheckpoint (reset_lrsched=False)
         
 
     
@@ -943,10 +943,11 @@ class ForgetfulBrain:
         self.loss = self.initLoss ()
         self.optMask = self.initOptMask ()
     
-    def loadCheckpoint (self) -> None:
+    def loadCheckpoint (self, reset_lrsched : bool) -> None:
         self.model.load_state_dict (self._cpt.get () ['model_state_dict'])
         self.optim.load_state_dict (self._cpt.get () ['optimizer_state_dict'])
-        for _ in self.optim.param_groups: _['lr'] = self._cnf.lrsched_init
+        if reset_lrsched:
+            for _ in self.optim.param_groups: _['lr'] = self._cnf.lrsched_init
         self.loss = self._cpt.get () ['loss']
 
         
@@ -1257,7 +1258,7 @@ class ForgetfulBrain:
         
     # START TRAINING
 
-    def startTrain (self, num_epochs : int) -> None:
+    def startTrain (self, num_epochs : int, reset_lrsched : bool) -> None:
         self.asrExpInit ()
         self.switchInferTopics (register=False)
 
@@ -1268,7 +1269,7 @@ class ForgetfulBrain:
         self.log_load (self._bldRec.load (pmn=True), 2)
         self.log_load (self._trnRec.load (pmn=True), 2)
         self.log_load (self._cpt.load(pmn=True), 2)
-        self.loadCheckpoint ()
+        self.loadCheckpoint (reset_lrsched)
         
         self.log (f"Experiment", 1)
         self.log (f"ID: {self.expID}", 2)
