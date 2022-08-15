@@ -1,4 +1,4 @@
-#!/home/fm/env/pytorch/bin/python3
+#!/usr/bin/env python3
 DEBUG = False
 
 
@@ -255,7 +255,7 @@ class Config:
         if new: self._mknew ()
 
     def _mknew (self) -> None:
-        UI = Path (user_input.__file__).relative_to (Path (rospack.get_path ('forgetful_drones')))
+        UI = Path (user_input.__file__)
         self._data = copy.deepcopy (user_input.user_input)
         
         # set cnf/data/raw/...
@@ -1126,10 +1126,12 @@ class ForgetfulBrain:
             ss_cnt = 1                                                  # count of sequential steps
             
             for i in pbar:                                              # (for every sample in df_imd)
-                if ss_cnt > 1: ss_cnt -= 1; continue                    # sequential step implementation
+                ss_cnt -= 1
                 if not dfIMD.iloc [i] ['expert_intervened']: continue  # skip this sample, if the expert did not intervene
                 
                 ei_cnt += 1
+
+                if ss_cnt > 1: continue                                 # sequential step implementation
 
                 rgb_dt = []; rgb_fp = []; imu_dt = []                   # Init sequences of inputs
                 imu_lx = []; imu_ly = []; imu_lz = []
@@ -1929,8 +1931,7 @@ class ForgetfulBrain:
                 np.array ([self.rgb_dt, self.imu_dt]), 
                 self.imu,
                 np.array ([self.maxSpeed])
-            ), 
-            dtype=np.float32
+            )
         ) [self.optMask]
         opt = torch.tensor (opt, dtype=torch.float32)
         opt = opt.view (1, 1, N).to (TORCH_DEVICE)
