@@ -47,6 +47,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
         m_rosSVS_SIMULATOR_START {m_rosRNH.advertiseService("simulator/start", &ForgetfulSimulator::ROSCB_SIMULATOR_START, this)},
         m_rosSVS_SIMULATOR_STOP {m_rosRNH.advertiseService("simulator/stop", &ForgetfulSimulator::ROSCB_SIMULATOR_STOP, this)},
         m_rosSVS_SIMULATOR_TELEPORT {m_rosRNH.advertiseService("simulator/teleport_drone", &ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT, this)},
+        m_rosSVS_SIMULATOR_LOAD {m_rosRNH.advertiseService("simulator/load_racetrack", &ForgetfulSimulator::ROSCB_SIMULATOR_LOAD, this)},
 
     // ROS timers
         //m_ROSTimer_SimulatorLoop( m_rosRNH.createTimer(ros::Duration(m_SimulatorLoopTime), &ForgetfulSimulator::ROSTimerFunc_SimulatorLoop, this, false, false) ), // DYNGATES
@@ -102,7 +103,10 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
 
     
     // Test simulator if specified
+    if (p_TRACKGEN_ENABLED) genTracks ();
+
     if (p_TEST_ENABLED) test ();
+    
 }
 
 
@@ -121,6 +125,7 @@ bool ForgetfulSimulator::initROSParameters () {
         {"SIM_UNITY_ENABLED", &p_UNITY_ENABLED},
         {"SIM_RVIZ_ENABLED", &p_RVIZ_ENABLED},
         {"SIM_TEST_ENABLED", &p_TEST_ENABLED},
+        {"SIM_TRACKGEN_ENABLED", &p_TRACKGEN_ENABLED},
     };
 
     // ROS param keys and destinations of type int
@@ -173,6 +178,149 @@ bool ForgetfulSimulator::initROSParameters () {
 }
 
 
+void ForgetfulSimulator::genTrackFile (const int& i) {
+    auto addPose2File = [this] (const int& i, const Pose& p) {
+        std::ofstream ofs;
+        const char delimiter = ',';
+        ofs.open (racetrack_fpath (i), std::ios_base::app); 
+        ofs
+            << p.position.x ()      << delimiter
+            << p.position.y ()      << delimiter
+            << p.position.z ()      << delimiter
+            << p.orientation.w ()   << delimiter
+            << p.orientation.x ()   << delimiter
+            << p.orientation.y ()   << delimiter
+            << p.orientation.z ()   << std::endl;
+        ofs.close (); 
+        ofs.clear ();
+
+        //std::cout << std::setprecision (3) << "Added pose: "
+        //        << p.position.x () << ", " << p.position.y () << ", " << p.position.z () << " - "
+        //        << p.orientation.w () << ", " << p.orientation.x () << ", " << p.orientation.y () << ", " << p.orientation.z () << std::endl;
+    };
+
+    //std::cout << "m_GazeboDroneInitPose" << std::endl;
+    addPose2File (i, m_GazeboDroneInitPose);
+    //std::cout << "m_GazeboGateInitPoses" << std::endl;
+    for (const Pose& p : m_GazeboGateInitPoses) addPose2File (i, p);
+    //std::cout << "m_UnityDroneInitPose" << std::endl;
+    addPose2File (i, m_UnityDroneInitPose);
+    //std::cout << "m_UnityGateInitPoses" << std::endl;
+    for (const Pose& p : m_UnityGateInitPoses) addPose2File (i, p);
+}
+
+void ForgetfulSimulator::loadTrackFile (const int& j) {
+    std::ifstream input_file (racetrack_fpath (j));
+    
+    std::ostringstream ss;
+    ss << input_file.rdbuf ();
+    std::string file_contents = ss.str ();
+
+    char delimiter = ',';
+    std::istringstream sstream (file_contents);
+    std::vector<float> items;
+    std::string record;
+
+    int counter = 0;
+    std::map<int, std::vector<float>> csv_contents;
+    while (std::getline (sstream, record)) {
+        std::istringstream line(record);
+        while (std::getline(line, record, delimiter)) {
+            items.push_back(std::stof (record));
+        }
+
+        csv_contents [counter] = items;
+        items.clear();
+        counter += 1;
+    }
+
+    
+
+    m_GazeboGateInitPoses.clear ();
+    m_UnityGateInitPoses.clear ();
+
+    for (int i = 0; i < csv_contents.size (); i++) {
+        geometry_msgs::Pose p;
+        p.position.x = csv_contents [i] [0];
+        p.position.y = csv_contents [i] [1];
+        p.position.z = csv_contents [i] [2];
+        p.orientation.w = csv_contents [i] [3];
+        p.orientation.x = csv_contents [i] [4];
+        p.orientation.y = csv_contents [i] [5];
+        p.orientation.z = csv_contents [i] [6];
+
+        if (i == 0) {
+            m_GazeboDroneInitPose = Pose (p);
+            //std::cout << std::setprecision (3) << "m_GazeboDroneInitPose: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        }
+        else if (i < csv_contents.size () / 2) {
+            m_GazeboGateInitPoses.push_back (Pose (p));
+            //std::cout << std::setprecision (3) << "m_GazeboGateInitPoses [" << m_GazeboGateInitPoses.size () - 1 << "]: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        } 
+        else if (i == csv_contents.size () / 2) {
+            m_UnityDroneInitPose = Pose (p);
+            //std::cout << std::setprecision (3) << "m_UnityDroneInitPose: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        } 
+        else {
+            m_UnityGateInitPoses.push_back (Pose (p));
+            //std::cout << std::setprecision (3) << "m_UnityGateInitPoses [" << m_UnityGateInitPoses.size () - 1 << "]: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        }
+    }
+
+    ROSINFO ("Loaded \"" << racetrack_fpath (j) << "\"");
+
+}
+
+
+
+
+std::string ForgetfulSimulator::racetrack_fpath (const int& i) {
+    std::ostringstream oss;
+    oss 
+        << ROS_PACKAGE_PATH 
+        << "/racetracks/"
+        << std::to_string (m_UnitySceneIdx) << "_"
+        << std::to_string (m_SceneSiteIdx) << "_"
+        << std::to_string (m_TrackTypeIdx) << "_"
+        << std::to_string (m_TrackGenerationIdx) << "_"
+        << std::to_string (m_TrackDirectionIdx) << "_"
+        << std::to_string (m_GateTypeIdx) << "___"
+        << std::to_string (i) << ".txt";
+
+    return oss.str ();
+}
+
+void ForgetfulSimulator::genTracks () {
+    ros::Duration(5.0).sleep();
+    ROSINFO(">>> GENERATE RACETRACK DATA");
+
+    std::ostringstream path; path << ROS_PACKAGE_PATH << "/racetracks";
+    delDirContents (path.str ());
+
+
+    buildSimulation_resetMembers ();
+    for (int i = 0; i < 10; i++)
+    for (m_UnitySceneIdx = 0; m_UnitySceneIdx < h_UNITY_SCENES.size (); m_UnitySceneIdx++)
+    for (m_SceneSiteIdx = 0; m_SceneSiteIdx < h_SCENE_SITES.size (); m_SceneSiteIdx++)
+    for (m_TrackTypeIdx = 0; m_TrackTypeIdx < 2; m_TrackTypeIdx++)
+    for (m_TrackGenerationIdx = 0; m_TrackGenerationIdx < h_TRACK_GENERATIONS.size (); m_TrackGenerationIdx++)
+    for (m_TrackDirectionIdx = 0; m_TrackDirectionIdx < h_TRACK_DIRECTIONS.size (); m_TrackDirectionIdx++)
+    for (m_GateTypeIdx = 1; m_GateTypeIdx < h_GATE_TYPES.size (); m_GateTypeIdx++) {
+        buildSimulation_logRequest ();
+        buildSimulation_setTrackPoses ();
+        if (!buildSimulation_generateTrack()) return;
+        
+        genTrackFile (i);
+    }
+}
 
 
 
@@ -477,6 +625,35 @@ bool ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req
 
 
 
+
+bool ForgetfulSimulator::ROSCB_SIMULATOR_LOAD (fdLRReq& req, fdLRRes& res) {
+    buildSimulation_resetMembers ();
+    //buildSimulation_handleRandRequest (req);
+    //if (!buildSimulation_RequestValid (req)) return false;
+
+    // Set members from request
+    m_UnitySceneIdx = req.unity_scene;
+    m_SceneSiteIdx = req.scene_site;
+    m_TrackTypeIdx = req.track_type;
+    m_TrackGenerationIdx = req.track_generation;
+    m_TrackDirectionIdx = req.track_direction;
+    m_GateTypeIdx = req.gate_type;
+
+    buildSimulation_logRequest();
+    buildSimulation_setTrackPoses();
+
+    loadTrackFile (req.track_idx);
+    buildSimulation_generateGazeboGroundPlane();
+    
+    // Process response
+    res.drone_init_pose = m_GazeboDroneInitPose.as_geometry_msg();
+    res.gate_init_poses.clear();
+    for (const Pose& p : m_GazeboGateInitPoses) {
+        res.gate_init_poses.push_back(p.as_geometry_msg());
+    }
+    
+    return true;
+}
 
 bool ForgetfulSimulator::ROSCB_SIMULATOR_BUILD (fdBSReq& req, fdBSRes& res) {
     // Process request

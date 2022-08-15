@@ -122,6 +122,7 @@ public:
     ros::ServiceServer m_rosSVS_SIMULATOR_START;
     ros::ServiceServer m_rosSVS_SIMULATOR_STOP;
     ros::ServiceServer m_rosSVS_SIMULATOR_TELEPORT;
+    ros::ServiceServer m_rosSVS_SIMULATOR_LOAD;
     
     //ros::Timer m_ROSTimer_SimulatorLoop;
     ros::Timer m_rosTMR_MAIN_LOOP;
@@ -178,6 +179,7 @@ public:
     const bool p_UNITY_ENABLED {};
     const bool p_RVIZ_ENABLED {};
     const bool p_TEST_ENABLED {};
+    const bool p_TRACKGEN_ENABLED {};
     
     
     
@@ -388,6 +390,8 @@ private:
     bool ROSCB_SIMULATOR_START (fdStartSReq& req, fdStartSRes& res);
     bool ROSCB_SIMULATOR_STOP (fdStopSReq& req, fdStopSRes& res);
     bool ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
+    bool ROSCB_SIMULATOR_LOAD (fdLRReq& req, fdLRRes& res);
+    
     void ROSCB_GROUND_TRUTH_ODOMETRY (const nav_msgs::Odometry::ConstPtr& msg);
     void ROSCB_MAIN_LOOP (const ros::TimerEvent& te);
 
@@ -464,6 +468,10 @@ private:
     void startSimulation_spawnGazeboDrone();
     void startSimulation_addUnityDrone();
     void test();
+    void genTracks ();
+    std::string racetrack_fpath (const int& i);
+    void genTrackFile (const int& i);
+    void loadTrackFile (const int& i);
     void startSimulation_spawnRVizDrone();
     void startSimulation_deleteGazeboModelsExceptDrone();
     void buildSimulation_generateGazeboGroundPlane();

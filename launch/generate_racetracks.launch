@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Arguments -->
+        <!-- Gazebo/RotorS -->
+            <arg name="debug" default="false"/>
+            <arg name="paused" default="true"/>
+            <arg name="gui" default="false"/>
+            <arg name="verbose" default="false"/>
+            <!--<arg name="world_name" default="$(find rotors_gazebo)/worlds/basic.world"/>-->
+            <!--<arg name="world_name" value="$(find forgetful_drones)/gazebo/worlds/RotorS.world" />-->
+            <arg name="world_name" value="$(find forgetful_drones)/gazebo/worlds/RotorS.world" />
+            
+            <arg name="quad_name" default="hummingbird"/>
+            <!--<arg name="model" default="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>-->
+            <!--<arg name="model" default="$(find rotors_description)/urdf/hummingbird_.gazebo"/>-->
+            <arg name="model" default="$(find forgetful_drones)/gazebo/drone/vehicles/hummingbird_.gazebo"/>
+            <!--<arg name="model" default="$(find rotors_description)/urdf/mav_with_vi_sensor.gazebo"/-->
+            <arg name="custom_models" default="$(find forgetful_drones)/gazebo"/>
+            <arg name="enable_logging" default="false"/>
+            <arg name="enable_ground_truth" default="true"/>
+            <arg name="enable_mavlink_interface" default="false"/>
+            <arg name="wait_to_record_bag" default="false"/>
+            <arg name="x_init" default="0.0"/>
+            <arg name="y_init" default="22.0"/>
+
+        <!-- Autopilot -->
+            <!--<arg name="enable_command_feedthrough" default="false"/>-->
+            <arg name="enable_command_feedthrough" default="true"/>
+
+        <!-- RPG Flightmare Unity Render -->>
+            <arg name="use_unity_editor" default="false" />
+            <arg name="unity_scene_index" default="-1" />
+            
+
+    
+    
+    
+
+    
+
+    
+
+    
+    <group ns="$(arg quad_name)">
+
+        <!-- Send the URDF of the drone to the ROS parameter server, 
+            to be able to spawn the drone in Gazebo from within a ROS node. -->
+        <param name="robot_description" 
+            command="$(find xacro)/xacro '$(arg model)'
+            enable_logging:=$(arg enable_logging)
+            enable_ground_truth:=$(arg enable_ground_truth)
+            enable_mavlink_interface:=$(arg enable_mavlink_interface)
+            log_file:=$(arg quad_name)
+            wait_to_record_bag:=$(arg wait_to_record_bag)
+            mav_name:=$(arg quad_name)
+            namespace:=$(arg quad_name)"
+        /> 
+        
+
+        <!-- FORGETFUL DRONES -->
+            <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml"/>
+            <param name="SIMULATOR_TEST_ENABLED" value="false"/>
+            <param name="SIM_TRACKGEN_ENABLED" value="true"/>
+            
+            
+            <!-- FORGETFUL SIMULATOR -->
+            <node 
+                pkg="forgetful_drones" 
+                type="forgetful_simulator" 
+                name="forgetful_simulator" 
+                output="screen">
+            </node>
+    
+    </group>
+
+</launch>
+
