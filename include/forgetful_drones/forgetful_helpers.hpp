@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <Eigen/Dense>
 #include <rapid_trajectories/Vec3.h>
 #include <nav_msgs/Odometry.h>
@@ -48,13 +46,16 @@
 #include "forgetful_drones/BuildSimulation.h"
 #include "forgetful_drones/StartSimulation.h"
 #include "forgetful_drones/StopSimulation.h"
+#include "forgetful_drones/LoadRacetrack.h"
 
 
 
 
 
-namespace forgetful_drone
-{
+namespace forgetful_drone {
+
+// using ...
+
 using fdBS = forgetful_drones::BuildSimulation;
 using fdBSReq = forgetful_drones::BuildSimulation::Request;
 using fdBSRes = forgetful_drones::BuildSimulation::Response;
@@ -67,6 +68,13 @@ using fdStopS = forgetful_drones::StopSimulation;
 using fdStopSReq = forgetful_drones::StopSimulation::Request;
 using fdStopSRes = forgetful_drones::StopSimulation::Response;
 
+using fdLR = forgetful_drones::LoadRacetrack;
+using fdLRReq = forgetful_drones::LoadRacetrack::Request;
+using fdLRRes = forgetful_drones::LoadRacetrack::Response;
+
+
+
+// classes
 
 class Pose {
 public:
@@ -76,6 +84,7 @@ public:
 
     Pose();
     Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori);
+    Pose(const geometry_msgs::Pose& pose);
 
     geometry_msgs::Point position_as_geometry_msg() const;
     geometry_msgs::Quaternion orientation_as_geometry_msg() const;
@@ -98,7 +107,7 @@ public:
 
 
 Eigen::Vector3d 
-EigenVector3d_From_Vec3
+EV3d___Vec3
 ( const Vec3& IN );
 
 Eigen::Quaternionf EQf_from_Yaw(const double& IN, const bool& InDegree);
@@ -117,10 +126,14 @@ geometry_msgs::Pose
 GMPose_From_NMO
 ( const nav_msgs::Odometry& In );
 
-geometry_msgs::Pose GMPose_from_EV3d_EQd (
+
+geometry_msgs::Pose GMPose___EV3d (const Eigen::Vector3d& ev3d);
+
+geometry_msgs::Pose GMPose___EV3d_EQd (
     const Eigen::Vector3d& ev3d,
     const Eigen::Quaterniond& eqd
 );
+
 
 
 quadrotor_common::TrajectoryPoint 
@@ -133,17 +146,15 @@ GMPoint__from__EV3d
 ( const Eigen::Vector3d& IN );
 
 
-Eigen::Vector3d
-EV3d_From_GMP
-( const geometry_msgs::Point& IN );
+Eigen::Vector3d EV3d___GMP (const geometry_msgs::Point& p);
+Eigen::Vector3f EV3f___GMP (const geometry_msgs::Point& p);
 
 Eigen::Vector3d
 EV3d_From_GMV3
 ( const geometry_msgs::Vector3& IN );
 
-Eigen::Quaterniond
-EQd_From_GMQ
-( const geometry_msgs::Quaternion& IN );
+Eigen::Quaternionf EQf___GMQ (const geometry_msgs::Quaternion& q);
+Eigen::Quaterniond EQd___GMQ (const geometry_msgs::Quaternion& q);
 
 geometry_msgs::Quaternion
 GMQ_From_EQd
@@ -161,13 +172,10 @@ EigenVector_From_StdVector
 // 
 
 std::string 
-getUTCDateTimeString
+UTCDateTime
 ();
 
 
-double 
-Saturation
-( const double& InputVal, const double& LowerLimit, const double& UpperLimit );
 
 
 // FILESYSTEM RELATED
@@ -183,7 +191,7 @@ writeStringToFile
 
 
 void 
-deleteDirectoryContents
+delDirContents
 ( const std::string& dir_path );
 
 
@@ -331,14 +339,8 @@ template<typename Type> bool fetchROSArrayParameter (
 }
 
 
-template<typename T> T capMinMax (
-    T val,
-    const T& min,
-    const T& max
-){
-    val = std::min(val, max); // upper bounded value
-    val = std::max(val, min); // upper and lower bounded value
-    return val;
+template<typename T> T capMinMax (T val, const T& min, const T& max) {
+    return std::max( std::min (val, max), min);
 }
 
 
@@ -347,17 +349,17 @@ void runForgetfulSimulator();
 
 
 
-void checkROSTimerPeriodTime (
+void checkTimerPeriod (
     const std::string& tag,
     const ros::TimerEvent& te,
     const double& period
 );
 
 void playAudioFile (const std::string fpath);
-void playAudioFromText (const std::string txt);
+void playAudio (const std::string txt);
 
 
-template<typename T> bool callROSService (
+template<typename T> bool callRosSrv (
     const std::string& tag,
     ros::ServiceClient& srv_cl,
     T& srv
@@ -370,16 +372,16 @@ template<typename T> bool callROSService (
 }
 
 
-bool isDirectory (const std::string& dir_path);
+bool isDir (const std::string& dir_path);
 
 bool isFile (const std::string& dir_path);
 
-void createDirectory (
+bool createDir (
     const std::string& tag,
     const std::string& dir_path
 );
 
-void copyFile (
+bool copyFile (
     const std::string& tag,
     const std::string& src_path,
     const std::string& dst_path
@@ -410,5 +412,7 @@ template<typename T, std::size_t N> T getRandomElement(
 
 
 
+std::string asSeqNo (const int& width, const int& no);
+std::string asFixedFloat (const int& width, const int& prec, const double& no);
 
 }

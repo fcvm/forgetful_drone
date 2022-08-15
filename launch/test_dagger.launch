@@ -13,8 +13,8 @@
             
             <arg name="quad_name" default="hummingbird"/>
             <!--<arg name="model" default="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>-->
-            <!--<arg name="model" default="$(find rotors_description)/urdf/hummingbird_rgbcamera300200.gazebo"/>-->
-            <arg name="model" default="$(find forgetful_drones)/gazebo/drone/vehicles/hummingbird_rgbcamera300200.gazebo"/>
+            <!--<arg name="model" default="$(find rotors_description)/urdf/hummingbird_.gazebo"/>-->
+            <arg name="model" default="$(find forgetful_drones)/gazebo/drone/vehicles/hummingbird_.gazebo"/>
             <!--<arg name="model" default="$(find rotors_description)/urdf/mav_with_vi_sensor.gazebo"/-->
             <arg name="custom_models" default="$(find forgetful_drones)/gazebo"/>
             <arg name="enable_logging" default="false"/>

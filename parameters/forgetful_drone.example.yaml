@@ -6,52 +6,65 @@
 
 
 
+# select existing in PKG/experiments/ or create new one
+EXPERIMENT_ID: "UTC_2022_07_01_07_27_56___SEQLEN_2" #"UTC_2022_06_13_10_13_56"
+
+# 0: racing - track global trajectory, 1: racing - expert, 2: racing - ANN, 3: DAGGER
+MISSION: 3
+
+# 0: Spaceship Interior, 1: Destroyed City, 2: Industrial Park, 3: Polygon City, 4: Desert Mountain, 255: Random choice
+SCENES: [1]
+
+# 0: Site A, 1: Site B, 2: Site C, 255: Random choice 
+SITES: [0]
+
+# 0: Figure 8, 1: Gap, 2: Random Circuit, 3: Randomized Sprint, 255: Random choice
+TRACK_TYPES: [0]
+
+# 0: Deterministic, 1: Randomized, 255: Random choice 
+TRACK_GENS: [1]
+
+# 0: Clockwise, 1: Counterclockwise, 255: Random choice
+TRACK_DIRECS: [0]
+
+# 0: RPG Gate, 1: TUB/DAI Gate, 2: THU/DME Gate, 255: Random choice
+GATES: [1]
+
+# m/s
+MAX_SPEEDS: [8.0, 10.0, 12.0] 
+
+
+RACING_NUMREPS: 1
+
+RUN_NUMLAPS: 1
+
+# 0: python, 1: cpp
+TORCH_INTERFACE: 0
+# 0: cpu, 1: cuda
+TORCH_DEVICE: 0 
+
+DAGGER_MARGINS: [0.7, 0.5]
+DAGGER_NUMLAPS_FIRSTRUN: 1
+DAGGER_NUMEPOCHS: 5
+DAGGER_EXPIVSHARE_THRESHOLD: 0.02
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-###########################################
-
-
-###########
-## DRONE ##
-###########
-DRONE_TEST_ENABLED: false 
-
-DRONE_MAINLOOP_FREQ: 50.0 # [Hz]
-
-CONFIG_NUMRUNS: 5
-RUN_NUMLAPS: 1 # [1]
-
+# ADVANCED
+MAIN_FREQ: 50.0 # [Hz]
 
 # NAVIGATOR
-NAV_REFSTATE_MAXDIVERGENCE: 1.2 #[m]
+NAV_MAX_DIV: 1.2 # [m], threshold distance from drone to reference state to abort current run
 NAV_REPLANNING_MAINLOOPITERSCNT: 3 #[1]
 NAV_INPUTPERTURBATION_ELEMENTWISEAMP: 0.15 #[1] #0.05 # 0.01 is a good value
 # NAVIGATOR - LOCAL TRAJECTORY
-NAV_LOCTRAJ_MAXSPEEDS: [4.0]
+
 NAV_LOCTRAJ_MINSPEED: 2.0
 NAV_LOCTRAJ_MAXSPEEDINCREMENT: 0.5
 NAV_LOCTRAJ_DURATION: 1.0 #1.5 # [s]
 NAV_LOCTRAJ_MINDIST: 2.0 # 3.0
-NAV_LOCTRAJ_MAXDIST: 5.0
+NAV_LOCTRAJ_MAXDIST: 5.0 #5.0
 NAV_LOCTRAJ_FEASIBILITY_POSITION_MINALTITUDE: 0.2
 NAV_LOCTRAJ_FEASIBILITY_POSITION_MAXALTITUDE: 10.0
 NAV_LOCTRAJ_FEASIBILITY_INPUT_MINTHRUST: 0.0
@@ -75,7 +88,7 @@ GLOTRAJ_NONDIMSPATIALRANGE: 2.0 #[1]
 
 # WAYPOINT ARRIVAL
 WAYPARRIV_THRESHOLDDIST: 1.0 # [m]
-WAYPARRIV_MAXDURATION: 20 # [s]
+WAYPARRIV_MAXDURATION: 10 # [s]
 
 # RVIZ
 RVIZ_CONFIGRELFPATH: "/rviz/default.rviz"
@@ -92,68 +105,13 @@ DRONE_CAMERA_HALF_YAW_AOV: deg(54.45) #deg(50.0) # from unreliable measurements 
 DRONE_CAMERA_HALF_PITCH_AOV: deg(45.64) #deg(35.0)
 
 
-# "": Start new experiment
-DRONE_EXPERIMENT_ID: "UTC_2022_5_27_23_25_24" 
 
-# 0: Track global trajectory through racetrack
-# 1: Navigate through racetrack with expert system
-# 2: Navigate through racetrack with brain (ANN)
-# 3: Generate training data
-# 4: DAGGER
-DRONE_FLIGHTMISSION: 4
-
-# 0: Spaceship Interior
-# 1: Destroyed City
-# 2: Industrial Park
-# 3: Polygon City
-# 4: Desert Mountain
-# 255: Random choice
-DRONE_FLIGHTMISSION_UNITYSCENES: [1]
-# 0: Site A
-# 1: Site B
-# 2: Site C
-# 255: Random choice
-DRONE_FLIGHTMISSION_SCENESITES: [0]
-# 0: Figure 8
-# 1: Gap
-# 2: Random Circuit
-# 3: Randomized Sprint
-# 255: Random choice
-DRONE_FLIGHTMISSION_TRACKTYPES: [0]
-# 0: Deterministic
-# 1: Randomized
-# 255: Random choice
-DRONE_FLIGHTMISSION_TRACKGENERATIONS: [1]
-# 0: Clockwise
-# 1: Counterclockwise
-# 255: Random choice
-DRONE_FLIGHTMISSION_TRACKDIRECTIONS: [0, 1]
-# 0: RPG Gate
-# 1: TUB/DAI Gate
-# 2: THU/DME Gate
-# 255: Random choice
-DRONE_FLIGHTMISSION_GATETYPES: [1]
 
 
 # Pose [x, y, z, qw, qx, qy, qz] of autopilot reference frame in world reference frame
-DRONE_AUTOPILOT_REFFRAME_WRF: [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
-
-# 0: python
-# 1: cpp
-DRONE_BRAIN_TORCHINTERFACE: 0
-# 0: cpu
-# 1: cuda
-DRONE_BRAIN_TORCHDEVICE: 0
+ARF_POSE_WRF: [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
 
 
-
-
-
-
-DRONE_DAGGER_MARGINS: [0.7, 0.5]
-DRONE_DAGGER_FIRSTRUN_NUMLAPS: 10
-DRONE_FLIGHTMISSION_DAGGER_NUM_EPOCHS: 10
-DRONE_FLIGHTMISSION_DAGGER_EXPERT_INTERVENTION_SHARE_THRESHOLD: 0.01
 
 
 

@@ -13,7 +13,7 @@ namespace forgetful_drone {
 
 ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::NodeHandle& pnh, const bool& as_ros_node)
     :
-    m_AsRosNode {as_ros_node},
+    m_runAsROSNode {as_ros_node},
 
     // ROS node handles
         m_rosRNH {rnh}, 
@@ -22,7 +22,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
     // ROS publishers
         m_rosPUB_RVIZ_GATES {m_rosRNH.advertise<visualization_msgs::MarkerArray>("rviz/gates", 1, true)},
         m_rosPUB_RVIZ_DRONE {m_rosRNH.advertise<visualization_msgs::MarkerArray>("rviz/drone", 1, true)},
-        //m_ROSPub_GazeboSetModelState( m_rosRNH.advertise<gazebo_msgs::ModelState>("/gazebo/set_model_state", 0) ), //DYNGATES
+        m_ROSPub_GazeboSetModelState {m_rosRNH.advertise <gazebo_msgs::ModelState> ("/gazebo/set_model_state", 0)},
         m_rosPUB_FLIGHTMARE_RGB {},
         //m_rosPUB_FLIGHTMARE_DEPTH {},
         //m_rosPUB_FLIGHTMARE_SEGMENTATION {},
@@ -38,6 +38,7 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
         m_rosSVC_GAZEBO_SPAWN_URDF_MODEL {m_rosRNH.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_urdf_model")},
         m_rosSVC_GAZEBO_DELETE_MODEL {m_rosRNH.serviceClient<gazebo_msgs::DeleteModel>("/gazebo/delete_model")},
         m_rosSVC_GAZEBO_SPAWN_SDF_MODEL {m_rosRNH.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_sdf_model")},
+        m_rosSVC_GAZEBO_GET_MODEL_STATE {m_rosRNH.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state")},
         m_rosSVC_RVIZ_LOAD_CONFIG {m_rosRNH.serviceClient<rviz::SendFilePath>("rviz/load_config")},
         //m_ROSSrvCl_GazeboResetSimulation( m_rosRNH.serviceClient<std_srvs::Empty>("/gazebo/reset_simulation") ),
 
@@ -45,6 +46,8 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
         m_rosSVS_SIMULATOR_BUILD {m_rosRNH.advertiseService("simulator/build", &ForgetfulSimulator::ROSCB_SIMULATOR_BUILD, this)},
         m_rosSVS_SIMULATOR_START {m_rosRNH.advertiseService("simulator/start", &ForgetfulSimulator::ROSCB_SIMULATOR_START, this)},
         m_rosSVS_SIMULATOR_STOP {m_rosRNH.advertiseService("simulator/stop", &ForgetfulSimulator::ROSCB_SIMULATOR_STOP, this)},
+        m_rosSVS_SIMULATOR_TELEPORT {m_rosRNH.advertiseService("simulator/teleport_drone", &ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT, this)},
+        m_rosSVS_SIMULATOR_LOAD {m_rosRNH.advertiseService("simulator/load_racetrack", &ForgetfulSimulator::ROSCB_SIMULATOR_LOAD, this)},
 
     // ROS timers
         //m_ROSTimer_SimulatorLoop( m_rosRNH.createTimer(ros::Duration(m_SimulatorLoopTime), &ForgetfulSimulator::ROSTimerFunc_SimulatorLoop, this, false, false) ), // DYNGATES
@@ -68,31 +71,28 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
     m_SimulationRunning {false},
     m_UnityBridgePtr {nullptr}
 {
-    ROSINFO("Construct ForgetfulSimulator instance");
-    // Set logger level to Debug
-    //namespace rc = ros::console;
-    //if (rc::set_logger_level(ROSCONSOLE_DEFAULT_NAME, rc::levels::Debug))
-    //    rc::notifyLoggerLevelsChanged();
-
     // Seed random engine
-    m_RandEngine.seed(ros::WallTime::now().toNSec());
+    m_RandEngine.seed (ros::WallTime::now().toNSec());
+
+
     
     // Init flightmare image publishers
-    image_transport::ImageTransport IT(m_rosPNH);
-    m_rosPUB_FLIGHTMARE_RGB = IT.advertise("/flightmare/rgb", 1);
-        //m_rosPUB_FLIGHTMARE_DEPTH = IT.advertise("/flightmare/depth", 1);
-        //m_rosPUB_FLIGHTMARE_SEGMENTATION = IT.advertise("/flightmare/segmentation", 1);
-        //m_rosPUB_FLIGHTMARE_OPTICALFLOW = IT.advertise("/flightmare/opticalflow", 1);
+    image_transport::ImageTransport IT (m_rosPNH);
+    m_rosPUB_FLIGHTMARE_RGB = IT.advertise ("/flightmare/rgb", 1);
+    //m_rosPUB_FLIGHTMARE_DEPTH = IT.advertise("/flightmare/depth", 1);
+    //m_rosPUB_FLIGHTMARE_SEGMENTATION = IT.advertise("/flightmare/segmentation", 1);
+    //m_rosPUB_FLIGHTMARE_OPTICALFLOW = IT.advertise("/flightmare/opticalflow", 1);
     
-    bool init_successful {true};
-    if (!initROSParameters()) init_successful = false;
-    if (!init_successful) {
-        ROSERROR("Initialization failed. Shut ROS down.");
+
+    if (initROSParameters ()) {
+        ROSINFO("Init succeeded");
+    } else {
+        ROSERROR("Init failed, terminate ROS");
         ros::shutdown();
     }
 
     // Init main loop timer
-    if (m_AsRosNode) {
+    if (m_runAsROSNode) {
         double rate = p_MAIN_LOOP_FREQ;
         m_rosTMR_MAIN_LOOP = m_rosRNH.createTimer (
             /*rate*/ ros::Rate(rate),//1 / p_MAIN_LOOP_FREQ,
@@ -103,7 +103,10 @@ ForgetfulSimulator::ForgetfulSimulator (const ros::NodeHandle& rnh, const ros::N
 
     
     // Test simulator if specified
+    if (p_TRACKGEN_ENABLED) genTracks ();
+
     if (p_TEST_ENABLED) test ();
+    
 }
 
 
@@ -116,13 +119,13 @@ ForgetfulSimulator::~ForgetfulSimulator () {}
 
 
 bool ForgetfulSimulator::initROSParameters () {
-    ROSINFO("Fetch ROS parameters");
 
     // ROS param keys and destinations of type bool
     std::vector <std::pair<const char*, const bool*>> kd_bool {
         {"SIM_UNITY_ENABLED", &p_UNITY_ENABLED},
         {"SIM_RVIZ_ENABLED", &p_RVIZ_ENABLED},
         {"SIM_TEST_ENABLED", &p_TEST_ENABLED},
+        {"SIM_TRACKGEN_ENABLED", &p_TRACKGEN_ENABLED},
     };
 
     // ROS param keys and destinations of type int
@@ -175,6 +178,149 @@ bool ForgetfulSimulator::initROSParameters () {
 }
 
 
+void ForgetfulSimulator::genTrackFile (const int& i) {
+    auto addPose2File = [this] (const int& i, const Pose& p) {
+        std::ofstream ofs;
+        const char delimiter = ',';
+        ofs.open (racetrack_fpath (i), std::ios_base::app); 
+        ofs
+            << p.position.x ()      << delimiter
+            << p.position.y ()      << delimiter
+            << p.position.z ()      << delimiter
+            << p.orientation.w ()   << delimiter
+            << p.orientation.x ()   << delimiter
+            << p.orientation.y ()   << delimiter
+            << p.orientation.z ()   << std::endl;
+        ofs.close (); 
+        ofs.clear ();
+
+        //std::cout << std::setprecision (3) << "Added pose: "
+        //        << p.position.x () << ", " << p.position.y () << ", " << p.position.z () << " - "
+        //        << p.orientation.w () << ", " << p.orientation.x () << ", " << p.orientation.y () << ", " << p.orientation.z () << std::endl;
+    };
+
+    //std::cout << "m_GazeboDroneInitPose" << std::endl;
+    addPose2File (i, m_GazeboDroneInitPose);
+    //std::cout << "m_GazeboGateInitPoses" << std::endl;
+    for (const Pose& p : m_GazeboGateInitPoses) addPose2File (i, p);
+    //std::cout << "m_UnityDroneInitPose" << std::endl;
+    addPose2File (i, m_UnityDroneInitPose);
+    //std::cout << "m_UnityGateInitPoses" << std::endl;
+    for (const Pose& p : m_UnityGateInitPoses) addPose2File (i, p);
+}
+
+void ForgetfulSimulator::loadTrackFile (const int& j) {
+    std::ifstream input_file (racetrack_fpath (j));
+    
+    std::ostringstream ss;
+    ss << input_file.rdbuf ();
+    std::string file_contents = ss.str ();
+
+    char delimiter = ',';
+    std::istringstream sstream (file_contents);
+    std::vector<float> items;
+    std::string record;
+
+    int counter = 0;
+    std::map<int, std::vector<float>> csv_contents;
+    while (std::getline (sstream, record)) {
+        std::istringstream line(record);
+        while (std::getline(line, record, delimiter)) {
+            items.push_back(std::stof (record));
+        }
+
+        csv_contents [counter] = items;
+        items.clear();
+        counter += 1;
+    }
+
+    
+
+    m_GazeboGateInitPoses.clear ();
+    m_UnityGateInitPoses.clear ();
+
+    for (int i = 0; i < csv_contents.size (); i++) {
+        geometry_msgs::Pose p;
+        p.position.x = csv_contents [i] [0];
+        p.position.y = csv_contents [i] [1];
+        p.position.z = csv_contents [i] [2];
+        p.orientation.w = csv_contents [i] [3];
+        p.orientation.x = csv_contents [i] [4];
+        p.orientation.y = csv_contents [i] [5];
+        p.orientation.z = csv_contents [i] [6];
+
+        if (i == 0) {
+            m_GazeboDroneInitPose = Pose (p);
+            //std::cout << std::setprecision (3) << "m_GazeboDroneInitPose: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        }
+        else if (i < csv_contents.size () / 2) {
+            m_GazeboGateInitPoses.push_back (Pose (p));
+            //std::cout << std::setprecision (3) << "m_GazeboGateInitPoses [" << m_GazeboGateInitPoses.size () - 1 << "]: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        } 
+        else if (i == csv_contents.size () / 2) {
+            m_UnityDroneInitPose = Pose (p);
+            //std::cout << std::setprecision (3) << "m_UnityDroneInitPose: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        } 
+        else {
+            m_UnityGateInitPoses.push_back (Pose (p));
+            //std::cout << std::setprecision (3) << "m_UnityGateInitPoses [" << m_UnityGateInitPoses.size () - 1 << "]: " 
+            //    << p.position.x << ", " << p.position.y << ", " << p.position.z << " - "
+            //    << p.orientation.w << ", " << p.orientation.x << ", " << p.orientation.y << ", " << p.orientation.z << std::endl;
+        }
+    }
+
+    ROSINFO ("Loaded \"" << racetrack_fpath (j) << "\"");
+
+}
+
+
+
+
+std::string ForgetfulSimulator::racetrack_fpath (const int& i) {
+    std::ostringstream oss;
+    oss 
+        << ROS_PACKAGE_PATH 
+        << "/racetracks/"
+        << std::to_string (m_UnitySceneIdx) << "_"
+        << std::to_string (m_SceneSiteIdx) << "_"
+        << std::to_string (m_TrackTypeIdx) << "_"
+        << std::to_string (m_TrackGenerationIdx) << "_"
+        << std::to_string (m_TrackDirectionIdx) << "_"
+        << std::to_string (m_GateTypeIdx) << "___"
+        << std::to_string (i) << ".txt";
+
+    return oss.str ();
+}
+
+void ForgetfulSimulator::genTracks () {
+    ros::Duration(5.0).sleep();
+    ROSINFO(">>> GENERATE RACETRACK DATA");
+
+    std::ostringstream path; path << ROS_PACKAGE_PATH << "/racetracks";
+    delDirContents (path.str ());
+
+
+    buildSimulation_resetMembers ();
+    for (int i = 0; i < 10; i++)
+    for (m_UnitySceneIdx = 0; m_UnitySceneIdx < h_UNITY_SCENES.size (); m_UnitySceneIdx++)
+    for (m_SceneSiteIdx = 0; m_SceneSiteIdx < h_SCENE_SITES.size (); m_SceneSiteIdx++)
+    for (m_TrackTypeIdx = 0; m_TrackTypeIdx < 2; m_TrackTypeIdx++)
+    for (m_TrackGenerationIdx = 0; m_TrackGenerationIdx < h_TRACK_GENERATIONS.size (); m_TrackGenerationIdx++)
+    for (m_TrackDirectionIdx = 0; m_TrackDirectionIdx < h_TRACK_DIRECTIONS.size (); m_TrackDirectionIdx++)
+    for (m_GateTypeIdx = 1; m_GateTypeIdx < h_GATE_TYPES.size (); m_GateTypeIdx++) {
+        buildSimulation_logRequest ();
+        buildSimulation_setTrackPoses ();
+        if (!buildSimulation_generateTrack()) return;
+        
+        genTrackFile (i);
+    }
+}
 
 
 
@@ -280,9 +426,11 @@ void ForgetfulSimulator::buildSimulation_setTrackPoses () {
 
 
 bool ForgetfulSimulator::startSimulation () {
-    if (m_SimulationRunning) {ROSWARN("Tried to start simulation which is already running."); return true;}
-    
+    if (m_SimulationRunning) {ROSWARN("Tried to start simulation which is already running"); return true;}
+
+    std::cout << std::endl;
     ROSINFO("Start simulation");
+    std::cout << std::endl;
 
     
     // Gazebo
@@ -323,7 +471,7 @@ bool ForgetfulSimulator::startSimulation () {
 
 
     
-    if (m_AsRosNode) m_rosTMR_MAIN_LOOP.start();
+    if (m_runAsROSNode) m_rosTMR_MAIN_LOOP.start();
     m_SimulationRunning = true;
     return true;
 }
@@ -351,7 +499,7 @@ bool ForgetfulSimulator::stopSimulation() {
         }
     } 
 
-    if (m_AsRosNode) m_rosTMR_MAIN_LOOP.stop();
+    if (m_runAsROSNode) m_rosTMR_MAIN_LOOP.stop();
     m_SimulationRunning = false;
     return true;
 }
@@ -381,7 +529,7 @@ void ForgetfulSimulator::spinOnce (const ros::TimerEvent& te) {
 }
 
 void ForgetfulSimulator::ROSCB_MAIN_LOOP (const ros::TimerEvent& te) {
-    checkROSTimerPeriodTime(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
+    checkTimerPeriod(ROS_LOG_PREFIX, te, 1 / p_MAIN_LOOP_FREQ);
     
     if ((!m_SimulationRunning) || (!m_UnityConnected)) return;
 
@@ -436,8 +584,76 @@ bool ForgetfulSimulator::ROSCB_SIMULATOR_STOP (fdStopSReq& req, fdStopSRes& res)
 }
 
 
+bool ForgetfulSimulator::ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req, std_srvs::Empty::Response& res) {
+    gazebo_msgs::GetModelState srv;
+    srv.request.model_name = h_DRONE_MODEL_NAME;
+
+    if (!callRosSrv (ROS_LOG_PREFIX, m_rosSVC_GAZEBO_GET_MODEL_STATE, srv)) return false;
+    forgetful_drone::Pose p0 (srv.response.pose);
+    const forgetful_drone::Pose& p1 = m_GazeboDroneInitPose;
+    
+    gazebo_msgs::ModelState msg;
+    msg.model_name = h_DRONE_MODEL_NAME;
+    
+    ros::Rate r (10.0);
+    for (float t = 0; t <= 1; t += 5.0 / 100 ) {
+        std::cout << ".";
+        
+        forgetful_drone::Pose pt {
+            p0.position * (1 - t) + p1.position * (t),
+            p0.orientation.slerp (t, p1.orientation)
+        };
+        msg.pose = pt.as_geometry_msg ();
+        m_ROSPub_GazeboSetModelState.publish (msg);
+        r.sleep ();
+    }
+    std::cout << std::endl;
+    return true;
 
 
+
+
+    //ROSINFO("Gazebo: delete drone");
+//
+    //gazebo_msgs::DeleteModel srv;
+    //srv.request.model_name = h_DRONE_MODEL_NAME;
+    //if (!m_rosSVC_GAZEBO_DELETE_MODEL.call (srv)) return false;
+//
+    //m_GazeboDroneSpawned = false;    
+    //return true;
+}
+
+
+
+
+bool ForgetfulSimulator::ROSCB_SIMULATOR_LOAD (fdLRReq& req, fdLRRes& res) {
+    buildSimulation_resetMembers ();
+    //buildSimulation_handleRandRequest (req);
+    //if (!buildSimulation_RequestValid (req)) return false;
+
+    // Set members from request
+    m_UnitySceneIdx = req.unity_scene;
+    m_SceneSiteIdx = req.scene_site;
+    m_TrackTypeIdx = req.track_type;
+    m_TrackGenerationIdx = req.track_generation;
+    m_TrackDirectionIdx = req.track_direction;
+    m_GateTypeIdx = req.gate_type;
+
+    buildSimulation_logRequest();
+    buildSimulation_setTrackPoses();
+
+    loadTrackFile (req.track_idx);
+    buildSimulation_generateGazeboGroundPlane();
+    
+    // Process response
+    res.drone_init_pose = m_GazeboDroneInitPose.as_geometry_msg();
+    res.gate_init_poses.clear();
+    for (const Pose& p : m_GazeboGateInitPoses) {
+        res.gate_init_poses.push_back(p.as_geometry_msg());
+    }
+    
+    return true;
+}
 
 bool ForgetfulSimulator::ROSCB_SIMULATOR_BUILD (fdBSReq& req, fdBSRes& res) {
     // Process request
@@ -514,20 +730,20 @@ bool ForgetfulSimulator::buildSimulation_RequestValid (const fdBSReq& req) {
 }
 
 void ForgetfulSimulator::buildSimulation_logRequest () {
-    ROSINFO("Simulation configuration:" << std::endl
-        << " - " << std::get<0>(h_REQUEST[0]) << ": " << std::get<0>(h_UNITY_SCENES[m_UnitySceneIdx])           << m_ReqLogRand[0] << std::endl
-        << " - " << std::get<0>(h_REQUEST[1]) << ": " << std::get<0>(h_SCENE_SITES[m_SceneSiteIdx])             << m_ReqLogRand[1] << std::endl
-        << " - " << std::get<0>(h_REQUEST[2]) << ": " << std::get<0>(h_TRACK_TYPES[m_TrackTypeIdx])             << m_ReqLogRand[2] << std::endl
-        << " - " << std::get<0>(h_REQUEST[3]) << ": " << std::get<0>(h_TRACK_GENERATIONS[m_TrackGenerationIdx]) << m_ReqLogRand[3] << std::endl
-        << " - " << std::get<0>(h_REQUEST[4]) << ": " << std::get<0>(h_TRACK_DIRECTIONS[m_TrackDirectionIdx])   << m_ReqLogRand[4] << std::endl
-        << " - " << std::get<0>(h_REQUEST[5]) << ": " << std::get<0>(h_GATE_TYPES[m_GateTypeIdx])               << m_ReqLogRand[5]);
+    std::cout << std::endl;
+    ROSINFO("Build simulation:" << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[0]) << ": " << std::get<0>(h_UNITY_SCENES[m_UnitySceneIdx])           << m_ReqLogRand[0] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[1]) << ": " << std::get<0>(h_SCENE_SITES[m_SceneSiteIdx])             << m_ReqLogRand[1] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[2]) << ": " << std::get<0>(h_TRACK_TYPES[m_TrackTypeIdx])             << m_ReqLogRand[2] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[3]) << ": " << std::get<0>(h_TRACK_GENERATIONS[m_TrackGenerationIdx]) << m_ReqLogRand[3] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[4]) << ": " << std::get<0>(h_TRACK_DIRECTIONS[m_TrackDirectionIdx])   << m_ReqLogRand[4] << std::endl
+        << "\t\t- " << std::get<0>(h_REQUEST[5]) << ": " << std::get<0>(h_GATE_TYPES[m_GateTypeIdx])               << m_ReqLogRand[5]);
+    std::cout << std::endl;
 }
 
 
 
 bool ForgetfulSimulator::buildSimulation (const fdBSReq& req) {
-    ROSINFO("Initialize Simulation");
-
     buildSimulation_resetMembers ();
     buildSimulation_handleRandRequest (req);
     if (!buildSimulation_RequestValid (req)) return false;
@@ -812,8 +1028,7 @@ ForgetfulSimulator::buildSimulation_generateTrack_redirectInitGatePosesTRF (
 
 
 Pose ForgetfulSimulator::buildSimulation_generateTrack_getInitDronePoseTRF (
-    std::vector<forgetful_drone::Pose> gps
-) {
+    std::vector <forgetful_drone::Pose> gps) {
     const size_t& num_gates = gps.size();
     const size_t idx_front = num_gates - 1 - h_DRONE_INIT_POSE_NUM_GATES_SETBACK;
     const size_t idx_back = idx_front - 1;
@@ -972,569 +1187,9 @@ void ForgetfulSimulator::buildSimulation_generateTrack_FIGURE8 () {
     buildSimulation_generateTrack_transformInitPosesTRFtoWRF (*gip_ptr, *dip_ptr);
 }
 
-/*
-bool ForgetfulSimulator::buildSimulation_OLD (
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_UnityScene_type unity_scene,
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackSite_type& scene_site,
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& racetrack_type,
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_RaceGateType_type& gate_type,
-
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackClockwise_type& RacetrackClockwise,
-    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackMode_type& RacetrackMode  
-) {
-    ROSINFO("Build drone racing simulation.");
-
-    m_SimulationRunning = false;
-    m_UnityTrackPose = Pose();
-    m_GazeboTrackPose = Pose();
-    m_UnityGateInitPoses.clear();
-    m_GazeboGateInitPoses.clear();
-    m_UnityDroneInitPose = Pose();
-    m_GazeboDroneInitPose = Pose();
-    m_GazeboGroundPlaneOrigin = {0.0, 0.0, 0.0};
-    m_GazeboGroundPlaneSize = {0.0, 0.0};
-    
-    
-    
-
-    std::string rc_tag = "";
-    if (unity_scene == forgetful_drones::BuildDroneRacingSimulation::Request::RANDOM_CHOICE) {
-        std::array<uint8_t, 5> UnityScenes{
-            forgetful_drones::BuildDroneRacingSimulation::Request::SPACESHIP_INTERIOR,
-            forgetful_drones::BuildDroneRacingSimulation::Request::DESTROYED_CITY,
-            forgetful_drones::BuildDroneRacingSimulation::Request::INDUSTRIAL_PARK,
-            forgetful_drones::BuildDroneRacingSimulation::Request::POLYGON_CITY,
-            forgetful_drones::BuildDroneRacingSimulation::Request::DESERT_MOUNTAIN
-            };
-        std::uniform_int_distribution<size_t> UIDistri_0To4{0, 4};
-        const_cast<uint8_t&>(unity_scene) = UnityScenes[UIDistri_0To4(m_RandEngine)];
-        rc_tag = " (randomly chosen)";
-    }
-    switch (unity_scene) {   
-        case forgetful_drones::BuildDroneRacingSimulation::Request::SPACESHIP_INTERIOR:
-            ROSDEBUG("Unity scene: " << "SPACESHIP_INTERIOR" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::DESTROYED_CITY:
-            ROSDEBUG("Unity scene: " << "DESTROYED_CITY" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::INDUSTRIAL_PARK:
-            ROSDEBUG("Unity scene: " << "INDUSTRIAL_PARK" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::POLYGON_CITY:
-            ROSDEBUG("Unity scene: " << "POLYGON_CITY" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::DESERT_MOUNTAIN:
-            ROSDEBUG("Unity scene: " << "DESERT_MOUNTAIN" << rc_tag);
-            break;
-        default:
-            ROSERROR("No implementation for " << GET_VAR_REP(unity_scene));
-            return false; break;
-    }
-    m_UnitySceneIdx = unity_scene;
-
-    rc_tag = "";
-    if (scene_site == forgetful_drones::BuildDroneRacingSimulation::Request::RANDOM_CHOICE) {
-        std::array<uint8_t, 3> RacetrackSites{
-            forgetful_drones::BuildDroneRacingSimulation::Request::SITE_A,
-            forgetful_drones::BuildDroneRacingSimulation::Request::SITE_B,
-            forgetful_drones::BuildDroneRacingSimulation::Request::SITE_C
-            };
-        std::uniform_int_distribution<size_t> UIDistri_0To2{0, 2};
-        const_cast<uint8_t&>(scene_site) = RacetrackSites[UIDistri_0To2(m_RandEngine)];
-        rc_tag = " (randomly chosen)";
-    }
-    switch (scene_site) {
-        case forgetful_drones::BuildDroneRacingSimulation::Request::SITE_A:
-            ROSDEBUG("Scene site: " << "A" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::SITE_B:
-            ROSDEBUG("Scene site: " << "B" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::SITE_C:
-            ROSDEBUG("Scene site: " << "C" << rc_tag);
-            break;
-        default:
-            ROSERROR("No implementation for " << GET_VAR_REP(scene_site));
-            return false; break;
-    }
-    m_SceneSiteIdx = scene_site;
-
-    buildSimulation_setTrackPoses();
 
 
-    rc_tag = "";
-    if (gate_type == forgetful_drones::BuildDroneRacingSimulation::Request::RANDOM_CHOICE) {
-        std::array<uint8_t, 3> RaceGateTypes{
-            forgetful_drones::BuildDroneRacingSimulation::Request::RPG_GATE,
-            forgetful_drones::BuildDroneRacingSimulation::Request::TUB_DAI_GATE,
-            forgetful_drones::BuildDroneRacingSimulation::Request::THU_DME_GATE
-            };
-        std::uniform_int_distribution<size_t> UIDistri_0To2{0, 0};
-        const_cast<uint8_t&>(gate_type) = RaceGateTypes[UIDistri_0To2(m_RandEngine)];
-        rc_tag = " (randomly chosen)";
-    }
-    switch (gate_type) {
-        case forgetful_drones::BuildDroneRacingSimulation::Request::RPG_GATE:
-            m_GateMinZ = 2.00;
-            m_GatePrefabID = "rpg_gate";
-            m_GateSTLFpath = ROS_PACKAGE_PATH + "/gazebo/rpg_gate/model.stl";
-            m_GateSDFFpath = ROS_PACKAGE_PATH + "/gazebo/rpg_gate/model.sdf";
-            ROSDEBUG("Gate type: " << "RPG_GATE" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::TUB_DAI_GATE:
-            m_GateMinZ = 2.00;
-            m_GatePrefabID = "tub_dai_gate";
-            m_GateSTLFpath = ROS_PACKAGE_PATH + "/gazebo/tub_dai_gate/model.stl";
-            m_GateSDFFpath = ROS_PACKAGE_PATH + "/gazebo/tub_dai_gate/model.sdf";
-            ROSDEBUG("Gate type: " << "TUB_DAI_GATE" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::THU_DME_GATE:
-            m_GateMinZ = 2.00;
-            m_GatePrefabID = "thu_dme_gate";
-            m_GateSTLFpath = ROS_PACKAGE_PATH + "/gazebo/thu_dme_gate/model.stl";
-            m_GateSDFFpath = ROS_PACKAGE_PATH + "/gazebo/thu_dme_gate/model.sdf";
-            ROSDEBUG("Gate type: " << "THU_DME_GATE" << rc_tag);
-            break;
-        default:
-            ROSERROR("No implementation for " << GET_VAR_REP(gate_type));
-            return false; break;
-    }
 
-
-    
-
-    rc_tag = "";
-    if (racetrack_type == forgetful_drones::BuildDroneRacingSimulation::Request::RANDOM_CHOICE) {
-        std::array<uint8_t, 3> RacetrackTypes{
-            forgetful_drones::BuildDroneRacingSimulation::Request::FIGURE8_RANDOMIZED,
-            //forgetful_drones::BuildDroneRacingSimulation::Request::CIRCUIT_RANDOMIZED,
-            //forgetful_drones::BuildDroneRacingSimulation::Request::SPRINT_RANDOMIZED
-            };
-        std::uniform_int_distribution<size_t> UIDistri_0To2{0, 2};
-        const_cast<uint8_t&>(racetrack_type) = RacetrackTypes[UIDistri_0To2(m_RandEngine)];
-        rc_tag = " (randomly chosen)";
-    }
-    switch (racetrack_type) {
-        case forgetful_drones::BuildDroneRacingSimulation::Request::FIGURE8_DETERMINISTIC:
-            computeRaceTrack_Figure8(racetrack_type);
-            ROSDEBUG("Racetrack type: " << "FIGURE8_DETERMINISTIC" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::FIGURE8_RANDOMIZED:
-            computeRaceTrack_Figure8(racetrack_type);
-            ROSDEBUG("Racetrack type: " << "FIGURE8_RANDOMIZED" << rc_tag);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::INTERMEDIATE_TARGET_LOSS:
-            computeRaceTrack_IntermediateTargetLoss(RacetrackClockwise, RacetrackMode);
-            ROSDEBUG("Racetrack type: " << "INTERMEDIATE_TARGET_LOSS" << rc_tag 
-                << ", clockwise: " << RacetrackClockwise << ", mode: " << RacetrackMode);
-            break;
-        case forgetful_drones::BuildDroneRacingSimulation::Request::CIRCUIT_RANDOMIZED:
-        case forgetful_drones::BuildDroneRacingSimulation::Request::SPRINT_RANDOMIZED: 
-            //computeGatePoses_SprintRand(); break;
-        default:
-            ROSERROR("No implementation for " << GET_VAR_REP(racetrack_type));
-            return false; break;
-    }
-
-
-    if (p_TEST_ENABLED) { // Plot gate positions
-        std::vector<float> Gates_X, Gates_Y, Gates_Z;
-        float Gates_MaxX = - 1e10;
-        float Gates_MinX = + 1e10;
-        float Gates_MaxY = - 1e10;
-        float Gates_MinY = + 1e10;
-        for (size_t Gate_i = 0; Gate_i < m_UnityGateInitPoses.size(); Gate_i++)
-        {
-            Gates_X.push_back(m_UnityGateInitPoses[Gate_i].position.x());
-            Gates_Y.push_back(m_UnityGateInitPoses[Gate_i].position.y());
-            Gates_Z.push_back(m_UnityGateInitPoses[Gate_i].position.z());
-
-            Gates_MaxX = std::max(Gates_MaxX, Gates_X[Gate_i]);
-            Gates_MinX = std::min(Gates_MinX, Gates_X[Gate_i]);
-            Gates_MaxY = std::max(Gates_MaxY, Gates_Y[Gate_i]);
-            Gates_MinY = std::min(Gates_MinY, Gates_Y[Gate_i]);
-        }
-
-        matplotlibcpp::figure_size(3840, 2160); // Ultra HD
-        matplotlibcpp::title("Initial Position of gates and drone in x/y-Plane");
-
-        matplotlibcpp::scatter(Gates_X, Gates_Y, 100);
-
-        float TextShift_X = (Gates_MaxX - Gates_MinX)/100;
-        float TextShift_Y = (Gates_MaxY - Gates_MinY)/100;
-        for (size_t Gate_i = 0; Gate_i < m_UnityGateInitPoses.size(); Gate_i++)
-        {
-            const std::string Text = "Gate " + std::to_string(Gate_i);
-            matplotlibcpp::text(Gates_X[Gate_i] + TextShift_X, Gates_Y[Gate_i] + TextShift_Y, Text);
-        }
-
-        std::vector<float> Drone_X {m_UnityDroneInitPose.position.x()};
-        std::vector<float> Drone_Y {m_UnityDroneInitPose.position.y()};
-        matplotlibcpp::scatter(Drone_X, Drone_Y, 100);
-        matplotlibcpp::text(Drone_X[0] + TextShift_X, Drone_Y[0] + TextShift_Y, "Drone start position");
-
-        //matplotlibcpp::legend();
-        //matplotlibcpp::save("./basic.png");
-        matplotlibcpp::show();
-    }
-
-
-    buildSimulation_generateGazeboGroundPlane();
-
-    
-
-
-    
-    //// Spawn environment in Gazebo for collision
-    //gazebo_msgs::SpawnModel srv;
-    //    srv.request.reference_frame = "world";
-    //    srv.request.robot_namespace = "environment";
-    //srv.request.model_name = "spaceship_interior_00";
-    //std::ifstream ModelXML(ROS_PACKAGE_PATH + "/gazebo/spaceship_interior/00/model.sdf");
-    //std::stringstream Buffer; Buffer << ModelXML.rdbuf();
-    //srv.request.model_xml = Buffer.str();
-    ////std::cout<<Buffer.str()<<std::endl;
-    ////srv.request.initial_pose.position 
-    ////    = GMP_From_EV3d( m_GatesInitPos_WorldRF[GateIdx] );
-    ////srv.request.initial_pose.orientation
-    ////    = tf::createQuaternionMsgFromYaw( m_GatesInitYaw_WorldRF[GateIdx] );
-    //
-    //if ( m_rosSVC_GAZEBO_SPAWN_SDF_MODEL.call( srv ) )
-    //    MY_ROS_INFO("[%s]\n  > Successfully spawned \"%s\" in Gazebo.", 
-    //        m_ROS_NODE_NAME, srv.request.model_name.c_str());
-    //else
-    //    MY_ROS_ERROR("[%s]\n  > Failed to spawn \"%s\" in Gazebo.",
-    //        m_ROS_NODE_NAME, srv.request.model_name.c_str());
-    
-
-    
-    //// --> get point cloud from unity and spawn collision model in gazebo
-    //flightlib::PointCloudMessage_t PointCloudMsg;
-    //PointCloudMsg.path = ROS_PACKAGE_PATH + "/tmp/";
-    //PointCloudMsg.file_name = "point_cloud"; // .ply is added automatically
-    //PointCloudMsg.origin = {
-    //    (float)RaceTrackPose_WorldRF.position.x, 
-    //    (float)RaceTrackPose_WorldRF.position.y,
-    //    (float)RaceTrackPose_WorldRF.position.z
-    //    };
-    //PointCloudMsg.range = {
-    //    35.0, 
-    //    35.0, 
-    //    (float)(RaceTrackPose_WorldRF.position.z + 3*GateWaypointHeight)
-    //    };
-    //PointCloudMsg.resolution = 0.10;
-    //bool FM_PointCloudReady = m_UnityBridgePtr->getPointCloud(PointCloudMsg);
-    //
-    //if (FM_PointCloudReady)
-    //    MY_ROS_INFO("#############################################################################");
-    //else
-    //    MY_ROS_INFO("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    
-    
-    
-    //initRandParamsOfDynGates();
-    //req.DynGatesActivated? m_ROSTimer_SimulatorLoop.start() : m_ROSTimer_SimulatorLoop.stop();
-    
-    
-    return true;
-}
-*/
-
-/*
-void ForgetfulSimulator::computeRaceTrack_IntermediateTargetLoss(const bool& IsClockwise, const int& Mode)
-{
-    constexpr int GatesN = 7;
-    std::array<Eigen::Vector3d, GatesN +1> GatesAndDroneInitPos_RaceTrackRF;
-    std::array<double, GatesN +1> GatesAndDroneInitYaw_RaceTrackRF;
-
-    switch (Mode) // WIDE OR NARROW GAP
-    {
-    case 0: // sharp 
-         GatesAndDroneInitPos_RaceTrackRF = {
-            Eigen::Vector3d{ -20.45 +10,   -8.65 * 0.8  ,   m_GateMinZ  }, // #01
-            Eigen::Vector3d{ -12.55 +10 ,   -11.15 * 0.6 ,   m_GateMinZ  }, // #02
-            //Eigen::Vector3d{ -4.15  ,   -5.35   ,   m_GateMinZ  }, // #03
-            
-            Eigen::Vector3d{ 2.85 +10  ,   -5.95 * 0.6  ,   m_GateMinZ  }, // #10
-
-            Eigen::Vector3d{ 3.45 +10   ,   4.25 * 0.6   ,   m_GateMinZ  }, // #04
-            //Eigen::Vector3d{ 11.95  ,   11.15   ,   m_GateMinZ  }, // #05
-            //Eigen::Vector3d{ 21.85  ,   6.85    ,   m_GateMinZ  }, // #06
-            //Eigen::Vector3d{ 24.25  ,   -1.75   ,   m_GateMinZ  }, // #07
-            //Eigen::Vector3d{ 19.25  ,   -9.55   ,   m_GateMinZ  }, // #08
-            //Eigen::Vector3d{ 10.55  ,   -10.65  ,   m_GateMinZ  }, // #09
-            
-            //Eigen::Vector3d{ -4.95  ,   4.65    ,   m_GateMinZ  }, // #11
-            Eigen::Vector3d{ -12.95 +10,   9.65 * 0.6   ,   m_GateMinZ  }, // #12
-            Eigen::Vector3d{ -21.05 +10,   6.65 * 0.8   ,   m_GateMinZ  }, // #13
-            Eigen::Vector3d{ -24.25 +10 ,   -2.15   ,   m_GateMinZ  }, // #14
-            Eigen::Vector3d{ -24.00 +10 ,   6.65    ,   0.2                     }  // Drone
-            };
-        // Gate and drone yaws in race track reference frame:
-        GatesAndDroneInitYaw_RaceTrackRF = {
-            -2.01e+00   ,   // #01s
-            -1.57e+00   ,   // #02
-            //-6.01e-01   ,   // #03
-            
-            (-1.57e+00) * 0.9,//-2.57e+00   ,   // #10
-
-            (-1.57e+00) * 1.1, //-3.77e+00   ,   // #04
-            //1.93e+00    ,   // #05
-            //9.99e-01    ,   // #06
-            //-7.96e-04   ,   // #07
-            //-4.17e+00   ,   // #08
-            //1.53e+00    ,   // #09
-            
-            //-2.47e+00   ,   // #11
-            -4.67e+00   ,   // #12
-            -7.71e-01   ,   // #13
-            -3.07e+00   ,   // #14
-            -M_PI/2        // Drone 
-            };
-        break;
-    case 1: //wide
-        GatesAndDroneInitPos_RaceTrackRF = {
-            Eigen::Vector3d{ -20.45 +10,   -8.65 * 0.8  ,   m_GateMinZ  }, // #01
-            Eigen::Vector3d{ -12.55 +10 ,   -11.15 * 0.7 ,   m_GateMinZ  }, // #02
-            //Eigen::Vector3d{ -4.15  ,   -5.35   ,   m_GateMinZ  }, // #03
-            //Eigen::Vector3d{ 3.45 +10   ,   4.25 * 1.2   ,   m_GateMinZ  }, // #04
-
-            Eigen::Vector3d{ 10.55  ,   -10.65 *0.9 ,   m_GateMinZ  }, // #09
-            
-            Eigen::Vector3d{ 11.95  ,   11.15  *0.9 ,   m_GateMinZ  }, // #05
-
-            //Eigen::Vector3d{ 21.85  ,   6.85    ,   m_GateMinZ  }, // #06
-            //Eigen::Vector3d{ 24.25  ,   -1.75   ,   m_GateMinZ  }, // #07
-            //Eigen::Vector3d{ 19.25  ,   -9.55   ,   m_GateMinZ  }, // #08
-            
-            //Eigen::Vector3d{ 2.85     ,   -5.95,   m_GateMinZ  }, // #10
-            //Eigen::Vector3d{ -4.95  ,   4.65    ,   m_GateMinZ  }, // #11
-            Eigen::Vector3d{ -12.95 +10,   9.65 * 0.7   ,   m_GateMinZ  }, // #12
-            Eigen::Vector3d{ -21.05 +10,   6.65 * 0.8   ,   m_GateMinZ  }, // #13
-            Eigen::Vector3d{ -24.25 +10 ,   -2.15   ,   m_GateMinZ  }, // #14
-            Eigen::Vector3d{ -24.00 +10 ,   6.65    ,   0.2                     }  // Drone
-            };
-        // Gate and drone yaws in race track reference frame:
-        GatesAndDroneInitYaw_RaceTrackRF = {
-            -2.01e+00   ,   // #01s
-            -1.57e+00   ,   // #02
-            //-6.01e-01   ,   // #03
-            //-3.77e+00   ,   // #04
-            
-            -4.17e+00 , //1.53e+00    ,   // #09
-            
-            9.99e-01, //1.93e+00    ,   // #05
-            //9.99e-01    ,   // #06
-            //-7.96e-04   ,   // #07
-            //-4.17e+00   ,   // #08
-            
-            //-2.57e+00   ,   // #10
-            //-2.47e+00   ,   // #11
-            -4.67e+00   ,   // #12
-            -7.71e-01   ,   // #13
-            -3.07e+00   ,   // #14
-            -M_PI/2        // Drone 
-            };
-    default:
-        break;
-    }
-
-
-    if (IsClockwise)
-    {
-        //std::array<Eigen::Vector3d, GatesN> GatesInitPos;
-        //std::array<double, GatesN> GatesInitYaw;
-        //for (size_t Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        //{
-        //    GatesInitPos[Gate_i] = GatesAndDroneInitPos_RaceTrackRF[Gate_i];
-        //    GatesInitYaw[Gate_i] = GatesAndDroneInitYaw_RaceTrackRF[Gate_i];
-        //}
-        //std::reverse(GatesInitPos.begin(), GatesInitPos.end());
-        //std::reverse(GatesInitYaw.begin(), GatesInitYaw.end());
-        //for (size_t Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        //{
-        //    GatesAndDroneInitPos_RaceTrackRF[Gate_i] = GatesInitPos[Gate_i];
-        //    GatesAndDroneInitYaw_RaceTrackRF[Gate_i] = GatesInitYaw[Gate_i];
-        //}            
-        //GatesAndDroneInitPos_RaceTrackRF[3].y() *= -1;
-        //GatesAndDroneInitYaw_RaceTrackRF[3] = M_PI/2;
-
-        for (size_t Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            GatesAndDroneInitPos_RaceTrackRF[Gate_i].y() *= -1;            
-        }
-        GatesAndDroneInitPos_RaceTrackRF.back().y() *= -1;
-        GatesAndDroneInitYaw_RaceTrackRF.back() = M_PI/2;   
-
-        std::array<double, 8UL> _ = GatesAndDroneInitYaw_RaceTrackRF;
-        for (size_t Gate_i = 0; Gate_i < GatesN - 1; Gate_i++)
-        {
-            GatesAndDroneInitYaw_RaceTrackRF[Gate_i] = _[GatesN - 2 - Gate_i];
-        }
-
-    }
-
-    
-
-    std::vector<float> Gates_X_Det, Gates_Y_Det, Gates_Z_Det;
-    float Gates_MaxX, Gates_MinX, Gates_MaxY, Gates_MinY;
-    std::vector<float> Drone_X_Det {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().x())};
-    std::vector<float> Drone_Y_Det {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().y())};
-    if (p_TEST_ENABLED)
-    {
-        Gates_MaxX = - 1e10;
-        Gates_MinX = + 1e10;
-        Gates_MaxY = - 1e10;
-        Gates_MinY = + 1e10;
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            Gates_X_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].x());
-            Gates_Y_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].y());
-            Gates_Z_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].z()); 
-
-            Gates_MaxX = std::max(Gates_MaxX, Gates_X_Det[Gate_i]);
-            Gates_MinX = std::min(Gates_MinX, Gates_X_Det[Gate_i]);
-            Gates_MaxY = std::max(Gates_MaxY, Gates_Y_Det[Gate_i]);
-            Gates_MinY = std::min(Gates_MinY, Gates_Y_Det[Gate_i]);
-        }
-    }
-
-
-    // Randomize racetrack if desired
-    //if (RacetrackType == forgetful_drones::BuildDroneRacingSimulation::Request::FIGURE8_RANDOMIZED)
-    //{
-        std::uniform_real_distribution<double> URDistri_MinusToPlus1(-1.0, 1.0);
-        std::uniform_real_distribution<double> URDistri_Scale(p_RAND_FIG8_SCALE_MIN, p_RAND_FIG8_SCALE_MAX);
-        double Scale = URDistri_Scale(m_RandEngine);
-
-        for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
-        {
-            Eigen::Vector3d AxialShift = p_RAND_FIG8_AXIAL_SHIFT_MAX * Eigen::Vector3d{ 
-                    URDistri_MinusToPlus1(m_RandEngine), 
-                    URDistri_MinusToPlus1(m_RandEngine), 
-                    URDistri_MinusToPlus1(m_RandEngine) +1.0
-                };
-            GatesAndDroneInitPos_RaceTrackRF[GateIdx] += AxialShift;
-            GatesAndDroneInitPos_RaceTrackRF[GateIdx] *= Scale;
-
-            double YawTwist = p_RAND_FIG8_YAW_TWIST_MAX * URDistri_MinusToPlus1(m_RandEngine);
-            GatesAndDroneInitYaw_RaceTrackRF[GateIdx] += YawTwist;
-
-            if (GateIdx == GatesAndDroneInitPos_RaceTrackRF.size() -3) // drone starting position is next to second last gate
-            {
-                GatesAndDroneInitPos_RaceTrackRF.back() += AxialShift;
-                GatesAndDroneInitPos_RaceTrackRF.back() *= Scale;
-            }
-        }
-    //}
-
-
-    
-    
-    if (p_TEST_ENABLED)
-    {
-        std::vector<float> Gates_X_Rand, Gates_Y_Rand, Gates_Z_Rand;
-        std::vector<float> Drone_X_Rand {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().x())};
-        std::vector<float> Drone_Y_Rand {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().y())};
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            Gates_X_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].x());
-            Gates_Y_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].y());
-            Gates_Z_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].z());
-
-            Gates_MaxX = std::max(Gates_MaxX, Gates_X_Rand[Gate_i]);
-            Gates_MinX = std::min(Gates_MinX, Gates_X_Rand[Gate_i]);
-            Gates_MaxY = std::max(Gates_MaxY, Gates_Y_Rand[Gate_i]);
-            Gates_MinY = std::min(Gates_MinY, Gates_Y_Rand[Gate_i]);
-        }
-
-        // HERE
-
-        matplotlibcpp::figure_size(3840, 2160); // Ultra HD
-        matplotlibcpp::title("Deterministic and randomized figure-8 racetrack in x/y-Plane");
-
-        std::map<std::string, std::string> keywords_det;
-        keywords_det.insert(std::pair<std::string, std::string>("label", "Deterministic"));
-        //keywords_det.insert(std::make_pair("label", "Deterministic"));
-        keywords_det.insert(std::pair<std::string, std::string>("color", "black"));
-        matplotlibcpp::scatter(Gates_X_Det, Gates_Y_Det, 100, keywords_det);
-
-        std::map<std::string, std::string> keywords_rand;
-        keywords_rand.insert(std::pair<std::string, std::string>("label", "Randomized"));
-        keywords_rand.insert(std::pair<std::string, std::string>("color", "red"));
-        matplotlibcpp::scatter(Gates_X_Rand, Gates_Y_Rand, 100, keywords_rand);
-
-        float TextShift_X = (Gates_MaxX - Gates_MinX)/100;
-        float TextShift_Y = (Gates_MaxY - Gates_MinY)/100;
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            const std::string Text = "Gate " + std::to_string(Gate_i);
-            matplotlibcpp::text(Gates_X_Det[Gate_i] + TextShift_X, Gates_Y_Det[Gate_i] + TextShift_Y, Text);
-        }
-
-        std::map<std::string, std::string> keywords_det2;
-        keywords_det2.insert(std::pair<std::string, std::string>("color", "black"));
-        matplotlibcpp::scatter(Drone_X_Det, Drone_Y_Det, 200, keywords_det2);
-        std::map<std::string, std::string> keywords_rand2;
-        keywords_rand2.insert(std::pair<std::string, std::string>("color", "red"));
-        matplotlibcpp::scatter(Drone_X_Rand, Drone_Y_Rand, 200, keywords_rand2);
-        matplotlibcpp::text(Drone_X_Det[0] + TextShift_X, Drone_Y_Det[0] + TextShift_Y, "Drone start");
-
-        matplotlibcpp::legend();
-        //matplotlibcpp::save("./basic.png");
-        matplotlibcpp::show();
-    }
-
-   
-
-    
-
-    // Resize the member containing the gate poses
-    m_UnityGateInitPoses.resize(GatesN);
-    m_GazeboGateInitPoses.resize(GatesN);
-
-    // Create Transformation between reference frames: race track -> world 
-    kindr::minimal::QuatTransformation T_WorldRF_RaceTrackRF_Flightmare;
-    tf::poseMsgToKindr(m_UnityTrackPose.as_geometry_msg(), &T_WorldRF_RaceTrackRF_Flightmare);
-    kindr::minimal::QuatTransformation T_WorldRF_RaceTrackRF_Gazebo;
-    tf::poseMsgToKindr(m_GazeboTrackPose.as_geometry_msg(), &T_WorldRF_RaceTrackRF_Gazebo);
-
-
-    // Apply transformation to compute gate poses in world reference frame
-    for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
-    {
-        geometry_msgs::Pose GateInitPose_RaceTrackRF;
-        GateInitPose_RaceTrackRF.position = GMPoint__from__EV3d(GatesAndDroneInitPos_RaceTrackRF[GateIdx]);
-        GateInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GateIdx]);
-        
-        kindr::minimal::QuatTransformation T_RaceTrackRF_GateInitRF;
-        tf::poseMsgToKindr(GateInitPose_RaceTrackRF, &T_RaceTrackRF_GateInitRF);
-        kindr::minimal::QuatTransformation T_WorldRF_GateInitRF_Flightmare = T_WorldRF_RaceTrackRF_Flightmare * T_RaceTrackRF_GateInitRF;
-        kindr::minimal::QuatTransformation T_WorldRF_GateInitRF_Gazebo = T_WorldRF_RaceTrackRF_Gazebo * T_RaceTrackRF_GateInitRF;
-
-        m_UnityGateInitPoses[GateIdx].position = T_WorldRF_GateInitRF_Flightmare.getPosition().cast<float>();
-        m_UnityGateInitPoses[GateIdx].orientation = T_WorldRF_GateInitRF_Flightmare.getEigenQuaternion().cast<float>();
-
-        m_GazeboGateInitPoses[GateIdx].position = T_WorldRF_GateInitRF_Gazebo.getPosition().cast<float>();
-        m_GazeboGateInitPoses[GateIdx].orientation = T_WorldRF_GateInitRF_Gazebo.getEigenQuaternion().cast<float>();
-    }
-
-    // Apply transformations to compute drone init pose in world reference frame
-    geometry_msgs::Pose DroneInitPose_RaceTrackRF;
-    DroneInitPose_RaceTrackRF.position = GMPoint__from__EV3d(GatesAndDroneInitPos_RaceTrackRF[GatesN]);
-    DroneInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GatesN]);
-    
-    kindr::minimal::QuatTransformation T_RaceTrackRF_DroneInitRF;
-    tf::poseMsgToKindr(DroneInitPose_RaceTrackRF, &T_RaceTrackRF_DroneInitRF);
-    kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF_Flightmare = T_WorldRF_RaceTrackRF_Flightmare * T_RaceTrackRF_DroneInitRF;
-    kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF_Gazebo = T_WorldRF_RaceTrackRF_Gazebo * T_RaceTrackRF_DroneInitRF;
-
-    m_UnityDroneInitPose.position = T_WorldRF_DroneInitRF_Flightmare.getPosition().cast<float>();
-    m_UnityDroneInitPose.orientation = T_WorldRF_DroneInitRF_Flightmare.getEigenQuaternion().cast<float>();
-    m_GazeboDroneInitPose.position = T_WorldRF_DroneInitRF_Gazebo.getPosition().cast<float>();
-    m_GazeboDroneInitPose.orientation = T_WorldRF_DroneInitRF_Gazebo.getEigenQuaternion().cast<float>();
-}
-*/
 
 
 
@@ -1730,208 +1385,7 @@ void ForgetfulSimulator::plotTracks (
 
 
 
-/*
-void ForgetfulSimulator::computeRaceTrack_Figure8(const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType)
-{
-    // Data in the race track reference frame
-        // Gate (center points) and drone start position:
-        constexpr int GatesN = 14;
-        std::array<Eigen::Vector3d, GatesN +1> GatesAndDroneInitPos_RaceTrackRF = {
-            Eigen::Vector3d{ -20.45 ,   -8.65   ,   m_GateMinZ  }, // #01
-            Eigen::Vector3d{ -12.55 ,   -11.15  ,   m_GateMinZ  }, // #02
-            Eigen::Vector3d{ -4.15  ,   -5.35   ,   m_GateMinZ  }, // #03
-            Eigen::Vector3d{ 3.45   ,   4.25    ,   m_GateMinZ  }, // #04
-            Eigen::Vector3d{ 11.95  ,   11.15   ,   m_GateMinZ  }, // #05
-            Eigen::Vector3d{ 21.85  ,   6.85    ,   m_GateMinZ  }, // #06
-            Eigen::Vector3d{ 24.25  ,   -1.75   ,   m_GateMinZ  }, // #07
-            Eigen::Vector3d{ 19.25  ,   -9.55   ,   m_GateMinZ  }, // #08
-            Eigen::Vector3d{ 10.55  ,   -10.65  ,   m_GateMinZ  }, // #09
-            Eigen::Vector3d{ 2.85   ,   -5.95   ,   m_GateMinZ  }, // #10
-            Eigen::Vector3d{ -4.95  ,   4.65    ,   m_GateMinZ  }, // #11
-            Eigen::Vector3d{ -12.95 ,   9.65    ,   m_GateMinZ  }, // #12
-            Eigen::Vector3d{ -21.05 ,   6.65    ,   m_GateMinZ  }, // #13
-            Eigen::Vector3d{ -24.25 ,   -2.15   ,   m_GateMinZ  }, // #14
-            Eigen::Vector3d{ -24.00 ,   6.65    ,   0.2                     }  // Drone
-            };
-        // Gate and drone yaws in race track reference frame:
-        std::array<double, GatesN +1> GatesAndDroneInitYaw_RaceTrackRF = {
-            -2.01e+00   ,   // #01
-            -1.57e+00   ,   // #02
-            -6.01e-01   ,   // #03
-            -3.77e+00   ,   // #04
-            1.93e+00    ,   // #05
-            9.99e-01    ,   // #06
-            -7.96e-04   ,   // #07
-            -4.17e+00   ,   // #08
-            1.53e+00    ,   // #09
-            -2.57e+00   ,   // #10
-            -2.47e+00   ,   // #11
-            -4.67e+00   ,   // #12
-            -7.71e-01   ,   // #13
-            -3.07e+00   ,   // #14
-            -M_PI/2        // Drone 
-            };
 
-    
-
-    std::vector<float> Gates_X_Det, Gates_Y_Det, Gates_Z_Det;
-    float Gates_MaxX, Gates_MinX, Gates_MaxY, Gates_MinY;
-    std::vector<float> Drone_X_Det {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().x())};
-    std::vector<float> Drone_Y_Det {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().y())};
-    if (p_TEST_ENABLED)
-    {
-        Gates_MaxX = - 1e10;
-        Gates_MinX = + 1e10;
-        Gates_MaxY = - 1e10;
-        Gates_MinY = + 1e10;
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            Gates_X_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].x());
-            Gates_Y_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].y());
-            Gates_Z_Det.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].z()); 
-
-            Gates_MaxX = std::max(Gates_MaxX, Gates_X_Det[Gate_i]);
-            Gates_MinX = std::min(Gates_MinX, Gates_X_Det[Gate_i]);
-            Gates_MaxY = std::max(Gates_MaxY, Gates_Y_Det[Gate_i]);
-            Gates_MinY = std::min(Gates_MinY, Gates_Y_Det[Gate_i]);
-        }
-    }
-
-
-    // Randomize racetrack if desired
-    if (RacetrackType == forgetful_drones::BuildDroneRacingSimulation::Request::FIGURE8_RANDOMIZED)
-    {
-        std::uniform_real_distribution<double> URDistri_MinusToPlus1(-1.0, 1.0);
-        std::uniform_real_distribution<double> URDistri_Scale(p_RAND_FIG8_SCALE_MIN, p_RAND_FIG8_SCALE_MAX);
-        double Scale = URDistri_Scale(m_RandEngine);
-
-        for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
-        {
-            Eigen::Vector3d AxialShift = p_RAND_FIG8_AXIAL_SHIFT_MAX * Eigen::Vector3d{ 
-                    URDistri_MinusToPlus1(m_RandEngine), 
-                    URDistri_MinusToPlus1(m_RandEngine), 
-                    URDistri_MinusToPlus1(m_RandEngine) +1.0
-                };
-            GatesAndDroneInitPos_RaceTrackRF[GateIdx] += AxialShift;
-            GatesAndDroneInitPos_RaceTrackRF[GateIdx] *= Scale;
-
-            double YawTwist = p_RAND_FIG8_YAW_TWIST_MAX * URDistri_MinusToPlus1(m_RandEngine);
-            GatesAndDroneInitYaw_RaceTrackRF[GateIdx] += YawTwist;
-
-            if (GateIdx == GatesAndDroneInitPos_RaceTrackRF.size() -3) // drone starting position is next to second last gate
-            {
-                GatesAndDroneInitPos_RaceTrackRF.back() += AxialShift;
-                GatesAndDroneInitPos_RaceTrackRF.back() *= Scale;
-            }
-        }
-    }
-
-
-    
-    
-    if (p_TEST_ENABLED)
-    {
-        std::vector<float> Gates_X_Rand, Gates_Y_Rand, Gates_Z_Rand;
-        std::vector<float> Drone_X_Rand {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().x())};
-        std::vector<float> Drone_Y_Rand {static_cast<float>(GatesAndDroneInitPos_RaceTrackRF.back().y())};
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            Gates_X_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].x());
-            Gates_Y_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].y());
-            Gates_Z_Rand.push_back(GatesAndDroneInitPos_RaceTrackRF[Gate_i].z());
-
-            Gates_MaxX = std::max(Gates_MaxX, Gates_X_Rand[Gate_i]);
-            Gates_MinX = std::min(Gates_MinX, Gates_X_Rand[Gate_i]);
-            Gates_MaxY = std::max(Gates_MaxY, Gates_Y_Rand[Gate_i]);
-            Gates_MinY = std::min(Gates_MinY, Gates_Y_Rand[Gate_i]);
-        }
-
-        // HERE
-
-        matplotlibcpp::figure_size(3840, 2160); // Ultra HD
-        matplotlibcpp::title("Deterministic and randomized figure-8 racetrack in x/y-Plane");
-
-        std::map<std::string, std::string> keywords_det;
-        keywords_det.insert(std::pair<std::string, std::string>("label", "Deterministic"));
-        keywords_det.insert(std::pair<std::string, std::string>("color", "black"));
-        matplotlibcpp::scatter(Gates_X_Det, Gates_Y_Det, 100, keywords_det);
-
-        std::map<std::string, std::string> keywords_rand;
-        keywords_rand.insert(std::pair<std::string, std::string>("label", "Randomized"));
-        keywords_rand.insert(std::pair<std::string, std::string>("color", "red"));
-        matplotlibcpp::scatter(Gates_X_Rand, Gates_Y_Rand, 100, keywords_rand);
-
-        float TextShift_X = (Gates_MaxX - Gates_MinX)/100;
-        float TextShift_Y = (Gates_MaxY - Gates_MinY)/100;
-        for (int Gate_i = 0; Gate_i < GatesN; Gate_i++)
-        {
-            const std::string Text = "Gate " + std::to_string(Gate_i);
-            matplotlibcpp::text(Gates_X_Det[Gate_i] + TextShift_X, Gates_Y_Det[Gate_i] + TextShift_Y, Text);
-        }
-
-        std::map<std::string, std::string> keywords_det2;
-        keywords_det2.insert(std::pair<std::string, std::string>("color", "black"));
-        matplotlibcpp::scatter(Drone_X_Det, Drone_Y_Det, 200, keywords_det2);
-        std::map<std::string, std::string> keywords_rand2;
-        keywords_rand2.insert(std::pair<std::string, std::string>("color", "red"));
-        matplotlibcpp::scatter(Drone_X_Rand, Drone_Y_Rand, 200, keywords_rand2);
-        matplotlibcpp::text(Drone_X_Det[0] + TextShift_X, Drone_Y_Det[0] + TextShift_Y, "Drone start");
-
-        matplotlibcpp::legend();
-        //matplotlibcpp::save("./basic.png");
-        matplotlibcpp::show();
-    }
-
-   
-
-    
-
-    // Resize the member containing the gate poses
-    m_UnityGateInitPoses.resize(GatesN);
-    m_GazeboGateInitPoses.resize(GatesN);
-
-    // Create Transformation between reference frames: race track -> world 
-    kindr::minimal::QuatTransformation T_WorldRF_RaceTrackRF_Flightmare;
-    tf::poseMsgToKindr(m_UnityTrackPose.as_geometry_msg(), &T_WorldRF_RaceTrackRF_Flightmare);
-    kindr::minimal::QuatTransformation T_WorldRF_RaceTrackRF_Gazebo;
-    tf::poseMsgToKindr(m_GazeboTrackPose.as_geometry_msg(), &T_WorldRF_RaceTrackRF_Gazebo);
-
-
-    // Apply transformation to compute gate poses in world reference frame
-    for (size_t GateIdx = 0; GateIdx < GatesN; GateIdx++)
-    {
-        geometry_msgs::Pose GateInitPose_RaceTrackRF;
-        GateInitPose_RaceTrackRF.position = GMPoint__from__EV3d(GatesAndDroneInitPos_RaceTrackRF[GateIdx]);
-        GateInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GateIdx]);
-        
-        kindr::minimal::QuatTransformation T_RaceTrackRF_GateInitRF;
-        tf::poseMsgToKindr(GateInitPose_RaceTrackRF, &T_RaceTrackRF_GateInitRF);
-        kindr::minimal::QuatTransformation T_WorldRF_GateInitRF_Flightmare = T_WorldRF_RaceTrackRF_Flightmare * T_RaceTrackRF_GateInitRF;
-        kindr::minimal::QuatTransformation T_WorldRF_GateInitRF_Gazebo = T_WorldRF_RaceTrackRF_Gazebo * T_RaceTrackRF_GateInitRF;
-
-        m_UnityGateInitPoses[GateIdx].position = T_WorldRF_GateInitRF_Flightmare.getPosition().cast<float>();
-        m_UnityGateInitPoses[GateIdx].orientation = T_WorldRF_GateInitRF_Flightmare.getEigenQuaternion().cast<float>();
-
-        m_GazeboGateInitPoses[GateIdx].position = T_WorldRF_GateInitRF_Gazebo.getPosition().cast<float>();
-        m_GazeboGateInitPoses[GateIdx].orientation = T_WorldRF_GateInitRF_Gazebo.getEigenQuaternion().cast<float>();
-    }
-
-    // Apply transformations to compute drone init pose in world reference frame
-    geometry_msgs::Pose DroneInitPose_RaceTrackRF;
-    DroneInitPose_RaceTrackRF.position = GMPoint__from__EV3d(GatesAndDroneInitPos_RaceTrackRF[GatesN]);
-    DroneInitPose_RaceTrackRF.orientation = tf::createQuaternionMsgFromYaw(GatesAndDroneInitYaw_RaceTrackRF[GatesN]);
-    
-    kindr::minimal::QuatTransformation T_RaceTrackRF_DroneInitRF;
-    tf::poseMsgToKindr(DroneInitPose_RaceTrackRF, &T_RaceTrackRF_DroneInitRF);
-    kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF_Flightmare = T_WorldRF_RaceTrackRF_Flightmare * T_RaceTrackRF_DroneInitRF;
-    kindr::minimal::QuatTransformation T_WorldRF_DroneInitRF_Gazebo = T_WorldRF_RaceTrackRF_Gazebo * T_RaceTrackRF_DroneInitRF;
-
-    m_UnityDroneInitPose.position = T_WorldRF_DroneInitRF_Flightmare.getPosition().cast<float>();
-    m_UnityDroneInitPose.orientation = T_WorldRF_DroneInitRF_Flightmare.getEigenQuaternion().cast<float>();
-    m_GazeboDroneInitPose.position = T_WorldRF_DroneInitRF_Gazebo.getPosition().cast<float>();
-    m_GazeboDroneInitPose.orientation = T_WorldRF_DroneInitRF_Gazebo.getEigenQuaternion().cast<float>();
-}
-*/
 
 void ForgetfulSimulator::startSimulation_launchUnity () {
     //system("rosrun flightrender ForgetfulDrone_Flightmare.x86_64 &");
@@ -2108,7 +1562,7 @@ void ForgetfulSimulator::startSimulation_spawnRVizGates()
 
 
 
-void ForgetfulSimulator::startSimulation_spawnGazeboDrone() {
+void ForgetfulSimulator::startSimulation_spawnGazeboDrone () {
     ROSINFO("Gazebo: spawn drone");
 
     gazebo_msgs::SpawnModel srv;
@@ -2198,7 +1652,7 @@ void ForgetfulSimulator::startSimulation_deleteGazeboModelsExceptDrone () {
                 ROSERROR("Gazebo: failed to delete \"" << model_name << "\"");
             }
         }
-    }    
+    }
 }
 
 

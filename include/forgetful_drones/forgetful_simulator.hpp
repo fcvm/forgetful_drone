@@ -2,9 +2,6 @@
 
 // forgetful_drone
 #include "forgetful_drones/forgetful_helpers.hpp"
-#include "forgetful_drones/BuildDroneRacingSimulation.h"
-#include "forgetful_drones/StartDroneRacingSimulation.h"
-#include "forgetful_drones/StopDroneRacingSimulation.h"
 #include "forgetful_drones/BuildSimulation.h"
 #include <minkindr_conversions/kindr_msg.h>
 #include <minkindr_conversions/kindr_tf.h>
@@ -16,12 +13,15 @@
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <std_msgs/Empty.h>
+#include <std_srvs/Empty.h>
 #include <rviz/SendFilePath.h>
 
 // gazebo_ros
 #include <gazebo_msgs/SpawnModel.h>
 #include <gazebo_msgs/ModelStates.h>
 #include <gazebo_msgs/DeleteModel.h>
+#include <gazebo_msgs/GetModelState.h>
+#include <gazebo_msgs/ModelState.h>
 
 // standard libraries
 #include <assert.h>
@@ -94,7 +94,7 @@ public:
 
 
 /*ROS*/ private:
-    const bool m_AsRosNode {};
+    const bool m_runAsROSNode {};
 
     ros::NodeHandle m_rosRNH; // resolved to the node's namespace.
     ros::NodeHandle m_rosPNH; // resolved to: <node's namespace>/<node's name>.
@@ -105,7 +105,7 @@ public:
     //image_transport::Publisher m_ITPub_DepthImg;
     //image_transport::Publisher m_ITPub_SegmentationImg;
     //image_transport::Publisher m_ITPub_OpticalFlowImg;
-    //ros::Publisher m_ROSPub_GazeboSetModelState; // gazebo_msgs::ModelState >> "/gazebo/set_model_state"
+    ros::Publisher m_ROSPub_GazeboSetModelState;
 
     ros::Subscriber m_ROS_SUB_GROUND_TRUTH_ODOMETRY;
     //ros::Subscriber m_ROSSub_DynamicGatesSwitch;
@@ -114,12 +114,15 @@ public:
     ros::ServiceClient m_rosSVC_GAZEBO_SPAWN_URDF_MODEL;
     ros::ServiceClient m_rosSVC_GAZEBO_DELETE_MODEL; // gazebo_msgs::DeleteModel -> "/gazebo/delete_model"
     ros::ServiceClient m_rosSVC_GAZEBO_SPAWN_SDF_MODEL; // gazebo_msgs::SpawnModel -> "/gazebo/spawn_sdf_model"
+    ros::ServiceClient m_rosSVC_GAZEBO_GET_MODEL_STATE;
     ros::ServiceClient m_rosSVC_RVIZ_LOAD_CONFIG;
     //ros::ServiceClient m_ROSSrvCl_GazeboResetSimulation; // std_srvs::Empty -> "/gazebo/reset_simulation"
 
     ros::ServiceServer m_rosSVS_SIMULATOR_BUILD;
     ros::ServiceServer m_rosSVS_SIMULATOR_START;
     ros::ServiceServer m_rosSVS_SIMULATOR_STOP;
+    ros::ServiceServer m_rosSVS_SIMULATOR_TELEPORT;
+    ros::ServiceServer m_rosSVS_SIMULATOR_LOAD;
     
     //ros::Timer m_ROSTimer_SimulatorLoop;
     ros::Timer m_rosTMR_MAIN_LOOP;
@@ -176,6 +179,7 @@ public:
     const bool p_UNITY_ENABLED {};
     const bool p_RVIZ_ENABLED {};
     const bool p_TEST_ENABLED {};
+    const bool p_TRACKGEN_ENABLED {};
     
     
     
@@ -379,11 +383,15 @@ private:
 
 
 
+
 /*ROS Callbacks*/ private:
 
     bool ROSCB_SIMULATOR_BUILD (fdBSReq& req, fdBSRes& res);
     bool ROSCB_SIMULATOR_START (fdStartSReq& req, fdStartSRes& res);
     bool ROSCB_SIMULATOR_STOP (fdStopSReq& req, fdStopSRes& res);
+    bool ROSCB_SIMULATOR_TELEPORT (std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
+    bool ROSCB_SIMULATOR_LOAD (fdLRReq& req, fdLRRes& res);
+    
     void ROSCB_GROUND_TRUTH_ODOMETRY (const nav_msgs::Odometry::ConstPtr& msg);
     void ROSCB_MAIN_LOOP (const ros::TimerEvent& te);
 
@@ -396,14 +404,6 @@ private:
     bool startSimulation();
     bool stopSimulation();
 
-    
-    //bool buildSimulation_OLD(
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_UnityScene_type UnityScene,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackSite_type& SceneSite,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RaceGateType_type& RaceGateType,
-    //    const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackClockwise_type& RacetrackClockwise,
-    //const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackMode_type& RacetrackMode);
 
     void plotTracks (
         const std::string& title,
@@ -449,9 +449,6 @@ private:
     );
 
 
-
-    //void computeRaceTrack_Figure8(const forgetful_drones::BuildDroneRacingSimulation::Request::_RacetrackType_type& RacetrackType);
-    void computeRaceTrack_IntermediateTargetLoss(const bool& IsClockwise, const int& Mode);
     
     void startSimulation_launchUnity ();
     void startSimulation_addUnityGates();
@@ -471,6 +468,10 @@ private:
     void startSimulation_spawnGazeboDrone();
     void startSimulation_addUnityDrone();
     void test();
+    void genTracks ();
+    std::string racetrack_fpath (const int& i);
+    void genTrackFile (const int& i);
+    void loadTrackFile (const int& i);
     void startSimulation_spawnRVizDrone();
     void startSimulation_deleteGazeboModelsExceptDrone();
     void buildSimulation_generateGazeboGroundPlane();

@@ -7,16 +7,28 @@
 
 
 
-namespace forgetful_drone
-{
+namespace forgetful_drone {
 
-Pose::Pose(const Eigen::Vector3f pos, const Eigen::Quaternionf ori)
-    : position{pos}, orientation{ori}
+
+Pose::Pose (const Eigen::Vector3f pos, const Eigen::Quaternionf ori)
+    : 
+    position {pos}, 
+    orientation {ori}
     {}
 
-Pose::Pose()
-    : position{0.0, 0.0, 0.0}, orientation{1.0, 0.0, 0.0, 0.0}
+Pose::Pose ()
+    : 
+    position {0.0, 0.0, 0.0}, 
+    orientation {1.0, 0.0, 0.0, 0.0}
     {}
+
+Pose::Pose (const geometry_msgs::Pose& pose)
+    : 
+    position {EV3f___GMP (pose.position)}, 
+    orientation {EQf___GMQ (pose.orientation)}
+    {}
+
+
 
 geometry_msgs::Point Pose::position_as_geometry_msg() const
 {
@@ -60,7 +72,7 @@ double Yaw_From_EQf (const Eigen::Quaternionf& in) {
 
 
 Eigen::Vector3d 
-EigenVector3d_From_Vec3
+EV3d___Vec3
 ( const Vec3& IN )
 {
     return { IN.x, IN.y, IN.z };
@@ -97,10 +109,16 @@ geometry_msgs::Pose GMPose_From_NMO (const nav_msgs::Odometry& in) {
     return out;
 }
 
-geometry_msgs::Pose GMPose_from_EV3d_EQd (
-    const Eigen::Vector3d& in_ev3d,
-    const Eigen::Quaterniond& in_eqd
-) {
+
+geometry_msgs::Pose GMPose___EV3d (const Eigen::Vector3d& v) {
+    geometry_msgs::Pose p;
+        p.position = GMPoint__from__EV3d (v);
+        p.orientation.w = 1.0; p.orientation.x = 0.0; p.orientation.y = 0.0; p.orientation.z = 0.0;
+    return p;
+}
+
+
+geometry_msgs::Pose GMPose___EV3d_EQd (const Eigen::Vector3d& in_ev3d, const Eigen::Quaterniond& in_eqd) {
     geometry_msgs::Pose out;
     out.position = GMPoint__from__EV3d(in_ev3d);
     out.orientation = GMQ_From_EQd(in_eqd);
@@ -109,12 +127,15 @@ geometry_msgs::Pose GMPose_from_EV3d_EQd (
 }
 
 
+
+
+
 void playAudioFile (const std::string fpath) {
     std::string cmd = "ffplay -nodisp -autoexit " + fpath + " >/dev/null 2>&1";
     system(cmd.c_str());
 }
 
-void playAudioFromText (const std::string txt) {
+void playAudio (const std::string txt) {
     std::string cmd = "spd-say \"" + txt + "\"";
     system(cmd.c_str());
 }
@@ -130,38 +151,19 @@ QCTrajectoryPoint_From_KMQuatTransformation
 }
 
 
-geometry_msgs::Point
-GMPoint__from__EV3d
-( const Eigen::Vector3d& IN )
-{
-    geometry_msgs::Point OUT;
-    OUT.x = IN.x();
-    OUT.y = IN.y();
-    OUT.z = IN.z();
-    return OUT;
+geometry_msgs::Point GMPoint__from__EV3d (const Eigen::Vector3d& v) {
+    geometry_msgs::Point p; 
+        p.x = v.x(); p.y = v.y(); p.z = v.z();
+    return p;
 }
 
+Eigen::Vector3d EV3d_From_GMV3 (const geometry_msgs::Vector3& IN) {return {IN.x, IN.y, IN.z };}
 
-Eigen::Vector3d
-EV3d_From_GMP
-( const geometry_msgs::Point& IN )
-{
-    return {IN.x, IN.y, IN.z };
-}
+Eigen::Vector3d EV3d___GMP (const geometry_msgs::Point& p) {return {p.x, p.y, p.z};}
+Eigen::Vector3f EV3f___GMP (const geometry_msgs::Point& p) {return {p.x, p.y, p.z};}
+Eigen::Quaterniond EQd___GMQ (const geometry_msgs::Quaternion& q) {return {q.w, q.x, q.y, q.z};}
+Eigen::Quaternionf EQf___GMQ (const geometry_msgs::Quaternion& q) {return {q.w, q.x, q.y, q.z};}
 
-Eigen::Vector3d
-EV3d_From_GMV3
-( const geometry_msgs::Vector3& IN )
-{
-    return {IN.x, IN.y, IN.z };
-}
-
-
-
-
-Eigen::Quaterniond EQd_From_GMQ (const geometry_msgs::Quaternion& in) {
-    return {in.w, in.x, in.y, in.z};
-}
 
 geometry_msgs::Quaternion
 GMQ_From_EQd
@@ -200,22 +202,24 @@ EigenVector_From_StdVector
 
 
 
-std::string 
-getUTCDateTimeString()
-{
-    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-    time_t tt = std::chrono::system_clock::to_time_t(now);
-    tm gm_tm = *std::gmtime(&tt);
-    std::string DateTimeString 
-        = "UTC_"
-        + std::to_string( gm_tm.tm_year + 1900 )    + "_"
-        + std::to_string( gm_tm.tm_mon + 1 )        + "_"
-        + std::to_string( gm_tm.tm_mday )           + "_"
-        + std::to_string( gm_tm.tm_hour )           + "_"
-        + std::to_string( gm_tm.tm_min )            + "_"
-        + std::to_string( gm_tm.tm_sec );
+std::string UTCDateTime () {
+
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now ();
+    time_t tt = std::chrono::system_clock::to_time_t (now);
+    tm gm_tm = *std::gmtime (&tt);
     
-    return DateTimeString;
+    char dlmtr = '_';
+    std::ostringstream dt; dt
+        << "UTC"                            << dlmtr
+        << gm_tm.tm_year + 1900             << dlmtr
+        << asSeqNo (2, gm_tm.tm_mon + 1)    << dlmtr
+        << asSeqNo (2, gm_tm.tm_mday)       << dlmtr
+        << asSeqNo (2, gm_tm.tm_hour)       << dlmtr
+        << asSeqNo (2, gm_tm.tm_min)        << dlmtr
+        << asSeqNo (2, gm_tm.tm_sec)
+        ;
+
+    return dt.str ();
 }
 
 
@@ -225,14 +229,7 @@ getUTCDateTimeString()
 
 
 
-double 
-Saturation
-( const double& InputVal, const double& LowerLimit, const double& UpperLimit )
-{
-    return std::min( 
-        UpperLimit, std::max(LowerLimit, InputVal) 
-        );
-}
+
 
 
 
@@ -266,19 +263,13 @@ getFileNamesInDir
     return OUT_Filenames;
 }
 
-void 
-writeStringToFile
-( const std::string& Cont, const std::string& Dest )
-{
-    std::ofstream( Dest.c_str() ) << Cont;
+void writeStringToFile (const std::string& m, const std::string& p) {
+    std::ofstream (p.c_str()) << m;
 }
 
-void 
-deleteDirectoryContents
-( const std::string& dir_path )
-{
-    for (const auto& entry : std::experimental::filesystem::directory_iterator(dir_path)) 
-        std::experimental::filesystem::remove_all( entry.path() );
+void delDirContents (const std::string& p) {
+    for (const auto& e : std::experimental::filesystem::directory_iterator (p)) 
+        std::experimental::filesystem::remove_all (e.path());
 }
 
 
@@ -599,7 +590,7 @@ void runForgetfulSimulator () {
 }
 
 
-void checkROSTimerPeriodTime (
+void checkTimerPeriod (
     const std::string& tag,
     const ros::TimerEvent& te,
     const double& period
@@ -611,37 +602,38 @@ void checkROSTimerPeriodTime (
 }
 
 
-void createDirectory (
-    const std::string& tag,
-    const std::string& dir_path
-) {
-    if (std::experimental::filesystem::create_directories(dir_path)) {
-        ROS_INFO_STREAM(tag << "Created directory \"" << dir_path << "\"");
+bool createDir (const std::string& tag, const std::string& path) {
+    if (std::experimental::filesystem::create_directories (path)) {
+        ROS_INFO_STREAM (tag << "Created directory \"" << path << "\"");
+        return true;
     } else {
-        ROS_ERROR_STREAM(tag << "Failed to create directory \"" << dir_path << "\"");
+        ROS_ERROR_STREAM(tag << "Failed to create directory \"" << path << "\"");
+        return false;
     }
 }
 
-bool isDirectory (const std::string& path) {
-    return std::experimental::filesystem::is_directory(path);
+bool isDir (const std::string& p) {
+    return std::experimental::filesystem::is_directory (p);
 }
 
-bool isFile (const std::string& path) {
-    return std::experimental::filesystem::exists(path);
+bool isFile (const std::string& p) {
+    return std::experimental::filesystem::exists (p);
 }
 
 
 
 
-void copyFile (
+bool copyFile (
     const std::string& tag,
-    const std::string& src_path,
-    const std::string& dst_path
+    const std::string& src,
+    const std::string& dst
 ) {
-    if (std::experimental::filesystem::copy_file(src_path, dst_path)) {
-        ROS_INFO_STREAM(tag << "Copied file from \"" << src_path << "\" to \"" << dst_path << "\"");
+    if (std::experimental::filesystem::copy_file (src, dst)) {
+        ROS_INFO_STREAM(tag << "Copied file from \"" << src << "\" to \"" << dst << "\"");
+        return true;
     } else {
-        ROS_INFO_STREAM(tag << "Failed to copy file from \"" << src_path << "\" to \"" << dst_path << "\"");
+        ROS_INFO_STREAM(tag << "Failed to copy file from \"" << src << "\" to \"" << dst << "\"");
+        return false;
     }
 }
 
@@ -657,19 +649,36 @@ void saveCVMat (
 }
 
 
-bool isEmpty (
-    const std::string& tag,
-    const cv::Mat& cv_mat
-) {
-    const int& xPx_N = cv_mat.cols;
-    const int& yPx_N = cv_mat.rows;
-    if (xPx_N * yPx_N == 0) {
+bool isEmpty (const std::string& tag, const cv::Mat& cv_mat) {
+    if (cv_mat.cols * cv_mat.rows == 0) {
         ROS_WARN_STREAM(tag << "Detected empty image");
         return true;
     }
     return false;
 }
 
+
+
+
+std::string asSeqNo (const int& width, const int& no) {
+    std::ostringstream oss; 
+    oss 
+        << std::setw (width) 
+        << std::setfill ('0') 
+        << no;
+    return oss.str ();
+}
+
+std::string asFixedFloat (const int& width, const int& prec, const double& no) {
+    std::ostringstream oss; 
+    oss 
+        << std::setfill ('0') 
+        << std::setw (width) 
+        << std::fixed 
+        << std::setprecision (prec) 
+        << no;
+    return oss.str ();
+}
 
 
 }

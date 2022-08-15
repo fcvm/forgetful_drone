@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+DEBUG = False
+
+
 import warnings
 import ast
 
-from distutils.command.config import config
-from sre_constants import SUCCESS
+
+
 import numpy as np
 import rospy
 import rospkg; rospack = rospkg.RosPack()
@@ -15,15 +18,18 @@ import sensor_msgs.msg
 import geometry_msgs.msg
 import cv_bridge
 
-import pathlib
+from pathlib import Path
 import json
 import torch
+from torch.optim import Optimizer
+from torch.nn import Module
+
+
 import cv2
 from tqdm import tqdm
 
-#from forgetful_drones.srv import StringTrigger, StringTriggerRequest, StringTriggerResponse, Inference, InferenceRequest, InferenceResponse
 
-from forgetful_drones.srv import TrainBrain, TrainBrainRequest, TrainBrainResponse
+import forgetful_drones.srv as fdsrv
 
 
 
@@ -31,9 +37,8 @@ from typing import List, Dict, Any
 import pandas as pd
 import copy
 
-
-import forgetful_ann
-import forgetful_dataset
+from forgetful_ann import ForgetfulANN
+from forgetful_dataset import ForgetfulDataset
 
 import matplotlib
 matplotlib.use('Agg')
@@ -44,437 +49,1452 @@ import user_input
 
 
 
+def subdirs (p: Path, sort : bool = True) -> List [Path]:
+    l = [s for s in p.iterdir () if s.is_dir ()]
+    return sorted (l) if sort else l
 
-def name_prefix (path: pathlib.Path) -> str:
-    return path.name.split(sep='_')[0]
-setattr(pathlib.Path, "name_prefix", name_prefix)
+def ndirs (p: Path) -> int:
+    return len (subdirs (p, sort=False))
 
-def name_has_prefix (path: pathlib.Path, prefix: str) -> bool:
-    return path.name_prefix() == prefix
-setattr(pathlib.Path, "name_has_prefix", name_has_prefix)
+def subfiles (p: Path, ext : None or str = None, sort : bool = True) -> List [Path]:
+    if ext is None: l = [s for s in p.iterdir() if s.is_file()]
+    else: l = [s for s in p.iterdir() if s.is_file() and s.suffix == ext]
+    return sorted (l) if sort else l
 
-def rmtree (path: pathlib.Path) -> None:
-    for subpath in path.iterdir():
-        if subpath.is_file(): subpath.unlink()
-        else: rmtree(subpath)
-    path.rmdir()
-setattr(pathlib.Path, "rmtree", rmtree)
+def nfiles (p: Path, ext : None or str = None) -> int:
+    return len (subfiles (p, ext=ext, sort=False))
 
-def dict2json (dictionary: Dict) -> str:
-    return json.dumps(dictionary, sort_keys=True, indent=4)
+def nlines (p: Path) -> int:
+    return sum (1 for _ in open (p))
 
-TORCH_DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-INFER_EVERY_INCOMING_FRAME = False
-NCOLS = 0
+def isempty (p: Path) -> bool:
+    if p.is_dir (): return 0 == ndirs (p) + nfiles (p)
+    if p.is_file (): return 0 == nlines (p)
+    else: raise AssertionError (f"Path \"{p}\" is not a directory or file")
+
+def rmtree (p: Path) -> None:
+    for s in p.iterdir (): s.unlink () if s.is_file () else rmtree (s)
+    p.rmdir ()
+
+def stempfx (path: Path, sep : str = '_') -> str:
+    return path.stem.split (sep=sep) [0]
+
+setattr (Path, 'subdirs', subdirs)
+setattr (Path, 'subfiles', subfiles)
+setattr (Path, 'ndirs', ndirs)
+setattr (Path, 'nfiles', nfiles)
+setattr (Path, 'nlines', nlines)
+setattr (Path, 'isempty', isempty)
+setattr (Path, 'rmtree', rmtree)
+setattr (Path, "stempfx", stempfx)
+
+
+def log (lvl: int, msg : str) -> None:
+    if lvl == 0: msg = '\n' + msg
+    elif lvl == 1: msg = '   - ' + msg
+    elif lvl == 2: msg = '      - ' + msg
+    elif lvl == 3: msg = '          - ' + msg
+    else: raise ValueError ('Log level unknown')
+    
+    CBLUEBG = '\33[44m'
+    print (CBLUEBG + msg + '\033[0m')
+
+# utils
+def repDict (d : Dict) -> None: 
+    return json.dumps (d, sort_keys=True, indent=4)
 
 
 
-class DAGGER:
+def save_json (d : dict or list, p : Path) -> None:
+    with open (p, 'w') as f: f.write (json.dumps (d, sort_keys=True, indent=4))
+def load_json (p : Path) -> dict or list:
+    with open (p, 'r') as f: return json.load (f)
 
-    def print_user_input (self) -> None:
-        print(dict2json(self.user_input))
-    def print_config (self) -> None:
-        print(dict2json(self.config))
+
+
+
+
+
+
+
+'''class Recordings:
+    def __init__ (self, p_pmn : Path, p_tmp : Path):
+        self.p_pmn = p_pmn
+        self.p_tmp = p_tmp
+        self.data = {
+            'run_id': [],
+            'expert_intervention_share': [],
+            'loss': {
+                'train': [],
+                'valid': [],
+            },
+            'learn_rate': [],
+        }
+        
+    def file (self, mode : str , pmn : bool) -> Path:
+        p = self.p_pmn if pmn else self.p_tmp
+        if mode == 'save': save_json (self.data, p)
+        elif mode == 'load': self.data = load_json (p)
+        else: raise ValueError (f"Unknown mode: {mode}")
+        return p
+
+    def get_train_loss (self) -> List: return self.data ['loss'] ['train']
+    def get_valid_loss (self) -> List: return self.data ['loss'] ['valid']
+    def get_ei_share (self) -> List: return self.data ['expert_intervention_share']
+
+
+    def include_run (self, id : str) -> bool: return id in self.data ['run_id']
+    def num_runs (self) -> int: return len (self.data ['run_id'])
+    def num_epochs (self, id : str) -> int:
+        if not self.include_run (id):
+            raise ValueError (f"Unrecorded run: {id}")
+        idx = self.data ['run_id'].index (id)
+        return len (self.data ['loss'] ['train'] [idx])
+
+
+
+    def add_run (self, id: str) -> None:
+        self.data ['run_id'].append (id)
+        self.data ['loss'] ['train'].append ([])
+        self.data ['loss'] ['valid'].append ([])
+        self.data ['learn_rate'].append ([])
+
+        if not int (id.split (sep='___') [0]) == self.num_runs () - 1:
+            raise ValueError (f"Recorded run count mismatches with run ID")
+
+    def add_eishare (self, x : float or None) -> None: self.data ['expert_intervention_share'].append (x)
+    def add_tloss (self, x : float or None) -> None: self.data ['loss'] ['train'] [-1].append (x)
+    def add_vloss (self, x : float or None) -> None: self.data ['loss'] ['valid'] [-1].append (x)
+    def add_lrate (self, x : float or None) -> None: self.data ['learn_rate'] [-1].append (x)'''
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+class File:
+    def __init__ (self, p_pmn : Path, p_tmp : Path):
+        self._path_pmn = p_pmn      # permanent file path (to save final results)
+        self._path_tmp = p_tmp      # temporary file path (to save temporary results)
+
+    def _path (self, pmn : bool) -> Path:
+        return self._path_pmn if pmn else self._path_tmp
+
+    def save (self, pmn : bool) -> Path:
+        raise NotImplementedError ()
+
+    def load (self, pmn : bool) -> Path:
+        raise NotImplementedError ()
+
+
+
+
+class RunRecord (dict):
+    id = 0
+    
+    def __init__ (self, id : str, eis : float):
+        self ['id'] = id
+        self ['eis'] = eis
+        
+
+class EpochRecord (dict):
+    id = 1
+    
+    def __init__ (self, tl : float, vl : float, lr : float):
+        self ['train_loss'] = tl
+        self ['valid_loss'] = vl
+        self ['learn_rate'] = lr
+        
+
+class Records:
+    def __init__ (self, rec_id : int):
+        self._data : List [Dict] = []         # list to store records sequentially
+        self._rec_id = rec_id
+    
+    def add (self, rec : RunRecord or EpochRecord) -> None:
+        if not self._rec_id == type(rec).id:
+            raise ValueError ("Can only add records of same type")
+        self._data.append (rec)
+        
+    def get_seq (self, key : str) -> List [Any]:
+        return [rec [key] for rec in self._data]
+    
+    def num_records (self) -> int:
+        return len (self._data)
+
+    def recorded (self, id : str) -> bool:
+        return id in [rec ['id'] for rec in self._data]
+
+
+class RecordsFile (File, Records):
+    def __init__ (self, p_pmn : Path, p_tmp : Path, rec_id : int):
+        File.__init__ (self, p_pmn, p_tmp)
+        Records.__init__ (self, rec_id)
+       
+    def save (self, pmn : bool) -> Path:
+        save_json (self._data, self._path (pmn))
+        return self._path (pmn)
+
+    def load (self, pmn : bool) -> Path:
+        self._data = load_json (self._path (pmn))
+        return self._path (pmn)
+
+
+
+class Config:
+    def __init__ (self, new : bool):
+        if new: self._mknew ()
+
+    def _mknew (self) -> None:
+        UI = Path (user_input.__file__)
+        self._data = copy.deepcopy (user_input.user_input)
+        
+        # set cnf/data/raw/...
+        self._data['data']['raw'] = {}
+        self._data['data']['raw']['rgb'] = {}
+        self._data['data']['raw']['rgb']['num_channels'] = 3
+        self._data['data']['raw']['rgb']['width'] = rospy.get_param ('SIM_UNITY_DRONE_CAMERA_WIDTH')
+        self._data['data']['raw']['rgb']['height'] = rospy.get_param ('SIM_UNITY_DRONE_CAMERA_HEIGHT')
+        self._data['data']['raw']['nominal_rate'] = rospy.get_param ('MAIN_FREQ')
+     
+        # set cnf/data/processed/rgb/...
+        rf = self._data['data']['processed']['rgb']['resize_factor']
+        self._data['data']['processed']['rgb']['num_channels'] = self._data['data']['raw']['rgb']['num_channels']
+        self._data['data']['processed']['rgb']['width'] = int (rf * self._data['data']['raw']['rgb']['width'])
+        self._data['data']['processed']['rgb']['height'] = int (rf * self._data['data']['raw']['rgb']['height'])
+
+        # set ann/cat/input_size
+        inputsize = len(self._data['data']['input']['cat'])
+        self._data['ann']['cat']['input_size'] = inputsize if (inputsize != 0) else None
+        
+        # set ann/head/output_size
+        noutputs = len(self._data['data']['label'])
+        if noutputs == 0: raise ValueError (f"File \"{UI}\", field \"data:label\": all lables disabled")
+        self._data['ann']['head']['output_size'] = noutputs
+
+        # set ann/gru/...
+        seqlen = self._data['data']['sequential']['length']
+        if seqlen < 1: raise ValueError (f"File \"{UI}\", field \"data:sequential:length\": not a positive integer")
+        if seqlen == 1:
+            self._data['ann']['gru']['num_layers'] = None
+            self._data['ann']['gru']['hidden_size'] = None
+            self._data['ann']['gru']['dropout'] = None
+
+        # set ann/fc/...
+        fc_nlayers = self._data['ann']['fc']['num_layers']
+        if fc_nlayers is None:
+            self._data['ann']['fc']['width'] = None
+            self._data['ann']['fc']['activation_function_id'] = None
+            self._data['ann']['fc']['dropout'] = None
+        else:
+            if fc_nlayers < 1: raise ValueError (f"File \"{UI}\", field \"fc:num_layers\": not a positive integer")
+
+        self._init_members ()
+
+
+    def _init_members (self) -> None:
+        self.ann            : Dict  = self._data ['ann']
+        self.opt_inp        : List  = self._data ['data'] ['input'] ['cat']
+        self.cnn_inp        : List  = self._data ['data'] ['input'] ['cnn']
+        self.lables         : List  = self._data ['data'] ['label']
+        self.prc_rgb_W      : int   = self._data ['data'] ['processed'] ['rgb'] ['width']
+        self.prc_rgb_H      : int   = self._data ['data'] ['processed'] ['rgb'] ['height']
+        self.prc_rgb_N      : int   = self._data ['data'] ['processed'] ['rgb'] ['num_channels']
+        self.seq_len        : int   = self._data ['data'] ['sequential'] ['length']
+        self.seq_stp        : int   = self._data ['data'] ['sequential'] ['step']
+        self.batch_size     : int   = self._data ['learn'] ['batch_size']
+        self.loss_id        : str   = self._data ['learn'] ['loss'] ['id']
+        self.lrsched_id     : str   = self._data ['learn'] ['lr_scheduler'] ['id']
+        self.lrsched_gamma  : float = self._data ['learn'] ['lr_scheduler'] ['gamma']
+        self.lrsched_init   : float = self._data ['learn'] ['lr_scheduler'] ['init']
+        #self.num_epochs     : int   = self._data ['learn'] ['num_epochs'] 
+        self.optim_id       : str   = self._data ['learn'] ['optimizer'] ['id']
+
+
+
+class ConfigFile (File, Config):
+    def __init__ (self, p_pmn : Path, p_tmp : Path, new : bool):
+        File.__init__ (self, p_pmn, p_tmp)
+        Config.__init__ (self, new)
+
+    def save (self, pmn : bool) -> Path:
+        save_json (self._data, self._path (pmn))
+        return self._path (pmn)
+
+    def load (self, pmn : bool) -> Path:
+        self._data = load_json (self._path (pmn))
+        self._init_members ()
+        return self._path (pmn)
+
+
+
+
+class DataFrameFile (File):
+    def __init__ (self, p_pmn : Path, p_tmp : Path, seq_cols : List [str] or None):
+        File.__init__ (self, p_pmn, p_tmp)
+        self._data = pd.DataFrame ()
+        self._seq_cols = seq_cols
+
+    def save (self, pmn : bool) -> Path:
+        self._data.to_csv (self._path (pmn), index=False)
+        return self._path (pmn)
+
+    def load (self, pmn : bool) -> Path:
+        try: 
+            self._data = pd.read_csv (self._path (pmn))
+            if self._seq_cols is not None:
+                self._load_seq ()
+        except pd.errors.EmptyDataError: 
+            self._data = pd.DataFrame ()
+        return self._path (pmn)
+
+    def _load_seq (self):
+        for i in range (len (self._data)):
+            for j in self._seq_cols:
+                try: self._data.at [i, j] = json.loads (self._data.at [i, j])
+                except json.decoder.JSONDecodeError:
+                    self._data.at[i, j] = ast.literal_eval (self._data.at [i, j])
+
+    def add (self, df : pd.DataFrame) -> None:
+        self._data = pd.concat ([self._data, df], ignore_index=True)
+
+    def num_samples (self) -> int:
+        return len (self._data)
+
+    def get (self) -> pd.DataFrame:
+        return self._data
+
+
+
+    
+class CheckpointFile (File):
+    def __init__ (self, p_pmn : Path, p_tmp : Path):
+        File.__init__ (self, p_pmn, p_tmp)
+        self._data = {}
+    
+    def save (self, pmn : bool) -> Path:
+        torch.save (self._data, self._path (pmn))
+        return self._path (pmn)
+
+    def load (self, pmn : bool) -> Path:
+        self._data = torch.load (self._path (pmn))
+        return self._path (pmn)
+
+    def set (self, ep : int, model : Module, optim : Optimizer, loss : Module) -> None:
+        self._data = {
+            'epoch': ep,
+            'model_state_dict': model.state_dict (),
+            'optimizer_state_dict': optim.state_dict (),
+            'loss': loss
+        }
+
+    
+    def get (self) -> Dict:
+        return self._data
 
         
-    def __init__(self, user_input: Dict):
-        
-        self.user_input = user_input
-        self.config = self.initConfig(user_input)
-        
-        self.CHECKPOINT_FNAME = 'checkpoint.pt'
-        self.PACKAGE_DPATH = pathlib.Path(rospack.get_path('forgetful_drones'))
-        
-
-        self.OUTPUT_DNAME = 'output'
-        self.DATA_DNAME = 'data'
-        self.RAW_DNAME = 'raw'
-        self.INTERMEDIATE_DNAME = 'intermediate'
-        self.PROCESSED_DNAME = 'processed'
-        self.EXPERIMENTS_DNAME = 'experiments'
-
-        self.RGB_DNAME = 'rgb'
-        self.RGB_FNAME_EXTENSION = '.jpg'
-        self.DATA_FNAME = 'data.txt'
-        self.INTERMEDIATE_FNAME_EXTENSION = '.csv'
-        self.PROCESSED_FNAME_EXTENSION = '.csv'
-
-        self.DATA_INPUT_CAT = [
-            'rgb_dt',
-            'imu_dt',
-            'imu_linacc_x',
-            'imu_linacc_y',
-            'imu_linacc_z',
-            'imu_angvel_x',
-            'imu_angvel_y',
-            'imu_angvel_z',
-            'max_speed'
-        ]
-
-        self.RGB_COLS = ['rgb_fpath']
-        self.RAW_DATA_COLS = [
-            'expert_intervened',
-            'rgb_dt',
-            'imu_dt',
-            'imu_linacc_x',
-            'imu_linacc_y',
-            'imu_linacc_z',
-            'imu_angvel_x',
-            'imu_angvel_y',
-            'imu_angvel_z',
-            'max_speed',
-            'exp_waypoint_x',
-            'exp_waypoint_y',
-            'exp_normspeed',
-            'ctrlcmd_bodyrates_x',
-            'ctrlcmd_bodyrates_y',
-            'ctrlcmd_bodyrates_z',
-            'ctrlcmd_angacc_x',
-            'ctrlcmd_angacc_y',
-            'ctrlcmd_angacc_z',
-            'ctrlcmd_collthrust'
-        ]
-        self.INTERMEDIATE_DATA_COLS = [
-            *self.RAW_DATA_COLS[:2],
-            *self.RGB_COLS,
-            *self.RAW_DATA_COLS[2:],
-        ]
-        self.PROCESSED_DATA_COLS = self.INTERMEDIATE_DATA_COLS[1:]
-        self.PROCESSED_DATA_SEQ_COLS = self.PROCESSED_DATA_COLS[:10]
-        self.USER_INPUT_FNAME = 'user_input.json'
-        self.CONFIG_FNAME = 'config.json'
-        self.RECORDINGS_FNAME = 'recordings.json'
-        self.RECORDINGS_PLOT_LIN_FNAME = 'recordings_lin_y.pdf'
-        self.RECORDINGS_PLOT_LOG_FNAME = 'recordings_log_y.pdf'
-        self.ANNOTATED_FNAME = 'model_scripted_with_annotation.pt'
-        self.TRACED_FNAME = 'model_scripted_with_tracing.pt'
-        self.EXPERT_INTERVENTION_SHARE_PLOT_FNAME = 'expert_intervention_share.pdf'
 
 
-        self.model = self.initModel()
-        self.optimizer = self.initOptimizer()
-        self.lr_scheduler = self.initLRScheduler()
-        self.loss = self.initLoss()
-
-        self.h = None
-        self.rgb = None
-        self.rgb_t_last = 0
-        self.imu_t_last = 0
-        self.cat = None
-        self.cat_t_last = 0
-        self.cat_mask = self.initCatMask()
-        self.bridge = cv_bridge.CvBridge()
-        self.output = None
 
 
-        self.rossub_flightmare_rgb = rospy.Subscriber("/flightmare/rgb", sensor_msgs.msg.Image, self.roscb_flightmare_rgb, queue_size=1)
-        self.rossub_ground_truth_imu = rospy.Subscriber("ground_truth/imu", sensor_msgs.msg.Imu, self.roscb_ground_truth_imu, queue_size=1)
-        self.rospub_brain_output = rospy.Publisher("brain/output", geometry_msgs.msg.Point, queue_size=1)
-        
-        self.rossvs_train_ann = rospy.Service("brain/train_ann", std_srvs.srv.Empty, self.roscb_train_ann)
-        
-        self.rossub_load_checkpoint = rospy.Subscriber("brain/load_checkpoint", std_msgs.msg.String, self.roscb_load_checkpoint)
-        #self.rossub_save_checkpoint = rospy.Service("brain/save_checkpoint", StringTrigger, self.roscb_save_checkpoint)
 
-        self.rossub_enable_inference = rospy.Subscriber("brain/enable_inference", std_msgs.msg.Bool, self.roscb_enable_inference, queue_size=1)
-        self.rossub_trigger_inference = rospy.Subscriber("brain/trigger_inference", std_msgs.msg.Empty, self.roscb_trigger_inference)
-
-
-    def roscb_trigger_inference (self, msg:std_msgs.msg.Empty) -> None:
-        self.roscb_infer_once()
 
     
 
 
 
-    def initCatMask (self) -> List[int]:
+
+
+
+
+# CONSTANTS
+TORCH_DEVICE = torch.device ('cuda' if torch.cuda.is_available() else 'cpu')
+NCOLS = 0
+BATCH_SIZE_INFER = 1
+
+
+
+
+
+
+
+
+
+
+class ForgetfulBrain:
+
+    def __init__ (self):
+        
+        # PATHS
+        self._pkg = Path (rospack.get_path ('forgetful_drones'))
+        
+        # CONSTANTS
+        self.RGB_EXT = '.jpg'
+        self.RAW_COLS = [                                   # columns of raw data's data.txt files
+                # whether a training sample is created
+            'expert_intervened', 
+                # inputs (without rgb)
+            'rgb_dt', 'imu_dt', 
+            'imu_linacc_x', 'imu_linacc_y', 'imu_linacc_z',
+            'imu_angvel_x', 'imu_angvel_y', 'imu_angvel_z',
+            'max_speed',
+                # label: navigation decision 
+            'exp_waypoint_x', 'exp_waypoint_y', 'exp_normspeed',
+                # label: control command
+            'ctrlcmd_bodyrates_x', 'ctrlcmd_bodyrates_y', 'ctrlcmd_bodyrates_z',
+            'ctrlcmd_angacc_x', 'ctrlcmd_angacc_y', 'ctrlcmd_angacc_z',
+            'ctrlcmd_collthrust'
+        ]
+        self.RGB_COLS = ['rgb_fpath']                       # columns that are input to the CNN
+        self.IMD_COLS = [                                   # columns of intermediate data (->insert RGB_COLS in RAW_COLS)
+            *self.RAW_COLS [:2],
+            *self.RGB_COLS,
+            *self.RAW_COLS [2:],
+        ]
+        self.PRC_COLS = self.IMD_COLS [1:]                  # columns of processed data (->cut 'expert_intervened' column of IMD_COLS)
+        self.PRC_SEQ_COLS = self.PRC_COLS [:10]             # columns of processed data that contain sequences (->no labels, only inputs)
+        self.OPT_COLS = self.RAW_COLS [1: 10]               # columns that are input to the CAT
+
+
+        # ALLOCATIONS
+        self.expID : str or None = None                     # ID of experiment
+        self.runID : str or None = None                     # ID of run
+        
+        # FILES
+        self._cnf : Config or None = None
+
+        self.model : ForgetfulANN or None = None            # model
+        self.optim : Optimizer or None = None   # optimizer
+        self.lrSched : torch.optim.lr_scheduler._LRScheduler or None = None # learning rate scheduler
+        self.loss : Module or None = None          # loss
+        self.optMask : List [int] or None = None            # mask to filter only selected optional input
+
+
+        # ROS
+        #  - service servers
+        self.srv_initExp = rospy.Service ("brain/init_experiment", fdsrv.String, self.cb_initExp)
+        self.srv_buildRun = rospy.Service ("brain/build_run", fdsrv.String, self.cb_buildRun)
+        self.srv_startTrain = rospy.Service ("brain/start_training", fdsrv.Int, self.cb_startTrain)
+        self.srv_startInfer = rospy.Service ("brain/start_inference", fdsrv.Float, self.cb_startInfer)
+    
+        
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # ROS CALLBACKS
+
+    #  - service servers
+
+    def cb_initExp (self, req : fdsrv.StringRequest) -> fdsrv.StringResponse: 
+        self.initExp (id=req.data)
+        return fdsrv.StringResponse ()
+    
+    def cb_buildRun (self, req : fdsrv.StringRequest) -> fdsrv.StringResponse: 
+        self.buildRun (id=req.data)
+        return fdsrv.StringResponse ()
+
+    def cb_startTrain (self, req : fdsrv.IntRequest) -> fdsrv.IntResponse:
+        self.startTrain (num_epochs=req.data, reset_lrsched=True)
+        return fdsrv.IntResponse ()
+
+    def cb_startInfer (self, req : fdsrv.FloatRequest) -> fdsrv.FloatResponse: 
+        self.startInfer (max_speed=req.data)
+        return fdsrv.FloatResponse ()
+
+    #  - during inference
+
+    def cb_RGB (self, msg : sensor_msgs.msg.Image) -> None: 
+        self.rgb_mgs = msg
+    
+    def cb_IMU (self, msg : sensor_msgs.msg.Imu) -> None: 
+        self.imu_msg = msg
+    
+    def cb_INF (self, _ : std_msgs.msg.Empty) -> None: 
+        self.INF()
+
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # ASSERT
+
+    def asrExpInit (self) -> None: 
+        if self.expID is None: raise ValueError (f"Experiment should be initialized")
+
+    def asrPath (self, p : Path or None, isdir : bool, exists : bool) -> None:
+        if p is None: raise ValueError (f"Path should be initialized")
+        if isdir:
+            if exists:
+                if not p.is_dir(): raise FileNotFoundError (str (self._rp (p)))
+            else:
+                if p.is_dir(): raise FileExistsError (str (self._rp (p)))
+        else:
+            if exists:
+                if not p.is_file(): raise FileNotFoundError (str (self._rp (p)))
+            else:
+                if p.is_file(): raise FileExistsError (str (self._rp (p)))
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # PATHS
+    
+    def _exp_                   (self)          -> Path: self.asrExpInit (); return self._pkg/'experiments'/self.expID
+    
+    def _exp_cnf_               (self)          -> Path: return self._exp_()/'config'
+    def _exp_cnf_YML            (self)          -> Path: return self._exp_cnf_()/'forgetful_drone.yaml'
+    def _exp_cnf_CNF            (self)          -> Path: return self._exp_cnf_()/'config.json'
+    
+    def _exp_dat_               (self)          -> Path: return self._exp_()/'data'
+    def _exp_dat_raw_           (self)          -> Path: return self._exp_dat_()/'raw'
+    def _exp_dat_raw_rid_       (self, rid:str) -> Path: return self._exp_dat_raw_()/rid
+    def _exp_dat_raw_rid_rgb_   (self, rid:str) -> Path: return self._exp_dat_raw_rid_(rid)/'rgb'
+    def _exp_dat_raw_rid_TXT    (self, rid:str) -> Path: return self._exp_dat_raw_rid_(rid)/'data.txt'
+    
+    def _exp_dat_idm_           (self)          -> Path: return self._exp_dat_()/'intermediate'
+    def _exp_dat_imd_RID        (self, rid:str) -> Path: return self._exp_dat_idm_()/f"{rid}.csv"
+    
+    def _exp_dat_prc_           (self)          -> Path: return self._exp_dat_()/'processed'
+    def _exp_dat_prc_PRC        (self)          -> Path: return self._exp_dat_prc_()/f"processed.csv"
+    def _exp_dat_prc_rid_       (self, rid:str) -> Path: return self._exp_dat_prc_()/rid
+    def _exp_dat_prc_rid_rgb_   (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'rgb'
+    def _exp_dat_prc_rid_CSV    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'data.csv'
+    
+    def _exp_out_               (self)          -> Path: return self._exp_()/'output'
+    def _exp_out_BRC            (self)          -> Path: return self._exp_out_()/'build_records.json'
+    def _exp_out_TRC            (self)          -> Path: return self._exp_out_()/'train_records.json'
+    def _exp_out_CPT            (self)          -> Path: return self._exp_out_()/'checkpoint.pt'
+    def _exp_out_ANT            (self)          -> Path: return self._exp_out_()/'model_scripted_with_annotation.pt'
+    def _exp_out_TRA            (self)          -> Path: return self._exp_out_()/'model_scripted_with_tracing.pt'
+    
+    def _exp_out_plt_           (self)          -> Path: return self._exp_out_()/'plot'
+    def _exp_out_plt_LSS        (self)          -> Path: return self._exp_out_plt_()/'loss.pdf'
+    def _exp_out_plt_EIS        (self)          -> Path: return self._exp_out_plt_()/'expert_intervention_share.pdf'
+
+    def _exp_out_tmp_           (self)          -> Path: return self._exp_out_()/'tmp'
+    def _exp_out_tmp_RBI        (self, rid:str) -> Path: return self._exp_out_tmp_()/f'_{rid}_build_incomplete.info'
+    def _exp_out_tmp_PRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_dat_prc_PRC().name
+    def _exp_out_tmp_BRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_BRC().name
+    def _exp_out_tmp_TRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_TRC().name
+    def _exp_out_tmp_CPT        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_CPT().name
+    def _exp_out_tmp_ANT        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_ANT().name
+    def _exp_out_tmp_TRA        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_TRA().name
+    def _exp_out_tmp_LSS        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_plt_LSS().name
+
+    # - utils
+
+    def _rp (self, p:Path)  -> Path: 
+        return p.relative_to (self._pkg/'experiments')
+    
+    def _newExp_ (self, isdir : bool, exist : bool) -> List [Path]:
+        if isdir: return [
+                self._exp_ (),
+                self._exp_cnf_ (),
+                self._exp_dat_ (),
+                self._exp_dat_raw_ (),
+            ] if exist else [
+                self._exp_dat_idm_ (),
+                self._exp_dat_prc_ (),
+                self._exp_out_ (),
+                self._exp_out_plt_ (),
+                self._exp_out_tmp_ (),
+            ]
+        else: return [
+                self._exp_cnf_YML (),
+            ] if exist else [
+                self._exp_cnf_CNF (),
+                self._exp_dat_prc_PRC (),
+                self._exp_out_BRC (),
+                self._exp_out_TRC (),
+                self._exp_out_CPT (),
+                #self._exp_out_ANT (),
+                #self._exp_out_TRA (),
+                #self._exp_out_plt_LSS (),
+                #self._exp_out_plt_EIS (),
+            ]
+
+
+    def _exExp_ (self, isdir : bool) -> List [Path]:
+        return [
+            *self._newExp_ (isdir=isdir, exist=True),
+            *self._newExp_ (isdir=isdir, exist=False),
+        ]
+
+
+    def _newRun_ (self, rid : str, isdir : bool, exist : bool) -> List [Path]:
+        if isdir: return [
+                self._exp_dat_raw_rid_ (rid),
+                self._exp_dat_raw_rid_rgb_ (rid),
+            ] if exist else [
+                self._exp_dat_prc_rid_ (rid),
+                self._exp_dat_prc_rid_rgb_ (rid),
+            ]
+        else: return [
+                self._exp_dat_raw_rid_TXT (rid),
+            ] if exist else [
+                self._exp_dat_imd_RID (rid),
+                self._exp_dat_prc_rid_CSV (rid),
+            ]
+
+        
+
+    
+    
+    
+    
+    ##############################################################################################################
+    ##############################################################################################################
+
+    def log (self, msg : str, lvl : int or None) -> None:
+        if lvl is None: return
+        
+        if lvl == 0: msg = '\n' + msg
+        elif lvl == 1: msg = '   - ' + msg
+        elif lvl == 2: msg = '      - ' + msg
+        elif lvl == 3: msg = '          - ' + msg
+        else: raise ValueError ('Log level unknown')
+
+        CBLUEBG = '\33[44m'
+        print (CBLUEBG + msg + '\033[0m')
+
+    def log_load (self, p : Path, lvl : int or None) -> None: self.log (f"Loaded \"{self._rp (p)}\"", lvl)
+    def log_save (self, p : Path, lvl : int or None) -> None: self.log (f"Saved \"{self._rp (p)}\"", lvl)
+    def log_create (self, p : Path, lvl : int or None) -> None: self.log (f"Created \"{self._rp (p)}\"", lvl)
+    def log_remove (self, p : Path, lvl : int or None) -> None: self.log (f"Removed \"{self._rp (p)}\"", lvl)
+    
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # SAVE & LOAD
+    def loadDF (self, p : Path, seq : bool, log_lvl : int or None = None) -> pd.DataFrame:
+        try: 
+            df = pd.read_csv (p)
+            if seq:
+                for i in range (len (df)):
+                    for j in self.PRC_SEQ_COLS:
+                        try: df.at [i, j] = json.loads (df.at [i, j])
+                        except json.decoder.JSONDecodeError:
+                            df.at[i, j] = ast.literal_eval (df.at [i, j])
+        except pd.errors.EmptyDataError: 
+            df = pd.DataFrame ()
+
+        self.log_load (p, log_lvl)
+        return df
+
+    
+    def saveScriptModule (self, ant : bool, pmn : bool, log_lvl: int or None = None) -> None:
+        if ant:
+            p = self._exp_out_ANT () if  pmn else self._exp_out_tmp_ANT ()
+            self.model.exportAsAnnotatedTorchScriptModule (p)
+        else:
+            p = self._exp_out_TRA () if pmn else self._exp_out_tmp_TRA ()
+            batch = next (iter (self.dataloader))
+            self.model.exportAsTracedTorchScriptModule (
+                batch ['input'] ['cnn'].to (TORCH_DEVICE),
+                batch ['input'] ['cat'].to (TORCH_DEVICE),
+                p
+            )
+        self.log_save (p, log_lvl)
+
+    def saveLossPlt (self, pmn : bool, log_lvl : int or None = None) -> None:
+
+        # PLOT CONFIG
+        plt.rcParams['text.usetex'] = True
+        clr = 'tab:orange'
+        
+        # CREATE FIG & AX
+        with warnings.catch_warnings():
+            warnings.simplefilter ("ignore")
+            fig, ax = plt.subplots (figsize=(10, 7))
+        
+        # PLOT TRAIN LOSS
+        ep_idx = 0
+        y = self._trnRec.get_seq ('train_loss')
+        x = list (range (self._trnRec.num_records ()))
+        lbl = 'Training'
+        plt.plot (x, y, color=clr, linestyle=':', label=lbl)
+
+        # PLOT VALID LOSS
+        y = self._trnRec.get_seq ('valid_loss')
+        lbl = 'Validation'
+        plt.plot (x, y, color=clr, linestyle='-', label=lbl)
+        
+        # AX CONFIG
+        ax.set_xlabel ('Epochs')
+        ax.set_ylabel (self._cnf.loss_id, color=clr)
+        ax.tick_params (axis='y', labelcolor=clr)
+        #ax.yaxis.set_major_formatter (mtick.FormatStrFormatter ('%.3e'))
+        ax.legend (loc='lower left')
+        ax.set_yscale('log')
+
+        # SAVE FIG
+        fig.tight_layout()
+        p = self._exp_out_plt_LSS () if pmn else self._exp_out_tmp_LSS ()
+        plt.savefig (p)
+
+        # LOG
+        self.log_save (p, log_lvl)
+
+    def saveEISPlot (self, log_lvl : int or None = None) -> None: 
+        
+        # PLOT CONFIG
+        plt.rcParams['text.usetex'] = True
+        clr = 'tab:green'
+
+        # CREATE FIG & AX
+        with warnings.catch_warnings():
+            warnings.simplefilter ("ignore")
+            fig, ax = plt.subplots (figsize=(10, 7))
+
+        # PLOT
+        plt.plot (self._bldRec.get_seq ("eis"), color=clr)
+        
+        # AX CONFIG
+        ax.set_xlabel ('Runs')
+        ax.set_ylabel ('Expert Intervention Share', color=clr)
+        ax.tick_params(axis='y', labelcolor=clr)
+
+        # SAVE FIG
+        fig.tight_layout()
+        p = self._exp_out_plt_EIS ()
+        plt.savefig (p)
+
+        # LOG
+        self.log_save (p, log_lvl)
+
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # INIT EXPERIMENT
+    
+    def initExp (self, id : str) -> None:
+        """
+        1) Set experiment ID
+        2) If new experiment:
+            1. Assert tree and create sub-directories
+            2. Create new config.json from user_input.py
+            3. Create empty processed.csv
+            4. Create empty build_records.json
+            5. Create empty train_records.json
+            6. Init model, optimizer, etc.
+            7. Create checkpoint.pt
+        3) If existing experiment:
+            1. Assert tree
+            2. Load config.json
+            3. Load processed.csv
+            4. Load build_records.json
+            5. Load train_records.json
+            6. Init model, optimizer, etc.
+            7. Load checkpoint.pt
+
+        """
+
+        self.log ('INIT EXPERIMENT', 0)
+        
+        self.expID = id
+        self.log (f"ID: {self.expID}", 1)
+
+        if not self._exp_cnf_CNF ().is_file ():
+            self.createExp ()
+        else:
+            self.loadExp ()
+
+        
+    def createExp (self) -> None:
+        self.log (f"Create new", 1)
+
+        LOGLVL = 2
+        PMN = True
+        
+        # ASSERT DIRS/FILES DO/DO NOT EXIST AND CREATE NON EXISTING DIRS
+        for exist in [True, False]:
+            for isdir in [True, False]:
+                for path in self._newExp_ (isdir=isdir, exist=exist):
+                    self.asrPath (path, isdir=isdir, exists=exist)
+                    if exist is False and isdir is True:
+                        path.mkdir (parents=True, exist_ok=False)
+                        self.log_create (path, LOGLVL)
+
+        # CREATE MISSING FILES
+        self._cnf = ConfigFile (                    # configuration File
+            self._exp_cnf_CNF (), 
+            None,
+            new=True
+        )
+        self.log_create (
+            self._cnf.save (pmn=PMN), LOGLVL)
+        
+        self._prc = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_PRC (), 
+            self._exp_out_tmp_PRC (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_create (
+            self._prc.save (pmn=PMN), LOGLVL)
+
+        self._bldRec = RecordsFile (                # data building recordings
+            self._exp_out_BRC (), 
+            self._exp_out_tmp_BRC (),
+            RunRecord.id
+        )
+        self.log_create (
+            self._bldRec.save (pmn=PMN), LOGLVL)
+
+        self._trnRec = RecordsFile (                # training recordings
+            self._exp_out_TRC (), 
+            self._exp_out_tmp_TRC (),
+            EpochRecord.id
+        )
+        self.log_create (
+            self._trnRec.save (pmn=PMN), LOGLVL)
+
+        # INIT MODEL ETC
+        self.initModelEtc ()
+
+        # SAVE CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_CPT (),
+            self._exp_out_tmp_CPT ()
+        )
+        self._cpt.set (
+            0,
+            self.model,
+            self.optim,
+            self.loss
+        )
+        self.log_create (
+            self._cpt.save (pmn=PMN), LOGLVL)
+
+
+    def loadExp (self) -> None:
+        self.log (f"Load existing", 1)
+        
+        LOGLVL = 2
+        PMN = True
+        
+        # ASSERT DIRS/FILES  EXIST
+        for isdir in [True, False]:
+            for path in self._exExp_ (isdir=isdir):
+                self.asrPath (path, isdir=isdir, exists=True)
+
+        # LOAD FILES
+        self._cnf = ConfigFile (                    # configuration File
+            self._exp_cnf_CNF (), 
+            None,
+            new=False
+        )
+        self.log_load (
+            self._cnf.load (pmn=PMN), LOGLVL)
+        
+        self._prc = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_PRC (), 
+            self._exp_out_tmp_PRC (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_load (
+            self._prc.load (pmn=PMN), LOGLVL)
+
+        self._bldRec = RecordsFile (                # data building recordings
+            self._exp_out_BRC (), 
+            self._exp_out_tmp_BRC (),
+            RunRecord.id
+        )
+        self.log_load (
+            self._bldRec.load (pmn=PMN), LOGLVL)
+
+        self._trnRec = RecordsFile (                # training recordings
+            self._exp_out_TRC (), 
+            self._exp_out_tmp_TRC (),
+            EpochRecord.id
+        )
+        self.log_load (
+            self._trnRec.load (pmn=PMN), LOGLVL)
+
+        # INIT MODEL ETC
+        self.initModelEtc ()
+
+        # LOAD CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_CPT (),
+            self._exp_out_tmp_CPT ()
+        )
+        self.log_load (
+            self._cpt.load (pmn=PMN), LOGLVL)
+        self.log (f"last epoch idx: {self._cpt.get () ['epoch']}", LOGLVL + 1)
+        self.loadCheckpoint (reset_lrsched=False)
+        
+
+    
+    def initModelEtc (self) -> None:
+        self.model = self.initModel ()
+        self.optim = self.initOptimizer ()
+        self.lrSched = self.initLRScheduler ()
+        self.loss = self.initLoss ()
+        self.optMask = self.initOptMask ()
+    
+    def loadCheckpoint (self, reset_lrsched : bool) -> None:
+        self.model.load_state_dict (self._cpt.get () ['model_state_dict'])
+        self.optim.load_state_dict (self._cpt.get () ['optimizer_state_dict'])
+        if reset_lrsched:
+            for _ in self.optim.param_groups: _['lr'] = self._cnf.lrsched_init
+        self.loss = self._cpt.get () ['loss']
+
+        
+
+    def initModel (self, log_on : bool = True) -> ForgetfulANN:
+        return ForgetfulANN (self._cnf.ann, log_on).to (TORCH_DEVICE)
+
+    def initOptimizer (self) -> Optimizer:
+        return {
+            'Adam': torch.optim.Adam    (self.model.parameters (), lr=self._cnf.lrsched_init),
+            'SGD':  torch.optim.SGD     (self.model.parameters (), lr=self._cnf.lrsched_init),
+        } [self._cnf.optim_id]
+
+    def initLRScheduler (self) -> torch.optim.lr_scheduler._LRScheduler:
+        return {
+            'ExponentialLR': torch.optim.lr_scheduler.ExponentialLR (self.optim, gamma=self._cnf.lrsched_gamma)
+        } [self._cnf.lrsched_id]
+
+    def initLoss (self) -> Module:
+        return {
+            'SmoothL1Loss': torch.nn.SmoothL1Loss (),
+            'MSELoss':      torch.nn.MSELoss ()
+        } [self._cnf.loss_id]
+    
+    def initOptMask (self) -> List [int]:
         mask = []
-        for cat_i in self.config['data']['input']['cat']:
-            for j, CAT_J in enumerate(self.DATA_INPUT_CAT):
-                if cat_i == CAT_J: 
-                    mask.append(j)
+        for i in self._cnf.opt_inp:
+            for idx, j in enumerate (self.OPT_COLS):
+                if i == j: 
+                    mask.append(idx)
                     break
         return mask
 
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # BUILD RUN
+
+    def buildRun (self, id : str) -> None:
+        """
+        1) Sets run ID
+        2) If run is built: Do nothing
+        3) If run not built:
+            1. If run incompletely built: Remove incomplete data
+            2. Assert tree and create sub-directories
+            3. Build/save run's intermediate/*.csv
+            4. Build/save run's processed/*/data.csv
+            5. Build/save experiment's processed.csv
+            6. Add run and save build recordings
+        """
+        self.asrExpInit ()
+        self.switchInferTopics (register=False)
+
+        self.log ('BUILD RUN', 0)
         
+        self.runID = id
+        self.log (f"ID: {self.runID}", 1)
 
-
-
-    def initConfig (self, user_input: Dict[str, Dict[str, Any]]) -> Dict:        
-        c = copy.deepcopy(user_input)
-        
-        # data/raw/rgb/...
-        try: c['data']['raw']
-        except KeyError: c['data']['raw'] = {}
-        try: c['data']['raw']['rgb']
-        except KeyError: c['data']['raw']['rgb'] = {}
-        
-        c['data']['raw']['rgb']['num_channels'] = 3
-        
-        try: c['data']['raw']['rgb']['width'] = rospy.get_param('SIM_UNITY_DRONE_CAMERA_WIDTH')
-        except Exception as e: print(e); successful = False;# c['data']['raw']['rgb']['width'] = 720
-        
-        try: c['data']['raw']['rgb']['height'] = rospy.get_param('SIM_UNITY_DRONE_CAMERA_HEIGHT')
-        except Exception as e: print(e); successful = False;# c['data']['raw']['rgb']['height'] = 480
-        
-        try: c['data']['raw']['nominal_rate'] = rospy.get_param('DRONE_MAIN_LOOP_FREQUENCY')
-        except Exception as e: print(e); successful = False;# c['data']['raw']['rgb']['rate'] = 50
-
-        # data/processed/rgb/...
-        rf = c['data']['processed']['rgb']['resize_factor']
-        c['data']['processed']['rgb']['num_channels'] = c['data']['raw']['rgb']['num_channels']
-        c['data']['processed']['rgb']['width'] = int(rf * c['data']['raw']['rgb']['width'])
-        c['data']['processed']['rgb']['height'] = int(rf * c['data']['raw']['rgb']['height'])
-
-
-        # ann/cat/input_size
-        data_input_cat = c['data']['input']['cat']
-        assert isinstance(data_input_cat, list), 'Wrong type'
-        c['ann']['cat']['input_size'] = None if (len(data_input_cat) == 0) else len(data_input_cat)
-        
-        # ann/head/output_size
-        data_label = c['data']['label']
-        assert isinstance(data_label, list), 'Wrong type'
-        len_data_label = len(data_label)
-        assert len_data_label > 0, 'User input: all label columns disabled'
-        c['ann']['head']['output_size'] = len_data_label
-
-        # ann/gru/...
-        data_sequential_length = c['data']['sequential']['length']
-        assert isinstance(data_sequential_length, int), 'Wrong type'
-        assert data_sequential_length > 0, 'User input: sequential length < 1'
-        if data_sequential_length == 1:
-            c['ann']['gru']['num_layers'] = None
-            c['ann']['gru']['hidden_size'] = None
-            c['ann']['gru']['dropout'] = None
-
-        # ann/fc/...
-        ann_fc_numlayers = c['ann']['fc']['num_layers']
-        if ann_fc_numlayers == None:
-            c['ann']['fc']['width'] = None
-            c['ann']['fc']['activation_function_id'] = None
-            c['ann']['fc']['dropout'] = None
+        if self._bldRec.recorded (self.runID):
+            self.log (f"Found complete build", 1)
         else:
-            assert isinstance(ann_fc_numlayers, int), 'Wrong type'
-            assert ann_fc_numlayers > 0, 'User input: number of layers of fully connected < 1'
+            if self._exp_out_tmp_RBI (self.runID).is_file ():   # build of run is incomplete (e.g., it was aborted)
+                self.buildRun__clearIncomplete ()
+            self.buildRun__build ()
 
-        return c
-
-    def initModel (self) -> forgetful_ann.ForgetfulANN:
-        config_ann = self.config['ann']
-        return forgetful_ann.ForgetfulANN(config_ann).to(TORCH_DEVICE)
-    def initOptimizer (self) -> torch.optim.Optimizer:
-        lr_init = self.config['learn']['lr_scheduler']['init']
-        optimizer_id = self.config['learn']['optimizer']['id']
-        try: return {
-                'Adam': torch.optim.Adam(self.model.parameters(), lr=lr_init),
-                'SGD': torch.optim.SGD(self.model.parameters(), lr=lr_init),
-            }[optimizer_id]
-        except: raise ValueError(f"Unknown optimizer id: {optimizer_id}.")
-    def initLRScheduler (self) -> torch.optim.lr_scheduler._LRScheduler:
-        optimizer = self.optimizer
-        lr_gamma = self.config['learn']['lr_scheduler']['gamma']
-        lr_scheduler_id = self.config['learn']['lr_scheduler']['id']
-        try: return {
-                'ExponentialLR': torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=lr_gamma)
-            }[lr_scheduler_id]
-        except:
-            raise ValueError(f"Unknown learning rate scheduler id: {lr_scheduler_id}.")
-    def initLoss (self) -> torch.nn.Module:
-        loss_id = self.config['learn']['loss']['id']
-        try: return {
-                'SmoothL1Loss': torch.nn.SmoothL1Loss(),
-                'MSELoss': torch.nn.MSELoss()
-            }[loss_id]
-        except: raise ValueError(f"Unknown loss id: {loss_id}.")
     
-    def initRecordings (self, msg_prefix:str='') -> bool:
-        success = True
-        fpath = self.output_dpath/self.RECORDINGS_FNAME 
-        if fpath.exists():
-            with open(fpath, 'r') as file:
-                self.recordings = json.load(file)
+    def buildRun__clearIncomplete (self) -> bool:
+        self.log (f"Found incomplete build", 1)
+
+        for p in self._newRun_ (self.runID, isdir=True, exist=False):
+            if p.is_dir ():
+                p.rmtree ()
+                self.log_remove (p, 2)
+        
+        for p in self._newRun_ (self.runID, isdir=False, exist=False):
+            if p.is_file(): 
+                p.unlink ()
+                self.log_remove (p, 2)
+
+    def buildRun__build (self) -> None:
+
+        # CREATE TMP BUILD FILE
+        self._exp_out_tmp_RBI (self.runID).touch ()
+
+        # ASSERT DIRS/FILES DO/DO NOT EXIST AND CREATE NON EXISTING DIRS
+        for exist in [True, False]:
+            for isdir in [True, False]:
+                for path in self._newRun_ (self.runID, isdir=isdir, exist=exist):
+                    self.asrPath (path, isdir=isdir, exists=exist)
+                    if exist is False and isdir is True:
+                        path.mkdir (parents=True, exist_ok=False)
+                        self.log_create (path, 2)
+
+        
+        # BUILD DATA
+        self.log ("Build intermediate data of run", 1)
+        dfIMD = self.buildRun__Imd (self.runID, log_lvl=2)
+        
+        self.log ('Build sequential data of run', 1)
+        dfSEQ, eis = self.buildRun__Seq (self.runID, dfIMD=dfIMD, log_lvl=2)
+
+        # PROCESSED DATA
+        self.log ('Update processed data of experiment', 1)
+        self.log_load (self._prc.load (pmn=True), 2)
+        prv_ns = self._prc.num_samples ()
+        self._prc.add (dfSEQ)
+        self.log (f"# samples: {prv_ns} -> {self._prc.num_samples ()}", 2)
+        self.log_save (self._prc.save (pmn=False), 2)
+
+        # RECORDINGS
+        self.log ('Update build records', 1)
+        self.log_load (self._bldRec.load (pmn=True), 2)
+        self._bldRec.add (RunRecord (self.runID, eis))
+        self.log ('Added run record', 2)
+        self.log_save (self._bldRec.save (pmn=False), 2)
+
+        # FINAL BUILD SAVINGS & REMOVE TMP BUILD FILE
+        self._exp_out_tmp_RBI (self.runID).unlink ()
+
+        self.log ('Save permanently', 1)
+        self.log_save (self._prc.save (pmn=True), 1)
+        self.log_save (self._bldRec.save (pmn=True), 1)
+        self.saveEISPlot (log_lvl=1)
+        
+
+        
+
+
+    def buildRun__Imd (self, run_id : str, log_lvl : int or None = None) -> pd.DataFrame:
+
+        # PATHS
+        RGB = self._exp_dat_raw_rid_rgb_ (run_id)     # to the run's dir of raw rgbs (source)
+        TXT = self._exp_dat_raw_rid_TXT (run_id)     # to the run's raw txt file (source)
+        CSV = self._exp_dat_imd_RID (run_id)      # to the run's intermediate csv file (destination)
+        
+        # DATA FRAMES
+        dfRGB = pd.DataFrame (
+            RGB.subfiles (ext=self.RGB_EXT, sort=True),   # sorted list of paths to .jpg files in RGB
+            columns=self.RGB_COLS
+        )
+        dfTXT = pd.read_csv (TXT)
+        dfTXT [self.RAW_COLS [9]] = dfTXT [self.RAW_COLS [9]].astype (float)  # max_speed column is saved as int
+
+        # ASSERT
+        if list (dfTXT.columns) != self.RAW_COLS:
+            raise ValueError (f"Corrupted columns in file \"{self._rp (TXT)}\"")
+        if len (dfRGB) != len (dfTXT):
+            raise ValueError (f"Mismatching # samples in file \"{self._rp (TXT)}\" and directory \"{self._rp (RGB)}\"")
+
+        # DATAFRAME: intermediate
+        dfIMD = pd.concat ([dfRGB, dfTXT], axis=1) [self.IMD_COLS]
+        dfIMD.to_csv (CSV, index=False)
+
+        # LOGGING
+        self.log (f"# samples: {len (dfIMD)}", log_lvl)
+        self.log_save (CSV, log_lvl)
+
+        return dfIMD
+
+
+
+    
+    def buildRun__Seq (self, run_id : str, dfIMD : pd.DataFrame or None = None, log_lvl : int or None = None) -> None:
+        
+        # PATHS
+        RGB = self._exp_dat_prc_rid_rgb_ (run_id)     # to the run's dir of processed rgbs (destination)
+        SEQ = self._exp_dat_prc_rid_CSV (run_id)     # to the run's processed csv file (destination)
+
+        # DATA FRAMES
+        if dfIMD is None: dfIMD = pd.read_csv (self._exp_dat_imd_RID (run_id))
+        dfSEQ = pd.DataFrame ()
+
+        # DATA SEQUENCING
+        with tqdm( range( len(dfIMD)), desc='|  Data Sequencing', leave=False, position=1, ncols=NCOLS) as pbar:
+            ei_cnt = 0                                                  # count of expert interventions
+            ss_cnt = 1                                                  # count of sequential steps
             
-            if self.latest_run_id in self.recordings['run_id']:
-                if self.config['learn']['num_epochs'] <= len(self.recordings['loss']['train'][-1]):
-                    msg = f"{msg_prefix}already trained on specified run \"{self.latest_run_id}\"! Do nothing!"
-                    success = False
-                else:
-                    self.num_prev_runs = 0
-                    msg = f"{msg_prefix}found #{self.num_prev_runs} previous runs"
+            for i in pbar:                                              # (for every sample in df_imd)
+                ss_cnt -= 1
+                if not dfIMD.iloc [i] ['expert_intervened']: continue  # skip this sample, if the expert did not intervene
+                
+                ei_cnt += 1
+
+                if ss_cnt > 1: continue                                 # sequential step implementation
+
+                rgb_dt = []; rgb_fp = []; imu_dt = []                   # Init sequences of inputs
+                imu_lx = []; imu_ly = []; imu_lz = []
+                imu_ax = []; imu_ay = []; imu_az = []
+                mspeed = []
+                
+                # Fill the sequences with the previous samples (according to the sequence length)
+                for j in range (i + 1 - self._cnf.seq_len, i + 1):
+                    if j < 0: break                                     # Skip, if there's not enough previous samples
+
+                    rgb_dt.append (dfIMD.iloc [j] ['rgb_dt'])
+                    rgb_fp.append (dfIMD.iloc [j] ['rgb_fpath'])
+                    imu_dt.append (dfIMD.iloc [j] ['imu_dt'])
+                    imu_lx.append (dfIMD.iloc [j] ['imu_linacc_x'])
+                    imu_ly.append (dfIMD.iloc [j] ['imu_linacc_y'])
+                    imu_lz.append (dfIMD.iloc [j] ['imu_linacc_z'])
+                    imu_ax.append (dfIMD.iloc [j] ['imu_angvel_x'])
+                    imu_ay.append (dfIMD.iloc [j] ['imu_angvel_y'])
+                    imu_az.append (dfIMD.iloc [j] ['imu_angvel_z'])
+                    mspeed.append (dfIMD.iloc [j] ['max_speed'])
+
+                if len (rgb_dt) == 0: continue                          # Because there were not enough previous samples
+              
+                # Assert sequence length
+                if not len (rgb_dt) == self._cnf.seq_len:
+                    raise AssertionError (f"Sequence length not as specified")
+                
+                ss_cnt = self._cnf.seq_stp                           # Make a sequential step since the sample was added
+
+
+                # Preprocess rgbs to make training faster
+                for j, raw in enumerate (rgb_fp):                       # Iterate through the rgb filepaths of the sequence
+                    prc = RGB/Path (raw).name                   # path to the processed rgb
+                    rgb_fp [j] = str(prc)                               # overwrite the path to the raw rgb
+
+                    if not prc.is_file (): cv2.imwrite (                # create processed rgb if not created from prior sequences
+                        rgb_fp [j], 
+                        self.INF_preprocRGB (cv2.imread (str (raw)))
+                    )
+
+                # Data frame containing the input sequences and the label
+                df_seq = pd.DataFrame (pd.Series (
+                    data = [
+                        rgb_dt, rgb_fp, imu_dt,
+                        imu_lx, imu_ly, imu_lz,
+                        imu_ax, imu_ay, imu_az,
+                        mspeed,
+                        dfIMD.iloc [i] ['exp_waypoint_x'],
+                        dfIMD.iloc [i] ['exp_waypoint_y'],
+                        dfIMD.iloc [i] ['exp_normspeed'],
+                        dfIMD.iloc [i] ['ctrlcmd_bodyrates_x'],
+                        dfIMD.iloc [i] ['ctrlcmd_bodyrates_y'],
+                        dfIMD.iloc [i] ['ctrlcmd_bodyrates_z'],
+                        dfIMD.iloc [i] ['ctrlcmd_angacc_x'],
+                        dfIMD.iloc [i] ['ctrlcmd_angacc_y'],
+                        dfIMD.iloc [i] ['ctrlcmd_angacc_z'],
+                        dfIMD.iloc [i] ['ctrlcmd_collthrust'],
+                    ], 
+                    index = self.PRC_COLS
+                )).transpose ()
+
+                # Add the above data frame
+                dfSEQ = pd.concat ([dfSEQ, df_seq], ignore_index=True)
+        
+        dfSEQ.to_csv (SEQ, index=False)
+        eis = float (ei_cnt) / len (dfIMD)
+
+        # LOGGING 
+        self.log (f"# samples: {len (dfSEQ)}", log_lvl)
+        self.log (f"Expert intervention share: {100 * eis} %", log_lvl)
+        self.log_save (SEQ, log_lvl)
+
+        return dfSEQ, eis
+        
+        
+
+
+
+    
+
+    
+        
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    def switchInferTopics (self, register : bool) -> None:
+        if register:
+            self.h = self.model.getZeroInitializedHiddenState (BATCH_SIZE_INFER, TORCH_DEVICE)
+            self.rgb = None                                     # lastly fetched rgb image from drone's onboard camera
+            self.rgb_t_last = 0                                 # time stamp of previously fetched rgb image
+            self.imu_t_last = 0                                 # time stamp of previously fetched imu data
+            self.opt = None                                     # ?
+            self.opt_t_last = 0                                 # ?
+            self.infCnt = 0                                     # number of inferences
+            self.aggT01 = 0                                     # aggregated time to process inputs during inference
+            self.aggT12 = 0                                     # aggregated time to forward during inference
+            self.bridge = cv_bridge.CvBridge ()
+            self.sub_RGB = rospy.Subscriber ("/flightmare/rgb", sensor_msgs.msg.Image, self.cb_RGB, queue_size=1)
+            self.sub_IMU = rospy.Subscriber ("ground_truth/imu", sensor_msgs.msg.Imu, self.cb_IMU, queue_size=1)
+            self.sub_INF = rospy.Subscriber ("brain/trigger_inference", std_msgs.msg.Empty, self.cb_INF)
+            self.pub_OUT = rospy.Publisher ("brain/output", geometry_msgs.msg.Point, queue_size=1)
+        else:
+            self.h = None
+            self.rgb = None
+            self.rgb_t_last = None
+            self.imu_t_last = None
+            self.opt = None
+            self.opt_t_last = None
+            self.infCnt = None
+            self.aggT01 = None
+            self.aggT12 = None
+            self.bridge = None
+            try:
+                self.sub_RGB.unregister ()
+                self.sub_IMU.unregister ()
+                self.sub_INF.unregister ()
+                self.pub_OUT.unregister ()
+            except:
+                pass
+            self.sub_RGB = None
+            self.sub_IMU = None
+            self.sub_INF = None
+            self.pub_OUT = None
+
+        
+    # START TRAINING
+
+    def startTrain (self, num_epochs : int, reset_lrsched : bool) -> None:
+        self.asrExpInit ()
+        self.switchInferTopics (register=False)
+
+
+
+        self.log (f"START TRAIN", 0)
+        self.log_load (self._prc.load (pmn=True), 2)
+        self.log_load (self._bldRec.load (pmn=True), 2)
+        self.log_load (self._trnRec.load (pmn=True), 2)
+        self.log_load (self._cpt.load(pmn=True), 2)
+        self.loadCheckpoint (reset_lrsched)
+        
+        self.log (f"Experiment", 1)
+        self.log (f"ID: {self.expID}", 2)
+        self.log (f"# runs: {self._bldRec.num_records ()}", 2)
+        self.log (f"# epochs: {self._trnRec.num_records ()}", 2)
+
+
+
+
+
+        log (1, '...')
+        self.dataloader = torch.utils.data.DataLoader (
+            dataset=ForgetfulDataset (
+                df=self._prc.get (),
+                id=self.expID,
+                cnn_cols=self._cnf.cnn_inp,
+                cat_cols=self._cnf.opt_inp,
+                lbl_cols=self._cnf.lables,
+                msg_pfx='|  '
+            ),
+            batch_size=self._cnf.batch_size,
+            shuffle=True,
+            drop_last=True
+        )
+        log (1, '...')
+        log (1, 'Data loader')
+        log (2, f"Batch size: {self._cnf.batch_size}")
+        log (2, f"Shuffle & drop last")
+        
+
+        log (1, 'Training')
+    
+        PMN = False
+        with tqdm (range (num_epochs), leave=False, desc='      - Epochs   ', position=0, ncols=NCOLS) as pbar:
+            pfx = '|    - '
+            for i in pbar:
+                epochRec = self.startTrain_trainOneEpoch ()
+
+                print ()                
+                PMN = True if (i + 1 == num_epochs) else False          # save only permanently after last epoch
+
+                self._trnRec.add (epochRec)                             # save training records
+                self.log_save (self._trnRec.save (pmn=PMN), 2)
+                
+                self._cpt.set (self._trnRec.num_records (), self.model, self.optim, self.loss)    # save checkpoint
+                self.log_save (self._cpt.save (pmn=PMN), 2)
+                
+                for _ in [True, False]:                                 # save annotated and traced script module
+                    self.saveScriptModule (ant=_, pmn=PMN, log_lvl=2)
+                
+                self.saveLossPlt (pmn=PMN, log_lvl=2)                  # save loss plot
+
+            pbar.write(f"      - Epochs   : 100%")
+            
+
+
+        
+
+        
+
+
+    
+
+
+    def startTrain_trainOneEpoch (self) -> EpochRecord:
+        self.model.train ()
+        self.h = self.model.getZeroInitializedHiddenState (self.dataloader.batch_size, TORCH_DEVICE)
+
+        agg_loss = 0.0      # aggregated loss 
+        batch_cnt = 0       # number of batches
+
+        with tqdm (self.dataloader, leave=False, desc='|  Batches  ', position=1, ncols=NCOLS) as pbar:
+            for batch in pbar:
+
+                batch_cnt += 1
+                self.optim.zero_grad ()
+
+                out, self.h = self.model.forward (
+                    x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE), 
+                    x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE), 
+                    h=self.h.data
+                )
+
+                batch_loss = self.loss (out, batch ['label'].to (TORCH_DEVICE))   
+                try: batch_loss += self.model.get_regularization_term ()
+                except: pass
+                
+                agg_loss += batch_loss.item ()
+
+                batch_loss.backward ()
+                self.optim.step ()
+
+        self.lrSched.step ()
+
+
+        return EpochRecord (agg_loss / batch_cnt, None, self.lrSched.get_last_lr () [0])
+
+
+    
+
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # START INFERENCE
+
+    def startInfer (self, max_speed : float) -> None:
+        self.switchInferTopics (register=True)
+        self.maxSpeed = max_speed
+        self.model.eval ()
+
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # OLD
+    
+    '''def roscb_timer (self, te: rospy.timer.TimerEvent) -> None:
+        if te.last_duration is not None and rospy.Duration(te.last_duration) > self.period:
+            rospy.logwarn(f"[{rospy.get_name()}]    ROS timer took {te.last_duration} > {self.period} s.")
+        self.triggerInference()'''
+
+
+
+    '''def buildData (self, rebuild : bool, exist_ok: bool) -> None:
+        self.asrExpInit ()
+
+        if rebuild:
+            pass
+            
+        else:
+            self.asrRunInit ()
+
+            if exist_ok:
+                try: self.startTrain_buildImd (self.runID, overwrite=False, log=True)
+                except FileExistsError as e: print (e)
+                try: self.startTrain_buildPrcSeq (self.runID, overwrite=False, log=True)
+                except FileExistsError as e: print (e)
             else:
-                self.num_prev_runs = len(self.recordings['loss']['train'])
-                msg = f"{msg_prefix}found #{self.num_prev_runs} previous runs"
-                self.recordings['loss']['train'].append([])
-                self.recordings['loss']['valid'].append([])
-                self.recordings['learn_rate'].append([])
-                self.recordings['run_id'].append(self.latest_run_id)
-        
-        else:
-            self.recordings = {
-                'run_id': [self.latest_run_id],
-                'expert_intervention_share': [],
-                'loss': {
-                    'train': [[]],
-                    'valid': [[]],
-                },
-                'learn_rate': [[]],
-                
-            }
-            self.num_prev_runs = 0
-            msg = f"{msg_prefix}found no previous runs"
-        
-        print(msg)
-        return success
-
-
+                self.startTrain_buildImd (self.runID, overwrite=False, log=True)'''
     
 
-    def rel (self, path:pathlib.Path) -> pathlib.Path:
-        return path.relative_to(self.PACKAGE_DPATH)
 
-
-    def roscb_load_checkpoint (self, msg:std_msgs.msg.String) -> None:
-        exp_id = msg.data
-        checkpoint_fpath = self.PACKAGE_DPATH/self.EXPERIMENTS_DNAME/exp_id/self.OUTPUT_DNAME/self.CHECKPOINT_FNAME
-        self.load_checkpoint(checkpoint_fpath)
-
-
-
-    def roscb_enable_inference (self, msg: std_msgs.msg.Bool) -> None:
-        self.enable_inference (msg.data)
-
-    def enable_inference (self, enabled:bool) -> None:
-        if enabled:
-            print('ENABLE INFERENCE')
-            self.model.eval()
-            self.h = self.model.getZeroInitializedHiddenState(1, TORCH_DEVICE)
-            self.max_speed = rospy.get_param('brain_MAX_SPEED')
+    '''def buildData_addRun (self, exist_ok: bool) -> None:
+        self.asrRunInit ()
+        if exist_ok:
+            try: self.startTrain_buildImd (self.runID, overwrite=False, log=True)
+            except FileExistsError as e: print (e)
+            try: self.startTrain_buildPrcSeq (self.runID, overwrite=False, log=True)
+            except FileExistsError as e: print (e)
         else:
-            print('DISABLE INFERENCE')
-            self.model.train()
-        
-    
-    
-
-    def createLink2Directory(self, lpath:pathlib.Path, dpath:pathlib.Path, msg_prefix:str='') -> None:
-        if not lpath.exists():
-            lpath.symlink_to(target=dpath, target_is_directory=True)
-            msg_prefix += 'created'
-        else:
-            assert lpath.resolve() == dpath, f"Link \"{lpath}\" resolves to \"{lpath.resolve()}\" and not to \"{dpath}\" as specified"
-            msg_prefix += 'found'
-
-        print(f"{msg_prefix} link \"{self.rel(lpath)}\" to \"{self.rel(dpath)}\"")
-
-    def initDirectory(self, dpath:pathlib.Path, msg_prefix:str='') -> None:
-        if not dpath.exists(): 
-            dpath.mkdir(); 
-            msg_prefix += 'created'
-        else:
-            assert dpath.is_dir(), f"\"{dpath}\" is not a directory"
-            msg_prefix += 'found'
-
-        print(f"{msg_prefix} directory \"{self.rel(dpath)}\"");
-
-
-
-
-
-
-
-    def buildIntermediateData (self, runID:str or None = None) -> bool:
-        run_dpaths = sorted([x for x in self.raw_dpath.iterdir() if x.is_dir()]) if (runID is None) else [self.raw_dpath/runID]
-
-            
-        with tqdm(run_dpaths, desc='|  Intermediate Data', position=0, ncols=NCOLS) as r2i_PBAR:
-            
-            for run_dpath in r2i_PBAR:
-                run_id = run_dpath.name
-                fpath = self.intermediate_fpath(run_id)
-                
-                if runID is not None:
-                    if fpath.exists():
-                        r2i_PBAR.write(f"|    [Run {run_id}]  \"{self.rel(fpath)}\" already exists and is not overwritten!")
-                        return False
+            self.startTrain_buildImd (self.runID, overwrite=False, log=True)'''
 
         
-                rgb_dpath = run_dpath/self.RGB_DNAME
-                rgb_fpaths = sorted([x for x in rgb_dpath.iterdir() if x.is_file() and x.suffix == self.RGB_FNAME_EXTENSION])
-                data_fpath = run_dpath/self.DATA_FNAME
 
+    '''def buildIntermediateFiles (
+        self, 
+        run_ids : List [str],
+        force_rebuild : bool,
+        log : bool
+    ) -> None:
 
-                df_rgb = pd.DataFrame(rgb_fpaths, columns=self.RGB_COLS)
-                df_data = pd.read_csv(data_fpath);
-                df_data['max_speed'] = df_data['max_speed'].astype(float)
-                assert list(df_data.columns) == self.RAW_DATA_COLS, 'Columns of raw data mismatch'
-                assert len(df_rgb) == len(df_data), '#frames and #datasamples mismatch'
-                
-
-                df_intermediate = pd.concat([df_rgb, df_data], axis=1)
-                df_intermediate = df_intermediate[self.INTERMEDIATE_DATA_COLS]
-
-                
-                df_intermediate.to_csv(fpath, index=False)
-                r2i_PBAR.write(f"|    [Run {run_id}]  Wrote #{len(df_intermediate)} samples to \"{self.rel(fpath)}\"")
-        
-        return True
-
-
-    def intermediate_fpath (self, run_id: str) -> pathlib.Path:
-        return self.intermediate_dpath/f"{run_id}{self.INTERMEDIATE_FNAME_EXTENSION}"
-
-    
-    def loadProcessedData (self) -> None:
-        self.df_processed = pd.read_csv(self.processed_fpath)
-        
-        for i in range(len(self.df_processed)):
-            for col in self.PROCESSED_DATA_SEQ_COLS:
+        with tqdm(run_ids, desc='|  Intermediate Data', position=0, ncols=NCOLS) as pbar:
+            for x in pbar:
                 try: 
-                    self.df_processed.at[i, col] = json.loads(self.df_processed.at[i, col])
-                except json.decoder.JSONDecodeError:
-                    fpaths = ast.literal_eval(self.df_processed.at[i, col])
-                    #fpaths = re.findall("PosixPath\('(.*?)'\)", self.df_processed.at[i, col])
-                    #for j in range(len(fpaths)):
-                    #    fpaths[j] = pathlib.Path(fpaths[j])
-                    self.df_processed.at[i, col] = fpaths
+                    self.startTrain_buildImd (x, overwrite=False, log=log)
+                except FileExistsError as e: 
+                    print(e)'''
 
+
+    
+    '''def buildData_ProcessedCSV (self, run_id : str or None, log : bool) -> None:
         
+        if run_id is None:
+            self.dfPrc = pd.DataFrame ()
 
-    def preprocessRGB (self, rgb: np.ndarray) -> np.ndarray:
-        rgb = cv2.resize(rgb, (
-            self.config['data']['processed']['rgb']['width'], 
-            self.config['data']['processed']['rgb']['height']
-        ))
-        rgb = cv2.cvtColor(rgb, cv2.COLOR_BGR2RGB)
-        return rgb
+            for dir in self.d__exp_dat_prc ().subdirs (): self.dfPrc = pd.concat (
+                [
+                    self.dfPrc, 
+                    self.loadSeqDF (dir/'data.csv')
+                ], 
+                ignore_index=True
+            )
 
-        
+        else: # Add run only
+            self.dfPrc = self.loadSeqDF (self.f__exp_dat_prc_prc ())
 
-    def buildProcessedData (self, RunID:str or None = None) -> None:
-        if RunID is None:
-            self.df_processed = pd.DataFrame();
+            pd.concat (
+                [
+                    self.dfPrc, 
+                    self.loadSeqDF (self.d_exp_dat_prc_X_csv (run_id))
+                ], 
+                ignore_index=True
+            )
+
+        self.dfPrc.to_csv (self.f__exp_dat_prc_prc (), index=False)'''
+
+    
+
+    '''def buildProcessedData (self, run_id : str or None = None) -> None:
+        if run_id is None:
+            self.df_prc = pd.DataFrame();
             intermediate_fpaths = sorted([x for x in (self.intermediate_dpath).iterdir() if x.is_file() and x.suffix == self.INTERMEDIATE_FNAME_EXTENSION])
         else:
-            if self.processed_fpath.exists(): self.loadProcessedData()
-            else: self.df_processed = pd.DataFrame();
-            intermediate_fpaths = [self.intermediate_fpath(RunID)]
-
-
+            if self.processed_fpath.exists(): self.loadProcessed()
+            else: self.df_prc = pd.DataFrame();
+            intermediate_fpaths = [self.intermediate_fpath(run_id)]
+    
+    
         with tqdm(intermediate_fpaths, desc='|  Processed Data', position=0, ncols=NCOLS) as i2p_pbar:
-
+    
             for intermediate_fpath in i2p_pbar:
                 run_id = intermediate_fpath.stem
                 if not (self.processed_dpath/f"{run_id}").exists(): (self.processed_dpath/f"{run_id}").mkdir()
                 df_intermediate = pd.read_csv(intermediate_fpath)
-
+    
                 with tqdm(range(len(df_intermediate)), desc='|  Sequential',leave=False, position=1, ncols=NCOLS) as s2s_PBAR:
                     exp_iv_cnt = 0
                     added_seq_cnt = 0
-
+    
                     seq_step_cnt = 1
                     for i in s2s_PBAR:
-
+    
                         if seq_step_cnt > 1:
                             seq_step_cnt -= 1
                             continue
@@ -489,11 +1509,11 @@ class DAGGER:
                         seq_imu_angvel_y = []
                         seq_imu_angvel_z = []
                         seq_max_speed = []
-
+    
                         if df_intermediate.iloc[i]['expert_intervened']:
                             exp_iv_cnt += 1
                             
-                            for j in range(i + 1 - self.config['data']['sequential']['length'], i + 1):
+                            for j in range(i + 1 - self.cnf['data']['sequential']['length'], i + 1):
                                 if j < 0: break
                                 seq_rgb_dt.append(df_intermediate.iloc[j]['rgb_dt'])
                                 seq_rgb_fpath.append(df_intermediate.iloc[j]['rgb_fpath'])
@@ -505,23 +1525,23 @@ class DAGGER:
                                 seq_imu_angvel_y.append(df_intermediate.iloc[j]['imu_angvel_y'])
                                 seq_imu_angvel_z.append(df_intermediate.iloc[j]['imu_angvel_z'])
                                 seq_max_speed.append(df_intermediate.iloc[j]['max_speed'])
-
+    
                             if not len(seq_rgb_dt) == 0:
-                                assert self.config['data']['sequential']['length'] == len(seq_rgb_dt), "len(sequence) != sequence length"
+                                assert self.cnf['data']['sequential']['length'] == len(seq_rgb_dt), "len(sequence) != sequence length"
                                 added_seq_cnt += 1
-
+    
                                 for k, raw_rgb_fpath in enumerate(seq_rgb_fpath):
                                     
-                                    rgb_id = pathlib.Path(raw_rgb_fpath).stem
-                                    processed_rgb_fpath = self.processed_dpath/f"{run_id}"/f"{rgb_id}{self.RGB_FNAME_EXTENSION}"
+                                    rgb_id = Path(raw_rgb_fpath).stem
+                                    processed_rgb_fpath = self.processed_dpath/f"{run_id}"/f"{rgb_id}{self.RGB_EXT}"
                                     seq_rgb_fpath[k] = str(processed_rgb_fpath)
-
+    
                                     if not processed_rgb_fpath.exists():
                                         rgb = cv2.imread(raw_rgb_fpath)
-                                        rgb = self.preprocessRGB(rgb)
+                                        rgb = self.preprocRGB(rgb)
                                         cv2.imwrite(str(processed_rgb_fpath), rgb)
-
-
+    
+      
                                 df_sequential = pd.DataFrame(
                                     pd.Series(
                                         data = [
@@ -546,141 +1566,68 @@ class DAGGER:
                                             df_intermediate.iloc[i]['ctrlcmd_angacc_z'],
                                             df_intermediate.iloc[i]['ctrlcmd_collthrust'],
                                         ], 
-                                        index = self.PROCESSED_DATA_COLS
+                                        index = self.PRC_COLS
                                     )
                                 ).transpose()
-
-                                self.df_processed = pd.concat([self.df_processed, df_sequential], ignore_index=True)
+    
+                                self.df_prc = pd.concat([self.df_prc, df_sequential], ignore_index=True)
                         
-                                seq_step_cnt = self.config['data']['sequential']['step']
+                                seq_step_cnt = self.cnf['data']['sequential']['step']
                     
-                    self.recordings['expert_intervention_share'].append(1.0 * exp_iv_cnt / len(df_intermediate))
+                    self.rec['expert_intervention_share'].append(1.0 * exp_iv_cnt / len(df_intermediate))
                     s2s_PBAR.write(f"|    [Run {run_id}]  Added #{added_seq_cnt} sequences from # {len(df_intermediate)} samples to processed data")
-
+    
                 if intermediate_fpath == intermediate_fpaths[-1]:
-                    msg = f"|    -> Wrote #{len(self.df_processed)} sequences to \"{self.rel(self.processed_fpath)}\""
+                    msg = f"|    -> Wrote #{len(self.df_prc)} sequences to \"{self.relpath(self.processed_fpath)}\""
                     i2p_pbar.write(msg)
             
             
-            self.df_processed.to_csv(self.processed_fpath, index=False)
-            #self.loadProcessedData()
-            
+            self.df_prc.to_csv(self.processed_fpath, index=False)
+            #self.loadProcessedData()'''
 
     
 
-
-    def train_one_epoch (self) -> None:
-        self.model.train()
-        loss_sum = 0.0
-        batch_cnt = 0
-
-        self.h = self.model.getZeroInitializedHiddenState(self.dataloader.batch_size, TORCH_DEVICE)
-        with tqdm(self.dataloader, leave=False, desc='|  Batches  ', position=1, ncols=NCOLS) as batch_PBAR:
-
-            for batch in batch_PBAR:
-                batch_cnt += 1
-                self.h = self.h.data
-                self.optimizer.zero_grad()
-
-                output, self.h = self.model.forward (
-                    x_img=batch['input']['cnn'].to(TORCH_DEVICE), 
-                    x_cat=batch['input']['cat'].to(TORCH_DEVICE), 
-                    h=self.h
-                )
-
-                #batch_loss\
-                #    = loss(batch_outputs[:, :2], batch_waypoint)\
-                #    + loss(batch_outputs[:, 2:], batch_speed) * config.LOSS_SPEED2WAYPOINT_RATIO
-                batch_loss = self.loss(output, batch['label'].to(TORCH_DEVICE))
-                try:
-                    batch_loss += self.model.get_regularization_term()
-                except:
-                    pass
-                loss_sum += batch_loss.item()
-
-                batch_loss.backward()
-                self.optimizer.step()
-
-        self.lr_scheduler.step()
-        
-        self.recordings['loss']['train'][self.num_prev_runs].append(loss_sum / batch_cnt)
-        self.recordings['loss']['valid'][self.num_prev_runs].append(None)
-        self.recordings['learn_rate'][self.num_prev_runs].append(self.lr_scheduler.get_last_lr()[0])
-
-    def initCheckpoint (self, msg_prefix:str='') -> None:
-        if not self.checkpoint_fpath.exists():
-            print(f"{msg_prefix}found none, consider this the very first training")
-        else:
-            self.load_checkpoint(self.checkpoint_fpath, log=False)
-            print(f"{msg_prefix}found file \"{self.rel(self.checkpoint_fpath)}\"")
-
-
-    def plotExpertInterventionShare (self) -> None:        
-        fpath = self.output_dpath/self.EXPERT_INTERVENTION_SHARE_PLOT_FNAME 
-        
-        try:
-            plt.rcParams['text.usetex'] = True
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                fig, ax1 = plt.subplots(figsize=(10, 7))
-            color = 'tab:green'
-            ax1.set_xlabel('Runs')
-            ax1.set_ylabel('Expert Interventions [Percentage]', color=color)
-            plt.plot(self.recordings['expert_intervention_share'], color=color)
-            ax1.tick_params(axis='y', labelcolor=color)
-            fig.tight_layout()  # otherwise the right y-label is slightly clipped
-            plt.savefig(fpath)
-            #plt.close()
-
-        except Exception as e:
-            print(f"Failed to save plot as \"{self.rel(fpath)}\", error: {e}")
-
-
-    def train_from_scratch (self, exp_id:str) -> None:
-        self.experiment_dpath = self.PACKAGE_DPATH/self.EXPERIMENTS_DNAME/exp_id
-        self.intermediate_dpath = self.experiment_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
-        self.processed_dpath = self.experiment_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
-        self.output_dpath = self.experiment_dpath/self.OUTPUT_DNAME
-
+    '''def train_from_scratch (self, exp_id:str) -> None:
+        self.exp_dpath = self.PKG_DIR/self.EXP_DNAME/exp_id
+        self.intermediate_dpath = self.exp_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
+        self.processed_dpath = self.exp_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
+        self.output_dpath = self.exp_dpath/self.OUTPUT_DNAME
         self.intermediate_dpath.rmtree(); self.intermediate_dpath.mkdir()
         self.processed_dpath.rmtree(); self.processed_dpath.mkdir()
         self.output_dpath.rmtree(); self.output_dpath.mkdir()
-
-        self.raw_dpath = self.experiment_dpath/self.DATA_DNAME/self.RAW_DNAME
-
+        self.raw_dpath = self.exp_dpath/self.DATA_DNAME/self.RAW_DNAME
         for run_id in sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()]):
             self.train_ann (
-                experiment_dpath=self.experiment_dpath,
+                experiment_dpath=self.exp_dpath,
                 latest_run_id=run_id
-            )
+            )'''
 
 
-    def train_nontrained (self, exp_id:str, data_built : bool) -> None:
-        self.experiment_dpath = self.PACKAGE_DPATH/self.EXPERIMENTS_DNAME/exp_id
-        self.intermediate_dpath = self.experiment_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
-        self.processed_dpath = self.experiment_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
-        self.output_dpath = self.experiment_dpath/self.OUTPUT_DNAME
-        self.raw_dpath = self.experiment_dpath/self.DATA_DNAME/self.RAW_DNAME
+    '''def train_ANN_variant (self, exp_id:str, data_built : bool) -> None:
+        self.exp_dpath = self.PKG_DIR/self.EXP_DNAME/exp_id
+        self.intermediate_dpath = self.exp_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
+        self.processed_dpath = self.exp_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
+        self.output_dpath = self.exp_dpath/self.OUTPUT_DNAME
+        self.raw_dpath = self.exp_dpath/self.DATA_DNAME/self.RAW_DNAME
         self.latest_run_id = sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()])[-1]
-        experiment_id = self.experiment_dpath.name
+        experiment_id = self.exp_dpath.name
         self.processed_fpath = self.processed_dpath/f"{experiment_id}{self.PROCESSED_FNAME_EXTENSION}"
-        self.checkpoint_fpath = self.output_dpath/self.CHECKPOINT_FNAME
-
+        self.checkpoint_fpath = self.output_dpath/self.CHKPNT_FNAME
+    
         run_ids = sorted([x.name for x in self.raw_dpath.iterdir() if x.is_dir()])
         if data_built: run_ids = [run_ids[-1]]
         
         for self.latest_run_id in run_ids:
             if self.latest_run_id not in [x.stem for x in self.intermediate_dpath.iterdir() if x.is_dir()]:
-
+    
                 print('\n\n.--- TRAIN FORGETFUL ANN\n|')
                 print(f"|  Experiment: {experiment_id}")
-                #self.createLink2Directory(self.raw_lpath, experiment_dpath, msg_prefix='|    - Raw data:          ')
                 self.initDirectory(self.raw_dpath,          msg_prefix='|    - Raw data:          ')
                 self.initDirectory(self.intermediate_dpath, msg_prefix='|    - Intermediate data: ')
                 self.initDirectory(self.processed_dpath,    msg_prefix='|    - Processed data:    ')
                 self.initDirectory(self.output_dpath,       msg_prefix='|    - Output data:       ')
                 self.initCheckpoint(                        msg_prefix='|    - Checkpoint:        ')
-                if not self.initRecordings(                 msg_prefix='|    - Recordings:        '): return
+                if not self.init_rec(                 msg_prefix='|    - Recordings:        '): return
                     
                 print('|')
                 if self.buildIntermediateData (runID=self.latest_run_id):
@@ -693,19 +1640,19 @@ class DAGGER:
                     self.loadProcessedData()
                     print(f'|    - Loaded #{len(self.df_processed)} sequences')
                 print('|')
-
-
-        self.dataset = forgetful_dataset.ForgetfulDataset (
+    
+    
+        self.dataset = ForgetfulDataset (
             df=self.df_processed,
             id=experiment_id,
-            cnn_cols=self.config['data']['input']['cnn'],
-            cat_cols=self.config['data']['input']['cat'],
-            lbl_cols=self.config['data']['label'],
+            cnn_cols=self.cnf['data']['input']['cnn'],
+            cat_cols=self.cnf['data']['input']['cat'],
+            lbl_cols=self.cnf['data']['label'],
             msg_pfx='|  '
         )
         print('|')
-
-        bs = self.config['learn']['batch_size']
+    
+        bs = self.cnf['learn']['batch_size']
         sffl = True
         dl = True
         self.dataloader = torch.utils.data.DataLoader (
@@ -719,14 +1666,14 @@ class DAGGER:
         print(f'|    - shuffle: {sffl}')
         print(f'|    - drop last: {dl}')
         print(f'|')
-
-
-
+    
+    
+    
         log_savings = True
-        with tqdm(range(self.config['learn']['num_epochs']), desc='|  Epochs   ', position=0, ncols=NCOLS) as train_PBAR:
+        with tqdm(range(self.cnf['learn']['num_epochs']), desc='|  Epochs   ', position=0, ncols=NCOLS) as train_PBAR:
             pfx = '|    - '
             for self.epoch_i in train_PBAR:
-
+    
                 try: 
                     self.recordings['learn_rate'][-1][self.epoch_i]
                     self.optimizer.step()
@@ -740,13 +1687,13 @@ class DAGGER:
                 
                 self.export_dict_as_json (
                     dictionary=self.user_input, 
-                    fname=self.USER_INPUT_FNAME,
+                    fname=self.UI_FNAME,
                     log = log_savings,
                     pbar=train_PBAR,
                     msg_prefix=pfx
                 )
                 self.export_dict_as_json (
-                    dictionary=self.config, 
+                    dictionary=self.cnf, 
                     fname=self.CONFIG_FNAME,
                     log = log_savings,
                     pbar=train_PBAR,
@@ -754,7 +1701,7 @@ class DAGGER:
                 )
                 self.export_dict_as_json (
                     dictionary=self.recordings, 
-                    fname=self.RECORDINGS_FNAME,
+                    fname=self.REC_FNAME,
                     log = log_savings,
                     pbar=train_PBAR,
                     msg_prefix=pfx
@@ -769,196 +1716,18 @@ class DAGGER:
                     pbar=train_PBAR, 
                     msg_prefix=pfx
                 )
-                self.export_model_as_torch_script_module(
-                    scripting_mode='annotated',
-                    log = log_savings,
-                    pbar=train_PBAR, 
-                    msg_prefix=pfx
-                )
-                self.export_model_as_torch_script_module(
-                    scripting_mode='traced',
-                    log = log_savings,
-                    pbar=train_PBAR, 
-                    msg_prefix=pfx
-                )
+                for ant in [True, False]: self.saveScriptModule(ant=ant, log_lvl=2)
                 log_savings = False
-
-                train_PBAR.write(f"|    [Epoch {self.epoch_i:04d}]  Loss: {self.recordings['loss']['train'][self.num_prev_runs][-1]:.10f} (train) | {'None'} (valid)  //  LR:  {self.recordings['learn_rate'][self.num_prev_runs][-1]:.10f}")      
-
-                if self.epoch_i + 1 == self.config['learn']['num_epochs']: train_PBAR.write("|", end='\n')
-        print("|_________________________________________________")
-
-
-
-    def roscb_train_ann (self, req:std_srvs.srv.EmptyRequest) -> std_srvs.srv.EmptyResponse:
-        
-        self.train_ann (
-            experiment_dpath=pathlib.Path(rospy.get_param('EXPERIMENT_DPATH')),
-            latest_run_id=rospy.get_param('LATEST_RUN_ID')
-        )
-        return std_srvs.srv.EmptyResponse()
-
-    def train_ann (
-        self,
-        experiment_dpath:pathlib.Path,
-        latest_run_id:str
-    ) -> None:
-        assert isinstance(experiment_dpath, pathlib.Path), 'Wrong type'
-        assert isinstance(latest_run_id, str), 'Wrong type'
-
-        self.latest_run_id = latest_run_id
-        self.experiment_dpath = experiment_dpath
-        experiment_id = experiment_dpath.name
-        self.raw_dpath = experiment_dpath/self.DATA_DNAME/self.RAW_DNAME
-        self.intermediate_dpath = experiment_dpath/self.DATA_DNAME/self.INTERMEDIATE_DNAME
-        self.processed_dpath = experiment_dpath/self.DATA_DNAME/self.PROCESSED_DNAME
-        self.processed_fpath = self.processed_dpath/f"{experiment_id}{self.PROCESSED_FNAME_EXTENSION}"
-        self.output_dpath = experiment_dpath/self.OUTPUT_DNAME
-        self.checkpoint_fpath = self.output_dpath/self.CHECKPOINT_FNAME
-
-        print('\n\n.--- TRAIN FORGETFUL ANN\n|')
-        print(f"|  Experiment: {experiment_id}")
-        #self.createLink2Directory(self.raw_lpath, experiment_dpath, msg_prefix='|    - Raw data:          ')
-        self.initDirectory(self.raw_dpath,          msg_prefix='|    - Raw data:          ')
-        self.initDirectory(self.intermediate_dpath, msg_prefix='|    - Intermediate data: ')
-        self.initDirectory(self.processed_dpath,    msg_prefix='|    - Processed data:    ')
-        self.initDirectory(self.output_dpath,       msg_prefix='|    - Output data:       ')
-        self.initCheckpoint(                        msg_prefix='|    - Checkpoint:        ')
-        if not self.initRecordings(                 msg_prefix='|    - Recordings:        '): return
-            
-
-        
-
-        print('|')
-        if self.buildIntermediateData (runID=latest_run_id):
-            print('|')
-            self.buildProcessedData (RunID=latest_run_id)
-            self.plotExpertInterventionShare()
-        else:
-            print('|')
-            print('|  Processed Data:')
-            self.loadProcessedData()
-            print(f'|    - Loaded #{len(self.df_processed)} sequences')
-        print('|')
-
-
-        self.dataset = forgetful_dataset.ForgetfulDataset (
-            df=self.df_processed,
-            id=experiment_id,
-            cnn_cols=self.config['data']['input']['cnn'],
-            cat_cols=self.config['data']['input']['cat'],
-            lbl_cols=self.config['data']['label'],
-            msg_pfx='|  '
-        )
-        print('|')
-
-        bs = self.config['learn']['batch_size']
-        sffl = True
-        dl = True
-        self.dataloader = torch.utils.data.DataLoader (
-            dataset=self.dataset,
-            batch_size=bs,
-            shuffle=sffl,
-            drop_last=dl
-        )
-        print(f'|  Data Loader')
-        print(f'|    - batch size: {bs}')
-        print(f'|    - shuffle: {sffl}')
-        print(f'|    - drop last: {dl}')
-        print(f'|')
-
-
-
-        log_savings = True
-        with tqdm(range(self.config['learn']['num_epochs']), desc='|  Epochs   ', position=0, ncols=NCOLS) as train_PBAR:
-            pfx = '|    - '
-            for self.epoch_i in train_PBAR:
-                
-                self.train_one_epoch ()
-                
-                self.export_dict_as_json (
-                    dictionary=self.user_input, 
-                    fname=self.USER_INPUT_FNAME,
-                    log = log_savings,
-                    pbar=train_PBAR,
-                    msg_prefix=pfx
-                )
-                self.export_dict_as_json (
-                    dictionary=self.config, 
-                    fname=self.CONFIG_FNAME,
-                    log = log_savings,
-                    pbar=train_PBAR,
-                    msg_prefix=pfx
-                )
-                self.export_dict_as_json (
-                    dictionary=self.recordings, 
-                    fname=self.RECORDINGS_FNAME,
-                    log = log_savings,
-                    pbar=train_PBAR,
-                    msg_prefix=pfx
-                )
-                self.save_recordings_plots (
-                    log = log_savings,
-                    pbar=train_PBAR,
-                    msg_prefix=pfx
-                )
-                self.save_checkpoint (
-                    log = log_savings,
-                    pbar=train_PBAR, 
-                    msg_prefix=pfx
-                )
-                self.export_model_as_torch_script_module(
-                    scripting_mode='annotated',
-                    log = log_savings,
-                    pbar=train_PBAR, 
-                    msg_prefix=pfx
-                )
-                self.export_model_as_torch_script_module(
-                    scripting_mode='traced',
-                    log = log_savings,
-                    pbar=train_PBAR, 
-                    msg_prefix=pfx
-                )
-                log_savings = False
-
-                train_PBAR.write(f"|    [Epoch {self.epoch_i:04d}]  Loss: {self.recordings['loss']['train'][self.num_prev_runs][-1]:.10f} (train) | {'None'} (valid)  //  LR:  {self.recordings['learn_rate'][self.num_prev_runs][-1]:.10f}")      
-
-                if self.epoch_i + 1 == self.config['learn']['num_epochs']: train_PBAR.write("|", end='\n')
-        print("|_________________________________________________")
-
-
     
+                train_PBAR.write(f"|    [Epoch {self.epoch_i:04d}]  Loss: {self.recordings['loss']['train'][self.num_prev_runs][-1]:.10f} (train) | {'None'} (valid)  //  LR:  {self.recordings['learn_rate'][self.num_prev_runs][-1]:.10f}")      
+    
+                if self.epoch_i + 1 == self.cnf['learn']['num_epochs']: train_PBAR.write("|", end='\n')
+        print("|_________________________________________________")'''
 
 
-    def export_model_as_torch_script_module (self, scripting_mode:str, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> None:
-        if scripting_mode == 'annotated':
-            fpath = self.output_dpath/self.ANNOTATED_FNAME
-        elif scripting_mode == 'traced':
-            fpath = self.output_dpath/self.TRACED_FNAME
-        else:
-            raise ValueError(f"Scripting mode: {scripting_mode} neither 'annotated' nor 'traced'")
-
-        try: 
-            if scripting_mode == 'annotated':
-                self.model.exportAsAnnotatedTorchScriptModule(fpath)
-            elif scripting_mode == 'traced':
-                batch = next(iter(self.dataloader))
-                self.model.exportAsTracedTorchScriptModule(
-                    batch['input']['cnn'].to(TORCH_DEVICE),
-                    batch['input']['cat'].to(TORCH_DEVICE),
-                    fpath
-                )
-            msg = f"{msg_prefix}Export model to \"{self.rel(fpath)}\""
-        
-        except Exception as e:
-            msg = f"{msg_prefix}Failed to export model to \"{self.rel(fpath)}\", error: {e}"
-        
-        if log: print(msg) if (pbar is None) else pbar.write(msg)
-
-
-    def save_recordings_plots (self, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> None:        
-        fpath1 = self.output_dpath/self.RECORDINGS_PLOT_LIN_FNAME 
-        fpath2 = self.output_dpath/self.RECORDINGS_PLOT_LOG_FNAME  
+    '''def save_recordings_plots (self, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> None:        
+        fpath1 = self._exp_out_/self.REC_PLOT_LIN_FNAME 
+        fpath2 = self._exp_out_/self.REC_PLOT_LOG_FNAME  
         
         try:
             plt.rcParams['text.usetex'] = True
@@ -967,17 +1736,17 @@ class DAGGER:
                 fig, ax1 = plt.subplots(figsize=(10, 7))
             color = 'tab:orange'
             ax1.set_xlabel('Epochs')
-            ax1.set_ylabel(self.config['learn']['loss']['id'], color=color)
+            ax1.set_ylabel(self.cnf['learn']['loss']['id'], color=color)
 
             epoch_cnt = 1
-            for loss in self.recordings['loss']['train']:
+            for loss in self.rec['loss']['train']:
                 label = 'Training' if (epoch_cnt == 1) else None
                 x_axis = list(range(epoch_cnt, epoch_cnt + len(loss)))
                 epoch_cnt += len(loss)
                 plt.plot(x_axis, loss, color=color, linestyle=':', label=label)
             
             epoch_cnt = 1
-            for loss in self.recordings['loss']['valid']:
+            for loss in self.rec['loss']['valid']:
                 label = 'Validation' if (epoch_cnt == 1) else None
                 x_axis = list(range(epoch_cnt, epoch_cnt + len(loss)))
                 epoch_cnt += len(loss)
@@ -993,9 +1762,9 @@ class DAGGER:
                 ax2.set_ylabel('Learning Rate', color=color)  # we already handled the x-label with ax1
                 
                 epoch_cnt = 1
-                for learn_rate in self.recordings['learn_rate']:
+                for learn_rate in self.rec['learn_rate']:
                     label = None if (epoch_cnt != 1) else\
-                        f"{self.config['learn']['lr_scheduler']['id']}, $\gamma={self.config['learn']['lr_scheduler']['gamma']}$"
+                        f"{self.cnf['learn']['lr_scheduler']['id']}, $\gamma={self.cnf['learn']['lr_scheduler']['gamma']}$"
                     x_axis = list(range(epoch_cnt, epoch_cnt + len(learn_rate)))
                     epoch_cnt += len(learn_rate)
                     ax2.plot(x_axis, learn_rate, color=color, label=label)
@@ -1015,120 +1784,104 @@ class DAGGER:
             plt.savefig(fpath2)
             #plt.close()
 
-            msg1 = f"{msg_prefix}Save plot as \"{self.rel(fpath1)}\""
-            msg2 = f"{msg_prefix}Save plot as \"{self.rel(fpath2)}\""
+            msg1 = f"{msg_prefix}Save plot as \"{self._rp(fpath1)}\""
+            msg2 = f"{msg_prefix}Save plot as \"{self._rp(fpath2)}\""
 
         except Exception as e:
-            msg1 = f"{msg_prefix}Failed to save plot as \"{self.rel(fpath1)}\", error: {e}"
-            msg2 = f"{msg_prefix}Failed to save plot as \"{self.rel(fpath2)}\", error: {e}"
+            msg1 = f"{msg_prefix}Failed to save plot as \"{self._rp(fpath1)}\", error: {e}"
+            msg2 = f"{msg_prefix}Failed to save plot as \"{self._rp(fpath2)}\", error: {e}"
         
         if log:
             print(msg1) if (pbar is None) else pbar.write(msg1)
-            print(msg2) if (pbar is None) else pbar.write(msg2)
+            print(msg2) if (pbar is None) else pbar.write(msg2)'''
+
+
+
         
 
-    def export_dict_as_json (self, dictionary:Dict, fname:str, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> None:
-        fpath = self.output_dpath/fname
-        
-        try:
-            with open(fpath, 'w') as file:
-                file.write(json.dumps(dictionary, sort_keys=True, indent=4))
-            msg = f"{msg_prefix}Export dict to \"{self.rel(fpath)}\""
-
-        except Exception as e:
-            msg = f"{msg_prefix}Failed to export dict to \"{self.rel(fpath)}\", error: {e}"
-        
-        if log: print(msg) if (pbar is None) else pbar.write(msg)
+    ##############################################################################################################
+    ##############################################################################################################
 
 
 
-
-    #def roscb_brain_load_checkpoint (self, req: StringTriggerRequest) -> StringTriggerResponse:
-    #    res = StringTriggerResponse()
-    #    res.success = self.load_checkpoint(req.message)
-    #    return res
-
-    def load_checkpoint (self, fpath: pathlib.Path, log:bool=True) -> bool:
-        try: 
-            self.checkpoint = torch.load(fpath)
-
-        except Exception as e: 
-            print(f"Failed to load checkpoint from \"{fpath}\", error: {e}")
-            return False
-
-        self.model.load_state_dict(self.checkpoint['model_state_dict'])
-        self.optimizer.load_state_dict(self.checkpoint['optimizer_state_dict'])
-        self.epoch_i = self.checkpoint['epoch']
-        self.loss = self.checkpoint['loss']
-        if log: print(f"Loaded checkpoint from \"{fpath}\"")
-        
-        for g in self.optimizer.param_groups:
-            g['lr'] = self.config['learn']['lr_scheduler']['init']
-
-        
-        return True
-
-
-
-
-
-    #def roscb_save_checkpoint (self, req: StringTriggerRequest) -> StringTriggerResponse:
-    #    res = StringTriggerResponse()
-    #    res.success = self.save_checkpoint(req.message)
-    #    return res
-
-    def save_checkpoint (self, fpath:pathlib.Path=None, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> bool:
-        if fpath is None: fpath = self.checkpoint_fpath
-        msg_body = f"checkpoint as \"{self.rel(fpath)}"
-
-        try:
-            torch.save({
-                'epoch': self.epoch_i,
-                'model_state_dict': self.model.state_dict(),
-                'optimizer_state_dict': self.optimizer.state_dict(),
-                'loss': self.loss,
-                }, 
-                fpath)
-            msg = f"{msg_prefix}Save {msg_body}"
-            success = True
-
-        except Exception as e:
-            msg = f"{msg_prefix}Failed to save {msg_body}, error: {e}"
-            success = False
-        
-        if log: print(msg) if (pbar is None) else pbar.write(msg)
-        return success
-        
-        
-
+    
+    
+    
     
 
 
 
 
-    def roscb_flightmare_rgb (self, msg: sensor_msgs.msg.Image) -> None:
-        self.rgb_mgs = msg
-        if INFER_EVERY_INCOMING_FRAME: self.roscb_infer_once()
+    
+        
 
-    def roscb_ground_truth_imu (self, msg: sensor_msgs.msg.Imu) -> None:
-        self.imu_msg = msg
+    def export_dict_as_json (self, dictionary:Dict, fname:str, log:bool=True, pbar:tqdm=None, msg_prefix:str='') -> None:
+        fpath = self._exp_out_/fname
+        
+        try:
+            with open(fpath, 'w') as file:
+                file.write(json.dumps(dictionary, sort_keys=True, indent=4))
+            msg = f"{msg_prefix}Export dict to \"{self._rp(fpath)}\""
 
-    def roscb_infer_once (self):
-        inference_t0 = rospy.Time.now ()
+        except Exception as e:
+            msg = f"{msg_prefix}Failed to export dict to \"{self._rp(fpath)}\", error: {e}"
+        
+        if log: print(msg) if (pbar is None) else pbar.write(msg)
 
+
+
+
+    
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # DURING INFERENCE
+
+    def INF (self) -> None:
+        self.infCnt += 1
+        
+        t_0 = rospy.Time.now ()
+
+        if not self.INF_fetchRGB (): return
+        if not self.INF_fetchIMU (): return
+        x_rgb = self.INF_tensorRGB ()
+        x_opt = self.INF_tensorOPT ()
+
+        t_1 = rospy.Time.now ()
+
+        x_out, self.h = self.model.forward (x_img=x_rgb, x_cat=x_opt, h=self.h.data)
+        out = x_out [0].detach ().cpu ().numpy ()
+
+        t_2 = rospy.Time.now()
+
+        T_01 = (t_1 - t_0).to_sec()
+        T_12 = (t_2 - t_1).to_sec()
+        self.aggT01 += T_01
+        self.aggT12 += T_12
+
+        rospy.loginfo_throttle (5.0, 
+            f"[{rospy.get_name()}]    Inference time [ms]:  - input proc. {1000*T_01}  - forward {1000*T_12}"
+        )
+
+        self.INF_pubOUT (out)
+    
+
+    def INF_fetchRGB (self) -> bool:
         try: 
-            self.rgb = self.bridge.imgmsg_to_cv2(self.rgb_mgs, "bgr8")
-            self.rgb_dt = self.rgb_mgs.header.stamp.to_sec() - self.rgb_t_last
-            self.rgb_t_last = self.rgb_mgs.header.stamp.to_sec()
-        except cv_bridge.CvBridgeError as e: 
-            print(e)
+            self.rgb = self.bridge.imgmsg_to_cv2 (self.rgb_mgs, "bgr8")
+            self.rgb_dt = self.rgb_mgs.header.stamp.to_sec () - self.rgb_t_last
+            self.rgb_t_last = self.rgb_mgs.header.stamp.to_sec ()
+            return True
+        except cv_bridge.CvBridgeError as e:
+            rospy.logerr (e)
             self.rgb = None
-            return
-        
+            return False
         
 
+    def INF_fetchIMU (self) -> bool:
         try: 
-            self.imu = np.array(
+            self.imu = np.array (
                 (
                     self.imu_msg.linear_acceleration.x,
                     self.imu_msg.linear_acceleration.y,
@@ -1139,89 +1892,193 @@ class DAGGER:
                 ),
                 dtype=np.float32
             )
-            self.imu_dt = self.imu_msg.header.stamp.to_sec() - self.imu_t_last
-            self.imu_t_last = self.imu_msg.header.stamp.to_sec()
+            self.imu_dt = self.imu_msg.header.stamp.to_sec () - self.imu_t_last
+            self.imu_t_last = self.imu_msg.header.stamp.to_sec ()
+            return True
         except Exception as e:
-            print(e)
+            rospy.logerr (e)
             self.imu = None
-            return
+            return False
+    
+    def INF_preprocRGB (self, rgb : np.ndarray) -> np.ndarray:
+        rgb = cv2.resize(
+            rgb, 
+            (
+                self._cnf.prc_rgb_W,
+                self._cnf.prc_rgb_H
+            )
+        )
+        return cv2.cvtColor (rgb, cv2.COLOR_BGR2RGB)
 
-                
-        C = self.config['data']['processed']['rgb']['num_channels']
-        H = self.config['data']['processed']['rgb']['height']
-        W = self.config['data']['processed']['rgb']['width']
+    def INF_tensorRGB (self) -> torch.Tensor:
+        C = self._cnf.prc_rgb_N
+        H = self._cnf.prc_rgb_H
+        W = self._cnf.prc_rgb_W
         
-        rgb = self.preprocessRGB(self.rgb)
-        rgb = np.array(rgb / 255.0, dtype=np.float32) 
+        rgb = self.INF_preprocRGB(self.rgb)
+        rgb = np.array(rgb / 255.0, dtype=np.float32)
         rgb = np.transpose(rgb, (2, 0, 1)) # channel size to index 0
         rgb = torch.tensor(rgb, dtype=torch.float32)
         rgb = rgb.view(1, 1, C, H, W).to(TORCH_DEVICE)
+        
+        return rgb
 
-
-        cat = np.concatenate(
+    def INF_tensorOPT (self) -> torch.Tensor:
+        N = len (self._cnf.opt_inp)
+        
+        opt = np.concatenate (
             (
-                np.array([self.rgb_dt, self.imu_dt]), 
+                np.array ([self.rgb_dt, self.imu_dt]), 
                 self.imu,
-                np.array([self.max_speed])
-            ), 
-            dtype=np.float32
-        )[self.cat_mask]
-        cat = torch.tensor(cat, dtype=torch.float32)
-        cat = cat.view(1, 1, len(self.config['data']['input']['cat'])).to(TORCH_DEVICE)
-
-        inference_t1 = rospy.Time.now() - inference_t0
-
-        output, self.h = self.model.forward(
-            x_img=rgb, 
-            x_cat=cat,
-            h=self.h.data
-        )
-        self.output = output[0].detach().cpu().numpy()
-
-        inference_t2 = rospy.Time.now() - inference_t1 - inference_t0
-
-        rospy.loginfo_throttle(
-            5.0, 
-            f"[{rospy.get_name()}]    Inference time [ms]:  - processing {1000*inference_t1.to_sec()}  - forwarding {1000*inference_t2.to_sec()}"
-        )
-
-        self.publishOutput ()
-        
-
-
-    def publishOutput (self) -> None:
-        
-        self.rospub_brain_output.publish(
-            geometry_msgs.msg.Point(
-                x=self.output[0],
-                y=self.output[1],
-                z=self.output[2]
+                np.array ([self.maxSpeed])
             )
+        ) [self.optMask]
+        opt = torch.tensor (opt, dtype=torch.float32)
+        opt = opt.view (1, 1, N).to (TORCH_DEVICE)
+
+        return opt
+
+
+    def INF_pubOUT (self, out : np.ndarray) -> None:
+        self.pub_OUT.publish (
+            geometry_msgs.msg.Point (
+                x=out [0], y=out [1], z=out [2]
+        ))
+        
+
+    ##############################################################################################################
+    ##############################################################################################################
+
+    # REBUILD DATA
+
+    def rebuildRuns (self) -> None:
+        raw_runs = self._exp_dat_raw_ ().subdirs (sort=True)
+
+        with tqdm (raw_runs, desc='|  Runs', leave=False, position=0, ncols=NCOLS) as pbar:
+
+            for _raw_run_ in pbar:
+                self.buildRun (_raw_run_.name)
+
+
+    def initExp_resetTraining (self, id) -> None:
+        self.log ('INIT EXPERIMENT', 0)
+        
+        self.expID = id
+        self.log (f"ID: {self.expID}", 1)
+
+        if not self._exp_cnf_CNF ().is_file ():
+            raise ValueError ("No config provided")
+
+        self.log (f"Load existing - reset training", 1)
+        
+        LOGLVL = 2
+        PMN = True
+        
+        # ASSERT DIRS/FILES  EXIST
+        for isdir in [True, False]:
+            for path in self._exExp_ (isdir=isdir):
+                self.asrPath (path, isdir=isdir, exists=True)
+
+        # LOAD FILES
+        self._cnf = ConfigFile (                    # configuration File
+            self._exp_cnf_CNF (), 
+            None,
+            new=False
         )
+        self.log_load (
+            self._cnf.load (pmn=PMN), LOGLVL)
         
+        self._prc = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_PRC (), 
+            self._exp_out_tmp_PRC (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_load (
+            self._prc.load (pmn=PMN), LOGLVL)
 
-    def roscb_timer (self, te: rospy.timer.TimerEvent) -> None:
-        if te.last_duration is not None:
-            if rospy.Duration(te.last_duration) > self.period:
-                rospy.logwarn(f"[{rospy.get_name()}]    ROS timer took {te.last_duration} > {self.period} s.")
-        
-        self.roscb_infer_once()
+        self._bldRec = RecordsFile (                # data building recordings
+            self._exp_out_BRC (), 
+            self._exp_out_tmp_BRC (),
+            RunRecord.id
+        )
+        self.log_load (
+            self._bldRec.load (pmn=PMN), LOGLVL)
+
+        self._trnRec = RecordsFile (                # training recordings
+            self._exp_out_TRC (), 
+            self._exp_out_tmp_TRC (),
+            EpochRecord.id
+        )
+        self.log_create (
+            self._trnRec.save (pmn=PMN), LOGLVL)
+
+        # INIT MODEL ETC
+        self.initModelEtc ()
+
+        # SAVE CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_CPT (),
+            self._exp_out_tmp_CPT ()
+        )
+        self._cpt.set (
+            0,
+            self.model,
+            self.optim,
+            self.loss
+        )
+        self.log_create (
+            self._cpt.save (pmn=PMN), LOGLVL)
 
 
-  
 
-if __name__ == '__main__':
-    rospy.init_node('forgetful_brain')
+
+
+
+
+
     
-    
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
-    rospy.set_param('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
-    rospy.set_param('DRONE_MAIN_LOOP_FREQUENCY', 50.0)
+def debug ():
+    rospy.set_param ('SIM_UNITY_DRONE_CAMERA_WIDTH', 720)
+    rospy.set_param ('SIM_UNITY_DRONE_CAMERA_HEIGHT', 480)
+    rospy.set_param ('MAIN_FREQ', 50.0)
 
-    dagger = DAGGER (user_input.user_input)
-    dagger.train_nontrained(exp_id='UTC_2022_7_1_7_27_56___SEQLEN_x', data_built=False)
+    fb = ForgetfulBrain ()
+
+    # Init Experiment
+    req = fdsrv.StringRequest ()
+    req.data = 'DEBUG_NEW_EXP'
+    res = fb.cb_initExp (req)
+
+    # Build Run
+    req = fdsrv.StringRequest ()
+    req.data = '0000___2_0_1_1_0_1_04.00_00.00___000'
+    res = fb.cb_buildRun (req)
+
+    # Start Training
+    req = fdsrv.IntRequest ()
+    req.data = 10
+    res = fb.cb_startTrain (req)
+
+    # Start Inference
+    req = fdsrv.FloatRequest ()
+    req.data = 3.141
+    res = fb.cb_startInfer (req)
+
+    
+
+    
+    #dagger.train_ANN_variant(exp_id='UTC_2022_7_1_7_27_56___SEQLEN_x', data_built=False)
     #dagger.train_ann(
-    #    experiment_dpath=pathlib.Path('/home/fm/catkin_ws/src/forgetful_drone/experiments/UTC_2022_6_13_20_21_51'),
+    #    experiment_dpath=Path('/home/fm/catkin_ws/src/forgetful_drone/experiments/UTC_2022_6_13_20_21_51'),
     #    latest_run_id='0002___0_0_0_1_0_1_04.00_00.70___002'
     #)
-    rospy.spin()
+
+
+
+
+if __name__ == '__main__':
+    if DEBUG: debug ()
+    else:
+        rospy.init_node ('forgetful_brain')
+        fb = ForgetfulBrain ()
+        rospy.spin()

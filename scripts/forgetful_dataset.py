@@ -99,11 +99,18 @@ class ForgetfulDataset (torch.utils.data.Dataset):
             ), 
             dtype=np.float32
         )
-        print(f"{msg_pfx}Forgetful Dataset: {self.id}")
-        print(f"{msg_pfx}  - Sequences:  - #{len(self.df)}  - length {sequential_length}")
-        print(f"{msg_pfx}  - CNN:  - cols {self.cnn_cols}  - shape ({cnn_num_channels}, {cnn_height}, {cnn_width})")
-        print(f"{msg_pfx}  - CAT:  - cols {self.cat_cols}")
-        print(f"{msg_pfx}  - LBL:  - cols {self.lbl_cols}")
+
+        self.addToConsoleRepresentation (f"")
+        self.addToConsoleRepresentation (f".--- INIT FORGETFUL DATASET")
+        self.addToConsoleRepresentation (f"|")
+        self.addToConsoleRepresentation (f"|  EXP  |    - ID: {self.id}")
+        self.addToConsoleRepresentation (f"|  SEQ  |    - Num: {len(self.df)}  - Len: {sequential_length}")
+        self.addToConsoleRepresentation (f"|  CNN  |    - Cols: {self.cnn_cols}  - shape: {cnn_num_channels}x{cnn_height}x{cnn_width}")
+        self.addToConsoleRepresentation (f"|  CAT  |    - Cols: {self.cat_cols}")
+        self.addToConsoleRepresentation (f"|  LBL  |    - Cols: {self.lbl_cols}")
+        self.addToConsoleRepresentation (f"|_________________________________________________")
+        print (self.console_representation)
+
         
 
         
@@ -128,3 +135,8 @@ class ForgetfulDataset (torch.utils.data.Dataset):
             },
             'label': torch.tensor(label, dtype=torch.float)
         }
+
+    
+    def addToConsoleRepresentation (self, text: str) -> None:
+        try: self.console_representation += text + '\n'
+        except: self.console_representation = text + '\n'

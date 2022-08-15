@@ -42,6 +42,7 @@
     <cylinder length="0.01" radius="0.007" />
     <origin xyz="0.3 0.0 -0.10" rpy="0.0 0.0 0.0" />
   </xacro:camera_macro>
+  
  
 </robot>
 
