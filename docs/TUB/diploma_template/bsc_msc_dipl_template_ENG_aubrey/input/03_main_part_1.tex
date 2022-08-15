@@ -159,7 +159,7 @@ $\pos[]{\drone}{}{\grs}{}$
 and quaternion orientation
 $\quat[]{\drone}{}{\grs}{}$
 with respect to the global reference system
-fully determine the bidirectional transformation
+are the parameters that determine the bidirectional transformation
 between the global and the local reference system.
 The following bases on quaternion mathematics,
 for which one can consult, e.g., \cite{Parent}.
@@ -273,8 +273,9 @@ $\ang[\user]{\camera}{z}{}{}$
 and the vertical
 $\ang[\user]{\camera}{y}{}{}$
 angle of view
-of the drone's onboard camera,
-fully determine the bidirectional transformation 
+of the drone's onboard camera
+are the parameters 
+that determine the bidirectional transformation 
 between the local and the image reference system.
 A point given in the coordinates of the local reference system
 is expressed in the coordinates of the image reference system with the transformation
@@ -303,7 +304,7 @@ is expressed in the coordinates of the image reference system with the transform
 The above transformation
 can be interpreted as the projection of a point onto the image plane 
 of the drone's onboard camera.
-It can be devided into two steps.
+It can be devided into three steps.
 First, the vector from the optical center of the camera 
 to the point to be transformed
 is mapped to its yaw
@@ -317,17 +318,16 @@ $\ang[\user]{\camera}{z}{}{}$
 and the half of the vertical
 $\ang[\user]{\camera}{y}{}{}$
 angle of view of the camera, respectively.
-However, these normalized angles are bounded to be in the interval from minus to plus one.
-This boundary takes into account that an
-artifical neural network,
-which inputs the images from the camera, 
-could possibly perceive only whether a point is
-out of the camera's field of view
-but not by which amount.
+Third, these normalized angles are bounded to be in the interval from minus to plus one.
+This boundary takes into account 
+that an artifical neural network, which inputs images, 
+has no basis for predictions 
+that relate to objects that are not within the camera's field of view.
 As a projection from 3D to 2D, the above transformation is accompanied by information loss
 and is hence neither bijective nor invertible.
-Reversely, a point given in the coordinates of the image reference system is expressed
-in the coordinates of the local reference system with the transformation
+
+A point given in the coordinates of the image reference system is expressed
+in the coordinates of the local reference system with the reverse transformation
 \begin{align} \label{eq:image_to_local_transformation}
     \trafo[]{}{\lrs\irs}{}{}
     &:\ 
@@ -360,13 +360,14 @@ $\odot$
 denotes the Hadamard product
 , i.e., the element-wise product of two equally dimensioned matrices.
 Because the 2D coordinates of the image reference system
-can only contain information about a points direction,
+can only contain information about the direction of a point,
 the above transformation to 3D requires the additional input of a backprojection length $d$.
+
 In contrast to the transformations 
 $\trafo[]{}{\lrs\grs}{}{}$
 and 
 $\trafo[]{}{\grs\lrs}{}{}$
-between the global and the local reference system
+between the global and the local reference system,
 the transformations 
 $\trafo[]{}{\irs\lrs}{}{}$
 and 
@@ -375,7 +376,7 @@ between the local and the image reference system
 are not invertible.
 However, for relevant points
 located within the camera's field of view
-and a relevant range of backprojection lengths,
+and a well chosen backprojection length,
 it is assumed that the transformations approximately invert each other
 \begin{equation}
     \trafo[]{}{\lrs\irs}{}{} \left[
@@ -413,18 +414,17 @@ are the compositions of the transformations via the intermittent local reference
     :\ 
     \mathbb{R}_{\ge 0}, \left[\text{-} 1, 1\right]^2 \rightarrow \mathbb{R}^3.
 \end{align}
-Because
+Due to the fact that
 $\trafo[]{}{\lrs\grs}{}{}$
 and
 $\trafo[]{}{\grs\lrs}{}{}$
 are the inverse of each other
-and it is assumed that
+and the assumption that
 $\trafo[]{}{\irs\lrs}{}{}$
 and
 $\trafo[]{}{\lrs\irs}{}{}$
-for the relevant range of interest
-approximately invert each other,
-the above compositions also approximately invert each other for this range
+approximately invert each other within a relevant range,
+the above compositions are expected to also approximately invert each other within this relevant range
 \begin{equation}
     \trafo[]{}{\grs\irs}{}{} \left[
         d, \trafo[]{}{\irs\grs}{}{} \left( \pos[]{}{}{\grs}{} \right)
@@ -524,22 +524,48 @@ the above compositions also approximately invert each other for this range
 
 
 \section{ANN module} \label{sec:ann_module}
-The function of the ANN module is to 
-make navigation decisions
-on the basis of the images from the onboard camera and other, user-switchable inputs.
-Fed to the planning module, 
-these navigation decisions effectively
-lead the drone through the racetrack.
+The ANN module performs the function of inference
+within the autonomous navigation method.
+More precisely, the module makes navigation decisions
+on the basis of data from the drone's onboard sensors.
+In order for these navigation decisions to be reasonable
+the ANN module is trained with supervised learning (see section ??).
+At testing, 
+when the autonomous navigation method flies the drone through the racetrack,
+the ANN module outputs navigation decisions in real-time at a user-specified frequency.
+Thereby, the GRU sub-module (and therewith the ANN module itself)
+operates in one-to-one mode,
+i.e., it maps each single, non-sequential input to a single, non-sequential output.
+As, however, the frequently incoming, single inputs as a whole constitute a time series,
+the GRU sub-module builds up memory in its hidden state.
+By this, not only the current but also 
+past inputs have impact on the current navigation decision.
+
+
+The ANN module itself is built 
+from the CNN, the CAT, the GRU, the FC and the HEAD sub-module
+(see figure XXX).
+This modular design entails a high flexibility for the studies
+of different ANN module variants in chaper ??.
+For all ANN module variants,
+the sequence of the sub-modules is fixed
+and the outer sub-modules, i.e, the CNN and the HEAD sub-module,
+are mandatory.
+This ensures the mapping 
+of the minimum input of an RGB image to a navigation decision.
+In contrast, the user specifies whether
+the individual inner sub-modules,
+i.e., the CAT, the GRU and the FC sub-module,
+are switched on or off
+before the training of an ANN module variant.
+Moreover, the user specifies the design of all individual sub-modules.
 
 
 
-%The current navigation decision is infered
-%from the current RGB image of the onboard camera
-%and optionally, the current data of the onboard IMU sensor.
-
-
-The current, preprocessed RGB image 
-is a mandatory component of the input to the ANN module
+\paragraph*{Input} ${}$\\
+The single inputs to the ANN module are devided into mandatory and optional.
+The mandatory input for the current inference is the
+latest, preprocessed RGB (therewith three channeled) image from the drone's onboard camera
 \begin{equation}
     \underline{\underline{\underline I}}^\text{preproc}
     \in 
@@ -556,22 +582,18 @@ is a mandatory component of the input to the ANN module
         \right\}
     }
     ^{
-        I_\text{C} \times    
+        %I_\text{C} \times    
+        3 \times
         I_\text{H}^\text{preproc} \times 
         I_\text{W}^\text{preproc}
-    }
+    }.
     %\text{ with } I_\text{C} = 3.
 \end{equation}
-with the number of channels
-$I_\text{C} = 3$
-for RGB.
-The preprocessing of the raw RGB image entails two steps.
-First, 
-the pixel intensities are normalized by the full intensity 
+The two-step preprocessing of the raw RGB image simplifies the training of the ANN module.
+First, the pixel intensities are normalized by the full intensity 
 $I_\text{max}^\text{raw} = 255$
-with the aim to accelerate the training of the ANN.
-Second, the image is sized down with a user-specied 
-factor preserving its aspect ratio
+with the aim to accelerate the convergence at training.
+Second, the image is sized down 
 to the height 
 $
     I_\text{H}^\text{preproc} 
@@ -591,59 +613,46 @@ $
     \cdot
     I_\text{W}^\text{raw}
     \right\rfloor
-$.
-By this,
-the occupation of GPU memory at the training of the ANN
+$
+with a user-specified 
+factor preserving its aspect ratio.
+By this, the occupation of GPU memory at training,
+which is critical for longer sequences,
 can be reduced if necessary.
 
-In addition to the RGB image, 
-the user may enable the current data of the onboard IMU 
-\begin{equation}
-    \left(
-        {}_\textbf{L}\underline a^\text{imu}
-        ,\ 
-        {}_\textbf{L}\underline \omega^\text{imu}
-    \right)
-\end{equation}
-as optional input component.
-The IMU data comprises the current measurements of
-the linear acceleration
-$
-    {}_\textbf{L}\underline a^\text{imu} \in \mathbb{R}^3
-$
-and the angular velocity
-$   
-    {}_\textbf{L}\underline \omega^\text{imu} \in \mathbb{R}^3
-$
-of the drone with respect to the local reference system (see section XXX).
-Further optional components of the input are
-the durations
-$
-    \Delta t^\text{rgb}
-$
-and
-$
-\Delta t^\text{imu}
-$
-elapsed between the previous and the current RGB image and IMU data, respectively.
+
+
+Before the training of an ANN module variant, the user switches on or off
+the individual elements of the feature vector of optional inputs
+\begin{align}
+    \featvec[]{\text{opt}}{}{}{} 
+    =
+    \begin{bmatrix}
+        \dur[]{\text{rgb}}{}{}{} \\
+        \acc[\hat]{\text{imu}}{}{}{} \\
+        \angvel[\hat]{\text{imu}}{}{}{} \\
+        \dur[]{\text{imu}}{}{}{}
+    \end{bmatrix}
+    .
+\end{align}
+The above vector comprises the
+the duration
+$\dur[]{\text{rgb}}{}{}{}$
+elapsed between the shooting of the previous and the latest raw RGB image,
+the drone's latest linear acceleration
+$\acc[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
+and angular velocity
+$\angvel[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
+measurement from its onboard inertial measurement unit (IMU)
+as well as the duration
+$\dur[]{\text{imu}}{}{}{}$
+elapsed between the recording of the previous and the latest IMU data.
 
 
 
 
 
-In order to achieve a high degree of flexibility for potential studies,
-the ANN module itself is designed modularly
-from the CNN, the CAT, the GRU, the FC and the HEAD sub-modules
-(see figure XXX).
-While the sequence of these sub-modules cannot be changed,
-the user may individually switch on/off the inner sub-modules,
-i.e.,
-the CAT, the GRU and the FC.
-The outer sub-modules,
-i.e.,
-the CNN and the HEAD,
-are mandatory,
-in order to ensure the mapping of the minimum input of an RGB image to an output.
+
 
 
 \subsection*{CNN}
