@@ -1310,10 +1310,12 @@ void ForgetfulDrone::runMission_DAGGER () {
 
             if (!launchDrone ()) {
                 ROS_WARN ("Drone failed to launch -> repeat run");
+                stopSimulation ();
                 continue;
             }
             if (!flyDroneToInitPose (true)) {
                 ROS_WARN ("Drone failed to arrive at start -> repeat run");
+                stopSimulation ();
                 continue;
             }
 
@@ -1332,7 +1334,10 @@ void ForgetfulDrone::runMission_DAGGER () {
 
             bool track_completed = startNavigation ();
             stopSimulation ();
-            flyDroneAboveTrack ();
+            if (!carryDroneBack ()) {
+                ROS_ERROR ("Failed to carry drone back");
+                ros::shutdown ();
+            }
 
             if (track_completed) {
                 
