@@ -173,7 +173,7 @@ with the transformation
     ; \quad
     \pos[]{}{}{\grs}{} \mapsto \pos[]{}{}{\lrs}{}
     =
-    \begin{cases}
+    %\begin{cases}
         \mathcal{P} \left[
             \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
             *
@@ -181,10 +181,10 @@ with the transformation
             *
             \quat[]{\drone}{}{\grs}{}
         \right], 
-        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
-        \pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{}, 
-        & \text{else}.
-    \end{cases}
+        %& \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        %\pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{}, 
+        %& \text{else}.
+    %\end{cases}
 \end{align}
 Reversely, a point given in the coordinates of the local reference system
 can be expressed in the coordinates of the global reference system
@@ -196,7 +196,7 @@ with the transformation
     ; \quad
     \pos[]{}{}{\lrs}{} \mapsto \pos[]{}{}{\grs}{}
     =
-    \begin{cases}
+    %\begin{cases}
         \mathcal{P} \left[
             \quat[]{\drone}{}{\grs}{}
             *
@@ -204,10 +204,10 @@ with the transformation
             *
             \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
         \right] + \pos[]{\drone}{}{\grs}{}, 
-        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
-        \pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
-        & \text{else}.
-    \end{cases}
+        %& \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        %\pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
+        %& \text{else}.
+    %\end{cases}
 \end{align}
 In the two above transformations,
 the mapping $\mathcal{Q}$
