@@ -8,27 +8,26 @@
 \BOOKMARK [1][-]{section.2.1}{Topic 1}{chapter.2}% 8
 \BOOKMARK [1][-]{section.2.2}{Topic 2}{chapter.2}% 9
 \BOOKMARK [1][-]{section.2.3}{Gated recurrent unit}{chapter.2}% 10
-\BOOKMARK [0][-]{chapter.3}{Navigation Method}{}% 11
+\BOOKMARK [0][-]{chapter.3}{Autonomous Navigation Method}{}% 11
 \BOOKMARK [1][-]{section.3.1}{Reference systems}{chapter.3}% 12
 \BOOKMARK [1][-]{section.3.2}{ANN module}{chapter.3}% 13
 \BOOKMARK [2][-]{subsection.3.2.1}{Baseline config}{section.3.2}% 14
 \BOOKMARK [1][-]{section.3.3}{Planning module}{chapter.3}% 15
-\BOOKMARK [1][-]{section.3.4}{Control module}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.4}{Control stack}{chapter.3}% 16
 \BOOKMARK [1][-]{section.3.5}{Expert system}{chapter.3}% 17
-\BOOKMARK [1][-]{section.3.6}{Training procedure}{chapter.3}% 18
-\BOOKMARK [1][-]{section.3.7}{Test procedure}{chapter.3}% 19
-\BOOKMARK [0][-]{chapter.4}{Experiments}{}% 20
-\BOOKMARK [1][-]{section.4.1}{Simulation environment}{chapter.4}% 21
-\BOOKMARK [1][-]{section.4.2}{ANN variants}{chapter.4}% 22
-\BOOKMARK [1][-]{section.4.3}{}{chapter.4}% 23
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 24
-\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 25
-\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 26
-\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 27
-\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 28
-\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 29
-\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 30
-\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 31
-\BOOKMARK [0][-]{chapter*.31}{Appendices}{}% 32
-\BOOKMARK [1][-]{chapter*.32}{Appendix A: Abbreviations}{chapter*.31}% 33
-\BOOKMARK [1][-]{section*.33}{Appendix B: LaTeX Help}{chapter*.31}% 34
+\BOOKMARK [1][-]{section.3.6}{Racing vs. Training Data Generation}{chapter.3}% 18
+\BOOKMARK [0][-]{chapter.4}{Experiments}{}% 19
+\BOOKMARK [1][-]{section.4.1}{Simulation Setup}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.2}{ANN variants}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.3}{}{chapter.4}% 22
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 23
+\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 24
+\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 25
+\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 26
+\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 27
+\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 28
+\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 29
+\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 30
+\BOOKMARK [0][-]{chapter*.32}{Appendices}{}% 31
+\BOOKMARK [1][-]{chapter*.33}{Appendix A: Abbreviations}{chapter*.32}% 32
+\BOOKMARK [1][-]{section*.34}{Appendix B: LaTeX Help}{chapter*.32}% 33

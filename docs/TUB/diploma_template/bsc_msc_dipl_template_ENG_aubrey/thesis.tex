@@ -98,15 +98,19 @@
 \newcommand{\ddtt}{\frac{\text d^2}{\text d t^2}}
 \newcommand{\ddttt}{\frac{\text d^3}{\text d t^3}}
 
-\newcommand{\minof}[2]{\min\left(#1,\quad #2\right)}
-\newcommand{\maxof}[2]{\max\left(#1,\quad #2\right)}
+\newcommand{\minof}[2]{\min\left(#1,\ #2\right)}
+\newcommand{\maxof}[2]{\max\left(#1,\ #2\right)}
 \newcommand{\mnm}{\text{min}}
 \newcommand{\mxm}{\text{max}}
+\newcommand{\argmin}[1]{\underset{#1}{\mathrm{argmin}}\ }
+\newcommand{\argmax}[1]{\underset{#1}{\mathrm{argmax}}\ }
 
 \newcommand{\anything}[6][]{{}_{#4}^{#5} #1{#6}^{#2}_{#3}}
 
 \newcommand{\user}{\breve}
 \newcommand{\drone}{\text{d}}
+\newcommand{\expert}{\text{exp}}
+\newcommand{\gate}{\text{gate}}
 \newcommand{\camera}{\text{cam}}
 \newcommand{\wayp}{\text{wp}}
 \newcommand{\glotraj}{\text{gt}}
@@ -116,9 +120,24 @@
 \newcommand{\irs}{\textbf{I}}
 \newcommand{\norm}{\tilde}
 \newcommand{\dronetowayp}{\drone\text{-}\wayp}
+\newcommand{\dronetogate}{\drone\text{-}\gate}
+\newcommand{\dronetoproj}{\drone\text{-}\proj}
+\newcommand{\projtospeed}{\proj\text{-}v}
+\newcommand{\projtowayp}{\proj\text{-}\wayp}
+\newcommand{\wayptoglotraj}{\wayp\text{-}\glotraj}
 \newcommand{\desired}{\text{des}}
 \newcommand{\average}{\text{avg}}
+\newcommand{\main}{\text{main}}
+\newcommand{\proj}{\text{proj}}
+\newcommand{\prev}{\text{prev}}
+\newcommand{\target}{\text{target}}
 
+
+
+
+
+\newcommand{\idx}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{i}}
+\newcommand{\num}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{N}}
 
 \newcommand{\x}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{x}}
 \newcommand{\y}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{y}}
@@ -140,9 +159,11 @@
 \newcommand{\dist}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{d}}
 \newcommand{\speed}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{v}}
 \newcommand{\scacc}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{a}}
+\newcommand{\scangvel}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\omega}}
 
-%\newcommand{\dur}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{\tau}}
+
 \newcommand{\dur}[5][]{\anything[#1]{#2}{\Delta #3}{#4}{#5}{t}}
+\newcommand{\freq}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{f}}
 \newcommand{\timepnt}[5][]{\anything[#1]{#2}{#3}{#4}{#5}{t}}
 
 

@@ -63,7 +63,7 @@ d = {
     'kwargs': {
         'color': 'tab:orange',
         's': 100,
-        'label': 'Drone'
+        'label': 'Drone position'
     }
 }
 
@@ -94,7 +94,7 @@ mds = {
         'color': 'tab:blue',
         'marker': 's',
         's': 100,
-        'label': 'Min. distance state'
+        'label': 'Min. dist. state'
     }
 }
 
@@ -157,7 +157,7 @@ ops = {
     'kwargs': {
         'color': 'tab:green',
         's': 100,
-        'label': 'Old projection state'
+        'label': 'Last proj. state'
     }
 }
 nps = {
@@ -168,7 +168,7 @@ nps = {
         'color': 'tab:green',
         'marker': '*',
         's': 200,
-        'label': 'New projection state'
+        'label': 'New proj. state'
     }
 }
 
