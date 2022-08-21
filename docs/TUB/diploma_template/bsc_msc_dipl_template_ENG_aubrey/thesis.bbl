@@ -170,6 +170,12 @@ Jürgen Schmidhuber.
   \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed
   on 04/07/2022).
 
+\bibitem{Song2020}
+Yunlong Song, Selim Naji, Elia Kaufmann, Antonio Loquercio, and Davide
+  Scaramuzza.
+\newblock Flightmare: A flexible quadrotor simulator.
+\newblock September 2020.
+
 \bibitem{Yin2017}
 Wenpeng Yin, Katharina Kann, Mo~Yu, and Hinrich Schütze.
 \newblock Comparative study of cnn and rnn for natural language processing,

@@ -322,4 +322,14 @@
   publisher = {arXiv},
 }
 
+@InProceedings{Mellinger2011,
+  author    = {Daniel Mellinger and Vijay Kumar},
+  booktitle = {2011 {IEEE} International Conference on Robotics and Automation},
+  title     = {Minimum snap trajectory generation and control for quadrotors},
+  year      = {2011},
+  month     = {may},
+  publisher = {{IEEE}},
+  doi       = {10.1109/icra.2011.5980409},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

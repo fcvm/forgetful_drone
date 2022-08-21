@@ -2,19 +2,205 @@
 \label{maintwo}
 
 \section{Simulation Setup}
-
-
-
-\begin{figure}
+The experiments of this thesis 
+are conducted in a drone racing simulation,
+which includes the drone,
+the the racetrack constituting gates 
+and the scenery.
+The implementation of the simulation
+is devided into physics modelling and image rendering
+(see figure \ref{fig:simulation_setup}).
+\begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{own/simulation_setup.drawio.pdf}
     \caption[
-        Simulation setup
+        Implementation concept of the simulation
     ]{
-        Simulation setup
-    %\label{fig:expert_system_projection}
+        Implementation concept of the simulation
+    \label{fig:simulation_setup}
     }
 \end{figure}
+
+The Gazebo\footnote{
+    \url{https://gazebosim.org/home}, visited on 18/08/2022
+} 
+simulator is deployed to model the physics with high accuracy.
+This includes the drone's dynamics and
+potential collisions of the drone with the gates.
+The RotorS \cite{Furrer2016} plugin
+actuates the drone model with the inputted motor speed commands
+and outputs the drone state estimate, the motor speed estimate and the data 
+from the drone's IMU unit.
+%Internally, RotorS sends the ground-truth state to the Forgetful Simulator.
+%The 
+
+The Flightmare \cite{Song2020} simulator is deployed to render 
+images that are almost photo-realistic.
+At a user-specified frequency,
+the Flightlib interface
+updates the drone's pose, and therewith its onboard camera,
+within the Unity\footnote{
+    \url{https://unity.com/}, visited on 20/08/2022
+} Engine and fetches an RGB image from the onboard camera.
+The Unity Engine is built from a Unity project
+that integrates the functionalities of the RPG Flightmare Unity Project\footnote{
+    \url{https://github.com/uzh-rpg/flightmare_unity}, visited on 20/08/2022
+}.
+The Unity project of this thesis 
+and entails five scenes named
+spaceship interior\footnote{
+    based on the "3D Free Modular Kit" from the Unity Asset Store
+},
+destroyed city\footnote{
+    based on "Destroyed City FREE" from the Unity Asset Store
+},
+industrial site\footnote{
+    based on "RPG/FPS Game Assets for PC/Mobile (Industrial Set v2.0)" from the Unity Asset Store
+},
+polygon city\footnote{
+    based on "CITY package" from the Unity Asset Store
+}
+and desert mountain\footnote{
+    based on "Free Island Collection" from the Unity Asset Store
+}
+(see figure \ref{fig:unity_scenes}).
+Each scene has three sites (A, B, C) to locate a racetrack.
+Two different gate covers, 
+one with TU Berlin/DAI-Labor and one with Tsinghua University/DME logos, 
+are available (see figure \ref{fig:unity_gates}).
+\begin{figure}[h]
+    \centering
+    \subfloat[
+        Spaceship Interior
+    ]{
+        \label{fig:unity_scene_SI}
+        \includegraphics[width=0.33\textwidth]{own/jpg/spaceship_interior.jpg}
+    }
+    %\hspace*{0cm}                
+    \subfloat[
+        Destroyed City
+    ]{
+        \label{fig:unity_scene_DC}
+        \includegraphics[width=0.33\textwidth]{own/jpg/destroyed_city.jpg}
+    }
+    \par
+    \subfloat[
+        Industrial Site
+    ]{
+        \label{fig:unity_scene_IS}
+        \includegraphics[width=0.33\textwidth]{own/jpg/industrial_site.jpg}
+    }
+    \subfloat[
+        Polygon City
+    ]{
+        \label{fig:unity_scene_PC}
+        \includegraphics[width=0.33\textwidth]{own/jpg/polygon_city.jpg}
+    }
+    \subfloat[
+        Desert Mountain
+    ]{
+        \label{fig:unity_scene_DM}
+        \includegraphics[width=0.33\textwidth]{own/jpg/desert_mountain.jpg}
+    }
+    \caption[
+        Scenes implemented in simulation
+    ]{
+        Scenes implemented in simulation
+        \label{fig:unity_scenes}
+    }
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \subfloat[
+        DAI-Labor at TU Berlin
+    ]{
+        %\label{fig:unity_scene_SI}
+        \includegraphics[width=0.33\textwidth]{own/jpg/tub_dai_gate.png}
+    }       
+    \subfloat[
+        DME at Tsinghua University
+    ]{
+        %\label{fig:unity_scene_DC}
+        \includegraphics[width=0.33\textwidth]{own/jpg/thu_dme_gate.png}
+    }
+    \caption[
+        Gate covers implemented in simulation
+    ]{
+        Gate covers implemented in simulation
+        \label{fig:unity_gates}
+    }
+\end{figure}
+
+The Forgetful Simulator ROS node takes on three tasks.
+First, it synchronizes the
+drone state in the Flightmare simulator with the
+ground-truth state in the Gazebo simulator.
+Second, it fetches the RGB images from the Flightmare simulator
+and makes them available as output.
+Third, it setups the simulation
+as requested by the inputted 
+simulation configuration.
+This configuration specifies the scene
+(spaceship interior,
+destroyed city,
+industrial site,
+polygon city or
+desert mountain)
+, the site (A, B, C),
+the gate cover (TUB-DAI or THU-DME) and the racetrack configuration.
+The racetrack configuration, in turn, specifies 
+the type (figure-8 or gap), the generation (deterministic or randomized) 
+and the direction (clockwise and counterclockwise).
+The Forgetful Simulator, 
+which stores the deterministic, 
+counterclockwise gate poses
+of the available racetrack type (see figure ...), 
+processes the simulation configuration as follows.
+
+If specified, 
+the stored gate poses of the specified racetrack type are randomized in three steps.
+\begin{enumerate}
+    \item Shift the gate positions along the $x$-, $y$- and $z$-axis
+    by a value, which is sampled, 
+    independently for each gate and axis, 
+    from the uniform real distribution
+    over the user-specified interval 
+    $\left[
+        -\dist[\user]{\text{sim}}{\text{shift},\mxm}{}{},
+        \dist[\user]{\text{sim}}{\text{shift},\mxm}{}{}\right]$.
+    \item Scale all gate positions by the same value
+    sampled from the uniform real distribution
+    over the user-specified interval
+    $\left[
+        \dist[\user]{\text{sim}}{\text{shift},\mnm}{}{}, 
+        \dist[\user]{\text{sim}}{\text{shift},\mxm}{}{}\right]$.
+    \item Twist the gate yaw-orientations
+    by a value, which is sampled, 
+    independently for each gate, 
+    from the uniform real distribution
+    over the user-specified interval
+    $\left[
+        -\dist[\user]{\text{sim}}{\text{twist},\mxm}{}{},
+        \dist[\user]{\text{sim}}{\text{twist},\mxm}{}{}\right]$.
+\end{enumerate}
+Then, if specified, the gate poses are redirected 
+from counterclockwise to clockwise.
+At last, the initial drone pose is computed to be located between
+the second last and the last gate and to face towards the last gate.
+The Forgetful Simulator loads the specified scene and site in 
+the Flightmare Simulator
+and spawns the drone model 
+and the gate models (with the specified cover)
+at the computed poses
+in both, the Flightmare and the Gazebo, simulator.
+Finally, the Forgetful Simulator
+outputs the computed initial drone and gate poses,
+which are required by, e.g., the expert system.
+
+
+
+
+
 
 
 
