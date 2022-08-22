@@ -149,4 +149,192 @@
 @Article{Bengio1994,
   author    = {Y. Bengio and P. Simard and P. Frasconi},
   journal   = {{IEEE} Transactions on Neural Networks},
-  title     = {Learning long-term dependencies wit
+  title     = {Learning long-term dependencies with gradient descent is difficult},
+  year      = {1994},
+  month     = {mar},
+  number    = {2},
+  pages     = {157--166},
+  volume    = {5},
+  doi       = {10.1109/72.279181},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@Misc{Chung2014,
+  author    = {Chung, Junyoung and Gulcehre, Caglar and Cho, KyungHyun and Bengio, Yoshua},
+  title     = {Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling},
+  year      = {2014},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  doi       = {10.48550/ARXIV.1412.3555},
+  keywords  = {Neural and Evolutionary Computing (cs.NE), Machine Learning (cs.LG), FOS: Computer and information sciences},
+  publisher = {arXiv},
+}
+
+@Misc{Yin2017,
+  author    = {Yin, Wenpeng and Kann, Katharina and Yu, Mo and Schütze, Hinrich},
+  title     = {Comparative Study of CNN and RNN for Natural Language Processing},
+  year      = {2017},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  doi       = {10.48550/ARXIV.1702.01923},
+  keywords  = {Computation and Language (cs.CL), FOS: Computer and information sciences},
+  publisher = {arXiv},
+}
+
+@Misc{Kaiser2015,
+  author    = {Kaiser, Lukasz and Sutskever, Ilya},
+  title     = {Neural GPUs Learn Algorithms},
+  year      = {2015},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  doi       = {10.48550/ARXIV.1511.08228},
+  keywords  = {Machine Learning (cs.LG), Neural and Evolutionary Computing (cs.NE), FOS: Computer and information sciences},
+  publisher = {arXiv},
+}
+
+@Article{Greff2017,
+  author    = {Klaus Greff and Rupesh K. Srivastava and Jan Koutnik and Bas R. Steunebrink and Jurgen Schmidhuber},
+  journal   = {{IEEE} Transactions on Neural Networks and Learning Systems},
+  title     = {{LSTM}: A Search Space Odyssey},
+  year      = {2017},
+  month     = {oct},
+  number    = {10},
+  pages     = {2222--2232},
+  volume    = {28},
+  doi       = {10.1109/tnnls.2016.2582924},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@InCollection{Zimmermann2012,
+  author    = {Hans-Georg Zimmermann and Christoph Tietz and Ralph Grothmann},
+  booktitle = {Lecture Notes in Computer Science},
+  publisher = {Springer Berlin Heidelberg},
+  title     = {Forecasting with Recurrent Neural Networks: 12 Tricks},
+  year      = {2012},
+  pages     = {687--707},
+  doi       = {10.1007/978-3-642-35289-8_37},
+}
+
+@Article{Forcada1995,
+  author    = {Mikel L. Forcada and Rafael C. Carrasco},
+  journal   = {Neural Computation},
+  title     = {Learning the Initial State of a Second-Order Recurrent Neural Network during Regular-Language Inference},
+  year      = {1995},
+  month     = {sep},
+  number    = {5},
+  pages     = {923--930},
+  volume    = {7},
+  doi       = {10.1162/neco.1995.7.5.923},
+  publisher = {{MIT} Press - Journals},
+}
+
+@Article{Minai1993,
+  author    = {Ali A. Minai and Ronald D. Williams},
+  journal   = {Neural Networks},
+  title     = {On the derivatives of the sigmoid},
+  year      = {1993},
+  month     = {jan},
+  number    = {6},
+  pages     = {845--853},
+  volume    = {6},
+  doi       = {10.1016/s0893-6080(05)80129-7},
+  publisher = {Elsevier {BV}},
+}
+
+@Article{Brookes2020,
+  author = {Mike Brookes},
+  title  = {The Matrix Reference Manual},
+  year   = {2020},
+  note   = {URL: \url{http://www.ee.imperial.ac.uk/hp/staff/dmb/matrix/intro.html} (accessed on 08/07/2022)},
+}
+
+@Article{li2016tutorial,
+  author  = {Li, Minchen},
+  journal = {Dept. Comput. Sci., Univ. British Columbia, Vancouver, BC, Canada, Tech. Rep},
+  title   = {A Tutorial On Backward Propagation Through Time (BPTT) In The Gated Recurrent Unit (GRU) RNN},
+  year    = {2016},
+}
+
+@Misc{LearnedMiller,
+  author = {Erik Learned-Miller},
+  note   = {URL: \url{http://cs231n.stanford.edu/vecDerivs.pdf} (accessed on 08/07/2022)},
+  title  = {Vector, Matrix, and Tensor Derivatives},
+}
+
+@Book{Parent,
+  author    = {Parent, Rick},
+  publisher = {Morgan Kaufmann},
+  title     = {Computer Animation: Algorithms and Techniques},
+  isbn      = {9780124158429},
+  pages     = {542},
+}
+
+@Article{Faessler2018,
+  author    = {Matthias Faessler and Antonio Franchi and Davide Scaramuzza},
+  journal   = {{IEEE} Robotics and Automation Letters},
+  title     = {Differential Flatness of Quadrotor Dynamics Subject to Rotor Drag for Accurate Tracking of High-Speed Trajectories},
+  year      = {2018},
+  month     = {apr},
+  number    = {2},
+  pages     = {620--626},
+  volume    = {3},
+  doi       = {10.1109/lra.2017.2776353},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@Article{Faessler2017,
+  author    = {Matthias Faessler and Davide Falanga and Davide Scaramuzza},
+  journal   = {{IEEE} Robotics and Automation Letters},
+  title     = {Thrust Mixing, Saturation, and Body-Rate Control for Accurate Aggressive Quadrotor Flight},
+  year      = {2017},
+  month     = {apr},
+  number    = {2},
+  pages     = {476--482},
+  volume    = {2},
+  doi       = {10.1109/lra.2016.2640362},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@InCollection{Furrer2016,
+  author    = {Fadri Furrer and Michael Burri and Markus Achtelik and Roland Siegwart},
+  booktitle = {Studies in Computational Intelligence},
+  publisher = {Springer International Publishing},
+  title     = {{RotorS}{\textemdash}A Modular Gazebo {MAV} Simulator Framework},
+  year      = {2016},
+  pages     = {595--625},
+  doi       = {10.1007/978-3-319-26054-9_23},
+}
+
+@Article{osti_5675197,
+  author       = {Jackson, P},
+  title        = {Introduction to expert systems},
+  year         = {1986},
+  month        = {1},
+  abstractnote = {Expert systems have become one of the most exciting applications within the domain of artificial intelligence. Further interest has been provoked by Japan's Fifth Generation Project, which identifies expert or knowledge-based systems as a key element in the computer systems of the future. This book presents an introduction to expert systems at a level suited to the undergraduate student and the interested layman. It surveys the three main techniques for knowledge representation - rules, frames and logic. and describes in detail the expert systems which employ them. Contents: Expert systems and artificial intelligence; Formalisms for knowledge representation; MYCIN; Medical diagnosis using rules. MYCIN derivatives; TEIRESIAS, EMYCIN, and GUIDON; RI: recognition as a problem-solving strategy; CENTAUR: a combination of frames metalevel inference and commonsense reasoning in MECHO; Tools for building expert systems; Summary and conclusions; Exercises.},
+  place        = {United States},
+  url          = {https://www.osti.gov/biblio/5675197},
+}
+
+@Article{Kaufmann2018,
+  author    = {Kaufmann, Elia and Loquercio, Antonio and Ranftl, Rene and Dosovitskiy, Alexey and Koltun, Vladlen and Scaramuzza, Davide},
+  title     = {Deep Drone Racing: Learning Agile Flight in Dynamic Environments},
+  year      = {2018},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  doi       = {10.48550/ARXIV.1806.08548},
+  keywords  = {Robotics (cs.RO), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  publisher = {arXiv},
+}
+
+@InProceedings{Mellinger2011,
+  author    = {Daniel Mellinger and Vijay Kumar},
+  booktitle = {2011 {IEEE} International Conference on Robotics and Automation},
+  title     = {Minimum snap trajectory generation and control for quadrotors},
+  year      = {2011},
+  month     = {may},
+  publisher = {{IEEE}},
+  doi       = {10.1109/icra.2011.5980409},
+}
+
+@Article{Song2020,
+  author        = {Yunlong Song and Selim Naji and Elia Kaufmann and Antonio Loquercio and Davide Scaramuzza},
+  title         = {Flightmare: A Flexible Quadrotor Simulator},
+  year          = {2020},
+  month         = sep,
+  abstract      = {State-of-the-art quadrotor simulators have a rigid and highly-specialized structure: either are they really fast, physically accurate, or photo-realistic. In this work, we propose a novel quadrotor simulator: Flightmare. Flightmare is composed of two main components: a configurable rendering engine built on Unity and a flexible physics engine for dynamic

@@ -1,20 +1,13 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 import numpy as np
-from typing import List
+from typing import List, Tuple
 
-
-
-AX_Z = np.array ([0, 0, 1.0])
-
-FIG8_DET_X = [-20.45, -12.55, -4.15, 3.45, 11.95, 21.85, 24.25, 19.25, 10.55, 2.85, -4.95, -12.95, -21.05, -24.25]
-FIG8_DET_Y = [-8.65, -11.15, -5.35, 4.25, 11.15, 6.85, -1.75, -9.55, -10.65, -5.95, 4.65, 9.65, 6.65, -1.00]
-FIG8_DET_Z = [2.0] * len (FIG8_DET_X)
-FIG8_DET_YAW = [1.13, -1.57, 1, 0.99, 0.0, -1.03, 1.53, 0.57, 0.67, -1.53, -0.77, 0.07]
 
 
 
 class Pos:
+
     @staticmethod
     def fromXYZ (x: float, y: float, z: float): 
         return np.array ([x, y, z], dtype=np.float)
@@ -102,8 +95,8 @@ class Quat:
    
 class Pose:
     def __init__ (self, p : np.ndarray = None, q : np.ndarray = None) -> None:
-        if p is None : p = Pos.fromXYZ (0, 0, 0)
-        if q is None : q = Quat.fromWXYZ (0, 0, 0, 0)
+        if p is None : p = Pos.fromXYZ (0.0, 0.0, 0.0)
+        if q is None : q = Quat.fromWXYZ (0.0, 0.0, 0.0, 0.0)
         Pos.assertPos (p)
         Quat.assertQuat (q)
         self.p = p
@@ -115,54 +108,166 @@ class Racetrack:
     def __init__ (self, gate_poses : List [Pose]) -> None:
         self.gateWidth = 3.35
         self.gateMinHeight = 3.7
-        self.gateYawTwist = np.pi / 2
+        self.gateConstYawTwist = - np.pi / 2
+        self.frontGateIdx = -2
         
         self.randMaxScale = 1.2
+        self.randMinScale = 0.8
+        self.randMaxAxShift = 0.8
+        self.randMaxYawTwist = 5.0 / 180 * np.pi
 
-        self.gatePoses = gate_poses
+        self.gatePosesDet = gate_poses
+        self.dronePoseDet = self.compDronePose (self.gatePosesDet)
 
-    
+        self.gatePosesRand = self.randTrack (self.gatePosesDet)
+        self.dronePoseRand = self.compDronePose (self.gatePosesRand)
+
     def compDronePose (self, gate_poses : List [Pose]) -> Pose:
-        front = gate_poses [-2] 
-        back = gate_poses [-3]
+        front = gate_poses [self.frontGateIdx] 
+        back = gate_poses [self.frontGateIdx - 1]
+        
         drone = Pose ()
 
         drone.q = Quat.multiply (
             front.q,
-            Quat.fromAngAx (self.gateYawTwist, AX_Z)
+            Quat.fromAngAx (self.gateConstYawTwist, UnitVecZ)
         )
         
         drone.p = (front.p + back.p) / 2
         ldv = np.array ([
-            np.cos (Quat.unitAng (front.q, 2) - self.gateYawTwist),
-            np.sin (Quat.unitAng (front.q, 2) - self.gateYawTwist),
+            np.cos (Quat.unitAng (front.q, 2) - self.gateConstYawTwist),
+            np.sin (Quat.unitAng (front.q, 2) - self.gateConstYawTwist),
         ])
         opm = np.outer (ldv, ldv) / np.inner (ldv, ldv)
         p0 = np.array ([front.p [0], front.p [1]])
         p = np.array ([drone.p [0], drone.p [1]])
-        drone.p [: 2] = opm * (p - p0) + p0
+        drone.p [: 2] = opm @ (p - p0) + p0
 
         return drone
+    
+    def getTrackSize (self, gate_poses : List [Pose]) -> Tuple:
+        
+        for i in range (len (gate_poses)):
+            x = self.gatePosesDet [i].p [0]
+            y = self.gatePosesDet [i].p [1]
+            z = self.gatePosesDet [i].p [2]
 
+            if i == 0:
+                xmin = xmax = x
+                ymin = ymax = y
+                zmin = zmax = z
+            
+            else:
+                if x < xmin: xmin = x
+                if y < ymin: ymin = y
+                if z < zmin: zmin = z
 
-    def compRandTrack (self) -> None:
-        pass
+                if x > xmax: xmax = x
+                if y > ymax: ymax = y
+                if z > zmax: zmax = z
+        
+        xmin -= self.gateWidth 
+        ymin -= self.gateWidth 
+        zmin -= self.gateWidth 
+        xmax += self.gateWidth 
+        ymax += self.gateWidth 
+        zmax += self.gateWidth 
+        
+        return ([xmin, xmax], [ymin, ymax], [zmin, zmax])
 
+    def plotTrackXY (self, ax, gate_poses : List [Pose], drone_pose : Pose) -> None:
+        # gates
+        for i in range (len (gate_poses)):
+            x = gate_poses [i].p [0]
+            y = gate_poses [i].p [1]
+            yaw = Quat.yaw (gate_poses [i].q)
+            lbl = i
 
+            dx = np.cos (yaw) * self.gateWidth / 2 
+            dy = np.sin (yaw) * self.gateWidth / 2 
+            ax.arrow (x - dx, y - dy, 2 * dx, 2 * dy, 
+                width=0.3, head_width=0.0, color="grey"
+            )
 
+            #ax.add_patch(
+            #    plt.Circle ((x, y), 0.3, color='black', clip_on=False, fill=True)
+            #)
 
+            ax.annotate (lbl, (x + 1.0, y + 1.0))
 
-fig8_det_poses = []
-for x, y, z, yaw in zip(FIG8_DET_X, FIG8_DET_Y, FIG8_DET_Z, FIG8_DET_YAW):
-    fig8_det_poses.append(
-        Pose (
-            Pos.fromXYZ (x, y, z),
-            Quat.fromAngAx (yaw, AX_Z)
+        # drone
+        dx = np.cos (Quat.yaw (drone_pose.q)) * self.gateWidth / 200
+        dy = np.sin (Quat.yaw (drone_pose.q)) * self.gateWidth / 200
+        ax.arrow (
+            drone_pose.p [0], 
+            drone_pose.p [1], 
+            dx,
+            dy, 
+            width=0.3, head_width=2, color="blue", overhang=.3
         )
-    )
+        ax.annotate ('Init. drone', (drone_pose.p [0], drone_pose.p [1]))
+
+            
+
+        
+        #xticks = ax.get_xticks()
+        #yticks = ax.get_yticks()
+        #if (xticks[-1] > yticks[-1]):
+        #    ticks_stepsize = yticks[1] - yticks[0]
+        #    ax.set_xticks(np.arange(xticks[0], xticks[-1], ticks_stepsize))
+        #else:
+        #    ticks_stepsize = xticks[1] - xticks[0]
+        #    ax.set_yticks(np.arange(yticks[0], yticks[-1], ticks_stepsize))
+        #ax.grid()
+        ax.set_aspect('equal', adjustable='box')
+        xlim, ylim, _ = self.getTrackSize (gate_poses)
+        ax.set_xlim (xlim)
+        ax.set_ylim (ylim)
+        
+
+    def randTrack (self, gate_poses : List [Pose]) -> List [Pose]:        
+        scale = np.random.uniform (self.randMinScale, self.randMaxScale)
+
+        rand_poses = []
+        for p in gate_poses:
+            shift = self.randMaxAxShift * np.random.uniform (-1.0, 1.0, (3,))
+            twist = self.randMaxYawTwist * np.random.uniform (-1.0, 1.0)
+        
+            rp = Pose ()
+            rp.p = (p.p + shift) * scale
+            rp.q = Quat.multiply (p.q, Quat.fromAngAx (twist, UnitVecZ))
+            rand_poses.append (rp)
+
+        return rand_poses
 
 
-fig8 = Racetrack (fig8_det_poses)
+        
+
+
+
+
+
+
+UnitVecZ = np.array ([0, 0, 1.0])
+Fig8DetX = [-20.45, -12.55, -4.15, 3.45, 11.95, 21.85, 24.25, 19.25, 10.55, 2.85, -4.95, -12.95, -21.05, -24.25]
+Fig8DetY = [-8.65, -11.15, -5.35, 4.25, 11.15, 6.85, -1.75, -9.55, -10.65, -5.95, 4.65, 9.65, 6.65, -1.00]
+Fig8DetZ = [2.0] * len (Fig8DetX)
+Fig8DetYaw = [1.13, -1.57, -0.60, -0.63, -1.21, 0.99, 0.00, -1.03, 1.53, 0.57, 0.67, -1.53, -0.77, 0.07,]
+ 
+
+Fig8DetPoses = []
+for x, y, z, yaw in zip (Fig8DetX, Fig8DetY, Fig8DetZ, Fig8DetYaw):
+    Fig8DetPoses.append (Pose (
+        Pos.fromXYZ (x, y, z),
+        Quat.fromAngAx (yaw, UnitVecZ)
+    ))
+
+RTFig8 = Racetrack (Fig8DetPoses)
+
+fig, ax = plt.subplots (1, 1)
+RTFig8.plotTrackXY (ax, RTFig8.gatePosesDet, RTFig8.dronePoseDet)
+fig.tight_layout()
+plt.show()
 
 
 

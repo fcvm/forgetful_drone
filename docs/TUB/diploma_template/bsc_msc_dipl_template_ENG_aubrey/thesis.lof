@@ -10,13 +10,25 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{19}{figure.caption.15}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{19}{subfigure.1.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{19}{subfigure.1.2}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Schematic 2D example of the iterative method to update the index to the projection state }}{32}{figure.caption.28}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces The control stack in simulation. }}{30}{figure.caption.26}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Update of the projection state index }}{35}{figure.caption.29}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{38}{figure.caption.31}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes implemented in simulation }}{39}{figure.caption.32}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{39}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{39}{subfigure.2.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{39}{subfigure.2.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{39}{subfigure.2.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{39}{subfigure.2.5}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Gate covers implemented in simulation }}{40}{figure.caption.33}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{40}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{40}{subfigure.3.2}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Computation of the racetrack }}{42}{figure.caption.34}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{45}{figure.caption.42}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{45}{figure.caption.43}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{45}{figure.caption.44}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{45}{subfigure.3.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{45}{subfigure.3.2}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{45}{subfigure.3.3}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{53}{figure.caption.47}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{53}{figure.caption.48}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{53}{figure.caption.49}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{53}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{53}{subfigure.3.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{53}{subfigure.3.3}%

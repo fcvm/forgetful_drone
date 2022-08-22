@@ -1,4 +1,4 @@
-\chapter{Navigation Method}
+\chapter{Autonomous Navigation Method}
 \label{mainone}
 \textit{
 DELETEME: In this chapter you start addressing your actual problem. Therefore, it makes often sense to make a detailed problem analysis first (if not done in introduction). You should be sure about what to do and how. As writtin in the background part, it might also make sense to include complex background information or papers you are basing on in this analysis. If you are solving a software problem, you should follow the state of the art of software development which basically includes: problem analysis, design, implementation, testing, and deployment. Maintenance is often also described but I believe this will not be required for most theses. Code should be placed in the appendix unless it is solving an essential aspect of your work.
@@ -15,9 +15,9 @@ This chapter \dots
 
 
 \section{Reference systems}
-In this thesis, a point 
+In this thesis, the coordinates of a point 
 $\pos[]{}{}{}{}$
-relates to either the global, the local or the image reference system
+relate to either the global, the local or the image reference system
 \begin{equation}
     \pos[]{}{}{\grs}{} = \begin{bmatrix}
         \x[]{}{}{\grs}{} \\ \y[]{}{}{\grs}{} \\ \z[]{}{}{\grs}{}
@@ -33,11 +33,11 @@ relates to either the global, the local or the image reference system
 \end{equation}
 
 
-The global reference system
-is fixed to an arbitrary point on the earth
-and hence quasi inertial.
+The 3D global reference system
+is fixed to an arbitrary point on earth
+and is hence quasi inertial.
 It is spanned by the orthonormal basis
-which, related to the global system,
+which, related to the global reference system,
 equates to the standard basis of $\mathbb{R}^3$
 \begin{equation}
     \left\{
@@ -159,7 +159,7 @@ $\pos[]{\drone}{}{\grs}{}$
 and quaternion orientation
 $\quat[]{\drone}{}{\grs}{}$
 with respect to the global reference system
-fully determine the bidirectional transformation
+are the parameters that determine the bidirectional transformation
 between the global and the local reference system.
 The following bases on quaternion mathematics,
 for which one can consult, e.g., \cite{Parent}.
@@ -173,7 +173,7 @@ with the transformation
     ; \quad
     \pos[]{}{}{\grs}{} \mapsto \pos[]{}{}{\lrs}{}
     =
-    \begin{cases}
+    %\begin{cases}
         \mathcal{P} \left[
             \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
             *
@@ -181,10 +181,10 @@ with the transformation
             *
             \quat[]{\drone}{}{\grs}{}
         \right], 
-        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
-        \pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{}, 
-        & \text{else}.
-    \end{cases}
+        %& \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        %\pos[]{}{}{\grs}{} - \pos[]{\drone}{}{\grs}{}, 
+        %& \text{else}.
+    %\end{cases}
 \end{align}
 Reversely, a point given in the coordinates of the local reference system
 can be expressed in the coordinates of the global reference system
@@ -196,7 +196,7 @@ with the transformation
     ; \quad
     \pos[]{}{}{\lrs}{} \mapsto \pos[]{}{}{\grs}{}
     =
-    \begin{cases}
+    %\begin{cases}
         \mathcal{P} \left[
             \quat[]{\drone}{}{\grs}{}
             *
@@ -204,10 +204,10 @@ with the transformation
             *
             \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
         \right] + \pos[]{\drone}{}{\grs}{}, 
-        & \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
-        \pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
-        & \text{else}.
-    \end{cases}
+        %& \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
+        %\pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
+        %& \text{else}.
+    %\end{cases}
 \end{align}
 In the two above transformations,
 the mapping $\mathcal{Q}$
@@ -249,8 +249,8 @@ Finally, the inversion of a quaternion is given by
     \frac{1}{\| \quat[]{}{}{}{} \|_2}
     \begin{bmatrix} w \\ \text - \pos[]{}{}{}{} \end{bmatrix}.
 \end{align}
-Because the two above transformations are the inversion of each other,
-points can be transformed between the global and local reference system
+The two above transformations are the inversion of each other.
+Therefore, points can be transformed between the global and local reference system
 without information loss
 \begin{equation}
     \trafo[]{}{\grs\lrs}{}{} \circ \trafo[]{}{\lrs\grs}{}{} 
@@ -269,12 +269,13 @@ In the above equations, the operator $\circ$ denotes the composition of two func
 
 \paragraph*{Transformation between the local and the image reference system} $\ $\\
 The horizontal
-$\ang[\user]{\camera}{z}{}{}$
+$\ang[\user]{\camera}{\text h}{}{}$
 and the vertical
-$\ang[\user]{\camera}{y}{}{}$
+$\ang[\user]{\camera}{\text v}{}{}$
 angle of view
-of the drone's onboard camera,
-fully determine the bidirectional transformation 
+of the drone's onboard camera
+are the parameters 
+that determine the bidirectional transformation 
 between the local and the image reference system.
 A point given in the coordinates of the local reference system
 is expressed in the coordinates of the image reference system with the transformation
@@ -286,24 +287,26 @@ is expressed in the coordinates of the image reference system with the transform
     \pos[]{}{}{\lrs}{} \mapsto \pos[]{}{}{\irs}{}
     =
     \begin{bmatrix}
-        \max \left\{ \text -1, \min \left[
-            \frac{\text -2}{\ang[\user]{\camera}{z}{}{}}
-            \mathrm{atan2}\left( \y[]{}{}{\lrs}{}, \x[]{}{}{\lrs}{} \right), 
-            1
-        \right] \right\} 
+        \maxof{\text -1}{
+            \minof{
+                \frac{\text -2}{\ang[\user]{\camera}{\text h}{}{}}
+                \mathrm{atan2}\left( \y[]{}{}{\lrs}{}, \x[]{}{}{\lrs}{} \right)
+            }{1}
+        }
         \\
-        \max \left\{ \text -1, \min \left\{
-            \frac{2}{\ang[\user]{\camera}{y}{}{}}
-            \mathrm{atan2} \left( \z[]{}{}{\lrs}{}, \| \pos[]{}{}{\lrs}{} \|_2 \right), 
-            1
-        \right\} \right\}
+        \maxof{\text -1}{
+            \minof{
+                \frac{2}{\ang[\user]{\camera}{\text v}{}{}}
+            \mathrm{atan2} \left( \z[]{}{}{\lrs}{}, \| \pos[]{}{}{\lrs}{} \|_2 \right)
+            }{1}
+        }
     \end{bmatrix}
     .
 \end{align}
 The above transformation
 can be interpreted as the projection of a point onto the image plane 
 of the drone's onboard camera.
-It can be devided into two steps.
+It can be devided into three steps.
 First, the vector from the optical center of the camera 
 to the point to be transformed
 is mapped to its yaw
@@ -313,21 +316,20 @@ $\mathrm{atan2} \left( \z[]{}{}{\lrs}{}, \| \pos[]{}{}{\lrs}{} \|_2 \right)$
 angle, both, with respect to the image reference system.
 Second these angles are normalized by 
 the half of the horizontal 
-$\ang[\user]{\camera}{z}{}{}$ 
+$\ang[\user]{\camera}{\text h}{}{}$ 
 and the half of the vertical
-$\ang[\user]{\camera}{y}{}{}$
+$\ang[\user]{\camera}{\text v}{}{}$
 angle of view of the camera, respectively.
-However, these normalized angles are bounded to be in the interval from minus to plus one.
-This boundary takes into account that an
-artifical neural network,
-which inputs the images from the camera, 
-could possibly perceive only whether a point is
-out of the camera's field of view
-but not by which amount.
+Third, these normalized angles are bounded to be in the interval from minus to plus one.
+This boundary takes into account 
+that an artifical neural network, which inputs images, 
+has no basis for predictions 
+that relate to objects that are not within the camera's field of view.
 As a projection from 3D to 2D, the above transformation is accompanied by information loss
-and is hence neither bijective nor invertible.
-Reversely, a point given in the coordinates of the image reference system is expressed
-in the coordinates of the local reference system with the transformation
+and is hence not bijective.
+
+A point given in the coordinates of the image reference system is expressed
+in the coordinates of the local reference system with the reverse transformation
 \begin{align} \label{eq:image_to_local_transformation}
     \trafo[]{}{\lrs\irs}{}{}
     &:\ 
@@ -348,25 +350,26 @@ in the coordinates of the local reference system with the transformation
     & \qquad \text{with} \quad
     \ang[]{}{z}{\lrs}{}
     = 
-    \text - \frac{\ang[\user]{\camera}{z}{}{}}{2} \cdot \x[]{}{}{\irs}{}
+    \text - \frac{\ang[\user]{\camera}{\text h}{}{}}{2} \cdot \x[]{}{}{\irs}{}
     ,\quad 
     \ang[]{}{y}{\lrs}{}
     = 
-    \frac{\ang[\user]{\camera}{y}{}{}}{2} \cdot \y[]{}{}{\irs}{}.
+    \frac{\ang[\user]{\camera}{\text v}{}{}}{2} \cdot \y[]{}{}{\irs}{}.
 \end{align}
 In the above transformation,
 the operator 
 $\odot$ 
-denotes the Hadamard product
-, i.e., the element-wise product of two equally dimensioned matrices.
+denotes the Hadamard product, 
+i.e., the element-wise product of two equally dimensioned matrices.
 Because the 2D coordinates of the image reference system
-can only contain information about a points direction,
+can only contain information about the direction of a point,
 the above transformation to 3D requires the additional input of a backprojection length $d$.
+
 In contrast to the transformations 
 $\trafo[]{}{\lrs\grs}{}{}$
 and 
 $\trafo[]{}{\grs\lrs}{}{}$
-between the global and the local reference system
+between the global and the local reference system,
 the transformations 
 $\trafo[]{}{\irs\lrs}{}{}$
 and 
@@ -375,7 +378,7 @@ between the local and the image reference system
 are not invertible.
 However, for relevant points
 located within the camera's field of view
-and a relevant range of backprojection lengths,
+and a well chosen backprojection length,
 it is assumed that the transformations approximately invert each other
 \begin{equation}
     \trafo[]{}{\lrs\irs}{}{} \left[
@@ -413,18 +416,17 @@ are the compositions of the transformations via the intermittent local reference
     :\ 
     \mathbb{R}_{\ge 0}, \left[\text{-} 1, 1\right]^2 \rightarrow \mathbb{R}^3.
 \end{align}
-Because
+Due to the fact that
 $\trafo[]{}{\lrs\grs}{}{}$
 and
 $\trafo[]{}{\grs\lrs}{}{}$
 are the inverse of each other
-and it is assumed that
+and the assumption that
 $\trafo[]{}{\irs\lrs}{}{}$
 and
 $\trafo[]{}{\lrs\irs}{}{}$
-for the relevant range of interest
-approximately invert each other,
-the above compositions also approximately invert each other for this range
+approximately invert each other within a relevant range,
+the above compositions are expected to also approximately invert each other within this relevant range
 \begin{equation}
     \trafo[]{}{\grs\irs}{}{} \left[
         d, \trafo[]{}{\irs\grs}{}{} \left( \pos[]{}{}{\grs}{} \right)
@@ -524,22 +526,49 @@ the above compositions also approximately invert each other for this range
 
 
 \section{ANN module} \label{sec:ann_module}
-The function of the ANN module is to 
-make navigation decisions
-on the basis of the images from the onboard camera and other, user-switchable inputs.
-Fed to the planning module, 
-these navigation decisions effectively
-lead the drone through the racetrack.
+The ANN module performs the function of inference
+within the autonomous navigation method.
+More precisely, the module makes navigation decisions
+on the basis of data from the drone's onboard sensors.
+In order for these navigation decisions to be reasonable
+the ANN module is trained with supervised learning (see section ??).
+At testing, 
+when the autonomous navigation method flies the drone through the racetrack,
+the ANN module outputs navigation decisions in real-time at a user-specified frequency.
+Thereby, the GRU sub-module (and therewith the ANN module itself)
+operates in one-to-one mode,
+i.e., it maps each single, non-sequential input to a single, non-sequential output.
+As, however, the frequently incoming, single inputs as a whole constitute a time series,
+the GRU sub-module builds up memory in its hidden state
+as the module learned during training.
+By this, not only the current but also 
+past inputs have impact on the current navigation decision.
+
+
+The ANN module itself is built 
+from the CNN, the CAT, the GRU, the FC and the HEAD sub-module
+(see figure XXX).
+This modular design entails a high flexibility for the studies
+of different ANN module variants in chaper ??.
+For all ANN module variants,
+the sequence of the sub-modules is fixed
+and the outer sub-modules, i.e, the CNN and the HEAD sub-module,
+are mandatory.
+This ensures the mapping 
+of the minimum input of an RGB image to a navigation decision.
+In contrast, the user specifies whether
+the individual inner sub-modules,
+i.e., the CAT, the GRU and the FC sub-module,
+are switched on or off
+before the training of an ANN module variant.
+Moreover, the user specifies the design of all individual sub-modules.
 
 
 
-%The current navigation decision is infered
-%from the current RGB image of the onboard camera
-%and optionally, the current data of the onboard IMU sensor.
-
-
-The current, preprocessed RGB image 
-is a mandatory component of the input to the ANN module
+\paragraph*{Input} ${}$\\
+The single inputs to the ANN module are devided into mandatory and optional.
+The mandatory input for the current inference is the
+latest, preprocessed RGB (therewith three channeled) image from the drone's onboard camera
 \begin{equation}
     \underline{\underline{\underline I}}^\text{preproc}
     \in 
@@ -556,22 +585,18 @@ is a mandatory component of the input to the ANN module
         \right\}
     }
     ^{
-        I_\text{C} \times    
+        %I_\text{C} \times    
+        3 \times
         I_\text{H}^\text{preproc} \times 
         I_\text{W}^\text{preproc}
-    }
+    }.
     %\text{ with } I_\text{C} = 3.
 \end{equation}
-with the number of channels
-$I_\text{C} = 3$
-for RGB.
-The preprocessing of the raw RGB image entails two steps.
-First, 
-the pixel intensities are normalized by the full intensity 
+The two-step preprocessing of the raw RGB image simplifies the training of the ANN module.
+First, the pixel intensities are normalized by the full intensity 
 $I_\text{max}^\text{raw} = 255$
-with the aim to accelerate the training of the ANN.
-Second, the image is sized down with a user-specied 
-factor preserving its aspect ratio
+with the aim to accelerate the convergence at training.
+Second, the image is sized down 
 to the height 
 $
     I_\text{H}^\text{preproc} 
@@ -591,59 +616,46 @@ $
     \cdot
     I_\text{W}^\text{raw}
     \right\rfloor
-$.
-By this,
-the occupation of GPU memory at the training of the ANN
+$
+with a user-specified 
+factor preserving its aspect ratio.
+By this, the occupation of GPU memory at training,
+which is critical for longer sequences,
 can be reduced if necessary.
 
-In addition to the RGB image, 
-the user may enable the current data of the onboard IMU 
-\begin{equation}
-    \left(
-        {}_\textbf{L}\underline a^\text{imu}
-        ,\ 
-        {}_\textbf{L}\underline \omega^\text{imu}
-    \right)
-\end{equation}
-as optional input component.
-The IMU data comprises the current measurements of
-the linear acceleration
-$
-    {}_\textbf{L}\underline a^\text{imu} \in \mathbb{R}^3
-$
-and the angular velocity
-$   
-    {}_\textbf{L}\underline \omega^\text{imu} \in \mathbb{R}^3
-$
-of the drone with respect to the local reference system (see section XXX).
-Further optional components of the input are
-the durations
-$
-    \Delta t^\text{rgb}
-$
-and
-$
-\Delta t^\text{imu}
-$
-elapsed between the previous and the current RGB image and IMU data, respectively.
+
+
+Before the training of an ANN module variant, the user switches on or off
+the individual elements of the feature vector of optional inputs
+\begin{align}
+    \featvec[]{\text{opt}}{}{}{} 
+    =
+    \begin{bmatrix}
+        \dur[]{\text{rgb}}{}{}{} \\
+        \acc[\hat]{\text{imu}}{}{}{} \\
+        \angvel[\hat]{\text{imu}}{}{}{} \\
+        \dur[]{\text{imu}}{}{}{}
+    \end{bmatrix}
+    .
+\end{align}
+The above vector comprises the
+the duration
+$\dur[]{\text{rgb}}{}{}{}$
+elapsed between the shooting of the previous and the latest raw RGB image,
+the drone's latest linear acceleration
+$\acc[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
+and angular velocity
+$\angvel[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
+measurement from its onboard inertial measurement unit (IMU)
+as well as the duration
+$\dur[]{\text{imu}}{}{}{}$
+elapsed between the recording of the previous and the latest IMU data.
 
 
 
 
 
-In order to achieve a high degree of flexibility for potential studies,
-the ANN module itself is designed modularly
-from the CNN, the CAT, the GRU, the FC and the HEAD sub-modules
-(see figure XXX).
-While the sequence of these sub-modules cannot be changed,
-the user may individually switch on/off the inner sub-modules,
-i.e.,
-the CAT, the GRU and the FC.
-The outer sub-modules,
-i.e.,
-the CNN and the HEAD,
-are mandatory,
-in order to ensure the mapping of the minimum input of an RGB image to an output.
+
 
 
 \subsection*{CNN}
@@ -1539,7 +1551,7 @@ The total number of trainable parameters of the HEAD sub-module is
 %HEAD: output size, act fct, bias
 %GRAPH
 %
-%loss optimzer learnrate
+%loss optimizer learnrate
 
 
 -resize image dims by a factor
@@ -1564,268 +1576,344 @@ The total number of trainable parameters of the HEAD sub-module is
 
 
 \section{Planning module}
-%back-projection the image coordinates along the camera projection ray
-%-prediction horizon proportional to the platforms predicted speed
-%speed rescaled by user spec max speed
-%- aggressiveness of flight 
-%state interception traj 
-%- computationally efficient min jerk traj
-%traj(time) -> ref states
+The planning module performs the task of path planning
+within the autonomous navigation method.
+At the user-specified main frequency 
+$\freq[\user]{\main}{}{}{}$,
+the planning module 
+samples states from its local trajectory
+and forwards them as reference to the control module.
+Every $\num[\user]{\text{plan}}{}{}{}$-th (user-specified) iteration,
+the planning module re-computes its local trajectory
+on the basis of its input,
+i.e., the latest navigation decision and the latest drone state estimate. 
+%These trajectories, generated by the planning module, 
+%are referred to as local trajectories
+%to distinguish them from the expert system's global trajectory
+%used when generating training data for the ANN module (see XX).
 
-
-
-
-%The planning module translates the navigation decisions of the ANN module into local trajectories
-%from the current state of the drone to the waypoint.
-%In case,
-%the ANN module outputs control command instead of navigation decisions,
-%the commands are bypassed the planning module
-%and directly forwarded to the control module.
-
-The task of the planning module is to translate the current navigation decision
+The latest navigation decision
+stems from either the ANN module
+(see equ. \ref{eq:navigation_decision}) 
+or, if it has intervened at training data generation,
+the expert system (see equ. \ref{eq:nav_dec_by_expert}).
+A navigation decision comprises the normalized desired speed 
+and the waypoint in the image reference system
 \begin{equation}
     (
         \speed[\norm]{\drone}{\desired}{}{}
         ,\ 
         \pos[]{\wayp}{}{\irs}{}
-    )
+    ).
 \end{equation}
-into a local trajectory 
-that leads the drone to the position indicated by
-$
-    \pos[]{\wayp}{}{\irs}{}
-$
-with a speed depending on
-$
-    \speed[\norm]{\drone}{\desired}{}{}
-$.
-While at testing, the navigation decisions are exclusively made by 
-the ANN module (see equation \ref{eq:navigation_decision}),
-at training,
-individual decisions may have been corrected by
-the expert system (see equation \ref{eq:nav_dec_by_expert}).
-Besides the current navigation decision, 
-the planning module additionally requires the input of the current
-state of the drone comprising
-the position, the velocity and the acceleration
-\begin{equation}
+The latest drone state estimate stems from the state estimation system.
+In simulation, the estimate may correspond to the ground-truth state.
+A drone state estimate includes position, velocity and acceleration
+with respect to the global reference system
+\begin{equation} \label{eq:drone_state}
     \pos[]{\drone}{}{\grs}{}
     ,\ 
     \vel[]{\drone}{}{\grs}{}
     ,\ 
     \acc[]{\drone}{}{\grs}{}.
 \end{equation}
-The drone state either corresponds to the ground-truth state in simulation or,
-in real-world, is obtained by a state estimation system.
 
 
-First,
-the normalized, desired speed component of the navigation decision is rescaled
-\begin{equation}
-    \speed[]{\drone}{\desired}{}{}
-    = 
-    \maxof{
-        \speed[\user]{\drone}{\mnm}{}{}
-    }{
-        \speed[\user]{\drone}{\mxm}{}{}
-        \cdot 
-        \speed[\norm]{\drone}{\desired}{}{}
-    }
-\end{equation}
-with the user-specified
-minimum 
-$
-    \speed[\user]{\drone}{\mnm}{}{}
-$
-and
-maximum speed
-$
-\speed[\user]{\drone}{\mxm}{}{}
-$.
-Second,
-the waypoint component of the navigation decision
-is transformed
-according to equation \ref{eq:global_image_transformations}
-from the image to the global reference system
-\begin{equation}
-    \pos[]{\wayp}{}{\grs}{}
-    = 
-    \trafo[]{}{\grs\irs}{}{} \left(
-        \dist[]{\dronetowayp}{}{}{}
-        ,\ 
-        \pos[]{\wayp}{}{\irs}{}
-    \right)
-    .
-\end{equation}
-Thereby, the distance 
-$
-    \dist[]{\dronetowayp}{}{}{}
-$
-from the drone to the waypoint is
-used as the backprojection length in equation \ref{eq:image_to_local_transformation}.
-The distance is computed by integrating the rescaled speed over the 
-duration
-$
-    \dur[\user]{\dronetowayp}{}{}{}
-$
-\begin{equation}
-    \dist[]{\dronetowayp}{}{}{}
-    = 
-    \maxof{
-        \dist[\user]{\dronetowayp}{\mnm}{}{}
-    }{
-        \minof{
-            \speed[]{\drone}{\desired}{}{}
-            \cdot
-            \dur[\user]{\dronetowayp}{}{}{}
-        }{
-            \dist[\user]{\dronetowayp}{\mxm}{}{}
-        }
-    }
-\end{equation}
-with the user-specified minimum 
-$
-    \dist[\user]{\dronetowayp}{\mnm}{}{}
-$
-and
-maximum distance
-$
-    \dist[\user]{\dronetowayp}{\mxm}{}{}
-$.
-Third,
-the local trajectory
-\begin{align}
-    \pos[]{\loctraj}{}{\grs}{}%(\timepnt[]{}{}{}{})
-    :\ 
-    &\mathbb{R}_{[0, \dur[]{\loctraj}{}{}{}]} \rightarrow \mathbb{R}^3
-    ;\quad
-    %\nonumber \\
-    \timepnt[]{}{}{}{}
-    \mapsto
-    \pos[]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
-\end{align}
-from the current drone state to the waypoint
-is generated according to
-the algorithm of Mueller et. al. \cite{Mueller2013} which
-minimizes the jerk of the trajectory
-\begin{align}
-    &\qquad \min 
-    \int_0^{\dur[]{\loctraj}{}{}{}}
-        \left\|
-            \pos[\dddot]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
-        \right\|^2_2
-    \text d \timepnt[]{}{}{}{}
-    \nonumber \\
-    \text{s.t.}\quad
-    & \pos[]{\loctraj}{}{\grs}{}(0) = \pos[]{\drone}{}{\grs}{}
-    \qquad\qquad \pos[]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) = \pos[]{\wayp}{}{\grs}{}
-    \nonumber \\
-    & \pos[\dot]{\loctraj}{}{\grs}{}(0) = \vel[]{\drone}{}{\grs}{}
-    \qquad\qquad \pos[\dot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}
-    \nonumber \\
-    & \pos[\ddot]{\loctraj}{}{\grs}{}(0) = \acc[]{\drone}{}{\grs}{}
-    \qquad\qquad \pos[\ddot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}
-    .
-\end{align}
-The above optimization problem is 
-computed in closed solution,
-which was derived with Pontryagin's maximum principle.
-Further, the dynamic constraints of the drone are only taken into account
-at a subsequent feasibility check.
-Thus, the algorithm is
-characterized by a low computational complexity 
-and can be executed at the higher frequencies required by the navigation method of this thesis.
-The duration of the local trajectory is given by the quotient
-of the distance from the drone to the waypoint and 
-the average speed of the trajectory
-\begin{equation}
-    \dur[]{\loctraj}{}{}{}
-    = 
-    \frac{
-        \dist[]{\dronetowayp}{}{}{}
-    }{
-        \speed[]{\loctraj}{\average}{}{}
-    }.
-\end{equation}
-The average speed is yielded by upper-bounding
-the denormalized speed 
-by 
-the current speed of the drone 
-plus a user-specified maximum speed increment
-\begin{equation}
-    \speed[]{\loctraj}{\average}{}{}
-    = 
-    \minof{
+At a fraction of the main frequency, i.e.,
+$\freq[\user]{\main}{}{}{} / \num[\user]{\text{plan}}{}{}{}$, 
+the planning module takes the following 5 steps 
+to re-compute its local trajectory.
+\begin{enumerate}
+    \item Compute the desired speed
+    \begin{equation}
         \speed[]{\drone}{\desired}{}{}
-    }{
-        %\speed[]{\drone}{}{}{} 
-        \left\|
-            \vel[]{\drone}{}{\grs}{}
-        \right\|_2
-        + 
-        \speed[\user]{\drone}{\Delta}{}{}
-    }
-\end{equation}
-in order to prevent too steep speed increases.
+        = 
+        \maxof{
+            \speed[\user]{\drone}{\mnm}{}{}
+        }{
+            \speed[\user]{\drone}{\mxm}{}{}
+            \cdot 
+            \speed[\norm]{\drone}{\desired}{}{}
+        }.
+    \end{equation}
+    The normalized, desired speed 
+    $\speed[\norm]{\drone}{\desired}{}{} \in \left[0, 1\right]$ 
+    of the navigation decision
+    is rescaled by its upper bound, 
+    the user-specified drone's maximum speed 
+    $\speed[\user]{\drone}{\mxm}{}{}$.    
+    The user-specified drone's minimum speed 
+    $\speed[\user]{\drone}{\mnm}{}{}$
+    lower-bounds the desired speed.
 
+    \item Compute the drone's distance to the waypoint 
+    \begin{equation}
+        \dist[]{\dronetowayp}{}{}{}
+        = 
+        \maxof{
+            \dist[\user]{\dronetowayp}{\mnm}{}{}
+        }{
+            \minof{
+                \speed[]{\drone}{\desired}{}{}
+                \cdot
+                \dur[\user]{\dronetowayp}{}{}{}
+            }{
+                \dist[\user]{\dronetowayp}{\mxm}{}{}
+            }
+        }.
+    \end{equation}
+    The desired speed 
+    $\speed[]{\drone}{\desired}{}{}$ 
+    is integrated over the user-specified duration
+    $\dur[\user]{\dronetowayp}{}{}{}$.
+    The result is bounded to the interval spanned 
+    by the user-specified minimum
+    $\dist[\user]{\dronetowayp}{\mnm}{}{}$
+    and maximum
+    $\dist[\user]{\dronetowayp}{\mxm}{}{}$
+    distance.
 
-\section{Control module}
+    \item Compute the waypoint with respect to the global reference system
+    \begin{equation} \label{eq:pl_global_wayp}
+        \pos[]{\wayp}{}{\grs}{}
+        = 
+        \trafo[]{}{\grs\irs}{}{} \left(
+            \dist[]{\dronetowayp}{}{}{}
+            ,\ 
+            \pos[]{\wayp}{}{\irs}{}
+        \right).
+    \end{equation}
+    The transformation
+    $\trafo[]{}{\grs\irs}{}{}$
+    (see equ. \ref{eq:global_image_transformations})
+    backprojects the waypoint
+    $\pos[]{\wayp}{}{\irs}{}$ 
+    of the navigation decision
+    from the 2D image to the 3D global reference system.
+    Thereby, the drone's distance 
+    $\dist[]{\dronetowayp}{}{}{}$
+    to the waypoint
+    constitutes the backprojection length.
+    
+    \item Set the starting time of the local trajectory to the current time
+    \begin{equation}
+        \timepnt[]{\loctraj}{0}{}{} = t
+    \end{equation}
+    and compute the duration of the local trajectory 
+    \begin{equation}
+        \dur[]{\loctraj}{}{}{}
+        = 
+        \frac{
+            \dist[]{\dronetowayp}{}{}{}
+        }{
+            \minof{
+            \speed[]{\drone}{\desired}{}{}
+            }{
+                %\speed[]{\drone}{}{}{} 
+                \left\|
+                    \vel[]{\drone}{}{\grs}{}
+                \right\|_2
+                + 
+                \speed[\user]{\drone}{\Delta}{}{}
+            }
+        }.
+    \end{equation}
+    The drone's distance 
+    $\dist[]{\dronetowayp}{}{}{}$
+    to the waypoint is devided 
+    by the slower of either the desired speed
+    $\speed[]{\drone}{\desired}{}{}$
+    or the latest drone speed estimate
+    $\left\|\vel[]{\drone}{}{\grs}{}\right\|_2$
+    plus a user-specified speed increment
+    $\speed[\user]{\drone}{\Delta}{}{}$.
+    By relating the desired to the estimated speed,
+    excessive speed increases
+    potentially violating the drone's dynamic limitations
+    can be prevented.
 
-
-Publish reference state from local trajectory to autopilot
-\begin{equation}
-    t^\text{loctraj} = t - t^\text{loctraj}_0 + T^\text{mainloop}
-\end{equation}
-Sample reference state
-\begin{equation}
-    \underline p^\text{ref} = \underline p^\text{loctraj}(t^\text{loctraj})
-    ,\ \dots,\ 
-    \underline j^\text{ref} = \underline j^\text{loctraj}(t^\text{loctraj})
+    \item Compute the local trajectory 
+    \begin{align} \label{eq:loc_traj}
+        \pos[]{\loctraj}{}{\grs}{}
+        :\ 
+        &\left[0, \dur[]{\loctraj}{}{}{}\right] \rightarrow \mathbb{R}^3
+        ;\quad
+        %\nonumber \\
+        \timepnt[]{}{}{}{}
+        \mapsto
+        \pos[]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+    \end{align}
+    starting in the latest drone state estimate
+    $\pos[]{\drone}{}{\grs}{}
     ,\ 
-    \phi_z^\text{ref} 
-    = 
-    \mathrm{atan2}\left(
-        v_y^\text{loctraj}(t^\text{loctraj})
-        ,
-        v_x^\text{loctraj}(t^\text{loctraj})
-    \right)
-\end{equation}
+    \vel[]{\drone}{}{\grs}{}
+    ,\ 
+    \acc[]{\drone}{}{\grs}{}$
+    and ending in the global waypoint
+    $\pos[]{\wayp}{}{\grs}{}$
+    with unconstrained velocity and acceleration.
+    The implementation\footnote{
+            \url{https://github.com/markwmuller/RapidQuadrocopterTrajectories}, visited on 17/08/2022
+    } 
+    of the algorithm of Mueller et. al. \cite{Mueller2013}
+    is deployed to find the polynomial trajectory with minimum jerk
+    (third time derivative of position)
+    by solving the optimization problem
+    \begin{align}
+        &\qquad \min 
+        \int_0^{\dur[]{\loctraj}{}{}{}}
+            \left\|
+                \pos[\dddot]{\loctraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+            \right\|^2_2
+        \text d \timepnt[]{}{}{}{}
+        \nonumber \\
+        \text{s.t.}\quad
+        & \pos[]{\loctraj}{}{\grs}{}(0) = \pos[]{\drone}{}{\grs}{}
+        \qquad\qquad \pos[]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) = \pos[]{\wayp}{}{\grs}{}
+        \nonumber \\
+        & \pos[\dot]{\loctraj}{}{\grs}{}(0) = \vel[]{\drone}{}{\grs}{}
+        \qquad\qquad \pos[\dot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}
+        \nonumber \\
+        & \pos[\ddot]{\loctraj}{}{\grs}{}(0) = \acc[]{\drone}{}{\grs}{}
+        \qquad\qquad \pos[\ddot]{\loctraj}{}{\grs}{}(\dur[]{\loctraj}{}{}{}) \text{ free}.
+    \end{align}
+    The drone's dynamic limitations
+    are only taken into account in subsequent feasibility checks 
+    and are exempt from the above optimization problem.
+    This allows the algorithm to solve the optimization problem in closed form
+    which is characterized by low computational effort.
+    The algorithm therewith qualifies 
+    to run at the relatively high frequencies
+    required by the autonomous navigation method.
+\end{enumerate}
 
 
-track the ref states -> lo2w level control commands
-control scheme by Faessler et al. [5]
+At the main frequency $\freq[\user]{\main}{}{}{}$, 
+the planning module takes the following 2 steps to sample 
+a reference state from its local trajectory.
+\begin{enumerate}
+    \item Compute the time point of the reference state
+    \begin{equation}
+        \timepnt[]{\loctraj}{}{}{} 
+        = 
+        t - \timepnt[]{\loctraj}{0}{}{} + 1/\freq[\user]{\main}{}{}{}.
+    \end{equation}
+    The actual time $t$ is related to the starting time 
+    $\timepnt[]{\loctraj}{0}{}{}$
+    of the local trajectory,
+    whose time domain starts at zero.
+    The addition of the main period
+    $1/\freq[\user]{\main}{}{}{}$
+    ensures that the sampled reference state remains prospective at all times.
+    \item Sample the current reference state from the local trajectory
+    \begin{align} \label{eq:ref_state}
+        \pos[]{\text{ref}}{}{\grs}{} 
+        &= 
+        \pos[]{\loctraj}{}{\grs}{}(\timepnt[]{\loctraj}{}{}{})
+        \nonumber \\
+        \vel[]{\text{ref}}{}{\grs}{} 
+        &= 
+        \pos[\dot]{\loctraj}{}{\grs}{}(\timepnt[]{\loctraj}{}{}{})
+        \nonumber \\
+        \acc[]{\text{ref}}{}{\grs}{} 
+        &= 
+        \pos[\ddot]{\loctraj}{}{\grs}{}(\timepnt[]{\loctraj}{}{}{})
+        \nonumber \\
+        \jerk[]{\text{ref}}{}{\grs}{} 
+        &= 
+        \pos[\dddot]{\loctraj}{}{\grs}{}(\timepnt[]{\loctraj}{}{}{})
+        \nonumber \\
+        \ang[]{\text{ref}}{z}{}{}
+        &=
+        \mathrm{atan2}\left(
+            \speed[]{\text{ref}}{y}{\grs}{}
+            ,
+            \speed[]{\text{ref}}{x}{\grs}{}
+        \right).
+    \end{align}
+    The reference yaw $\ang[]{\text{ref}}{z}{}{}$ is set so that
+    the drone and therewith its onboard camera 
+    point in the direction of flight movement.
+\end{enumerate}
 
 
 
-\section*{Training data generation}
+
+
+
+
+
+
+
+
+\section{Control stack}
+Within the autonomous navigation method, 
+the control stack takes on the task of 
+flying the drone as planned.
+To do this, the control stack
+generates the inputs for the motors attached to the drone's rotors,
+which consequently track the latest reference state
+(equ. \ref{eq:ref_state})
+from the planning module.
+In the simulations of this thesis,
+the control stack is realized with the RPG Quadrotor Control \footnote{
+        \url{https://github.com/uzh-rpg/rpg_quadrotor_control}, visited on 17/08/2022
+} implementation
+(see figure \ref{fig:control_module}).
+Since this thesis centers on the reasoning aspect of autonomous navigation, 
+only an overview of the deployed control stack is presented here.
+The reader may consult the provided references for more details
+on the control.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{own/control_module.drawio.pdf}
+    \caption[
+        The control stack in simulation.
+    ]{
+        The control stack in simulation.
+        \label{fig:control_module}}
+\end{figure}
+
+The RPG Quadrotor Control implementation,
+which includes the autopilot, the SBUS bridge and and the RPG RotorS interface,
+basically executes two feedback control loops in a cascade.
+The autopilot integrates the position controller 
+that runs the control algorithm of Faessler at al. proposed in \cite{Faessler2018}.
+Based on the latest reference state and the fed back drone state estimates,
+the position controller generates high-level control commands.
+A control command comprises 
+the collective thrust of the drone's rotors 
+as well as the drone's angular velocity and acceleration.
+The SBUS bridge converts each incoming control command
+into an SBUS message and forwards this message to the
+RPG RotorS interface.
+The RPG RotorS interface integrates the body-rate controller
+that runs the control algorithm of Faessler at al. proposed in \cite{Faessler2017}.
+Based on the latest high-level control command 
+as well as the fed back drone state and motor speed estimates,
+the body-rate controller generates low-level motor speed commands.
+These commands are forwarded to RotorS for execution.
+RotorS, developed by Furrer et al. \cite{Furrer2016},
+is plugged into the Gazebo \footnote{
+    \url{https://gazebosim.org/home}, visited on 18/08/2022
+}
+simulator to model the drone's physics 
+and to provide the controllers with
+drone state and motor speed estimates.
+
+In real-world, the drone's flight controller would replace the 
+RPG RotorS interface in order to generate hardware-specific low-level
+motor commands based on the latest SBUS message from the SBUS bridge.
+
+
+
+
+
 
 
 
 \section{Expert system} \label{sec:expert_system}
-
-The training data for the ANN module is automatically generated.
-For this, a slightly extended version of the expert system by Kaufmann et al. \cite{Kaufmann2018}  
-(they referred to it as expert policy) is implemented.
-In the context of machine learning, 
-an expert system is a program that imitates a human expert
-in order to solve a \textbf{problem}. 
-It comprises two main components: a \textbf{knowledge base} 
-that stores known facts and rules, and an
-\textbf{inference engine} which, by applying the rules to the known facts,
-generates new facts \cite{jackson1986introduction}.
-
-\subsection*{Problem}
-At training data generation (see XXX),
-the expert system undertakes the task
-of the ANN module by
-either making navigation decisions
-\begin{equation} \label{eq:nav_dec_by_expert}
-    (v_\text{norm},\ {}_\textbf{I} \underline p^\text{wayp})   
-\end{equation}
-instead of the fully untrained ANN module
-or correcting the false navigation decisions of the partly trained ANN module.
-
-
 %In contrast to the ANN module,
 %the expert system derives its navigation decisions 
 %not from onboard sensor data but from its knowledge base.
@@ -1845,277 +1933,477 @@ or correcting the false navigation decisions of the partly trained ANN module.
 %of the completely untrained or yet insufficiently trained ANN module
 %to make navigation decisions.
 
+In the context of machine learning, 
+an expert system is a program that imitates a human expert
+in order to solve a problem. 
+It comprises a knowledge base,
+which stores known facts and rules, and an
+inference engine, which infers new facts 
+by applying the rules to the known facts \cite{osti_5675197}.
 
-\subsection*{Knowledge Base}
-The expert system makes navigation decisions on its knowledge base
-which consists of the following facts (\textbf{F*}) and rules (\textbf{R*}).
+\paragraph*{Problem} $\ $\\
+This thesis implements the expert system 
+by Kaufmann et al. \cite{Kaufmann2018}
+in order to solve the problem of automated navigation decision making
+during the generation of training data for the ANN module.
+The training dataset is extended with new samples 
+while the drone runs the autonomous navigation method to fly through a racetrack.
+The expert system checks the latest navigation decision 
+made by the yet partially trained ANN module.
+If it does not meet certain requirements,
+the expert system intervenes with its own navigation decision.
+This, first, keeps the drone on course and, second,
+triggers the generation of a new training sample labeled 
+with the expert system's navigation decision.
+
+\paragraph*{Knowledge base} $\ $\\
+While the ANN module infers navigation decisions from onboard sensor data,
+the expert system makes navigation decisions based on its knowledge
+which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
 \begin{itemize}
-    \item [\textbf{F1}] Current drone position and orientation
-    in the global reference frame
+    
+    \item [\textbf{F1}] 
+    The planning module's waypoint
     \begin{equation}
-        {}_\textbf{G} \underline p^\text{drone} \in \mathbb{R}^3,
-        \quad 
-        {}_\textbf{G} \underline q_\text{drone} \in \mathbb{R}^4.
+        \pos[]{\text{ann}}{\wayp}{\grs}{}
     \end{equation}
-    In simulation,
-    ${}_\textbf{G} \underline p^\text{drone}$ 
-    and 
-    ${}_\textbf{G} \underline q_\text{drone}$
-    comply with their ground-truth values,
-    whereas in real-world experiments
-    they can only be estimated.
+     with respect to the global reference system
+    (see equ. \ref{eq:pl_global_wayp}) 
+    that was computed based
+    on the ANN module's latest navigation decision
+    (see equ. \ref{eq:navigation_decision}).
+    
 
-    \item [\textbf{F2}] The center points of the gates,
-    i.e., the waypoints of the racetrack, 
-    in the global reference system
+    \item [\textbf{F2}] The drone's latest position and quaternion orientation estimate,
+    which are provided by the drone's state estimation system and 
+    may correspond to ground truth in the simulation
     \begin{equation}
-        \left( {}_\textbf{G} \underline p^\text{gate}_{i}  \in \mathbb{R}^3\right)
-        _{i \in \left\{0, ..., N^\text{gate} - 1 \right\}}
+        \pos[]{\drone}{}{\grs}{}
+        ,\quad 
+        \quat[]{\drone}{}{\grs}{}.
     \end{equation}
-    as well as the initial index to the currently targeted gate
+    
+    \item [\textbf{F3}] The center points of the gates of the racetrack
     \begin{equation}
-        i_\text{curr} = i_\text{curr}^\text{init}
-        \in \left\{0, ..., N^\text{gate} - 1 \right\}.
+        \left( 
+            \pos[]{\gate}{\idx[]{}{}{}{}}{\grs}{}
+        \right)
+        _{\idx[]{}{}{}{} \in \left\{0, ..., \num[]{\gate}{}{}{} - 1 \right\}}
     \end{equation}
-    \item [\textbf{F3}] Positions and velocities 
-    in the global reference frame
-    from the sampled states of the global trajectory,
-    i.e., the previously computed minimum-snap trajectory [?] 
-    traversing through the center points of the gates
+    and the initial index to the currently targeted gate to be passed next
     \begin{equation}
-        \left( {}_\textbf{G} \underline p^\text{traj}_i \in \mathbb{R}^3 \right)
-        _{i \in \{0, ..., N^\text{traj}-1\}},
-        \quad
-        \left( {}_\textbf{G} \underline v^\text{traj}_i \in \mathbb{R}^3 \right)
-        _{i \in \{0, ..., N^\text{traj}-1\}}.
+        \idx[]{\gate}{\target}{}{} \in \left\{0, ..., \num[]{\gate}{}{}{} - 1 \right\}
+        .
     \end{equation}
 
-    \item [\textbf{R1}] If the drone is closer to the currently targeted gate
+    \item [\textbf{R1}] Compute the global trajectory of the current racetrack
+    \begin{align} \label{eq:glo_traj}
+        \pos[]{\glotraj}{}{\grs}{}
+        :\ 
+        &\left[
+            \timepnt[]{\gate}{0}{}{}, 
+            \timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}
+        \right] \rightarrow \mathbb{R}^3
+        ;\quad
+        \timepnt[]{}{}{}{}
+        \mapsto
+        \pos[]{\glotraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+        .
+    \end{align}
+    The algorithm of Mellinger and Kumar \cite{Mellinger2011}
+    finds the minimum snap (fourth time derivative of position) spline trajectory
+    \begin{align}
+        \pos[]{\glotraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+        = \sum_{i = 0}^{\num[]{\gate}{}{}{} - 1}
+        \begin{cases}
+            \pos[]{\glotraj}{i}{\grs}{}(\timepnt[]{}{}{}{})
+            , 
+            &t \in \left[\timepnt[]{\gate}{i}{}{}, \timepnt[]{\gate}{i+1}{}{}\right] \\
+            0, & \text{else}
+        \end{cases}
+    \end{align}
+    that, traverses through all gate center points (\textbf{F3}),
+    each at its corresponding gate time $\timepnt[]{\gate}{i}{}{}$,
+    and reconnects to itself at $t=\timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}$ at gate $i=0$.
+    The entries of the pieces 
+    $\pos[]{\glotraj}{i}{\grs}{}(\timepnt[]{}{}{}{})$
+    of the spline are polynomials. 
+    The user specifies the polynomial order 
+    $\num[\user]{\glotraj}{\text{poly}}{}{}$
+    of the pieces and
+    the continuity order
+    $\num[\user]{\glotraj}{\text{cont}}{}{}$
+    of the spline. 
+    However, since the goal is to minimize snap,
+    it is required that 
+    $
+    \num[\user]{\glotraj}{\text{poly}}{}{}
+    \ge \num[\user]{\glotraj}{\text{cont}}{}{} \ge 4
+    $.
+    The algorithm performs the following two-step iterative optimization.
+
+    First,
+    the optimal polynomial coefficients of the spline pieces
+    are found for fixed gate arrival times 
+    $\timepnt[]{\gate}{i}{}{}$
+    by solving the optimization problem
+    \begin{align}
+        &\qquad \argmin{\pos[]{\glotraj}{}{\grs}{}}
+        \int_{\timepnt[]{\gate}{0}{}{}}^{\timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}}
+            \left\|
+                \pos[\ddddot]{\glotraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+            \right\|^2_2
+        \text d \timepnt[]{}{}{}{}
+        \nonumber 
+        \\
+        \text{s.t.}\quad
+        & \pos[]{\glotraj}{}{\grs}{}\left(\timepnt[]{\gate}{i}{}{}\right) = 
+            \pos[]{\gate}{\idx[]{}{}{}{}}{\grs}{},
+        &&
+            \frac{\text d^j \pos[]{\glotraj}{}{\grs}{}}{\text d \timepnt[]{j}{}{}{}} 
+            (\timepnt[]{\gate}{i}{}{}) \text{ defined},
+        \nonumber \\
+        & \idx[]{}{}{}{} \in \left\{0, ..., \num[]{\gate}{}{}{}\right\},
+        && j \in \left\{1, ..., \num[\user]{\glotraj}{\text{cont}}{}{}\right\}.
+    \end{align}
+    Note that, as the spline is closed, 
+    the first and last gate equate 
+    $\pos[]{\gate}{\num[]{\gate}{}{}{}}{\grs}{} = \pos[]{\gate}{0}{\grs}{}$.
+    Morover, the gate times of the very first iteration are 
+    approximated with the distances between the gate center points
+    devided by the user-specified maximum speed $\speed[\user]{\glotraj}{\mxm}{}{}$ of the trajectory.
+    The above optimization problem
+    is temporally and spatially dedimensionalized 
+    to increase numeric stability and 
+    reformulated as quadratic program,
+    which is solved with the Gurobi\footnote{
+        \url{https://www.gurobi.com/}, visited on 20/08/2022
+    } optimizer.
+
+    Second, the polynomial coefficients of the spline pieces 
+    are fixed
+    and the inner gate times
+    $\timepnt[]{\gate}{i}{}{}$
+    are optimized relatively to each other.
+    The corresponding optimization problem
+    \begin{align}
+        &\qquad \argmin{\timepnt[]{\gate}{i}{}{}}
+        \int_{\timepnt[]{\gate}{0}{}{}}^{\timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}}
+            \left\|
+                \pos[\ddddot]{\glotraj}{}{\grs}{}(\timepnt[]{}{}{}{})
+            \right\|^2_2
+        \text d \timepnt[]{}{}{}{}
+        \nonumber \\
+        \text{s.t.}\quad
+        & \timepnt[]{\gate}{i}{}{} < \timepnt[]{\gate}{i+1}{}{},
+        \qquad
+        \timepnt[]{\gate}{0}{}{},\ \timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{} \text{ fixed},
+        \qquad
+        \idx[]{}{}{}{} \in \left\{0, ..., \num[]{\gate}{}{}{} - 1 \right\}
+    \end{align}
+    is solved by gradient descent with backtracking line search.
+
+    
+    
+    The two optimization steps are executed iteratively until the cost
+    of the first optimization problem converges. 
+    Then, the trajectory is temporally and spatially redimensionalized
+    and temporally scaled to adhere to 
+    the user-specified maximum values in terms of 
+    speed
+    $\speed[\user]{\glotraj}{\mxm}{}{}$, 
+    thrust 
+    $\scacc[\user]{\glotraj}{\mxm}{}{}$
+    and roll-pitch rate 
+    $\scangvel[\user]{\glotraj}{\mxm}{}{}$
+    along the trajectory. 
+    For later use,
+    the expert system samples the positions and speeds
+    of the global trajectory
+    \begin{equation}
+        \left( 
+            \pos[]{\glotraj}{\idx[]{}{}{}{}}{\grs}{}
+        \right)
+        _{\idx[]{}{}{}{} \in \left\{0, ..., \num[]{\glotraj}{}{}{} - 1 \right\}}
+        ,\quad
+        \left( 
+            \speed[]{\glotraj}{\idx[]{}{}{}{}}{\grs}{}
+        \right)
+        _{\idx[]{}{}{}{} \in \left\{0, ..., \num[]{\glotraj}{}{}{} - 1 \right\}}
+    \end{equation}
+    with $\speed[]{\glotraj}{\idx[]{}{}{}{}}{\grs}{} = 
+    \left\| 
+        \pos[\dot]{\glotraj}{\idx[]{}{}{}{}}{\grs}{}
+    \right\|_2 $.
+    The sampling occurs at the
+    user-specified frequency
+    $\freq[\user]{\glotraj}{}{}{}$,
+    which results in
+    $\num[]{\glotraj}{}{}{} = \freq[\user]{\glotraj}{}{}{} \cdot 
+    \left(\timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}
+    - \timepnt[]{\gate}{0}{}{}\right)$
+    samples.
+
+    
+    \item [\textbf{R2}] If the drone is closer to the currently targeted gate 
     than a user-specified distance
     \begin{equation}
-        \left\| {}_\textbf{G} \underline p^\text{gate}_{i_\text{curr}} - {}_\textbf{G}\underline p^\text{drone} \right\|_2 
-        < d^\text{user}_\text{drone-curr},
+        \left\| 
+            \pos[]{\gate}{\idx[]{\gate}{\target}{}{}}{\grs}{} - \pos[]{\drone}{}{\grs}{}
+        \right\|_2 
+        < 
+        \dist[\user]{\dronetogate}{}{}{},
     \end{equation}
     increment the index to the currently targeted gate
     \begin{align}
-        i_\text{curr} &\leftarrow (i_\text{curr} + 1) \bmod N^\text{gate}. 
-        %\\
-        %i_\text{last} &\leftarrow (i_\text{curr} - 1 + N_\text{gate}) \bmod N_\text{gate}.
+        \idx[]{\gate}{}{}{} &\leftarrow (\idx[]{\gate}{}{}{} + 1) \bmod \num[]{\gate}{}{}{}.
     \end{align}
     
+    \item [\textbf{R3}] If the
+    planning module's waypoint (\textbf{F1}) computed based on the
+    ANN module's latest navigation decision,
+    is more distant from the global trajectory (\textbf{R1}) than
+    a user-specified margin scaled by the 
+    the user-specified drone's maximum speed, i.e.,
+    \begin{equation}
+        \argmin{i \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}}
+            \left\| 
+                \pos[]{\text{ann}}{\wayp}{\grs}{}
+                - 
+                \pos[]{\glotraj}{i}{\grs}{}
+            \right\|_2
+            >
+            \dist[\user]{\wayptoglotraj}{\mxm}{}{} \cdot \frac{\speed[\user]{\drone}{\mxm}{}{} +1}{5},
+    \end{equation}
+    the expert system is required to intervene with its own navigation decision.
+
     
-    \item [\textbf{R2}] Update the index $i_\text{proj} \in \{0, ..., N^\text{traj}-1\}$ to the projection state,
+    \item [\textbf{R4}] Update the index 
+    $\idx[]{\glotraj}{\proj}{}{} \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}$ 
+    to the projection state,
     i.e., the state of the global trajectory
-    onto which the current drone position is projected,
+    onto which the drone's latest position estimate is projected,
     with the following iterative method.
+    Figure \ref{fig:expert_system_projection} 
+    schematically illustrates the method with a 2D example.
     \begin{enumerate}
-        \item Decrement the index to the projection state 
-        to compute the index to the previous state of the global trajectory
+        \item Compute the index to the previous state of the global trajectory,
+        by decrementing the index to the projection state
         \begin{equation}
-            i_\text{prev} = (i_\text{proj} - 1 + N^\text{traj}) \bmod N^\text{traj}.
+            \idx[]{\glotraj}{\prev}{}{} 
+            = 
+            (\idx[]{\glotraj}{\proj}{}{} - 1 + \num[]{\glotraj}{}{}{}) 
+            \bmod 
+            \num[]{\glotraj}{}{}{}.
         \end{equation}
         \item Starting from the previous state, 
         compute the vector to the projection state
         \begin{equation} \label{eq:vec_prev_state_2_proj_state}
-            {}_\textbf{G} \underline a 
+            \anything[]{}{}{\grs}{}{\underline a}
             = 
-            {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}}
+            \pos[]{\glotraj}{\idx[]{\glotraj}{\proj}{}{}}{\grs}{}
             - 
-            {}_\textbf{G} \underline p^\text{traj}_{i_\text{prev}}
+            \pos[]{\glotraj}{\idx[]{\glotraj}{\prev}{}{}}{\grs}{}
         \end{equation}
         and the vector to the current drone position
         \begin{equation} \label{eq:vec_prev_state_2_drone}
-            {}_\textbf{G} \underline b 
+            \anything[]{}{}{\grs}{}{\underline b}
             = 
-            {}_\textbf{G} \underline p^\text{drone}
+            \pos[]{\drone}{}{\grs}{}
             - 
-            {}_\textbf{G} \underline p^\text{traj}_{i_\text{prev}}.
+            \pos[]{\glotraj}{\idx[]{\glotraj}{\prev}{}{}}{\grs}{}.
         \end{equation}
-        \item If the scalar product of the vectors ${}_\textbf{G} \underline a$ and ${}_\textbf{G} \underline b$, 
-        both normalized by the length of ${}_\textbf{G} \underline a$,
+        \item If the scalar product of the vectors 
+        $\anything[]{}{}{\grs}{}{\underline a}$ 
+        and 
+        $\anything[]{}{}{\grs}{}{\underline b}$, 
+        both normalized by the length of $\anything[]{}{}{\grs}{}{\underline a}$,
         is less than 1
         \begin{align} \label{eq:norm_dot_prod_criterion}
-            \frac{{}_\textbf{G} \underline a ^T {}_\textbf{G} \underline b}{{}_\textbf{G} \underline a ^T {}_\textbf{G} \underline a} < 1,
+            \frac{
+                \anything[]{}{}{\grs}{}{\underline a} 
+                \cdot 
+                \anything[]{}{}{\grs}{}{\underline b}
+            }{  
+                \anything[]{}{}{\grs}{}{\underline a} 
+                \cdot 
+                \anything[]{}{}{\grs}{}{\underline a}
+            } < 1,
         \end{align}
         go to the next step. 
         Else, increment the index to the projection state
         \begin{equation}
-            i_\text{proj} \leftarrow (i_\text{proj} + 1) \bmod N^\text{traj}
-            %(j_\text{proj} + 1) \bmod N_\text{traj} \mapsto j_\text{proj}
+            \idx[]{\glotraj}{\proj}{}{} 
+            \leftarrow 
+            (\idx[]{\glotraj}{\proj}{}{} + 1) \bmod \num[]{\glotraj}{}{}{}
         \end{equation}
         and go back to step 1.
         \item If the drone is 
         within a user-specified distance to the projection state 
         \begin{equation} \label{eq:dist_drone_proj_criterion}
             \left\| 
-                {}_\textbf{G} \underline p^\text{drone} 
+                \pos[]{\drone}{}{\grs}{}
                 - 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{\proj}{}{}}{\grs}{}
             \right\|_2 
             \le 
-            d^\text{user}_\text{drone-proj},
+            \dist[\user]{\dronetoproj}{}{}{},
         \end{equation}
-        the index $i_\text{proj}$ to the projection state is found.
+        the index 
+        $\idx[]{\glotraj}{\proj}{}{}$ 
+        to the projection state is found.
         Else, set the index 
         to the state of the global trajectory
         which has the minimum distance to the current drone position
         \begin{equation} \label{eq:proj_idx_with_min_dist}
-            \underset{i_\text{proj}}{\mathrm{argmin}}\ 
+            \argmin{\idx[]{\glotraj}{\proj}{}{}}
             \left\| 
-                {}_\textbf{G} \underline p^\text{drone} 
+                \pos[]{\drone}{}{\grs}{}
                 - 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{\proj}{}{}}{\grs}{}
             \right\|_2.
         \end{equation}
         Due to this step,
         the expert system does not require to know
-        the initial index $j^\text{init}_\text{proj} \in \{0, ..., N_\text{traj}-1\}$ 
+        the initial index 
         to the projection state.
-        
 
     \end{enumerate}
-    Figure \ref{fig:expert_system_projection} 
-    schematically illustrates the above method with a 2D example.
+    
     
 
     \begin{figure}
         \centering
         \includegraphics[width=0.9\textwidth]{own/expert_state_projection_3d.pdf}
         \caption[
-            Schematic 2D example 
-            of the iterative method 
-            to update the index to the projection state
+            Update of the projection state index
         ]{
-            Schematic 2D example 
-            of the iterative method 
-            to update the index to the projection state.
-            
-            The positions of the states (blue points)
+            Schematic example
+            of the update of the projection state index (\textbf{R4}).
+            Known are: the positions (blue points) 
             sampled from the global trajectory (blue dotted line),
-            the old index to the projection state (green circle)
-            and the current position of the drone (orange circle) are known.
-            At each iteration of the method,
-            the vector from the previous state 
-            to the projection state 
-            (green arrows, equation \ref{eq:vec_prev_state_2_proj_state})
-            and the vector from the previous state to the drone position (orange arrows, equation \ref{eq:vec_prev_state_2_drone})
-            are computed. 
-            Then, the normalized dot product criterion (annotations, equation \ref{eq:norm_dot_prod_criterion}) is checked. 
-            For iteration \#0-2, the criterion is not fullfilled.
+            the last index to the projection state (green circle)
+            and the current position of the drone (orange circle).
+            At an iteration,
+            the vector from the previous to the projection state 
+            (green arrows, equ. \ref{eq:vec_prev_state_2_proj_state})
+            and the vector from the previous to the drone position 
+            (orange arrows, equ. \ref{eq:vec_prev_state_2_drone})
+            are computed.
+            Then, the normalized dot product criterion 
+            (annotations, equ. \ref{eq:norm_dot_prod_criterion}) 
+            is checked. 
+            For iteration \#0-2, the criterion is not met.
             Thus, the index to the projection state is incremented
             and another iteration is started.
-            At iteration \#3 the criterion is finally met and the 
-            new index to the projection state (green star) is identified -
-            assuming the distance criterion (equation \ref{eq:dist_drone_proj_criterion}) is also true. 
+            At iteration \#3 the criterion is met and the 
+            new index to the projection state (green star) is identified
+            (assuming the distance criterion 
+            (equ. \ref{eq:dist_drone_proj_criterion}) is also met). 
             Note that finding the index to the projection state 
-            only with the minimum distance criterion (equation \ref{eq:proj_idx_with_min_dist}) would have failed here,
-            since the state that is closest to the drone (blue square) 
-            belongs to a later or earlier part of the global trajectory which intersects the current part.
-            %Moreover, it justifies the higher effort of the method
-            %compared to identifying the projection state
-            %solely based on minimum distance (see equation \ref{eq:proj_idx_with_min_dist}).
-            %The latter, more intuitive, approach may fail 
-            %if the global trajectory intersects itself,
-            %as is the case with figure 8 racetracks, for example.
+            only with minimum distance 
+            (equ. \ref{eq:proj_idx_with_min_dist}) 
+            would have failed here,
+            since the so indexed state (blue square) 
+            belongs to a later or earlier part of the global trajectory 
+            which only intersects the current part.
         \label{fig:expert_system_projection}}
     \end{figure}
 
 
     
-    \item [\textbf{R3}] 
+    \item [\textbf{R5}] 
     Update the index 
-    $i_\text{speed} \in \{0, ..., N^\text{traj}-1\}$ 
+    $\idx[]{\glotraj}{v}{}{} \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}$
     to the speed state,
     i.e., the state of the global trajectory
-    that is the basis for the normalized speed
-    $v_\text{norm}$  decision,
-    by iteratively finding the first state of the global trajectory 
+    that is the reference for the normalized speed
+    $\speed[\norm]{\expert}{\desired}{}{}$ component
+    of the expert system's navigation decision,
+    by finding the first state of the global trajectory 
     that follows the projection state
     with a specific distance.
     \begin{enumerate}
         \item Initialize the searched index with the index to the projection state
         \begin{equation}
-            i_\text{speed} = i_\text{proj}.
+            \idx[]{\glotraj}{v}{}{} = \idx[]{\glotraj}{\proj}{}{}.
         \end{equation}
+
         \item Increment the searched index
         \begin{equation}
-            i_\text{speed} \leftarrow (i_\text{speed} + 1) \bmod N^\text{traj}.
+            \idx[]{\glotraj}{v}{}{} \leftarrow (\idx[]{\glotraj}{v}{}{} + 1) \bmod \num[]{\glotraj}{}{}{}.
         \end{equation}
         \item If the speed state is further 
         from the projection state than a user-specified distance
         \begin{equation}
             \left\| 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{speed}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{v}{}{}}{\grs}{}
                 - 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{\proj}{}{}}{\grs}{}
             \right\|_2
             > 
-            d^\text{user}_\text{proj-speed}.
+            \dist[\user]{\projtospeed}{}{}{}
+            .
         \end{equation}
         the searched index is found.
         Else, go back to step 2.
     \end{enumerate}
 
 
-    \item [\textbf{R4}] 
+    \item [\textbf{R6}] 
     Update the index 
-    $i_\text{wayp} \in \{0, ..., N^\text{traj}-1\}$ 
+    $\idx[]{\glotraj}{\wayp}{}{} \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}$
     to the waypoint state,
     i.e., the state of the global trajectory
-    that is the basis for the image waypoint
-    ${}_\textbf{I} \underline p^\text{wayp}$  decision,
-    by iteratively finding the first state of the global trajectory 
+    that is the reference for the image waypoint
+    $\pos[]{\expert}{\wayp}{\irs}{}$
+    component of the expert system's navigation decision,
+    by finding the first state of the global trajectory 
     that follows the projection state
-    with a specific distance.
+    with a distance to be computed.
     \begin{enumerate}
-        \item Set the distance from the projection state to the waypoint state
-        by choosing the shorter distance from the drone to
-        either the currently targeted gate
-        or the lastly targeted gate,
-        however, it must be greater than a user-specified distance
+        \item Set the distance from the projection to the waypoint state
+        to the distance from the drone to the closer of
+        either the currently or lastly targeted gate.
+        However, a user-specified distance constitutes the lower limit
         \begin{align}
-            d_\text{proj-wayp} 
-            = 
-            \max 
-            \left\{
-                d^\text{user}_\text{proj-wayp, min}, 
-                \min 
-                \left\{
-                    \substack{
-                        \left\| 
-                            {}_\textbf{G} \underline p^\text{gate}_{i_\text{last}}
-                            -
-                            {}_\textbf{G} \underline p^\text{drone}
-                        \right\|_2,
-                    \\
-                        \left\| 
-                        {}_\textbf{G} \underline p^\text{gate}_{i_\text{curr}}
-                        -
-                        {}_\textbf{G} \underline p^\text{drone}
-                        \right\|_2 
-                    }
-                \right\} 
+            \dist[]{\projtowayp}{}{}{} &= 
+            \maxof{
+                \dist[\user]{\projtowayp}{\mnm}{}{}
+            }{
+                \argmin{i} \left\| 
+                    \pos[]{\gate}{i}{\grs}{} 
+                    - 
+                    \pos[]{\drone}{}{\grs}{}
+                \right\|_2
+            }, 
+            \\
+            i &\in \left\{ \idx[]{\gate}{\target}{}{}, 
+            (\idx[]{\gate}{\target}{}{} - 1 + \num[]{\gate}{}{}{}) 
+            \bmod 
+            \num[]{\gate}{}{}{}
             \right\}
             .
         \end{align}
         \item Initialize the searched index with the index to the projection state
         \begin{equation}
-            i_\text{wayp} = i_\text{proj}.
+            \idx[]{\glotraj}{\wayp}{}{} = \idx[]{\glotraj}{\proj}{}{}.
         \end{equation}
         \item Increment the searched index
         \begin{equation}
-            i_\text{wayp} \leftarrow (i_\text{wayp} + 1) \bmod N^\text{traj}.
+            \idx[]{\glotraj}{\wayp}{}{} \leftarrow (\idx[]{\glotraj}{\wayp}{}{} + 1) 
+            \bmod \num[]{\glotraj}{}{}{}.
         \end{equation}
         \item If the waypoint state is further from the projection state 
         than the distance computed in step 1
         \begin{equation}
             \left\| 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{wayp}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{\wayp}{}{}}{\grs}{}
                 - 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{proj}} 
+                \pos[]{\glotraj}{\idx[]{\glotraj}{\proj}{}{}}{\grs}{}
             \right\|_2
             > 
-            d_\text{proj-wayp},
+            \dist[]{\projtowayp}{}{}{},
         \end{equation}
         the searched index is found.
         Else, go back to step 3.
@@ -2125,21 +2413,20 @@ which consists of the following facts (\textbf{F*}) and rules (\textbf{R*}).
     
 
 
-    \item [\textbf{R4}] Compute the normalized speed decision
-    as the Frobenius norm of the velocity at the speed state
-    normalized by the maximum speed of all states of the global trajectory
+    \item [\textbf{R7}] Compute the normalized speed component
+    of the expert system's navigation decision
+    as the sampled speed of the speed state
+    normalized by the maximum speed of the global trajectory
     \begin{equation}
-        v_\text{norm} 
+        \speed[\norm]{\expert}{\desired}{}{}
         = 
         \frac{
-            \left\| 
-                {}_\textbf{G} \underline v^\text{traj}_{i_\text{speed}} 
-            \right\|_2
+            \speed[]{\glotraj}{\idx[]{\glotraj}{v}{}{}}{\grs}{}
         }
         {
-            \underset{i}{\mathrm{argmax}}\  
+            \argmax{i \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}}
             \left\| 
-                {}_\textbf{G} \underline v^\text{traj}_i
+                \speed[]{\glotraj}{\idx[]{}{}{}{}}{\grs}{}
             \right\|_2
         }  
         \in [0,1].
@@ -2149,25 +2436,19 @@ which consists of the following facts (\textbf{F*}) and rules (\textbf{R*}).
     
     
     
-    \item [\textbf{R4}] Compute the image waypoint decision
-    by transforming the waypoint state 
-    from the global 
-    via the local
-    to the image reference system
+    \item [\textbf{R8}] Compute the image waypoint component
+    of the expert system's navigation decision
+    by applying the transformation
+    from the global to the image reference system (see equ. \ref{eq:global_image_transformations})
+    on the sampled position of the waypoint state 
     \begin{equation}
-        {}_\textbf{I} \underline p^\text{wayp}
+        \pos[]{\expert}{\wayp}{\irs}{}
         =
-        T_\textbf{IL} \left( 
-            T_\textbf{LG} \left( 
-                {}_\textbf{G} \underline p^\text{traj}_{i_\text{wayp}} 
-            \right)
-        \right) \in \mathbb{R}^2.
+        \trafo[]{}{\irs\grs}{}{} \left(
+            \pos[]{\glotraj}{\idx[]{\glotraj}{\wayp}{}{}}{\irs}{}
+        \right)
+        .
     \end{equation}
-
-    
-    
-
-    
 
 \end{itemize}
 
@@ -2175,24 +2456,27 @@ which consists of the following facts (\textbf{F*}) and rules (\textbf{R*}).
 
 
 
-\subsection*{Inference Engine}
-\begin{itemize}
-	\item Implemented as a set of functions within a C++ ros node, that fetches the known facts via ROS topics or computes and store them as internal variables.
-	\item The user can de-/activate the expert system as functional part of the navigation method.
-\end{itemize} 
-is build and send to the planning module as input.
-In addition, it is used as label for the current training sample.
-The features of the training samples are ... .
+\paragraph*{Inference Engine} $\ $\\
+The inference engine of the expert system is only activated 
+during training data generation.
+Figure ?? shows the related interaction of the inference engine 
+within the autnomous navigation method.
+Internally, the inference engine runs the following schedule.
 
+Before the drone starts to fly,
+the inference engine pre-computes the global trajectory (\textbf{R1})
+and samples the position and speeds.
+During the flight, it constantly update the currently targeted
+gate index (\textbf{R2}).
+Whenever the planning module has computed a global waypoint on the basis
+of the latest ANN navigation decision,
+the inference engine checks whether it must intervene (\textbf{R3}).
+If so, the engine updates its indices to relevant states of the global trajectory
+(\textbf{R4-6})
+and makes its own navigation decision (\textbf{R7-8}).
+Finally the engine sends its navigation decision to the planning module for processing.
 
-
-\section{Training procedure}
-
-
-\section{Test procedure}
-
-
-
+\section{Racing vs. Training Data Generation}
 
 
 

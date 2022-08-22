@@ -25,11 +25,31 @@ Junyoung Chung, Caglar Gulcehre, KyungHyun Cho, and Yoshua Bengio.
 \newblock Empirical evaluation of gated recurrent neural networks on sequence
   modeling, 2014.
 
+\bibitem{Faessler2017}
+Matthias Faessler, Davide Falanga, and Davide Scaramuzza.
+\newblock Thrust mixing, saturation, and body-rate control for accurate
+  aggressive quadrotor flight.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 2(2):476--482, apr
+  2017.
+
+\bibitem{Faessler2018}
+Matthias Faessler, Antonio Franchi, and Davide Scaramuzza.
+\newblock Differential flatness of quadrotor dynamics subject to rotor drag for
+  accurate tracking of high-speed trajectories.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 3(2):620--626, apr
+  2018.
+
 \bibitem{Forcada1995}
 Mikel~L. Forcada and Rafael~C. Carrasco.
 \newblock Learning the initial state of a second-order recurrent neural network
   during regular-language inference.
 \newblock {\em Neural Computation}, 7(5):923--930, sep 1995.
+
+\bibitem{Furrer2016}
+Fadri Furrer, Michael Burri, Markus Achtelik, and Roland Siegwart.
+\newblock {RotorS}{\textemdash}a modular gazebo {MAV} simulator framework.
+\newblock In {\em Studies in Computational Intelligence}, pages 595--625.
+  Springer International Publishing, 2016.
 
 \bibitem{Greff2017}
 Klaus Greff, Rupesh~K. Srivastava, Jan Koutnik, Bas~R. Steunebrink, and Jurgen
@@ -74,9 +94,20 @@ Xiaolin Hu and P.~Balasubramaniam.
 \newblock URL: \url{https://www.ibm.com/cloud/learn/recurrent-neural-networks}
   (accessed on 04/07/2022).
 
+\bibitem{osti_5675197}
+P~Jackson.
+\newblock Introduction to expert systems.
+\newblock 1 1986.
+
 \bibitem{Kaiser2015}
 Lukasz Kaiser and Ilya Sutskever.
 \newblock Neural gpus learn algorithms, 2015.
+
+\bibitem{Kaufmann2018}
+Elia Kaufmann, Antonio Loquercio, Rene Ranftl, Alexey Dosovitskiy, Vladlen
+  Koltun, and Davide Scaramuzza.
+\newblock Deep drone racing: Learning agile flight in dynamic environments.
+\newblock 2018.
 
 \bibitem{LearnedMiller}
 Erik Learned-Miller.
@@ -90,6 +121,12 @@ Minchen Li.
   recurrent unit (gru) rnn.
 \newblock {\em Dept. Comput. Sci., Univ. British Columbia, Vancouver, BC,
   Canada, Tech. Rep}, 2016.
+
+\bibitem{Mellinger2011}
+Daniel Mellinger and Vijay Kumar.
+\newblock Minimum snap trajectory generation and control for quadrotors.
+\newblock In {\em 2011 {IEEE} International Conference on Robotics and
+  Automation}. {IEEE}, may 2011.
 
 \bibitem{Minai1993}
 Ali~A. Minai and Ronald~D. Williams.
@@ -132,6 +169,12 @@ Jürgen Schmidhuber.
 \newblock URL:
   \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed
   on 04/07/2022).
+
+\bibitem{Song2020}
+Yunlong Song, Selim Naji, Elia Kaufmann, Antonio Loquercio, and Davide
+  Scaramuzza.
+\newblock Flightmare: A flexible quadrotor simulator.
+\newblock September 2020.
 
 \bibitem{Yin2017}
 Wenpeng Yin, Katharina Kann, Mo~Yu, and Hinrich Schütze.
