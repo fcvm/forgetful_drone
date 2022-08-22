@@ -139,8 +139,9 @@ Second, it fetches the RGB images from the Flightmare simulator
 and makes them available as output.
 Third, it setups the simulation
 as requested by the inputted 
-simulation configuration.
-This configuration specifies the scene
+simulation configuration as follows.
+
+The simulation configuration specifies the scene
 (spaceship interior,
 destroyed city,
 industrial site,
@@ -197,6 +198,56 @@ Finally, the Forgetful Simulator
 outputs the computed initial drone and gate poses,
 which are required by, e.g., the expert system.
 
+
+
+
+\begin{figure}[h]
+    \centering
+    \subfloat{
+        \includegraphics[width=0.4\textwidth]{own/computeRacetrack_fig8_shift.pdf}
+    }
+    %\subfloat{
+    %    \fbox{
+    %        \begin{minipage}[c]{0.2\textwidth}
+    %            Randomly shifted
+    %        \end{minipage}
+    %    }
+    %}
+    \subfloat{
+        \includegraphics[width=0.4\textwidth]{own/computeRacetrack_gap_shift.pdf}
+    }
+    \par
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_scale.pdf}
+    }
+    \subfloat{ \textbf{Scale} }
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_scale.pdf}
+    }
+    \par
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_twist.pdf}
+    }
+    \subfloat{ \textbf{Twist} }
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_twist.pdf}
+    }
+    \par
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_redir.pdf}
+    }
+    \subfloat{ \textbf{Redirect} }
+    \subfloat{
+        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_redir.pdf}
+    }
+    \par
+    \caption[
+        Computation of the racetrack
+    ]{
+        Computation of the racetrack
+        \label{fig:racetrack_comp}
+    }
+\end{figure}
 
 
 
