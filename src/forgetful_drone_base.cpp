@@ -118,6 +118,7 @@ ForgetfulDrone::~ForgetfulDrone () {}
 
 std::string ForgetfulDrone::RunID () {
     std::string runidx = p_MISSION == 3? asSeqNo (4, m_RunIdx) + "___" : "";
+    std::string daggermargin = p_MISSION == 3? "_" + asFixedFloat (5, 2, m_DaggerMargin) : "";
 
     std::ostringstream oss; 
     oss
@@ -128,8 +129,8 @@ std::string ForgetfulDrone::RunID () {
         << std::to_string (m_TrackGenIdx)       << '_'
         << std::to_string (m_TrackDirecIdx)     << '_'
         << std::to_string (m_GateIdx)           << '_'
-        << asFixedFloat (5, 2, m_MaxSpeed)      << '_'
-        << asFixedFloat (5, 2, m_DaggerMargin)  << "___"
+        << asFixedFloat (5, 2, m_MaxSpeed)
+        << daggermargin  << "___"
         << asSeqNo (3, m_RunRepIdx);
     return oss.str();
 
@@ -960,7 +961,7 @@ void ForgetfulDrone::setTrackWaypoints () {
         m_GloTrajWayps.push_back(EV3d___GMP(pose.position));
     }
 
-    if (m_TrackTypeIdx == 1) // Gap
+    if (m_TrackTypeIdx == 1 && p_MISSION == 3) // Gap
         insertGapWaypoint();
 }
 
@@ -1204,10 +1205,15 @@ void ForgetfulDrone::runMission_Racing () {
             //} while (!compGloTraj ());
 
             initGateIdc ();
-            initANN (); //findExpMaxHor ();
+            //initANN (); //findExpMaxHor ();
             startSim ();
             // rvizGloTraj ();
             
+            if (!carryDroneBack ()) {
+                ROS_ERROR ("Failed to carry drone back");
+                ros::shutdown ();
+            }
+
             if (!launchDrone ()) {
                 ROS_WARN ("Drone failed to launch -> repeat run");
                 stopSimulation ();
@@ -1236,10 +1242,7 @@ void ForgetfulDrone::runMission_Racing () {
             bool track_completed = startNavigation ();
             stopSimulation ();
 
-            if (!carryDroneBack ()) {
-                ROS_ERROR ("Failed to carry drone back");
-                ros::shutdown ();
-            }
+            
             
             if (track_completed) {
                 playAudio ("Run successful");
@@ -1433,7 +1436,7 @@ void ForgetfulDrone::addRacingRecord (const std::string& run_id, const bool& com
     J.push_back (j);
 
     std::ofstream f (_exp_rac_RRC ());
-    f << J;
+    f << J.dump (4);
 }
 
 
@@ -1848,7 +1851,7 @@ void ForgetfulDrone::switchNav (const bool& enabled) {
         m_RefState_ARF.position = m_ARF_LRF.getPosition ();
         m_RefState_ARF.heading = Yaw_From_EQd (m_ARF_LRF.getEigenQuaternion ().normalized ());
         m_PUB__apRefState.publish( m_RefState_ARF.toRosMessage() );
-        ros::Duration(1.0).sleep();
+        ros::Duration (2.0).sleep();
     };
 
     auto enable = [prv, pubInitRefState, this] () {
