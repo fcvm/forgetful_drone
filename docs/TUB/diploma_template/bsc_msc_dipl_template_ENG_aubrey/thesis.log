@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.7.4)  22 AUG 2022 13:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.7.4)  25 AUG 2022 22:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -340,11 +340,7 @@ LaTeX Font Info:    Overwriting symbol font `wasy' in version `bold'
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count298
 \l__pdf_internal_box=\box49
-) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.aux
-
-LaTeX Warning: Label `eq:gru_reset' multiply defined.
-
-)
+) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.aux)
 \openout1 = `thesis.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 59.
@@ -456,12 +452,12 @@ LaTeX Font Info:    Trying to load font information for U+wasy on input line 26.
  (/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
-<gfx/template/TUBerlin_Logo_rot_hell.pdf, id=135, 4741.715pt x 3529.185pt>
+<gfx/template/TUBerlin_Logo_rot_hell.pdf, id=139, 4741.715pt x 3529.185pt>
 File: gfx/template/TUBerlin_Logo_rot_hell.pdf Graphic file (type pdf)
 <use gfx/template/TUBerlin_Logo_rot_hell.pdf>
 Package pdftex.def Info: gfx/template/TUBerlin_Logo_rot_hell.pdf  used on input line 27.
 (pdftex.def)             Requested size: 62.73549pt x 46.68877pt.
-<gfx/template/aot_logo.pdf, id=136, 838.2025pt x 535.86098pt>
+<gfx/template/aot_logo.pdf, id=140, 838.2025pt x 535.86098pt>
 File: gfx/template/aot_logo.pdf Graphic file (type pdf)
 <use gfx/template/aot_logo.pdf>
 Package pdftex.def Info: gfx/template/aot_logo.pdf  used on input line 27.
@@ -523,7 +519,7 @@ LaTeX Warning: Citation `oberheide:2008:cloudav' on page 1 undefined on input li
 [1
 
 ]
-<gfx/template/writing.pdf, id=270, 665.7944pt x 371.3082pt>
+<gfx/template/writing.pdf, id=277, 665.7944pt x 371.3082pt>
 File: gfx/template/writing.pdf Graphic file (type pdf)
 <use gfx/template/writing.pdf>
 Package pdftex.def Info: gfx/template/writing.pdf  used on input line 19.
@@ -535,52 +531,52 @@ Chapter 2.
 ]
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_folded.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/rnn_folded.drawio.pdf, id=309, 152.57pt x 216.81pt>
+<gfx/own/rnn_folded.drawio.pdf, id=316, 152.57pt x 216.81pt>
 File: gfx/own/rnn_folded.drawio.pdf Graphic file (type pdf)
 <use gfx/own/rnn_folded.drawio.pdf>
-Package pdftex.def Info: gfx/own/rnn_folded.drawio.pdf  used on input line 84.
+Package pdftex.def Info: gfx/own/rnn_folded.drawio.pdf  used on input line 87.
 (pdftex.def)             Requested size: 103.01988pt x 146.39133pt.
 
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/rnn_unfolded.drawio.pdf, id=310, 260.975pt x 232.87pt>
+<gfx/own/rnn_unfolded.drawio.pdf, id=317, 260.975pt x 232.87pt>
 File: gfx/own/rnn_unfolded.drawio.pdf Graphic file (type pdf)
 <use gfx/own/rnn_unfolded.drawio.pdf>
-Package pdftex.def Info: gfx/own/rnn_unfolded.drawio.pdf  used on input line 91.
+Package pdftex.def Info: gfx/own/rnn_unfolded.drawio.pdf  used on input line 94.
 (pdftex.def)             Requested size: 164.06468pt x 146.39133pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 114--114
+Underfull \hbox (badness 10000) in paragraph at lines 117--117
 [][][][]$\OT1/pcr/m/n/10 https : / / pytorch . org / docs / stable / generated / torch . nn . LSTM . html$[]\OT1/ptm/m/n/10 , vis-ited
  []
 
 [5] [6 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_folded.drawio.pdf> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf>] [7] [8]
-<gfx/own/sigmoid_tanh.pdf, id=412, 406.73225pt x 139.445pt>
+<gfx/own/sigmoid_tanh.pdf, id=419, 406.73225pt x 139.445pt>
 File: gfx/own/sigmoid_tanh.pdf Graphic file (type pdf)
 <use gfx/own/sigmoid_tanh.pdf>
-Package pdftex.def Info: gfx/own/sigmoid_tanh.pdf  used on input line 536.
+Package pdftex.def Info: gfx/own/sigmoid_tanh.pdf  used on input line 538.
 (pdftex.def)             Requested size: 376.42575pt x 129.05693pt.
  [9] [10 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/sigmoid_tanh.pdf>]
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf, id=463, 959.50468pt x 613.33138pt>
+<gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf, id=469, 959.50468pt x 613.33138pt>
 File: gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf Graphic file (type pdf)
 <use gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf>
-Package pdftex.def Info: gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf  used on input line 728.
+Package pdftex.def Info: gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf  used on input line 730.
 (pdftex.def)             Requested size: 376.42575pt x 240.61142pt.
 [11 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf>] [12] [13] [14] [15]) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/03_main_part_1.tex [16]
 Chapter 3.
 [17
 
 ]
-<gfx/own/local_reference_system.pdf, id=754, 372.9132pt x 281.56392pt>
+<gfx/own/local_reference_system.pdf, id=760, 372.9132pt x 281.56392pt>
 File: gfx/own/local_reference_system.pdf Graphic file (type pdf)
 <use gfx/own/local_reference_system.pdf>
 Package pdftex.def Info: gfx/own/local_reference_system.pdf  used on input line 130.
 (pdftex.def)             Requested size: 184.44746pt x 139.265pt.
-<gfx/own/image_reference_system.pdf, id=755, 371.76302pt x 246.16672pt>
+<gfx/own/image_reference_system.pdf, id=761, 371.76302pt x 246.16672pt>
 File: gfx/own/image_reference_system.pdf Graphic file (type pdf)
 <use gfx/own/image_reference_system.pdf>
 Package pdftex.def Info: gfx/own/image_reference_system.pdf  used on input line 136.
@@ -592,65 +588,60 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [18] [19 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/local_reference_system.pdf> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/image_reference_system.pdf
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/image_reference_system.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [20] [21] [22] [23]
-Overfull \hbox (10.21332pt too wide) detected at line 1085
-[]
- []
+>] [20] [21] [22] [23] [24] [25] [26]
 
-[24] [25] [26]
-
-LaTeX Warning: Reference `eq:nav_dec_by_expert' on page 27 undefined on input line 1599.
+LaTeX Warning: Reference `eq:nav_dec_by_expert' on page 27 undefined on input line 1375.
 
 [27] [28]
-Underfull \hbox (badness 10000) in paragraph at lines 1757--1757
+Underfull \hbox (badness 10000) in paragraph at lines 1533--1533
 [][][][]$\OT1/pcr/m/n/10 https : / / github . com / markwmuller / RapidQuadrocopterTrajectories$[]\OT1/ptm/m/n/10 , vis-ited
  []
 
 [29]
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/control_module.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/control_module.drawio.pdf, id=940, 385.44pt x 390.49887pt>
+<gfx/own/control_module.drawio.pdf, id=956, 385.44pt x 390.49887pt>
 File: gfx/own/control_module.drawio.pdf Graphic file (type pdf)
 <use gfx/own/control_module.drawio.pdf>
-Package pdftex.def Info: gfx/own/control_module.drawio.pdf  used on input line 1870.
+Package pdftex.def Info: gfx/own/control_module.drawio.pdf  used on input line 1646.
 (pdftex.def)             Requested size: 292.77629pt x 296.61537pt.
-[30 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/control_module.drawio.pdf>] [31] [32] [33]
-<gfx/own/expert_state_projection_3d.pdf, id=1006, 372.9132pt x 281.56392pt>
+[30] [31 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/control_module.drawio.pdf>] [32] [33] [34]
+<gfx/own/expert_state_projection_3d.pdf, id=1030, 372.9132pt x 281.56392pt>
 File: gfx/own/expert_state_projection_3d.pdf Graphic file (type pdf)
 <use gfx/own/expert_state_projection_3d.pdf>
-Package pdftex.def Info: gfx/own/expert_state_projection_3d.pdf  used on input line 2277.
+Package pdftex.def Info: gfx/own/expert_state_projection_3d.pdf  used on input line 2053.
 (pdftex.def)             Requested size: 376.42575pt x 284.21834pt.
- [34] [35 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/expert_state_projection_3d.pdf>] [36]) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/04_main_part_2.tex [37]
+ [35] [36 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/expert_state_projection_3d.pdf>] [37]) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/04_main_part_2.tex [38]
 Chapter 4.
 
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/simulation_setup.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/simulation_setup.drawio.pdf, id=1092, 702.625pt x 247.92625pt>
+<gfx/own/simulation_setup.drawio.pdf, id=1115, 702.625pt x 247.92625pt>
 File: gfx/own/simulation_setup.drawio.pdf Graphic file (type pdf)
 <use gfx/own/simulation_setup.drawio.pdf>
 Package pdftex.def Info: gfx/own/simulation_setup.drawio.pdf  used on input line 15.
 (pdftex.def)             Requested size: 418.25368pt x 147.58794pt.
-<gfx/own/jpg/spaceship_interior.jpg, id=1108, 722.7pt x 481.8pt>
+<gfx/own/jpg/spaceship_interior.jpg, id=1131, 722.7pt x 481.8pt>
 File: gfx/own/jpg/spaceship_interior.jpg Graphic file (type jpg)
 <use gfx/own/jpg/spaceship_interior.jpg>
 Package pdftex.def Info: gfx/own/jpg/spaceship_interior.jpg  used on input line 78.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/destroyed_city.jpg, id=1109, 722.7pt x 481.8pt>
+<gfx/own/jpg/destroyed_city.jpg, id=1132, 722.7pt x 481.8pt>
 File: gfx/own/jpg/destroyed_city.jpg Graphic file (type jpg)
 <use gfx/own/jpg/destroyed_city.jpg>
 Package pdftex.def Info: gfx/own/jpg/destroyed_city.jpg  used on input line 85.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/industrial_site.jpg, id=1110, 722.7pt x 481.8pt>
+<gfx/own/jpg/industrial_site.jpg, id=1133, 722.7pt x 481.8pt>
 File: gfx/own/jpg/industrial_site.jpg Graphic file (type jpg)
 <use gfx/own/jpg/industrial_site.jpg>
 Package pdftex.def Info: gfx/own/jpg/industrial_site.jpg  used on input line 92.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/polygon_city.jpg, id=1111, 722.7pt x 481.8pt>
+<gfx/own/jpg/polygon_city.jpg, id=1134, 722.7pt x 481.8pt>
 File: gfx/own/jpg/polygon_city.jpg Graphic file (type jpg)
 <use gfx/own/jpg/polygon_city.jpg>
 Package pdftex.def Info: gfx/own/jpg/polygon_city.jpg  used on input line 98.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/desert_mountain.jpg, id=1112, 722.7pt x 481.8pt>
+<gfx/own/jpg/desert_mountain.jpg, id=1135, 722.7pt x 481.8pt>
 File: gfx/own/jpg/desert_mountain.jpg Graphic file (type jpg)
 <use gfx/own/jpg/desert_mountain.jpg>
 Package pdftex.def Info: gfx/own/jpg/desert_mountain.jpg  used on input line 104.
@@ -660,82 +651,68 @@ Overfull \hbox (13.81975pt too wide) in paragraph at lines 92--110
  [][][][][][] 
  []
 
-<gfx/own/jpg/tub_dai_gate.png, id=1113, 1003.75pt x 1003.75pt>
+<gfx/own/jpg/tub_dai_gate.png, id=1136, 1003.75pt x 1003.75pt>
 File: gfx/own/jpg/tub_dai_gate.png Graphic file (type png)
 <use gfx/own/jpg/tub_dai_gate.png>
 Package pdftex.def Info: gfx/own/jpg/tub_dai_gate.png  used on input line 119.
 (pdftex.def)             Requested size: 138.02448pt x 138.01222pt.
-<gfx/own/jpg/thu_dme_gate.png, id=1115, 1003.75pt x 1003.75pt>
+<gfx/own/jpg/thu_dme_gate.png, id=1138, 1003.75pt x 1003.75pt>
 File: gfx/own/jpg/thu_dme_gate.png Graphic file (type png)
 <use gfx/own/jpg/thu_dme_gate.png>
 Package pdftex.def Info: gfx/own/jpg/thu_dme_gate.png  used on input line 125.
 (pdftex.def)             Requested size: 138.02448pt x 138.01222pt.
-[38
+[39
 
  </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/simulation_setup.drawio.pdf>]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[39 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/spaceship_interior.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/destroyed_city.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/industrial_site.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/polygon_city.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/desert_mountain.jpg>]
-<gfx/own/computeRacetrack_fig8_shift.pdf, id=1155, 455.30101pt x 247.95042pt>
+[40 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/spaceship_interior.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/destroyed_city.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/industrial_site.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/polygon_city.jpg> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/desert_mountain.jpg>] [41 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/tub_dai_gate.png> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/thu_dme_gate.png>]
+<gfx/own/computeRacetrack_fig8_shift.pdf, id=1193, 455.56483pt x 245.94585pt>
 File: gfx/own/computeRacetrack_fig8_shift.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_shift.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_shift.pdf  used on input line 208.
-(pdftex.def)             Requested size: 167.2989pt x 91.10838pt.
-<gfx/own/computeRacetrack_gap_shift.pdf, id=1156, 455.30101pt x 260.52658pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_shift.pdf  used on input line 224.
+(pdftex.def)             Requested size: 175.66577pt x 94.83392pt.
+<gfx/own/computeRacetrack_gap_shift.pdf, id=1194, 455.96324pt x 249.17502pt>
 File: gfx/own/computeRacetrack_gap_shift.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_shift.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_shift.pdf  used on input line 218.
-(pdftex.def)             Requested size: 167.2989pt x 95.72943pt.
-<gfx/own/computeRacetrack_fig8_scale.pdf, id=1157, 455.30101pt x 246.80586pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_shift.pdf  used on input line 230.
+(pdftex.def)             Requested size: 175.66577pt x 95.9992pt.
+<gfx/own/computeRacetrack_fig8_scale.pdf, id=1195, 455.30101pt x 234.42659pt>
 File: gfx/own/computeRacetrack_fig8_scale.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_scale.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_scale.pdf  used on input line 222.
-(pdftex.def)             Requested size: 188.21288pt x 102.02333pt.
-<gfx/own/computeRacetrack_gap_scale.pdf, id=1158, 455.30101pt x 260.52658pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_scale.pdf  used on input line 238.
+(pdftex.def)             Requested size: 175.66577pt x 90.44588pt.
+<gfx/own/computeRacetrack_gap_scale.pdf, id=1196, 455.30101pt x 249.82187pt>
 File: gfx/own/computeRacetrack_gap_scale.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_scale.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_scale.pdf  used on input line 226.
-(pdftex.def)             Requested size: 188.21288pt x 107.69511pt.
-
-Overfull \hbox (2.83572pt too wide) in paragraph at lines 222--227
- [][][][][][] 
- []
-
-<gfx/own/computeRacetrack_fig8_twist.pdf, id=1159, 455.30101pt x 246.80586pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_scale.pdf  used on input line 244.
+(pdftex.def)             Requested size: 175.66577pt x 96.38565pt.
+<gfx/own/computeRacetrack_fig8_twist.pdf, id=1197, 455.30101pt x 234.42659pt>
 File: gfx/own/computeRacetrack_fig8_twist.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_twist.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_twist.pdf  used on input line 230.
-(pdftex.def)             Requested size: 188.21288pt x 102.02333pt.
-<gfx/own/computeRacetrack_gap_twist.pdf, id=1160, 455.30101pt x 260.52658pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_twist.pdf  used on input line 252.
+(pdftex.def)             Requested size: 175.66577pt x 90.44588pt.
+<gfx/own/computeRacetrack_gap_twist.pdf, id=1198, 455.30101pt x 249.82187pt>
 File: gfx/own/computeRacetrack_gap_twist.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_twist.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_twist.pdf  used on input line 234.
-(pdftex.def)             Requested size: 188.21288pt x 107.69511pt.
-
-Overfull \hbox (3.95164pt too wide) in paragraph at lines 230--235
- [][][][][][] 
- []
-
-<gfx/own/computeRacetrack_fig8_redir.pdf, id=1161, 455.30101pt x 246.80586pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_twist.pdf  used on input line 258.
+(pdftex.def)             Requested size: 175.66577pt x 96.38565pt.
+<gfx/own/computeRacetrack_fig8_redir.pdf, id=1199, 455.30101pt x 234.42659pt>
 File: gfx/own/computeRacetrack_fig8_redir.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_redir.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_redir.pdf  used on input line 238.
-(pdftex.def)             Requested size: 188.21288pt x 102.02333pt.
-<gfx/own/computeRacetrack_gap_redir.pdf, id=1162, 455.30101pt x 260.52658pt>
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_redir.pdf  used on input line 266.
+(pdftex.def)             Requested size: 175.66577pt x 90.44588pt.
+<gfx/own/computeRacetrack_gap_redir.pdf, id=1200, 455.30101pt x 249.82187pt>
 File: gfx/own/computeRacetrack_gap_redir.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_redir.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_redir.pdf  used on input line 242.
-(pdftex.def)             Requested size: 188.21288pt x 107.69511pt.
-
-Overfull \hbox (19.93556pt too wide) in paragraph at lines 238--243
- [][][][][][] 
- []
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_redir.pdf  used on input line 272.
+(pdftex.def)             Requested size: 175.66577pt x 96.38565pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/05_evaluation.tex [40 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/tub_dai_gate.png> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/jpg/thu_dme_gate.png>] [41] [42 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_fig8_shift.pdf> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_shift.pdf
+) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/05_evaluation.tex [42 </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_fig8_shift.pdf> </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_shift.pdf
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_shift.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 > </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_fig8_scale.pdf
@@ -756,9 +733,9 @@ pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_t
 > </home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_redir.pdf
 
 pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_redir.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]
+>] [43]
 Chapter 5.
-) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/06_conclusion.tex [43
+) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/06_conclusion.tex [44
 
 ]
 Chapter 6.
@@ -772,9 +749,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 23--24
 [][]$\OT1/pcr/m/n/12 https : / / en . wikipedia . org / wiki / Gated _ recurrent _ unit #
  []
 
-) [44
+) [45
 
-] (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.bbl [45
+] (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.bbl [46
 
 
 ]
@@ -787,26 +764,26 @@ Underfull \hbox (badness 4726) in paragraph at lines 91--96
 \OT1/ptm/m/it/12 Learn Hub\OT1/ptm/m/n/12 , 2020.  URL: []$\OT1/pcr/m/n/12 https : / / www . ibm . com / cloud / learn /
  []
 
-[46]) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/07_appendix.tex [47]
+[47]) (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/07_appendix.tex [48]
 Overfull \hbox (25.05867pt too wide) in paragraph at lines 13--45
  [] 
  []
 
-[48
+[49
 
 ] (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/__help/latex_hinweise.tex
 
-LaTeX Warning: Citation `oberheide:2008:cloudav' on page 49 undefined on input line 16.
+LaTeX Warning: Citation `oberheide:2008:cloudav' on page 50 undefined on input line 16.
 
-[49]
+[50]
 Underfull \hbox (badness 10000) in paragraph at lines 64--65
 []\OT1/ptm/m/n/12 check []$\OT1/pcr/m/n/12 http : / / www . uni-[]giessen . de / hrz / tex / cookbook /
  []
 
 
-LaTeX Warning: Citation `latexcookbook2007' on page 50 undefined on input line 66.
+LaTeX Warning: Citation `latexcookbook2007' on page 51 undefined on input line 66.
 
-[50] [51] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+[51] [52] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/09/10 1.8c listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 74.
@@ -822,7 +799,7 @@ File: omsptm.fd
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 103.
- [52]
+ [53]
 Underfull \hbox (badness 2626) in paragraph at lines 119--120
 \OT1/ptm/m/n/12 This sec-tion de-scribes how to in-clude im-ages to your doc-u-ment. In-for-ma-
  []
@@ -852,7 +829,7 @@ File: gfx/template/TUBerlin_Logo_rot_hell.pdf Graphic file (type pdf)
 <use gfx/template/TUBerlin_Logo_rot_hell.pdf>
 Package pdftex.def Info: gfx/template/TUBerlin_Logo_rot_hell.pdf  used on input line 145.
 (pdftex.def)             Requested size: 83.64944pt x 62.2517pt.
-[53]
+[54]
 Underfull \hbox (badness 7740) in paragraph at lines 191--194
 []\OT1/ptm/m/n/12 Cloudy with rain, across
  []
@@ -861,36 +838,33 @@ Underfull \hbox (badness 7740) in paragraph at lines 191--194
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 203.
- [54] [55]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 203.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 227.
+ [55] [56]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 227.
  (/home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 203.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 203.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 227.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 227.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: DF89CC49C7E1A3A2491B188250648313;1921.
+(rerunfilecheck)             Checksum: 2783456EA2A9078BEB97ADBB32F615BD;1993.
 
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 203.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 227.
  ) 
 Here is how much of TeX's memory you used:
- 11658 strings out of 481239
- 175889 string characters out of 5920378
- 629963 words of memory out of 5000000
- 26233 multiletter control sequences out of 15000+600000
- 569877 words of font info for 107 fonts, out of 8000000 for 9000
+ 11703 strings out of 481239
+ 176236 string characters out of 5920378
+ 630414 words of memory out of 5000000
+ 26264 multiletter control sequences out of 15000+600000
+ 571503 words of font info for 109 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  50i,21n,53p,2137b,1496s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb>
-Output written on /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.pdf (64 pages, 2227715 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.pdf (65 pages, 2229801 bytes).
 PDF statistics:
- 1511 PDF objects out of 1728 (max. 8388607)
- 1179 compressed objects within 12 object streams
- 388 named destinations out of 1000 (max. 500000)
- 400 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1543 PDF objects out of 1728 (max. 8388607)
+ 1210 compressed objects within 13 object streams
+ 401 named destinations out of 1000 (max. 500000)
+ 408 words of extra memory for PDF output out of 10000 (max. 10000000)
 

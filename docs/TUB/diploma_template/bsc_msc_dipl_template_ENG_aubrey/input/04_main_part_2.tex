@@ -5,7 +5,7 @@
 The experiments of this thesis 
 are conducted in a drone racing simulation,
 which includes the drone,
-the the racetrack constituting gates 
+the gates constituting the racetrack
 and the scenery.
 The implementation of the simulation
 is devided into physics modelling and image rendering
@@ -139,7 +139,7 @@ Second, it fetches the RGB images from the Flightmare simulator
 and makes them available as output.
 Third, it setups the simulation
 as requested by the inputted 
-simulation configuration as follows.
+simulation configuration.
 
 The simulation configuration specifies the scene
 (spaceship interior,
@@ -151,16 +151,23 @@ desert mountain)
 the gate cover (TUB-DAI or THU-DME) and the racetrack configuration.
 The racetrack configuration, in turn, specifies 
 the type (figure-8 or gap), the generation (deterministic or randomized) 
-and the direction (clockwise and counterclockwise).
+and the direction (clockwise or counterclockwise).
 The Forgetful Simulator, 
-which stores the deterministic, 
+which stores the data of the deterministic, 
 counterclockwise gate poses
-of the available racetrack type (see figure ...), 
-processes the simulation configuration as follows.
+of the available racetrack types (see table \ref{tab:gate_pos}), 
+processes the simulation configuration as shown in figure
+\ref{fig:racetrack_comp}.
 
-If specified, 
-the stored gate poses of the specified racetrack type are randomized in three steps.
+If it was specified, randomize the stored gate poses of the specified racetrack type
+with the following steps.
 \begin{enumerate}
+    \item This step applies only to the gap racetrack type
+    as it explicitely randomizes the gap distance.
+    Sample the y-position values 
+    of the gates \#3 -6 from the uniform real distribution
+    over the intervals specified in table \ref{tab:gate_pos}.
+    
     \item Shift the gate positions along the $x$-, $y$- and $z$-axis
     by a value, which is sampled, 
     independently for each gate and axis, 
@@ -169,7 +176,8 @@ the stored gate poses of the specified racetrack type are randomized in three st
     $\left[
         -\dist[\user]{\text{sim}}{\text{shift},\mxm}{}{},
         \dist[\user]{\text{sim}}{\text{shift},\mxm}{}{}\right]$.
-    \item Scale all gate positions by the same value
+    
+        \item Scale all gate positions by the same value
     sampled from the uniform real distribution
     over the user-specified interval
     $\left[
@@ -184,10 +192,10 @@ the stored gate poses of the specified racetrack type are randomized in three st
         -\dist[\user]{\text{sim}}{\text{twist},\mxm}{}{},
         \dist[\user]{\text{sim}}{\text{twist},\mxm}{}{}\right]$.
 \end{enumerate}
-Then, if specified, the gate poses are redirected 
-from counterclockwise to clockwise.
-At last, the initial drone pose is computed to be located between
-the second last and the last gate and to face towards the last gate.
+Then, if it was specified, redirect the gate poses from counterclockwise to clockwise.
+Compute the drone's starting pose to face towards the last gate
+and to be located between
+the second last and the last gate.
 The Forgetful Simulator loads the specified scene and site in 
 the Flightmare Simulator
 and spawns the drone model 
@@ -202,49 +210,75 @@ which are required by, e.g., the expert system.
 
 
 \begin{figure}[h]
+    \newcommand{\dimmm}{0.42\textwidth}
+    \newcommand{\dimmmb}{0.1\textwidth}
+    \newcommand{\vertspace}{-3ex}
+
     \centering
+        \subfloat{\footnotesize \textbf{$\downarrow$ shift}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_shift.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_shift.pdf}
+            %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ scale}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_scale.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_scale.pdf}
+            %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ twist}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_twist.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+           %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_twist.pdf}
+        %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ redirect}}
+    \\[\vertspace]
     \subfloat{
-        \includegraphics[width=0.4\textwidth]{own/computeRacetrack_fig8_shift.pdf}
+        %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_redir.pdf}
+        %}
     }
-    %\subfloat{
-    %    \fbox{
-    %        \begin{minipage}[c]{0.2\textwidth}
-    %            Randomly shifted
-    %        \end{minipage}
-    %    }
-    %}
+    \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
     \subfloat{
-        \includegraphics[width=0.4\textwidth]{own/computeRacetrack_gap_shift.pdf}
+        %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_redir.pdf}
+        %}
     }
-    \par
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_scale.pdf}
-    }
-    \subfloat{ \textbf{Scale} }
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_scale.pdf}
-    }
-    \par
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_twist.pdf}
-    }
-    \subfloat{ \textbf{Twist} }
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_twist.pdf}
-    }
-    \par
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_fig8_redir.pdf}
-    }
-    \subfloat{ \textbf{Redirect} }
-    \subfloat{
-        \includegraphics[width=0.45\textwidth]{own/computeRacetrack_gap_redir.pdf}
-    }
-    \par
     \caption[
         Computation of the racetrack
     ]{
-        Computation of the racetrack
+        Computation of the racetrack for
+        the figure-8 (left) 
+        and the gap (right) racetrack type.
+        In the xy-plane, the drone's starting pose (arrow) and the gate poses (numbered bars)
+        are depicted before (grey) and after (blue) the individual processing step.
+        The randomizing processing step exclusive to the gap racetrack is not shown.
         \label{fig:racetrack_comp}
     }
 \end{figure}
@@ -255,12 +289,60 @@ which are required by, e.g., the expert system.
 
 
 
+\begin{table}[h]
+    \footnotesize
+    \caption{Deterministic gate poses\label{tab:gate_pos}}
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+    %\hline
+    %\multicolumn{3}{|c|}{Team sheet} \\
+    \hline
+    racetrack & gate & x & y & z & yaw\\ 
+    \hline
+    \hline
+    \multirow{14}{*}{Figure-8}   
+    &0 &-20.45& -8.65&2.0& 1.13\\ \cline{2-6}
+    &1 &-12.55&-11.15&2.0&-1.57\\ \cline{2-6}
+    &2 &-4.15 & -5.35&2.0&-0.60\\ \cline{2-6}
+    &3 &3.45  &  4.25&2.0&-0.63\\ \cline{2-6}
+    &4 &11.95 & 11.15&2.0&-1.21\\ \cline{2-6}
+    &5 &21.85 &  6.85&2.0& 0.99\\ \cline{2-6}
+    &6 &24.25 & -1.75&2.0& 0.00\\ \cline{2-6}
+    &7 &19.25 & -9.55&2.0&-1.03\\ \cline{2-6}
+    &8 &10.55 &-10.65&2.0& 1.53\\ \cline{2-6}
+    &9 &2.85  & -5.95&2.0& 0.57\\ \cline{2-6}
+    &10&-4.95 &  4.65&2.0& 0.67\\ \cline{2-6}
+    &11&-12.95&  9.65&2.0&-1.53\\ \cline{2-6}
+    &12&-21.05&  6.65&2.0&-0.77\\ \cline{2-6}
+    &13&-24.25& -1.00&2.0& 0.07\\
+    \hline
+    \hline
+    \multirow{14}{*}{Gap}   
+    &0 &-20.45&-8.65         &2.0& 1.13\\ \cline{2-6}
+    &1 &-12.55&-11.15        &2.0&-1.57\\ \cline{2-6}
+    &2 &-4.15 &-9.35         &2.0& -1.0\\ \cline{2-6}
+    &3 &4.85  &[-4.95, -5.95]&2.0& -1.4\\ \cline{2-6}
+    &4 &16.95 &[-2.25, -5.25]&2.0& 1.57\\ \cline{2-6}
+    &5 &16.95 &[2.25,   5.25]&2.0& 1.57\\ \cline{2-6}
+    &6 &5.45  &[4.45,   5.45]&2.0&  1.4\\ \cline{2-6}
+    &7 &-4.95 &7.95          &2.0&  1.2\\ \cline{2-6}
+    &8 &-12.95&9.65          &2.0&-1.53\\ \cline{2-6}
+    &9 &-21.05&6.65          &2.0&-0.77\\ \cline{2-6}
+    &10&-24.25&-1.0          &2.0& 0.07\\
+    \hline
+    \end{tabular}
+    \end{table}
 
 
 
 
 
-\section{ANN variants}
+
+\section{ANN Module Variants}
+
+\section{Data Generation and Training}
+
+\section{Racing Tests}
 
 
 
