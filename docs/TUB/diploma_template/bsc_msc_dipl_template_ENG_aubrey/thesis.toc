@@ -29,6 +29,6 @@
 \contentsline {section}{\numberline {6.2}Conclusion}{45}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Future Work}{45}{section.6.3}%
 \contentsline {chapter}{Bibliography}{46}{section.6.3}%
-\contentsline {chapter}{Appendices}{48}{chapter*.37}%
-\contentsline {section}{Appendix A: Abbreviations}{49}{chapter*.38}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{50}{section*.39}%
+\contentsline {chapter}{Appendices}{48}{chapter*.36}%
+\contentsline {section}{Appendix A: Abbreviations}{49}{chapter*.37}%
+\contentsline {section}{Appendix B: {\LaTeX } Help}{50}{section*.38}%

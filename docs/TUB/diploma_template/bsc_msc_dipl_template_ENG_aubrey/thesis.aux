@@ -77,6 +77,7 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces  The non-linear activation functions deployed within a standard GRU }}{10}{figure.caption.12}\protected@file@percent }
 \newlabel{fig:gru_activations}{{2.2}{10}{The non-linear activation functions deployed within a standard GRU}{figure.caption.12}{}}
 \newlabel{eq:gru_params}{{2.17}{10}{Backpropagation through time}{equation.2.3.17}{}}
+\newlabel{eq:gru_layer_nparams}{{2.18}{10}{Backpropagation through time}{equation.2.3.18}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces  Time-unfolded computation graph of a GRU layer operating in many-to-one mode. }}{11}{figure.caption.14}\protected@file@percent }
 \newlabel{fig:gru_unfolded}{{2.3}{11}{Time-unfolded computation graph of a GRU layer operating in many-to-one mode}{figure.caption.14}{}}
 \newlabel{equ:gru_output_many_to_one}{{2.20}{11}{Backpropagation through time}{equation.2.3.20}{}}
@@ -119,42 +120,45 @@
 \newlabel{eq:global_image_transformations}{{3.14}{21}{Transformation between the global and the image reference system}{equation.3.1.14}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}ANN module}{21}{section.3.2}\protected@file@percent }
 \newlabel{sec:ann_module}{{3.2}{21}{ANN module}{section.3.2}{}}
-\newlabel{eq:rgb_preproc}{{3.19}{22}{Input preprocessing}{equation.3.2.19}{}}
-\newlabel{eq:CNN}{{3.21}{23}{CNN}{equation.3.2.21}{}}
+\newlabel{eq:rgb_preproc}{{3.17}{22}{Input preprocessing}{equation.3.2.17}{}}
+\newlabel{eq:CNN}{{3.19}{23}{CNN}{equation.3.2.19}{}}
+\newlabel{eq:cnn_output}{{3.21}{23}{CNN}{equation.3.2.21}{}}
 \citation{Cho2014}
+\newlabel{eq:cat}{{3.22}{24}{CAT}{equation.3.2.22}{}}
+\newlabel{eq:batch_opt}{{3.23}{24}{CAT}{equation.3.2.23}{}}
+\newlabel{eq:cat_output}{{3.24}{24}{CAT}{equation.3.2.24}{}}
 \citation{Hinton2012}
-\newlabel{eq:cat}{{3.24}{24}{CAT}{equation.3.2.24}{}}
-\newlabel{eq:gru}{{3.28}{24}{GRU}{equation.3.2.28}{}}
-\newlabel{eq:fc_layer}{{3.32}{25}{FC}{equation.3.2.32}{}}
-\newlabel{eq:fc}{{3.33}{25}{FC}{equation.3.2.33}{}}
-\newlabel{eq:navigation_decision}{{3.37}{26}{HEAD}{equation.3.2.37}{}}
-\newlabel{eq:head}{{3.39}{27}{HEAD}{equation.3.2.39}{}}
+\newlabel{eq:gru}{{3.27}{25}{GRU}{equation.3.2.27}{}}
+\newlabel{eq:fc_layer}{{3.31}{25}{FC}{equation.3.2.31}{}}
+\newlabel{eq:fc}{{3.32}{26}{FC}{equation.3.2.32}{}}
+\newlabel{eq:navigation_decision}{{3.36}{27}{HEAD}{equation.3.2.36}{}}
+\newlabel{eq:head}{{3.38}{27}{HEAD}{equation.3.2.38}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.3}Planning module}{27}{section.3.3}\protected@file@percent }
-\newlabel{eq:drone_state}{{3.44}{28}{Planning module}{equation.3.3.44}{}}
-\newlabel{eq:pl_global_wayp}{{3.47}{28}{Planning module}{equation.3.3.47}{}}
+\newlabel{eq:drone_state}{{3.43}{28}{Planning module}{equation.3.3.43}{}}
+\newlabel{eq:pl_global_wayp}{{3.46}{28}{Planning module}{equation.3.3.46}{}}
 \citation{Mueller2013}
-\newlabel{eq:loc_traj}{{3.50}{29}{Planning module}{equation.3.3.50}{}}
+\newlabel{eq:loc_traj}{{3.49}{29}{Planning module}{equation.3.3.49}{}}
 \citation{Faessler2018}
 \citation{Faessler2017}
 \citation{Furrer2016}
-\newlabel{eq:ref_state}{{3.53}{30}{Planning module}{equation.3.3.53}{}}
+\newlabel{eq:ref_state}{{3.52}{30}{Planning module}{equation.3.3.52}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.4}Control stack}{30}{section.3.4}\protected@file@percent }
 \newlabel{sec:control_stack}{{3.4}{30}{Control stack}{section.3.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces  The control stack in simulation. }}{31}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:control_module}{{3.2}{31}{The control stack in simulation}{figure.caption.27}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces  The control stack in simulation. }}{31}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:control_module}{{3.2}{31}{The control stack in simulation}{figure.caption.26}{}}
 \citation{osti_5675197}
 \citation{Kaufmann2018}
 \@writefile{toc}{\contentsline {section}{\numberline {3.5}Expert system}{32}{section.3.5}\protected@file@percent }
 \newlabel{sec:expert_system}{{3.5}{32}{Expert system}{section.3.5}{}}
 \citation{Mellinger2011}
-\newlabel{eq:glo_traj}{{3.58}{33}{Knowledge base}{equation.3.5.58}{}}
-\newlabel{eq:vec_prev_state_2_proj_state}{{3.67}{35}{Knowledge base}{equation.3.5.67}{}}
-\newlabel{eq:vec_prev_state_2_drone}{{3.68}{35}{Knowledge base}{equation.3.5.68}{}}
-\newlabel{eq:norm_dot_prod_criterion}{{3.69}{35}{Knowledge base}{equation.3.5.69}{}}
-\newlabel{eq:dist_drone_proj_criterion}{{3.71}{35}{Knowledge base}{equation.3.5.71}{}}
-\newlabel{eq:proj_idx_with_min_dist}{{3.72}{35}{Knowledge base}{equation.3.5.72}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces  Update of the projection state index }}{36}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:expert_system_projection}{{3.3}{36}{Update of the projection state index}{figure.caption.30}{}}
+\newlabel{eq:glo_traj}{{3.57}{33}{Knowledge base}{equation.3.5.57}{}}
+\newlabel{eq:vec_prev_state_2_proj_state}{{3.66}{35}{Knowledge base}{equation.3.5.66}{}}
+\newlabel{eq:vec_prev_state_2_drone}{{3.67}{35}{Knowledge base}{equation.3.5.67}{}}
+\newlabel{eq:norm_dot_prod_criterion}{{3.68}{35}{Knowledge base}{equation.3.5.68}{}}
+\newlabel{eq:dist_drone_proj_criterion}{{3.70}{35}{Knowledge base}{equation.3.5.70}{}}
+\newlabel{eq:proj_idx_with_min_dist}{{3.71}{35}{Knowledge base}{equation.3.5.71}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces  Update of the projection state index }}{36}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:expert_system_projection}{{3.3}{36}{Update of the projection state index}{figure.caption.29}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.6}Racing vs. Training Data Generation}{38}{section.3.6}\protected@file@percent }
 \citation{Furrer2016}
 \citation{Song2020}
@@ -163,8 +167,8 @@
 \@writefile{lot}{\addvspace {10\p@ }}
 \newlabel{maintwo}{{4}{39}{Experiments}{chapter.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Simulation Setup}{39}{section.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces  Implementation concept of the simulation }}{39}{figure.caption.32}\protected@file@percent }
-\newlabel{fig:simulation_setup}{{4.1}{39}{Implementation concept of the simulation}{figure.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces  Implementation concept of the simulation }}{39}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:simulation_setup}{{4.1}{39}{Implementation concept of the simulation}{figure.caption.31}{}}
 \newlabel{fig:unity_scene_SI}{{4.2a}{40}{Subfigure 4 4.2a}{subfigure.4.2.1}{}}
 \newlabel{sub@fig:unity_scene_SI}{{(a)}{a}{Subfigure 4 4.2a\relax }{subfigure.4.2.1}{}}
 \newlabel{fig:unity_scene_DC}{{4.2b}{40}{Subfigure 4 4.2b}{subfigure.4.2.2}{}}
@@ -175,21 +179,21 @@
 \newlabel{sub@fig:unity_scene_PC}{{(d)}{d}{Subfigure 4 4.2d\relax }{subfigure.4.2.4}{}}
 \newlabel{fig:unity_scene_DM}{{4.2e}{40}{Subfigure 4 4.2e}{subfigure.4.2.5}{}}
 \newlabel{sub@fig:unity_scene_DM}{{(e)}{e}{Subfigure 4 4.2e\relax }{subfigure.4.2.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces  Scenes implemented in simulation }}{40}{figure.caption.33}\protected@file@percent }
-\newlabel{fig:unity_scenes}{{4.2}{40}{Scenes implemented in simulation}{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces  Scenes implemented in simulation }}{40}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:unity_scenes}{{4.2}{40}{Scenes implemented in simulation}{figure.caption.32}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces { Spaceship Interior }}}{40}{subfigure.2.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces { Destroyed City }}}{40}{subfigure.2.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces { Industrial Site }}}{40}{subfigure.2.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces { Polygon City }}}{40}{subfigure.2.4}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces { Desert Mountain }}}{40}{subfigure.2.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces  Gate covers implemented in simulation }}{41}{figure.caption.34}\protected@file@percent }
-\newlabel{fig:unity_gates}{{4.3}{41}{Gate covers implemented in simulation}{figure.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces  Gate covers implemented in simulation }}{41}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:unity_gates}{{4.3}{41}{Gate covers implemented in simulation}{figure.caption.33}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{41}{subfigure.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces { DME at Tsinghua University }}}{41}{subfigure.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces  Computation of the racetrack }}{42}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:racetrack_comp}{{4.4}{42}{Computation of the racetrack}{figure.caption.35}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Deterministic gate poses\relax }}{43}{table.caption.36}\protected@file@percent }
-\newlabel{tab:gate_pos}{{4.1}{43}{Deterministic gate poses\relax }{table.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces  Computation of the racetrack }}{42}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:racetrack_comp}{{4.4}{42}{Computation of the racetrack}{figure.caption.34}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Deterministic gate poses\relax }}{43}{table.caption.35}\protected@file@percent }
+\newlabel{tab:gate_pos}{{4.1}{43}{Deterministic gate poses\relax }{table.caption.35}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.2}ANN Module Variants}{43}{section.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}Data Generation and Training}{43}{section.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4.4}Racing Tests}{43}{section.4.4}\protected@file@percent }
@@ -243,35 +247,35 @@
 \bibcite{Song2020}{29}
 \bibcite{Yin2017}{30}
 \bibcite{Zimmermann2012}{31}
-\@writefile{toc}{\contentsline {chapter}{Appendices}{48}{chapter*.37}\protected@file@percent }
-\newlabel{appendices}{{6.3}{49}{Appendices}{chapter*.38}{}}
-\@writefile{toc}{\contentsline {section}{Appendix A: Abbreviations}{49}{chapter*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Appendices}{48}{chapter*.36}\protected@file@percent }
+\newlabel{appendices}{{6.3}{49}{Appendices}{chapter*.37}{}}
+\@writefile{toc}{\contentsline {section}{Appendix A: Abbreviations}{49}{chapter*.37}\protected@file@percent }
 \citation{oberheide:2008:cloudav}
-\@writefile{toc}{\contentsline {section}{Appendix B: {\LaTeX  } Help}{50}{section*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Appendix B: {\LaTeX  } Help}{50}{section*.38}\protected@file@percent }
 \citation{latexcookbook2007}
 \@writefile{lol}{\contentsline {lstlisting}{\textunderscore \textunderscore help/Example.java}{53}{lstlisting.6.-1}\protected@file@percent }
 \newlabel{list:code}{{6.1}{53}{Example code is presented here}{lstlisting.6.1}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}Example code is presented here}{53}{lstlisting.6.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{54}{figure.caption.49}\protected@file@percent }
-\newlabel{fig:help1}{{6.1}{54}{Including an Image}{figure.caption.49}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{54}{figure.caption.50}\protected@file@percent }
-\newlabel{fig:help2}{{6.2}{54}{Short caption for list of figures}{figure.caption.50}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{54}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:help1}{{6.1}{54}{Including an Image}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{54}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:help2}{{6.2}{54}{Short caption for list of figures}{figure.caption.49}{}}
 \newlabel{fig:tub1}{{6.3a}{54}{Subfigure 6 6.3a}{subfigure.6.3.1}{}}
 \newlabel{sub@fig:tub1}{{(a)}{a}{Subfigure 6 6.3a\relax }{subfigure.6.3.1}{}}
 \newlabel{fig:tub2}{{6.3b}{54}{Subfigure 6 6.3b}{subfigure.6.3.2}{}}
 \newlabel{sub@fig:tub2}{{(b)}{b}{Subfigure 6 6.3b\relax }{subfigure.6.3.2}{}}
 \newlabel{fig:tub3}{{6.3c}{54}{Subfigure 6 6.3c}{subfigure.6.3.3}{}}
 \newlabel{sub@fig:tub3}{{(c)}{c}{Subfigure 6 6.3c\relax }{subfigure.6.3.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{54}{figure.caption.51}\protected@file@percent }
-\newlabel{fig:tuball}{{6.3}{54}{Placing images side by side}{figure.caption.51}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{54}{figure.caption.50}\protected@file@percent }
+\newlabel{fig:tuball}{{6.3}{54}{Placing images side by side}{figure.caption.50}{}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Small}}}{54}{subfigure.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Large}}}{54}{subfigure.3.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Medium}}}{54}{subfigure.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }}{55}{table.caption.53}\protected@file@percent }
-\newlabel{tab:help1}{{6.1}{55}{Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }{table.caption.53}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Table using vertical and horizontal lines\relax }}{55}{table.caption.54}\protected@file@percent }
-\newlabel{tab:help2}{{6.2}{55}{Table using vertical and horizontal lines\relax }{table.caption.54}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Table with column width specification on last column\relax }}{55}{table.caption.55}\protected@file@percent }
-\newlabel{tab:help3}{{6.3}{55}{Table with column width specification on last column\relax }{table.caption.55}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.4}{\ignorespaces Table using multi-column and multirow\relax }}{56}{table.caption.56}\protected@file@percent }
-\newlabel{tab:help4}{{6.4}{56}{Table using multi-column and multirow\relax }{table.caption.56}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }}{55}{table.caption.52}\protected@file@percent }
+\newlabel{tab:help1}{{6.1}{55}{Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }{table.caption.52}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Table using vertical and horizontal lines\relax }}{55}{table.caption.53}\protected@file@percent }
+\newlabel{tab:help2}{{6.2}{55}{Table using vertical and horizontal lines\relax }{table.caption.53}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Table with column width specification on last column\relax }}{55}{table.caption.54}\protected@file@percent }
+\newlabel{tab:help3}{{6.3}{55}{Table with column width specification on last column\relax }{table.caption.54}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.4}{\ignorespaces Table using multi-column and multirow\relax }}{56}{table.caption.55}\protected@file@percent }
+\newlabel{tab:help4}{{6.4}{56}{Table using multi-column and multirow\relax }{table.caption.55}{}}
