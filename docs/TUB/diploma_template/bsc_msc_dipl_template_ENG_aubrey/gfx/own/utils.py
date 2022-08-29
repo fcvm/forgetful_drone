@@ -20,10 +20,11 @@ def initRCParams () -> None:
 def figFpath (file: str, suffix : str = None):
     return pathlib.Path(file).parent.resolve()/f"{pathlib.Path(file).stem}{suffix}.pdf"
 
-def saveFig (file: str, suffix : str = None):
+def saveFig (file: str, suffix : str = None, transparent : bool = False):
     plt.savefig(
         figFpath(file, suffix),
-        bbox_inches='tight'
+        bbox_inches='tight',
+        transparent=transparent
     )
 
 

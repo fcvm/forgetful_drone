@@ -525,131 +525,200 @@ the above compositions are expected to also approximately invert each other with
 
 
 
-\section{ANN module} \label{sec:ann_module}
-The ANN module performs the function of inference
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ANN module}\label{sec:ann_module}
+%
+%
+\newcommand{\setOfAllPosInts}{\mathbb{N}_{>0}}
+\newcommand{\setOfInts}[1]{\left\{ #1 \right\}}
+\newcommand{\setOfAllRealNumbers}{\mathbb{R}}
+\newcommand{\placeholder}{\square}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\series}[1]{\left(#1\right)}
+\newcommand{\tuple}[1]{\left(#1\right)}
+%
+\newcommand{\rawRGB}{\img[]{\camera}{}{}{}}
+\newcommand{\rawRGBFullInt}{\num[]{\camera}{\mxm}{}{}}
+\newcommand{\rawRGBHeight}{\num[]{\camera}{\height}{}{}}
+\newcommand{\rawRGBWidth}{\num[]{\camera}{\widthh}{}{}}
+\newcommand{\rawRGBTimeStep}{\dur[]{\camera}{}{}{}}
+\newcommand{\preprocRGB}[1]{\img[]{\preprocessed}{#1}{}{}}
+\newcommand{\IMULinAcc}{\acc[\hat]{\imu}{}{\lrs}{}}
+\newcommand{\IMUAngVel}{\angvel[\hat]{\imu}{}{\lrs}{}}
+\newcommand{\IMUTimeStep}{\dur[]{\imu}{}{}{}}
+\newcommand{\optFeatVec}[1]{\featvec[]{\optional}{#1}{}{}}
+\newcommand{\CNNMap}{\Func[\user]{\cnn}{}{}{}}
+\newcommand{\CNNNumC}{\num[]{\cnn}{\channel}{}{}}
+\newcommand{\CNNHeight}{\num[]{\cnn}{\height}{}{}}
+\newcommand{\CNNWidth}{\num[]{\cnn}{\widthh}{}{}}
+\newcommand{\CNNOutp}{\num[]{\cnn}{\outp}{}{}}
+\newcommand{\visFeatVec}[1]{\featvec[]{\visual}{#1}{}{}}
+\newcommand{\CNNNumP}{\num[]{\cnn}{\params}{}{}}
+\newcommand{\CATMap}{\Func[]{\cat}{}{}{}}
+\newcommand{\CATInp}[1]{\num[]{\cat}{#1}{}{}}
+\newcommand{\CATNumP}{\num[]{\cat}{\params}{}{}}
+%
+\newcommand{\batchSize}{\num[\user]{\batch}{}{}{}}
+\newcommand{\seqLen}{\num[\user]{\seq}{}{}{}}
+\newcommand{\mainFreq}{\freq[\user]{\main}{}{}{}}
+\newcommand{\resizeFact}{\anything[\user]{\cnn}{\text{resize}}{}{}{s}}
+%
+%
+The ANN module performs the function of making navigation decisions
 within the autonomous navigation method.
-More precisely, the module makes navigation decisions
-on the basis of data from the drone's onboard sensors.
-In order for these navigation decisions to be reasonable
-the ANN module is trained with supervised learning (see section ??).
-At testing, 
+Figure ?? shows the module's information flow.
+The module infers its decisions exclusively 
+on the basis of preprocessed data from sensors onboard the drone.
+It comprises the five submodules named
+CNN, CAT, GRU, FC and HEAD.
+This modular design enables a high flexibility for the experiments
+with the different ANN module variants in chapter \ref{maintwo}.
+All variants have in common that,
+first, the order of the submodules is fixed
+and, second, the outer submodules (CNN and HEAD)
+are always activated.
+The latter ensures the minimum functionality of the ANN module
+of extracting visual features of the preprocessed 
+RGB images from the drone's onboard camera
+and mapping them to navigation decisions.
+The variants differ in that
+the user specifies the design parameters of 
+all (inner and outer) individual submodules.
+This includes, among other things, the de-/activation 
+of individual inner submodules 
+(CAT, GRU and FC).
+A deactivated inner submodule recedes to the identity map.
+The inner submodules perform the functions of
+inputting optional features (CAT),
+extracting temporal features (GRU)
+and increasing the general complexity of the ANN module (FC).
+
+
+The ANN module is trained with supervised learning on
+batches whose elements are randomly sampled from training data
+of sequential samples.
+The user specifies
+the batch size 
+$
+    \batchSize \in \setOfAllPosInts
+$ 
+and the sequence length 
+$
+    \seqLen \in \setOfAllPosInts
+$
+of the training samples 
+for the individual ANN module variant.
+The submodules prior to the GRU submodule (CNN and CAT)
+have no awareness of sequential connections 
+and, thus, process sequence elements in parallel like batch elements.
+The GRU submodule,
+which has the sequential awareness,
+operates in many-to-one mode, i.e.,
+each input sequence of feature vectors is mapped to a 
+single non-sequential output feature vector.
+The subsequent submodules (FC and HEAD)
+then process batches of non-sequential data, 
+as is common in conventional feedforward networks.
+In this sense,
+the GRU submodule is mandatory in case the user specifies
+$\seqLen > 1$ for the training data.
+
+At racing,
 when the autonomous navigation method flies the drone through the racetrack,
-the ANN module outputs navigation decisions in real-time at a user-specified frequency.
-Thereby, the GRU sub-module (and therewith the ANN module itself)
-operates in one-to-one mode,
-i.e., it maps each single, non-sequential input to a single, non-sequential output.
-As, however, the frequently incoming, single inputs as a whole constitute a time series,
-the GRU sub-module builds up memory in its hidden state
-as the module learned during training.
-By this, not only the current but also 
-past inputs have impact on the current navigation decision.
-
-
-The ANN module itself is built 
-from the CNN, the CAT, the GRU, the FC and the HEAD sub-module
-(see figure XXX).
-This modular design entails a high flexibility for the studies
-of different ANN module variants in chaper ??.
-For all ANN module variants,
-the sequence of the sub-modules is fixed
-and the outer sub-modules, i.e, the CNN and the HEAD sub-module,
-are mandatory.
-This ensures the mapping 
-of the minimum input of an RGB image to a navigation decision.
-In contrast, the user specifies whether
-the individual inner sub-modules,
-i.e., the CAT, the GRU and the FC sub-module,
-are switched on or off
-before the training of an ANN module variant.
-Moreover, the user specifies the design of all individual sub-modules.
+the ANN module makes navigation decisions 
+in real-time at the user-specified frequency
+$\mainFreq$ with the batch size and sequence length 
+of the input
+$\batchSize = \seqLen =1$.
+The GRU submodule (if activated in the specific variant) 
+hence operates in one-to-one mode,
+i.e., 
+each single non-sequential input feature vector
+is mapped to a single non-sequential output feature vector.
+Since the single input feature vectors 
+trace back to the sensor data coming in at a fixed frequency,
+they, as a whole, constitute a time series,
+on which the GRU submodule can build up memory
+% in its hidden state
+as learned during the training on the sequences of the specified length.
+As a result, both, the current and past sensor data, 
+influence the current navigation decision.
 
 
 
-\paragraph*{Input} ${}$\\
-The single inputs to the ANN module are devided into mandatory and optional.
-The mandatory input for the current inference is the
-latest, preprocessed RGB (therewith three channeled) image from the drone's onboard camera
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph*{Input preprocessing} ${}$\\
+The drone's onboard camera 
+outputs raw RGB images
 \begin{equation}
-    \underline{\underline{\underline I}}^\text{preproc}
-    \in 
-    %\left\{
-    %    0,\dots,I_\text{max}
-    %\right\}
-    \left\{
-        \frac{i}{I_\text{max}^\text{raw}}
-    \right\}
-    _{
-        i \in 
-        \left\{
-            0,\dots,I_\text{max}^\text{raw}
-        \right\}
-    }
-    ^{
-        %I_\text{C} \times    
-        3 \times
-        I_\text{H}^\text{preproc} \times 
-        I_\text{W}^\text{preproc}
-    }.
-    %\text{ with } I_\text{C} = 3.
+    \rawRGB \in \setOfInts{0, \dots, \rawRGBFullInt}^{
+        3 \times \rawRGBHeight \times \rawRGBWidth}
 \end{equation}
-The two-step preprocessing of the raw RGB image simplifies the training of the ANN module.
-First, the pixel intensities are normalized by the full intensity 
-$I_\text{max}^\text{raw} = 255$
-with the aim to accelerate the convergence at training.
+where 
+$\rawRGBFullInt$ (usually $= 255$) is the full pixel intensity 
+and
+$\rawRGBHeight \times \rawRGBWidth$
+is the image size.
+The latest raw RGB image is preprocessed in two steps
+before being fed to the CNN submodule.
+First, the pixel intensities are noralized by the full intensity 
+$\rawRGBFullInt$ with the aim
+to accelerate the convergence of the loss during training.
 Second, the image is sized down 
-to the height 
-$
-    I_\text{H}^\text{preproc} 
-    = 
-    \left\lfloor
-    s^\text{user}_\text{rgb-resize}
-    \cdot
-    I_\text{H}^\text{raw}
-    \right\rfloor
-$
-and width
-$
-    I_\text{W}^\text{preproc} 
-    = 
-    \left\lfloor
-    s^\text{user}_\text{rgb-resize}
-    \cdot
-    I_\text{W}^\text{raw}
-    \right\rfloor
-$
-with a user-specified 
-factor preserving its aspect ratio.
-By this, the occupation of GPU memory at training,
-which is critical for longer sequences,
-can be reduced if necessary.
+preserving its aspect ratio
+with the user-specified factor $\resizeFact$.
+Besides significantly accelerating the training,
+this step makes training on longer sequences possible
+in the first place by reducing GPU memory usage.
+The resulting preprocessed RGB image is
+\begin{equation} \label{eq:rgb_preproc}
+    \preprocRGB{} \in \setOfInts{\frac{i}{\rawRGBFullInt}}_{
+        i \in \setOfInts{0, \dots, \rawRGBFullInt}
+    }^{
+        3 \times 
+        \floor{\resizeFact \cdot \rawRGBHeight} \times 
+        \floor{\resizeFact \cdot \rawRGBWidth}
+    }
+\end{equation} 
+where $\floor{\placeholder}$ denotes the operation of rounding down to the nearest integer.
 
 
 
-Before the training of an ANN module variant, the user switches on or off
-the individual elements of the feature vector of optional inputs
+The available optional input features are
+\begin{itemize}
+    \item the time step
+    $\rawRGBTimeStep$
+    between the stamps of the raw RGB images processed
+    at the previous and the current inference
+    \item the latest estimate from the drone's onboard IMU
+    (inertial measurement unit) 
+    comprising the drone's linear acceleration
+    $\IMULinAcc \in \setOfAllRealNumbers^3$
+    and angular velocity
+    $\IMUAngVel \in \setOfAllRealNumbers^3$
+    in the local reference system
+    \item the time step
+    $\IMUTimeStep$
+    between the stamps of the IMU estimates
+    processed at the previous and the current inference.
+\end{itemize}
+The user-activated optional inputs are stacked into the optional input vector
+before being fed to the CAT submodule.
+For example, the fully activated optional input vector is
 \begin{align}
-    \featvec[]{\text{opt}}{}{}{} 
-    =
+    \optFeatVec{} =
     \begin{bmatrix}
-        \dur[]{\text{rgb}}{}{}{} \\
-        \acc[\hat]{\text{imu}}{}{}{} \\
-        \angvel[\hat]{\text{imu}}{}{}{} \\
-        \dur[]{\text{imu}}{}{}{}
-    \end{bmatrix}
-    .
+        \rawRGBTimeStep \\
+        \IMULinAcc \\
+        \IMUAngVel \\
+        \IMUTimeStep
+    \end{bmatrix}.
 \end{align}
-The above vector comprises the
-the duration
-$\dur[]{\text{rgb}}{}{}{}$
-elapsed between the shooting of the previous and the latest raw RGB image,
-the drone's latest linear acceleration
-$\acc[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
-and angular velocity
-$\angvel[\hat]{\text{imu}}{}{}{} \in \mathbb{R}^3$
-measurement from its onboard inertial measurement unit (IMU)
-as well as the duration
-$\dur[]{\text{imu}}{}{}{}$
-elapsed between the recording of the previous and the latest IMU data.
 
 
 
@@ -658,865 +727,509 @@ elapsed between the recording of the previous and the latest IMU data.
 
 
 
-\subsection*{CNN}
-The convolutional neural network (CNN) sub-module
-extracts a batch of visual features 
-from the pixel data of a batch of images
+%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph*{CNN} ${}$\\
+The CNN (convolutional neural network) submodule 
+extracts visual features of images.
+This submodule is implemented with the backbone
+of any user-selected TorchVision
+classification model\footnote{
+    \url{https://pytorch.org/vision/stable/models.html}, visited on 23/08/2022
+},
+which is obtained by removing the last layer of the model.
+In addition, the user specifies whether the backbone
+initializes with pretrained weights and whether
+the weights of the backbone are trainable.
+Since CNN backbones are only applied in this thesis, 
+their corresponding mapping is 
+regarded as a black box 
 \begin{align} \label{eq:CNN}
-    \underline{\underline{ \mathcal{F} }}^\text{cnn}
-    :\ 
-    & 
-    \mathbb{R}^{
-        N^\text{cnn}_\text{batch} 
-        \times
-        N^\text{cnn}_\text{channel}
-        \times
-        N^\text{cnn}_\text{height}
-        \times
-        N^\text{cnn}_\text{width}
-    } 
+    \CNNMap 
+    :
+    \setOfAllRealNumbers^{\CNNNumC \times \CNNHeight \times \CNNWidth} 
     \rightarrow 
-    \mathbb{R}^{
-        N^\text{cnn}_\text{batch}
-        \times
-        N^\text{cnn}_\text{out}
-    }
-    \nonumber \\
-    %;\quad
-    &\underline{\underline{\underline{\underline x}}}
+    \setOfAllRealNumbers^{\CNNOutp}
+    ;\quad 
+    \img[]{}{}{}{}
     \mapsto 
-    \underline{\underline{ \mathcal{F} }}^\text{cnn} \left(
-        \underline{\underline{\underline{\underline x}}}
-    \right)
+    \visFeatVec{}
     .
 \end{align}
-The batch size 
-$
-    N^\text{cnn}_\text{batch}
-$,
-the number of channels
-$
-    N^\text{cnn}_\text{channel}
-$
-as well as the image height 
-$
-    N^\text{cnn}_\text{height}
-$
-and width
-$
-    N^\text{cnn}_\text{width}
-$
-of the CNN
-adapt to the dimensions of the inputted batch of images
-$
-    \underline{\underline{\underline{\underline x}}}
-$,
-whereas the output size
-$
-    N^\text{cnn}_\text{out}
-$
-of the CNN
-is fixed by the design of the CNN, 
-more specifically, by its last layer.
-The training data is generally sequential,
-i.e., the images are present in batches of sequences
-\begin{equation}
-    \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}
-    \in
-    \mathbb{R}^{
-        N^\text{batch} 
-        \times
-        N^\text{seq}
-        \times
-        N^\text{C}
-        \times
-        N^\text{H}
-        \times
-        N^\text{W}
-    }
-\end{equation}
-with the sequence lenght $N^\text{seq}$.
-These batches of sequences must be
-vectorized along their two first dimensions
-\begin{equation}
-    \mathrm{vec} \left(
-        \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}   
-    \right)
-    \in
-    \mathbb{R}^{
-        N^\text{batch} 
-        \cdot
-        N^\text{seq}
-        \times
-        N^\text{C}
-        \times
-        N^\text{H}
-        \times
-        N^\text{W}
-    }
-\end{equation}
-before they are processed by the CNN.
-Afterwards the sequences are restored 
-by de-vectorizing the direct output of the CNN backbone 
-\begin{equation}
-    \underline{\underline{\underline{x}}}^\text{cnn}
-    =
-    \mathrm{vec}^{-1} \left(
-        \underline{\underline{ \mathcal{F} }}^\text{cnn} \left(
-            \mathrm{vec} \left(
-                \underline{\underline{\underline{\underline{\underline x}}}} ^\text{rgb}   
-            \right)
-        \right)
-    \right)
-    \in
-    \mathbb{R}^{
-        N^\text{batch} 
-        \times
-        N^\text{seq}
-        \times
-        N^\text{cnn}_\text{out}
-    }.
-\end{equation}
+The backbone implementation adapts to the inputted image
+in terms of the 
+the number of channels $\CNNNumC$,
+height $\CNNHeight$
+and width $\CNNWidth$.
+The backbone's output dimensionality 
+$\CNNOutp$
+is fixed by the design of its last layer.
+The user specifies
 
-\subsection*{CAT}
-The CAT sub-module concatenates
-each corresponding pair of sequential feature matrices,
-sampled from 
-the
-batch outputted by the CNN sub-module
-and the batch of optional inputs,
-along their feature axis
+The CNN submodule inputs
+a batch of sequences of preprocessed RGB images 
+(equ. \ref{eq:rgb_preproc}) 
+\begin{equation}
+    \series{\preprocRGB{t}}_{t \in \setOfInts{1, \dots, \seqLen}, i}
+    ,\quad 
+    i \in \setOfInts{1, \dots, \batchSize}.
+\end{equation}
+As it processes the individual sequence elements 
+unrelated in parallel like batch elements,
+the CNN submodule maps each image of the input batch 
+to an individual visual feature vector in the output batch
+\begin{equation} \label{eq:cnn_output}
+    \series{\visFeatVec{t}}_{t \in \setOfInts{1, \dots, \seqLen}, i}
+    ,\quad 
+    i \in \setOfInts{1, \dots, \batchSize}.
+\end{equation}
+The number of trainable parameters $\CNNNumP$ of the CNN submodule 
+depends on the user-selected TorchVision model.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph*{CAT} ${}$\\
+The CAT submodule concatenates
+two feature vectors
 \begin{align} \label{eq:cat}
-    \mathcal{F}^\text{cat}
-    :\ 
-    & \left(
-        \mathbb{R}^{
-            N^\text{seq}
-            \times
-            N^\text{cnn}_{\text{out}}
-        }
-        ,\ 
-        \mathbb{R}^{
-            N^\text{seq}
-            \times
-            N^\text{input}_{\text{opt}}
-        }
-    \right)
+    \CATMap
+    :
+    \tuple{\setOfAllRealNumbers^{\CATInp{1}}, \setOfAllRealNumbers^{\CATInp{2}}}
     \rightarrow 
-    \mathbb{R}^{
-            N^\text{seq}
-            \times
-            \left(
-                N^\text{cnn}_{\text{out}}
-                + 
-                N^\text{input}_{\text{opt}}
-            \right)
-        }
-    \nonumber \\ &
-    \left(
-        \underline{\underline{x}}_{i}
-        ,\ 
-        \underline{\underline{y}}_{i}
-    \right)
+    \setOfAllRealNumbers^{\CATInp{1} + \CATInp{2}}
+    ;\quad
+    \tuple{\featvec[]{}{1}{}{}, \featvec[]{}{2}{}{}}
     \mapsto
     \begin{bmatrix}
-        \underline{\underline{x}}_{i} & \underline{\underline{y}}_{i}
-    \end{bmatrix} 
-    ,\qquad
-    i \in \left\{
-        1, \dots, N^\text{batch}
-    \right\}.
+        \featvec[]{}{1}{}{} \\ \featvec[]{}{2}{}{}
+    \end{bmatrix}
 \end{align}
-If the user deactivates all optional input, i.e.,
-$
-    N^\text{input}_{\text{opt}} = 0
-$,
-the CAT sub-module recedes to 
-the identity map
-of the output of the CNN sub-module.
-Either way, 
-the CAT sub-module has zero trainable parameters
+where the input dimensionalities
+$\mathbb{R}^{\num[]{\cat}{1}{}{}}$
+and
+$\mathbb{R}^{\num[]{\cat}{2}{}{}}$
+adapt to the number of features of the input.
+This submodule applies to each
+visual feature vector 
+outputted by the CNN submodule 
+(see equ. \ref{eq:cnn_output})
+and optional input feature vector
+\begin{equation} \label{eq:batch_opt}
+    \series{\optFeatVec{t}}_{t \in \setOfInts{1, \dots, \seqLen}, i}
+    ,\quad 
+    i \in \setOfInts{1, \dots, \batchSize}.
+\end{equation}
+that correspond to the same position in batch and sequence.
+Hence the CAT submodule outputs a batch of sequences
+of concatenated feature vectors
+\begin{equation} \label{eq:cat_output}
+    \series{
+        \begin{bmatrix} 
+            \visFeatVec{t} \\ \optFeatVec{t}
+        \end{bmatrix}
+    }_{t \in \setOfInts{1, \dots, \seqLen}, i}
+    ,\quad 
+    i \in \setOfInts{1, \dots, \batchSize}.
+\end{equation}
+If the user deactivates all optional inputs,
+the CAT submodule also deactivates and recedes to 
+the identity map of the the CNN submodule output.
+Either way, the CAT submodule has zero trainable parameters
 \begin{equation}
-    N^\text{cat}_\text{param} = 0.
+    \CATNumP = 0.
 \end{equation}
 
 
-%The user specifies a subset of all possible optional inputs.
-\subsection*{GRU}
-The GRU sub-module consists of multiple layers of 
-gated recurrent units (GRU) \cite{Cho2014}.
-%RNN
-
-The input to a single unit is
-a batch of sequences of feature vectors
-\begin{equation}
-    \left(
-        \underline x_k
-    \right)_{
-        k \in \left\{
-            1, \dots, N^\text{seq}
-        \right\}
-        ,
-        j
-    }
-    ,\quad
-    j \in \left\{
-        1, \dots, N^\text{batch}
-    \right\}
-\end{equation}
-and a batch of the hidden states
-previously inferenced by the unit
-\begin{equation}
-    \underline h_{0,j}
-    ,\quad
-    j \in \left\{
-        1, \dots, N^\text{batch}
-    \right\}.
-\end{equation}
 
 
------------------------
+\newcommand{\GRULayerMap}[1]{\Func[]{\gru}{#1}{}{}}
+\newcommand{\GRUNumLayer}{\num[\user]{\gru}{\layer}{}{}}
+\newcommand{\GRUInp}[1]{\num[]{\gru}{\inp,#1}{}{}}
+\newcommand{\GRUHiddenSize}{\num[\user]{\gru}{\hidden}{}{}}
+\newcommand{\setOfRealNumbers}[1]{\left[#1\right]}
+\newcommand{\GRUMap}{\Func[]{\gru}{}{}{}}
+\newcommand{\GRUDropout}{\underline\delta}
+\newcommand{\GRUDropoutP}{\prob[\user]{\gru}{}{}{}}
+\newcommand{\GRUNumP}{\num[]{\gru}{\params}{}{}}
 
-The $i$-th gated recurrent unit 
-%$
-%    i 
-%    \in 
-%    \left\{
-%        1, \dots, N^\text{gru}_\text{unit}
-%    \right\}
-%$
-maps the $k$-th feature vector of
-the $j$-th sequence 
-%$
-%    j 
-%    \in 
-%    \left\{
-%        1, \dots, N^\text{batch}
-%    \right\}
-%$
-of its input batch, i.e.,
-$\underline x_{k,j}$,
-and the $j$-th previous hidden state
-of its hidden batch,
-i.e., $\underline h_{k-1,j}$,
-to the $j$-th current hidden state of its output batch,
-i.e., $\underline h_{k,j}$,
-by averaging
-its new gate 
-$\mathcal{F}^\text{gru}_{\text{new},i}$
-and its previous hidden state,
-weighted with its update gate
-$\mathcal{F}^\text{gru}_{\text{upd},i}$
-\begin{align} \label{eq:gru_hidden}
-    \forall \quad &
-    i \in \left\{
-        1, \dots, N^\text{gru}_\text{unit}
-    \right\}
-    ,\ 
-    j \in \left\{
-        1, \dots, N^\text{batch}
-    \right\}
-    ,\ 
-    k \in \left\{
-        1, \dots, N^\text{seq}
-    \right\}
+%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph*{GRU} ${}$\\
+The GRU (gated recurrent unit) submodule
+is implemented using the PyTorch
+multi-layer GRU\footnote{
+    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 24/08/2022
+},
+which integrates the GRU \cite{Cho2014} 
+introduced in section \ref{sec:gru} on each layer.
+As a quick reminder, 
+the single layer GRU 
+has the ability to comprehend temporal relations within sequences.
+Each layer 
+$l \in \setOfInts{1, \dots, \GRUNumLayer}$ 
+processes an input sequence by
+iterating through it
+$t \in \setOfInts{1, \dots, \seqLen}$ 
+mapping the current sequence element
+and the layer's previous hidden state
+to the current hidden state (see equ. \ref{eq:gru_layer_current_hidden})
+\begin{align}
+    \GRULayerMap{l}
     :
-    \nonumber \\ &
-    \mathcal{F}^\text{gru}_{\text{hidden},i}
-    :\
-    \left(
-        \mathbb{R}^{
-            N^\text{gru}_{\text{in}, i}
-        }
-        ,\ 
-        \left[
-            -1, 1
-        \right]^{
-            N^\text{gru}_{\text{hidden}}
-        }
-    \right)
+    \tuple{
+        \setOfAllRealNumbers^{\GRUInp{l}}, 
+        \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
+    }
     \rightarrow 
-    \left[
-        -1, 1
-    \right]^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    \nonumber \\ & \quad
-    \chi
-    :=
-    \left(
-        \underline x_{k,j}
-        ,\ 
-        \underline h_{k-1,j}
-    \right)
+    \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
+    ;\quad
+    \tuple{\featvec[]{(l)}{t}{}{}, \hiddenstate[]{(l)}{t-1}{}{}}
     \mapsto
-    \nonumber \\ & \qquad \qquad
-    \underline h_{k,j}
-    =
-    \left[
-        1 
-        -
-        \mathcal{F}^\text{gru}_{\text{upd},i} \left(
-            \chi
-        \right)
-    \right]
-    \odot
-    \mathcal{F}^\text{gru}_{\text{new},i} \left(
-        \chi
-    \right)
-    %\nonumber \\ & \qquad 
-    +
-    \mathcal{F}^\text{gru}_{\text{upd},i} \left(
-        \chi
-    \right)
-    \odot
-    \underline h_{k-1,j}
-    .
+    \hiddenstate[]{(l)}{t}{}{}.
 \end{align}
-In addition to the update and new gate,
-a gated recurrent unit also incorporates
-the reset gate which is used to compute the new gate.
-These three gates
-follow the mappings
-\begin{align} \label{eq:gru_reset}
-    \forall \quad &
-    i \in \left\{
-        1, \dots, N^\text{gru}_\text{unit}
-    \right\}
-    ,\ 
-    j \in \left\{
-        1, \dots, N^\text{batch}
-    \right\}
-    ,\ 
-    k \in \left\{
-        1, \dots, N^\text{seq}
-    \right\}
-    :
-    \nonumber \\ &
-    \mathcal{F}^\text{gru}_{\text{reset},i}
-    ,\ 
-    \mathcal{F}^\text{gru}_{\text{upd},i}
-    ,\ 
-    \mathcal{F}^\text{gru}_{\text{new},i}
-    :\
-    \left(
-        \mathbb{R}^{
-            N^\text{gru}_{\text{in},i}
-        }
-        ,\ 
-        \left[
-            -1, 1
-        \right]^{
-            N^\text{gru}_{\text{hidden}}
-        }
-    \right)
-    \rightarrow
-    \left[
-        0, 1   
-    \right]^{
-        N^\text{gru}_{\text{hidden}}
+Thereby, $\hiddenstate[]{(l)}{0}{}{}$ is either initialized with zeros 
+or corresponds to the last computed hidden state from the last inference.
+ In the multi-layer GRU,
+each layer maintains its own hidden state.
+The user specifies the number of layers 
+$\GRUNumLayer$
+and the hidden size 
+$\GRUHiddenSize$ (i.e., dimensionality) shared by all hidden states.
+While the first GRU layer inputs the elements of the given input sequence,
+all subsequent layers input the hidden state from the previous layer subject to dropout
+\begin{align} \label{eq:gru}
+    \GRUMap
+    :\ &
+    \tuple{
+        \setOfAllRealNumbers^{\GRUInp{1}},
+        \setOfRealNumbers{-1, 1}^{\GRUHiddenSize \times \GRUNumLayer}
     }
-    ,\ 
-    \left[
-        0, 1   
-    \right]^{
-        N^\text{gru}_{\text{hidden}}
-    },\ 
-    \left[
-        -1, 1   
-    \right]^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    \nonumber \\ & \quad
-    \chi
-    :=
-    \left(
-        \underline x_{k,j}
-        ,\ 
-        \underline h_{k-1,j}
-    \right)
-    \mapsto
-    \nonumber \\ & \qquad\qquad
-        \sigma \fullmoon \left(
-            \underline{\underline A}^\text{reset}_{x,i}
-            \underline x_{k,j}
-            +
-            \underline b^\text{reset}_{x,i}
-            +
-            \underline{\underline A}^\text{reset}_{h,i}
-            \underline h_{k-1,j}
-            +
-            \underline b^\text{reset}_{h,i}
-        \right)
-    ,
-    \nonumber \\ & \qquad\qquad
-        \sigma \fullmoon \left(
-            \underline{\underline A}^\text{upd}_{x,i}
-            \underline x_{k,j}
-            +
-            \underline b^\text{upd}_{x,i}
-            +
-            \underline{\underline A}^\text{upd}_{h,i}
-            \underline h_{k-1,j}
-            +
-            \underline b^\text{upd}_{h,i}
-        \right)
-    ,
-    \nonumber \\ & \qquad\qquad
-        \tanh \fullmoon \left[
-            \underline{\underline A}^\text{new}_{x,i}
-            \underline x_{k,j}
-            +
-            \underline b^\text{new}_{x,i}
-            %\nonumber \\ & \qquad \qquad \qquad \qquad \qquad \qquad \quad 
-            +
-            \mathcal{F}^\text{gru}_\text{reset} \left(
-                \chi
-            \right)
-            \odot
-            \left(
-                \underline{\underline A}^\text{new}_{h,i}
-                \underline h_{k-1,j}
-                +
-                \underline b^\text{new}_{h,i}
-            \right)
-        \right]
-    .
-\end{align}
-The reset gate linearly transforms the feature vector and the previous hidden state
-with the matrices of trainable weights and the vectors of trainable biases
-\begin{align}
-    \underline{\underline A}^\text{reset}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{in},i}
-    }
-    ,
-    &\underline{\underline A}^\text{reset}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
+    \rightarrow 
+    \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
     \nonumber \\
-    \underline{b}^\text{reset}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
+    &\tuple{
+        \featvec[]{}{t}{}{}, 
+        \hiddenstate[]{(1)}{t-1}{}{},
+        \dots,
+        \hiddenstate[]{(\GRUNumLayer)}{t-1}{}{}
     }
-    ,
-    &\underline{b}^\text{reset}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
-\end{align}
-and applies the standard sigmoid function \cite{Han1995}
-\begin{equation}
-    \sigma
-    :\ 
-    \mathbb{R}
-    \rightarrow
-    \left[
-        0,1
-    \right]
-    ;\ 
-    x \mapsto \frac{1}{1 + e^{-x}}
-\end{equation}
-elementwise (denoted with $\fullmoon$) to the result.
-The update gate differs to the reset gate only in the fact
-that it has own trainable weights and biases
-\begin{align}
-    \underline{\underline A}^\text{upd}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{in},i}
-    }
-    ,
-    &\underline{\underline A}^\text{upd}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
-    \nonumber \\
-    \underline{b}^\text{upd}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
-    &\underline{b}^\text{upd}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    .
-\end{align}
-The new gate also linearly transforms the feature vector and the previous hidden state
-with its own weights and biases
-\begin{align}
-    \underline{\underline A}^\text{new}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{in},i}
-    }
-    ,
-    &\underline{\underline A}^\text{new}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-        \times
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
-    \nonumber \\
-    \underline{b}^\text{new}_{x,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    ,
-    &\underline{b}^\text{new}_{h,i}
-    &\in \mathbb{R}^{
-        N^\text{gru}_{\text{hidden}}
-    }
-    .
-\end{align}
-In contrast to the other two gates,
-the new gate, before building the sum of both linear transformations,
-mitigates the contribution of the linear transformation of the 
-hidden state by the Hadamard product with the reset gate.
-Moreover, the hyperbolic tangent \cite{D.1966}
-\begin{equation}
-    \tanh
-    :\ 
-    \mathbb{R}
-    \rightarrow
-    \left[
-        -1,1
-    \right]
-    ;\ 
-    x 
     \mapsto 
-    \frac{
-        e^x - e^{-x}
-    }{
-        e^x + e^{-x}
+    \hiddenstate[]{(\GRUNumLayer)}{t}{}{} =
+    \dots
+    \nonumber \\
+    \dots &\GRULayerMap{\GRUNumLayer} \tuple{
+        \GRUDropout \odot
+        \GRULayerMap{\GRUNumLayer - 1} \tuple{
+            \GRUDropout \odot
+                \dots \GRULayerMap{1} \tuple{
+                    \featvec[]{}{t}{}{}
+                    ,
+                    \hiddenstate[]{(1)}{t-1}{}{}
+                }
+            ,
+            \hiddenstate[]{(\GRUNumLayer-1)}{t-1}{}{}
+        },
+        \hiddenstate[]{(\GRUNumLayer)}{t-1}{}{}
     }
+    .
+\end{align}
+Dropout is a measure that prevents ANNs from overfitting 
+to their provided training data.
+At training, 
+it randomly sets entries of a feature vector to zero 
+while maintaining the vector's signal strength on average
+in order to force the ANN to learn the extraction of stand-alone features 
+whose informative value is independent from the other extracted features \cite{Hinton2012}.
+Mathematically, dropout applied on a hidden state (or feature vector)
+is calculated with the Hadamard product (denoted with $\odot$)
+of that hidden state and the vector $\GRUDropout$ of same dimensionality 
+whose entries, for every calculation, 
+are random variables resampled 
+from a Bernoulli distribution
+with a user-specified probability
+\begin{equation}
+    P \left( \delta_i = 0 \right) = \GRUDropoutP
+    ,\quad
+    P \left( \delta_i = \frac{1}{1-\GRUDropoutP} \right) = 1 - \GRUDropoutP
+    .
 \end{equation}
-and not the sigmoid function 
-is applied element-wise.
+At racing, the dropout probability is null
+whereby the dropout is deactivated.
 
+As the $l$-th GRU layer has $3\GRUHiddenSize (\GRUInp{l} + \GRUHiddenSize + 2)$
+trainable parameters (see equ. \ref{eq:gru_layer_nparams}),
+the total number of trainable parameters of the GRU submodule is
+\begin{align}
+    \GRUNumP = 3\GRUHiddenSize \tuple{
+        (\GRUInp{1} + \GRUHiddenSize + 2)
+        + 
+        (\GRUNumLayer -1)
+        (2\GRUHiddenSize + 2)
+    }.
+\end{align}
 
+The GRU submodule operates in many-to-one mode at training or 
+one-to-one mode at racing where the length of the input sequences is one.
+Either way, the GRU submodule maps its input batch
+(see equ. \ref{eq:cat_output})
+to a batch of last hidden states of the last layer
+\begin{equation}
+    \hiddenstate[]{(\GRUNumLayer)}{\seqLen, i}{}{}
+    , \quad i \in \setOfInts{1, \dots, \batchSize}
+    .
+\end{equation}
 
-applies the following maps
-For the computation of the current batch of hidden states,
-the unit intermittently maps its input to three gates.
-The reset gate is computed by 
-applying the sigmoid function
-$
-\sigma(x) = \frac{1}{1+\exp(-x)}
-$
-to the individual elements of the sum
-of the biased linear transformations
-to the inputs and the previous hidden states
-and the subsequent
-
-
-This multi-layer gated recurrent unit (GRU)
-uses feedback connection to process the time series data
-thereby inttroducing temporal understanding in the decision making.
 
 
 
 \subsection*{FC}
-The FC sub-module comprises multiple fully connected layers
-applied to a batch of features.
+The FC submodule comprises multiple fully connected layers
+and performs the function
+of increasing the general complexity of the ANN module.
 Each layer 
 $
-    i 
+    l 
     \in 
     \left\{
-        1, \dots, N^\text{fc}_\text{layer}
+        1, \dots, \num[\user]{\fc}{\layer}{}{}
     \right\}
 $ 
 applies
 an activation function,
 a dropout
 and a biased linear transformation
-on each element
-$
-    j
-    \in 
-    \left\{
-        1, \dots, N^\text{batch}
-    \right\}
-$
-of a batch
-\begin{align} \label{eq:FC}
-    \mathcal{F}^\text{fc}_i
+on the inputted feature vector
+\begin{align} \label{eq:fc_layer}
+    \mathcal{F}^\text{fc}_l
     :\ &
     \mathbb{R}^{
-        %N^\text{batch} 
-        %\times
-        N^\text{fc}_{\text{in}, i}
+        \num[]{\text{fc}}{\text{in}, l}{}{}
     }
     \rightarrow 
     \mathbb{R}^{
-            %N^\text{batch} 
-            %\times
-            N^\text{fc}_\text{out}
+        \num[\user]{\text{fc}}{\text{out}, l}{}{}
         }
     \nonumber \\ &
-    %;\quad
-    \underline{x}_j%^\text{fc}_\text{in}
+    \underline{x}
     \mapsto
-    %\underline{\underline{x}}^\text{fc}_\text{out}
-    %=
-    \underline{\underline A}^\text{fc}_i
+    \underline{\underline A}^\text{fc}_l
     \left(
         \underline{\delta}^\text{fc}
         \odot
-        f^\text{fc} \fullmoon \left(
-            \underline{x}_j%^\text{fc}_\text{in}
+        \overset{\scriptscriptstyle \odot}{\func[\user]{\fc}{}{}{}} \left(
+            \underline{x}
         \right)
     \right)
-    + \underline b^\text{fc}_i
-    %
-    %\nonumber \\ &
-    %x_{kl}
-    %\mapsto
-    %\sum_l \delta_{kl} f(x_{kl}) a_{lm} + b_m 
+    + \underline b^\text{fc}_l
     .
 \end{align}
-The activation function 
-$
-    f^\text{fc}: \mathbb{R} \rightarrow \mathbb{R}
-$
-is applied element-wise (denoted with $\fullmoon$) on the input
-and is chosen by the user from the non-linear activations
-provided by PyTorch\footnote{
-    \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
-}.
-The dropout\cite{Hinton2012} decreases the overfitting of the ANN module on the training data set
-by enforcing the neurons to learn the detection of stand-alone features
-whose informative value is independent from
-the relation to other detected features.
-The dropout is accomplished
-by the Hadamard product (denoted with $\odot$)
-with the vector
-\begin{equation}
-    \underline{\delta}^\text{fc}
-    =
-    \left[
-        \delta^\text{fc}_i
-    \right]_{
-        i \in \left\{
-            1, \dots, N^\text{fc}_{\text{in}, i}
-        \right\}
-    }
-\end{equation}
-of independent, scaled Bernoulli random variables
-that are resampled for every function call
-with the probabilities
-\begin{equation}
-    P \left(
-        \delta^\text{fc}_i = 0
-    \right)
-    = p^\text{fc}
-    ,\quad
-    P \left(
-        \delta^\text{fc}_i = \frac{1}{1-p^\text{fc}}
-    \right)
-    = 1 - p^\text{fc}
-    .
-\end{equation}
-During training,
-the dropout probability $p^\text{fc} \in [0,1]$ equates to value specified by the user,
-whereas during evaluation,
-it is null $p^\text{fc} = 0$
-whereby the dropout becomes an identity operation.
-The linear transformation
-consist of the linear map given by the matrix of trainable weights
-\begin{equation}
-    \underline{\underline A}^\text{fc}_i 
-    \in 
+The mapping of the multi-layer FC submodule is recursively defined
+\begin{align} \label{eq:fc}
+    \mathcal{F}^\text{fc}
+    :\ &
     \mathbb{R}^{
-        N^\text{fc}_{\text{in}, i}
-        \times
-        N^\text{fc}_\text{out}
+        \num[]{\text{fc}}{\text{in}, 1}{}{}
     }
-\end{equation}
+    \rightarrow 
+    \mathbb{R}^{
+        \num[\user]{\text{fc}}{\text{out}, l}{}{}
+        }
+    \nonumber \\ &
+    \featvec[]{}{}{}{}
+    \mapsto
+    \mathcal{F}^\text{fc}_{\num[\user]{\fc}{\layer}{}{}} \left(
+        \mathcal{F}^\text{fc}_{\num[\user]{\fc}{\layer}{}{} - 1} \left(
+            \dots
+            \mathcal{F}^\text{fc}_{1} \left(
+                \featvec[]{}{}{}{}
+            \right)    
+        \right)
+    \right)
+    .
+\end{align}
+For the FC submodule,
+the user specifies:
+\begin{itemize}
+    \item the activation function
+    $\func[\user]{\fc}{}{}{}: \mathbb{R} \rightarrow \mathbb{R} $
+    from the non-linear activations
+    implemented by PyTorch\footnote{
+        \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
+    },
+    which applies element-wise 
+    on the input (denoted with the overset ${}^\odot$)
+    \item the dropout probability 
+    $\prob[\user]{\fc}{}{}{} \in [0,1]$,
+    i.e., the probability that an entry of the vector 
+    $\underline{\delta}^\fc$ will be sampled with zero
+    \item the number of layers
+    $
+    \num[\user]{\fc}{\layer}{}{}
+    $
+    \item the width 
+    $
+    \num[\user]{\fc}{\outp}{}{}
+    $,
+    i.e., output dimensionality
+    shared by all layers.
+\end{itemize}
+The input dimensionality of a layer
+adapts to the given input vector.
+For the first layer,
+it adapts to the feature vector
+forwarded to the FC submodule
+$
+\num[]{\fc}{\inp,1}{}{} 
+= 
+\dim \left(\featvec[]{}{}{}{}\right)$.
+For all subsequent layers $l \ge 2$,
+it adapts to
+the width of the FC submodule
+$
+\num[]{\fc}{\inp,l}{}{} 
+= \num[]{\fc}{\outp}{}{}
+$.
+The biased linear transformation of the $l$-th layer
+consists of the multiplication with the matrix of trainable weights
 and the addition of the vector of trainable biases
 \begin{equation}
-    \underline b^\text{fc}_i 
+    \underline{\underline A}^\fc_l
+    \in 
+    \mathbb{R}^{
+        \num[]{\fc}{\inp,l}{}{}
+        \times
+        \num[]{\fc}{\outp}{}{}
+    }, \quad
+    \underline b^\text{fc}_l 
     \in \mathbb{R}^{
-        N^\text{fc}_\text{out}
+        \num[]{\fc}{\outp}{}{}
     }.
 \end{equation}
-A single layer, thus,
-has
+As a single layer therewith has
 $
-    \left(
-        N^\text{fc}_{\text{in}, i} + 1
-    \right)
-    \cdot
-    N^\text{fc}_\text{out}
+\left( \num[]{\fc}{\inp,l}{}{} + 1 \right)
+\num[]{\fc}{\outp}{}{}
 $
-trainable parameters.
-The user specifies the number of layers
-$
-    N^\text{fc}_\text{layer}
-$
-of the FC, the width 
-$
-    N^\text{fc}_\text{out}
-$,
-i.e., the number of outputted features,
-which is shared by all layers of the FC,
-the activation function 
-$
-    f^\text{fc}: \mathbb{R} \rightarrow \mathbb{R}
-$
-and the dropout probability
-$
-    p^\text{fc} \in [0,1]
-$.
-The number of inputted features
-of a layer
-adapts to the given input
-$
-    N^\text{fc}_{\text{in}, i} 
-    = 
-    \begin{cases}
-        \dim \left(
-            \underline{x}_j
-        \right)
-        ,\quad 
-        \text{if } i = 1
+trainable parameters,
+the total number of trainable parameters of the FC submodule is
+\begin{align}
+    \num[]{\fc}{\params}{}{}
+    = \begin{cases}
+        \left( \num[]{\fc}{\inp,1}{}{} + 1 \right)
+        \num[\user]{\fc}{\outp}{}{}
+        ,& \text{ if } \num[\user]{\fc}{\layer}{}{} = 1
         \\
-        N^\text{fc}_\text{out}
-        ,\quad 
-        \text{else} 
+        \left( \num[]{\fc}{\inp,1}{}{} + 1 \right)
+        \num[\user]{\fc}{\outp}{}{}
+        +
+        \left( \num[\user]{\fc}{\layer}{}{} - 1 \right)
+        \left( \num[\user]{\fc}{\outp}{}{} + 1 \right)
+        \num[\user]{\fc}{\outp}{}{}
+        ,& \text{ else.}
     \end{cases}
-$.
-For 
-$
-    N^\text{fc}_\text{layer} \ge 1
-$,
-the FC sub-module hence has
-a total of 
-$
-    \left(
-        N^\text{fc}_{\text{in}, i} + 1
-    \right)
-    %\cdot
-    N^\text{fc}_\text{out}
-    +
-    \left(
-        N^\text{fc}_\text{layer} - 1
-    \right)
-    %\cdot
-    \left(
-        N^\text{fc}_\text{out} + 1
-    \right)
-    %\cdot
-    N^\text{fc}_\text{out}
-$
-trainable parameters.
+\end{align}
+Depending on the user specification,
+the FC submodule applies 
+on the batch of visual feature vectors,
+concatenated feature vectors
+or hidden states
+outputted by the CNN, the CAT or the GRU submodule, respectively.
+In general, the submodule applies 
+to a batch of single non-sequential feature vectors $\featvec[]{}{i}{}{}$
+and 
+hence outputs the batch
+\begin{equation}
+    \mathcal{F}^\text{fc}\left(
+        \featvec[]{}{}{}{}
+    \right)_i
+    , \quad 
+    i \in \left\{1, \dots, \num[\user]{\ann}{\batch}{}{}\right\}
+    .
+\end{equation}
+
+
 
 \subsection*{HEAD}
-The HEAD sub-module is mandatory
-since it produces 
-the final output of the entire ANN module
+The mandatory HEAD submodule
+ensures the mapping 
+to the final output of the ANN module,
 which is,
-depending on the user's selection,
+depending on the user specification,
 either a navigation decision
 or a control command.
 A navigation decision 
 \begin{equation} \label{eq:navigation_decision}
     (
-        v_\text{norm},
-        \ 
-        {}_\textbf{I} \underline p^\text{wayp}
-    )   
+        \speed[\norm]{\drone}{\desired}{}{}
+        ,\ 
+        \pos[]{\wayp}{}{\irs}{}
+    )
 \end{equation}
-consists of a normalized speed 
-$v_\text{norm} \in [0, 1]$
+consists of a normalized desired speed 
+$\speed[\norm]{\drone}{\desired}{}{} \in [0, 1]$
 and a waypoint
-${}_\textbf{I} \underline p^\text{wayp} \in [-1, 1]^2$
+$\pos[]{\wayp}{}{\irs}{} \in [-1, 1]^2$
 in the image reference system
-(see figure \ref{fig:image_reference_system}).
+(see fig. \ref{fig:image_reference_system}).
 A control command 
 \begin{equation}
     (
-        {}_\textbf{I} \underline \omega^\text{cmd},\ 
-        {}_\textbf{I} \underline{\dot\omega}^\text{cmd},\ 
-        c^\text{cmd}
+        \angvel[]{\drone}{\desired}{\lrs}{},\ 
+        \angvel[\dot]{\drone}{\desired}{\lrs}{},\ 
+        \anything[]{\drone}{\desired}{}{}{c}
     )
 \end{equation}
 comprises the desired angular velocity
-${}_\textbf{I} \underline \omega^\text{cmd}$
+$\angvel[]{\drone}{\desired}{\lrs}{}$
 (also referred to as body rates)
 and acceleration
-$
-{}_\textbf{I} \underline{\dot\omega}^\text{cmd}
-$
-of the drone body
+$\angvel[\dot]{\drone}{\desired}{\lrs}{}$
+of the drone in the local reference system 
+(see fig. \ref{fig:local_reference_system})
 as well as the desired collective thrust 
-$c^\text{drone}$
+$\anything[]{\drone}{\desired}{}{}{c}$
 of the drone rotors.
 In the limited scope of this master's thesis,
-the option to output control commands
-is only implemented but not tested in experiments.
-The mapping of the HEAD entails 
-an activation function and a biased linear transformation
-which are deployed to each feature vector
-of the input batch
+the option to output control commands,
+which is a shortcut to the position controller output 
+(see section \ref{sec:control_stack}),
+is only partly implemented and not further investigated.
+
+The head submodule applies 
+a user-specified activation function 
+elementwise
+and a biased linear transformation
 \begin{align} \label{eq:head}
-    \mathcal{F}^\text{head}
+    \mathcal{F}^\head
     :\ &
-    \mathbb{R}^{
-        N^\text{head}_\text{in}
-    }
+    \mathbb{R}^{ \num[]{\head}{\inp}{}{} }
     \rightarrow 
-    \mathbb{R}^{
-            N^\text{head}_\text{out}
-        }
-    \nonumber \\ &
-    \underline{x}_j
+    \mathbb{R}^{ \num[\user]{\head}{\outp}{}{} }
+    %\nonumber \\ &
+    ;\quad 
+    \featvec[]{}{}{}{}
     \mapsto
-    \underline{\underline A}^\text{head}
+    \underline{\underline A}^\head
     \left(
-        f^\text{head} \fullmoon \left(
-            \underline{x}_j
-        \right)
+        \overset{\scriptscriptstyle \odot}{\func[\user]{\head}{}{}{}}
+        \left(\featvec[]{}{}{}{}\right)
     \right)
-    + \underline b^\text{head}
-    ,\quad
-    j
-    \in 
-    \left\{
-        1, \dots, N^\text{batch}
-    \right\}
-    .
+    + \underline b^\head
+    ,
 \end{align}
-This structure is similar to a layer of the FC sub-module
-(see equation \ref{eq:FC}),
-leaving out the dropout functionality.
-While the number of input features is adaptive
+which corresponds to a layer of the FC submodule
+without dropout (see equ. \ref{eq:fc_layer}).
+The input dimensionality adapts to the
+number of features in the given input
 \begin{equation}
-    N^\text{head}_\text{in}
+    \num[]{\head}{\inp}{}{}
     =
-    \dim \left(
-        \underline{x}_j
-    \right),
+    \dim \left(\featvec[]{}{}{}{}\right),
 \end{equation}
-the number of output features is determined by 
-the user-selected output
+while the output dimensionality
+is determined by the user-specified output
 \begin{equation}
-    N^\text{head}_\text{out}
+    \num[\user]{\head}{\outp}{}{}
     = 
     \begin{cases}
         3
@@ -1525,22 +1238,20 @@ the user-selected output
         \\
         7
         ,\quad 
-        \text{if control command} 
-    \end{cases}.
+        \text{if control command.} 
+    \end{cases}
 \end{equation}
-The total number of trainable parameters of the HEAD sub-module is
+The total number of trainable parameters of the HEAD submodule is
 \begin{equation}
-    N^\text{head}_\text{params} 
+    \num[]{\head}{\params}{}{}
     = 
-    \left(
-        N^\text{head}_\text{in} + 1
-    \right)
-    %\cdot
-    N^\text{head}_\text{out}
+    \left( \num[]{\head}{\inp}{}{} + 1 \right)
+    \num[\user]{\head}{\outp}{}{}
+    .
 \end{equation}
 
 
-\subsection{Baseline config}
+
 
 
 
@@ -1552,18 +1263,6 @@ The total number of trainable parameters of the HEAD sub-module is
 %GRAPH
 %
 %loss optimizer learnrate
-
-
--resize image dims by a factor
--cnn backbone
--cat cnn output with optional inputs
--multilayer gru if data sequential
--multilayer fc
--head
-
-
-
-
 \subsection*{Output}
 
 
@@ -1846,7 +1545,7 @@ a reference state from its local trajectory.
 
 
 
-\section{Control stack}
+\section{Control stack} \label{sec:control_stack}
 Within the autonomous navigation method, 
 the control stack takes on the task of 
 flying the drone as planned.

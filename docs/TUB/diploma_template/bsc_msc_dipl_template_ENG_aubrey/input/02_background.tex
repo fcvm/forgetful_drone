@@ -21,8 +21,8 @@ DELETEME: Related work respresents results from work that handled the same or a 
 %###################################################################################
 %###################### Topic C             ########################################
 %###################################################################################
-\section{Gated recurrent unit}
-The artifical neural network (ANN) of the navigation method of this thesis
+\section{Gated recurrent unit} \label{sec:gru}
+The artifical neural network (ANN) of the autonomous navigation method of this thesis
 integrates the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 09/07/2022
 }
@@ -34,10 +34,14 @@ published in 2014 by Cho et al. \cite{Cho2014},
 is a variant of the ANN class of recurrent neural networks (RNN).
 This section shortly introduces the RNN class
 and justifies the design choice for the GRU
-in light of standard RNNs and the more prevalent long short-term memory (LSTM).
+in light of standard RNNs and 
+the more prevalent RNN variant,
+the long short-term memory (LSTM).
 Moreover, it provides an insight into
 the mechanisms of the GRU that make temporal comprehension available
-as well as the loss backpropagation through time at the training of the GRU.
+as well as how the 
+GRU trains its temporal comprehension by backpropagating 
+loss through time.
 
 \paragraph*{Recurrent neural networks} ${}$\\
 RNNs contrasts with classical feedforward ANNs,
@@ -52,14 +56,14 @@ In this sense, an RNN is qualified to process and reason on
 entire sequences of data points.
 In case of time-series data, this can be interpreted as 
 temporal comprehension and memory \cite{ICE2020}.
-RNNs are trained on sequential data with
+RNNs train on sequential data with
 backpropagation through time (BPTT) \cite{pascanu2013difficulty}
 which is basically the application of standard backpropagation
 (e.g., \cite{Rojas1996})
-on the unfolded representation of the RNN.
+on the unfolded representation of the RNN
+(see figure \ref{fig:rnn_unfolded}).
 The unfolded representation exhibits a layer for
 each data point in the given input sequence 
-(see figure \ref{fig:rnn_unfolded})
 and can be construed as a feedforward ANN
 that shares its trainable parameters across its layers.
 The longer the input sequences,
@@ -68,9 +72,8 @@ The training of RNNs on long sequences
 is hence prone to the vanishing gradient problem \cite{hochreiter1991untersuchungen},
 which manifests itself in the premature slowdown or standstill 
 of the convergence of the RNN.
-As a result, it is difficult to
-teach standard RNNs to
-make connections to information of inputs deep in the past
+As a result, standard RNNs have difficulties 
+learning to connect to information from inputs deep in the past
 \cite{Bengio1994}.
 
 
@@ -112,11 +115,11 @@ A standard LSTM layer
 (see, e.g., the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html}, visited on 03/07/2022
 })
-recurrently maintains a cell and a hidden state,
-i.e., the layer,
+recurrently maintains a cell and a hidden state.
+This means that,
 in addition to the current data point of the input sequence,
-re-inputs the fed back cell and hidden state
-outputted at the previous sequential step.
+the layer re-inputs the fed back cell and hidden state
+from the previous sequential step.
 %The cell state is able to 
 %conserve its information content
 %over an arbitrary amount of sequential steps \cite{pascanu2013difficulty}.
@@ -146,9 +149,8 @@ the flow from the current cell state to current hidden state.
 By this design of recurrent states with gated information flow,
 the training of the LSTM is essentially 
 robust to the vanishing gradient problem \cite{pascanu2013difficulty}.
-As a result, the LSTM is essentially 
-more capable of learning to remember long-term dependencies within input sequences
-than standard RNNs.
+As a result, the LSTM is, compared to standard RNNs, essentially 
+more capable of learning to remember long-term dependencies within input sequences.
 
 
 
@@ -185,7 +187,7 @@ In consideration of these findings and the
 fact that the GRU has less trainable parameters
 and occupies less memory during inference,
 the GRU is chosen over the LSTM for the deployment 
-in the ANN module of the navigation method of this thesis.
+in the ANN module of the autonomous navigation method of this thesis.
 
 
 
@@ -234,7 +236,7 @@ Let the initial batch of hidden states be
         1, \dots, N^\text{batch}
     \right\}
 \end{equation}
-with the dimensionality $N^\text{hidden}$ of the hidden states,
+with the dimensionality $N^\text{hidden}$ of the hidden state,
 which is a design parameter of the GRU layer.
 The values of the initial hidden states $\underline h_{0,i}$,
 are typically initialized with zeros or noise \cite{Zimmermann2012}
@@ -688,7 +690,7 @@ and \ref{eq:gru_candidate_params}
 \end{equation}
 The addition of the sizes of the structurs in the set $\Theta$
 yields the total number of trainable parameters of the GRU layer
-\begin{align}
+\begin{align} \label{eq:gru_layer_nparams}
     N^\text{param} 
     = 
     \begin{cases}
@@ -713,7 +715,7 @@ from the previous layer of the ANN
 \begin{equation}
     \left(\underline x_t\right)_{t\in\{1,\dots,N^\text{seq}\},i}
     , \quad i \in \left\{1,\dots,N^\text{batch}\right\}.
-\end{equation} 
+\end{equation}
 The GRU layer in many-to-one mode maps each incoming batch of sequences
 to a batch of single outputs,
 whereby a single output is the hidden state lastly infered from a sequence

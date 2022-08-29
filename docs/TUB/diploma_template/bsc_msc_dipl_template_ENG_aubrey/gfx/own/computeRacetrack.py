@@ -195,12 +195,12 @@ class Figure8:
                 if y > ymax: ymax = y
                 if z > zmax: zmax = z
         
-        xmin -= self.gateWidth 
-        ymin -= self.gateWidth 
-        zmin -= self.gateWidth 
-        xmax += self.gateWidth 
-        ymax += self.gateWidth 
-        zmax += self.gateWidth 
+        xmin -= self.gateWidth * 0.6 
+        ymin -= self.gateWidth * 0.6 
+        zmin -= self.gateWidth * 0.6 
+        xmax += self.gateWidth * 0.6 
+        ymax += self.gateWidth * 0.6 
+        zmax += self.gateWidth * 0.6 
         
         return ([xmin, xmax], [ymin, ymax], [zmin, zmax])
 
@@ -280,7 +280,7 @@ class Figure8:
         xlim, ylim, _ = self.getTrackSize (
             gate_poses + shift_poses+ scale_poses + twist_poses
         )
-        alpha_pre = 0.3
+        alpha_pre = 0.4
         
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -297,7 +297,7 @@ class Figure8:
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_fig8_shift')
+        utils.saveFig(__file__, '_fig8_shift', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -314,7 +314,7 @@ class Figure8:
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_fig8_scale')
+        utils.saveFig(__file__, '_fig8_scale', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -333,7 +333,7 @@ class Figure8:
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_fig8_twist')
+        utils.saveFig(__file__, '_fig8_twist', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -350,7 +350,7 @@ class Figure8:
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_fig8_redir')
+        utils.saveFig(__file__, '_fig8_redir', transparent=True)
         
         return twist_poses
     
@@ -441,10 +441,10 @@ class Gap (Figure8):
 
         utils.initRCParams ()
         plt.rcParams['legend.fontsize'] = 20
-        xlim, ylim, _ = self.getTrackSize (
+        xlim, ylim, _ = fig8.getTrackSize (
             gate_poses_n + gate_poses_w + shift_poses+ scale_poses + twist_poses
         )
-        alpha_pre = 0.3
+        alpha_pre = 0.4
         
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -461,7 +461,7 @@ class Gap (Figure8):
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_gap_avg')
+        utils.saveFig(__file__, '_gap_avg', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -478,7 +478,7 @@ class Gap (Figure8):
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_gap_shift')
+        utils.saveFig(__file__, '_gap_shift', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -514,7 +514,7 @@ class Gap (Figure8):
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_gap_twist')
+        utils.saveFig(__file__, '_gap_twist', transparent=True)
 
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
@@ -531,7 +531,7 @@ class Gap (Figure8):
         #legend = ax.legend(loc='lower right')
         plt.axis('off')
         fig.tight_layout()
-        utils.saveFig(__file__, '_gap_redir')
+        utils.saveFig(__file__, '_gap_redir', transparent=True)
         
         return twist_poses
 
