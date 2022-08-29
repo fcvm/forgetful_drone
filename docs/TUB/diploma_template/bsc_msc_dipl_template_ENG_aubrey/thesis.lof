@@ -10,25 +10,26 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{19}{figure.caption.15}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{19}{subfigure.1.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{19}{subfigure.1.2}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces The control stack in simulation. }}{31}{figure.caption.26}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Update of the projection state index }}{36}{figure.caption.29}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Perception and Reasoning }}{22}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{31}{figure.caption.27}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{36}{figure.caption.30}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{39}{figure.caption.31}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes implemented in simulation }}{40}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{39}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes implemented in simulation }}{40}{figure.caption.33}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{40}{subfigure.2.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{40}{subfigure.2.2}%
 \contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{40}{subfigure.2.3}%
 \contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{40}{subfigure.2.4}%
 \contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{40}{subfigure.2.5}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Gate covers implemented in simulation }}{41}{figure.caption.33}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Gate covers implemented in simulation }}{41}{figure.caption.34}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{41}{subfigure.3.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{41}{subfigure.3.2}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Computation of the racetrack }}{42}{figure.caption.34}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Computation of the racetrack }}{42}{figure.caption.35}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{54}{figure.caption.48}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{54}{figure.caption.49}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{54}{figure.caption.50}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{54}{subfigure.3.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{54}{subfigure.3.2}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{54}{subfigure.3.3}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{56}{figure.caption.51}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{56}{figure.caption.52}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{56}{figure.caption.53}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{56}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{56}{subfigure.3.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{56}{subfigure.3.3}%

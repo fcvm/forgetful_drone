@@ -19,6 +19,9 @@
 \usepackage{multirow} %for multi-row tables
 \usepackage{color} %needed for listings
 \usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{xfrac}
 
 %depth of section
 \setcounter{secnumdepth}{4}
@@ -51,6 +54,7 @@
 \setcounter{tocdepth}{3}
 %This is needed for entering URLs for harvard citation style
 %\renewcommand{\harvardurl}{URL: \url}
+
 
 
 %###################################################################################
@@ -93,6 +97,9 @@
 
 
 %%%%%%%%%%%
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
 \newcommand{\hadfct}[1]{\overset{\scriptscriptstyle \odot}{#1}}
 \newcommand{\ddt}{\frac{\text d}{\text d t}}
 \newcommand{\ddtt}{\frac{\text d^2}{\text d t^2}}

@@ -532,9 +532,11 @@ the above compositions are expected to also approximately invert each other with
 \section{ANN module}\label{sec:ann_module}
 %
 %
+\newcommand{\R}[1]{\mathbb{R}^{#1}}
+\newcommand{\setR}[1]{\left[#1\right]}
+
 \newcommand{\setOfAllPosInts}{\mathbb{N}_{>0}}
 \newcommand{\setOfInts}[1]{\left\{ #1 \right\}}
-\newcommand{\setOfAllRealNumbers}{\mathbb{R}}
 \newcommand{\placeholder}{\square}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\series}[1]{\left(#1\right)}
@@ -569,7 +571,7 @@ the above compositions are expected to also approximately invert each other with
 %
 The ANN module performs the function of making navigation decisions
 within the autonomous navigation method.
-Figure ?? shows the module's information flow.
+Figure \ref{fig:perception_and_reasoning} shows the module's information flow.
 The module infers its decisions exclusively 
 on the basis of preprocessed data from sensors onboard the drone.
 It comprises the five submodules named
@@ -595,6 +597,17 @@ The inner submodules perform the functions of
 inputting optional features (CAT),
 extracting temporal features (GRU)
 and increasing the general complexity of the ANN module (FC).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{own/ann_module.drawio.pdf}
+    \caption[
+        Perception and Reasoning
+    ]{
+        Perception and Reasoning
+    \label{fig:perception_and_reasoning}
+    }
+\end{figure}
 
 
 The ANN module is trained with supervised learning on
@@ -666,7 +679,7 @@ $\rawRGBHeight \times \rawRGBWidth$
 is the image size.
 The latest raw RGB image is preprocessed in two steps
 before being fed to the CNN submodule.
-First, the pixel intensities are noralized by the full intensity 
+First, the pixel intensities are normalized by the full intensity 
 $\rawRGBFullInt$ with the aim
 to accelerate the convergence of the loss during training.
 Second, the image is sized down 
@@ -698,9 +711,9 @@ The available optional input features are
     \item the latest estimate from the drone's onboard IMU
     (inertial measurement unit) 
     comprising the drone's linear acceleration
-    $\IMULinAcc \in \setOfAllRealNumbers^3$
+    $\IMULinAcc \in \R{3}$
     and angular velocity
-    $\IMUAngVel \in \setOfAllRealNumbers^3$
+    $\IMUAngVel \in \R{3}$
     in the local reference system
     \item the time step
     $\IMUTimeStep$
@@ -746,9 +759,9 @@ regarded as a black box
 \begin{align} \label{eq:CNN}
     \CNNMap 
     :
-    \setOfAllRealNumbers^{\CNNNumC \times \CNNHeight \times \CNNWidth} 
+    \R{\CNNNumC \times \CNNHeight \times \CNNWidth} 
     \rightarrow 
-    \setOfAllRealNumbers^{\CNNOutp}
+    \R{\CNNOutp}
     ;\quad 
     \img[]{}{}{}{}
     \mapsto 
@@ -795,9 +808,9 @@ two feature vectors
 \begin{align} \label{eq:cat}
     \CATMap
     :
-    \tuple{\setOfAllRealNumbers^{\CATInp{1}}, \setOfAllRealNumbers^{\CATInp{2}}}
+    \tuple{\R{\CATInp{1}}, \R{\CATInp{2}}}
     \rightarrow 
-    \setOfAllRealNumbers^{\CATInp{1} + \CATInp{2}}
+    \R{\CATInp{1} + \CATInp{2}}
     ;\quad
     \tuple{\featvec[]{}{1}{}{}, \featvec[]{}{2}{}{}}
     \mapsto
@@ -847,7 +860,7 @@ Either way, the CAT submodule has zero trainable parameters
 \newcommand{\GRUNumLayer}{\num[\user]{\gru}{\layer}{}{}}
 \newcommand{\GRUInp}[1]{\num[]{\gru}{\inp,#1}{}{}}
 \newcommand{\GRUHiddenSize}{\num[\user]{\gru}{\hidden}{}{}}
-\newcommand{\setOfRealNumbers}[1]{\left[#1\right]}
+
 \newcommand{\GRUMap}{\Func[]{\gru}{}{}{}}
 \newcommand{\GRUDropout}{\underline\delta}
 \newcommand{\GRUDropoutP}{\prob[\user]{\gru}{}{}{}}
@@ -877,11 +890,11 @@ to the current hidden state (see equ. \ref{eq:gru_layer_current_hidden})
     \GRULayerMap{l}
     :
     \tuple{
-        \setOfAllRealNumbers^{\GRUInp{l}}, 
-        \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
+        \R{\GRUInp{l}}, 
+        \setR{-1, 1}^{\GRUHiddenSize}
     }
     \rightarrow 
-    \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
+    \setR{-1, 1}^{\GRUHiddenSize}
     ;\quad
     \tuple{\featvec[]{(l)}{t}{}{}, \hiddenstate[]{(l)}{t-1}{}{}}
     \mapsto
@@ -901,11 +914,11 @@ all subsequent layers input the hidden state from the previous layer subject to 
     \GRUMap
     :\ &
     \tuple{
-        \setOfAllRealNumbers^{\GRUInp{1}},
-        \setOfRealNumbers{-1, 1}^{\GRUHiddenSize \times \GRUNumLayer}
+        \R{\GRUInp{1}},
+        \setR{-1, 1}^{\GRUHiddenSize \times \GRUNumLayer}
     }
     \rightarrow 
-    \setOfRealNumbers{-1, 1}^{\GRUHiddenSize}
+    \setR{-1, 1}^{\GRUHiddenSize}
     \nonumber \\
     &\tuple{
         \featvec[]{}{t}{}{}, 
@@ -959,7 +972,7 @@ whereby the dropout is deactivated.
 As the $l$-th GRU layer has $3\GRUHiddenSize (\GRUInp{l} + \GRUHiddenSize + 2)$
 trainable parameters (see equ. \ref{eq:gru_layer_nparams}),
 the total number of trainable parameters of the GRU submodule is
-\begin{align}
+\begin{align} \label{eq:gru_param}
     \GRUNumP = 3\GRUHiddenSize \tuple{
         (\GRUInp{1} + \GRUHiddenSize + 2)
         + 
@@ -982,254 +995,206 @@ to a batch of last hidden states of the last layer
 
 
 
+\newcommand{\normDesSpeed}{\speed[\norm]{\drone}{\desired}{}{}}
+\newcommand{\waypIRS}{\pos[]{\wayp}{}{\irs}{}}
+\newcommand{\headNavDec}{(\normDesSpeed, \waypIRS)}
+
+\newcommand{\desAngVel}{\angvel[]{\drone}{\desired}{\lrs}{}}
+\newcommand{\desAngAcc}{\angvel[\dot]{\drone}{\desired}{\lrs}{}}
+\newcommand{\desColThrust}{\anything[]{\drone}{\desired}{}{}{c}}
+\newcommand{\headCtrlCmd}{(\desAngVel, \desAngAcc, \desColThrust)}
+
+\newcommand{\headMap}{\Func[]{\head}{}{}{}}
+\newcommand{\headIn}{\num[]{\head}{\inp}{}{}}
+\newcommand{\headOut}{\num[]{\head}{\outp}{}{}}
+\newcommand{\headMat}{\underline{\underline A}^\head}
+\newcommand{\headBias}{\underline{b}^\head}
+\newcommand{\headAct}{\func[\user]{\head}{}{}{}}
+\newcommand{\headParam}{\num[]{\head}{\params}{}{}}
+
+
+\newcommand{\fcLayer}{\num[\user]{\fc}{\layer}{}{}}
+\newcommand{\fcIn}[1]{\num[]{\fc}{\inp, #1}{}{}}
+\newcommand{\fcOut}{\num[\user]{\fc}{\widthh}{}{}}
+\newcommand{\fcMap}[1]{\Func[]{\fc}{#1}{}{}}
+\newcommand{\fcMat}[1]{\underline{\underline A}^\fc_{#1}}
+\newcommand{\fcBias}[1]{\underline{b}^\fc_{#1}}
+\newcommand{\fcDropout}{\underline{\delta}^\fc}
+\newcommand{\fcAct}{\func[\user]{\fc}{}{}{}}
+\newcommand{\fcDropoutProb}{\prob[\user]{\fc}{}{}{}}
+\newcommand{\fcParam}{\num[]{\fc}{\params}{}{}}
+
 \subsection*{FC}
-The FC submodule comprises multiple fully connected layers
-and performs the function
+The FC submodule performs the function
 of increasing the general complexity of the ANN module.
+It consists of multiple fully connected layers.
 Each layer 
-$
-    l 
-    \in 
-    \left\{
-        1, \dots, \num[\user]{\fc}{\layer}{}{}
-    \right\}
-$ 
+$ l \in \setOfInts{1, \dots, \fcLayer}$ 
 applies
-an activation function,
-a dropout
+an activation, 
+dropout
 and a biased linear transformation
-on the inputted feature vector
+on the input feature vector
 \begin{align} \label{eq:fc_layer}
-    \mathcal{F}^\text{fc}_l
+    \fcMap{l}
     :\ &
-    \mathbb{R}^{
-        \num[]{\text{fc}}{\text{in}, l}{}{}
-    }
-    \rightarrow 
-    \mathbb{R}^{
-        \num[\user]{\text{fc}}{\text{out}, l}{}{}
-        }
-    \nonumber \\ &
-    \underline{x}
-    \mapsto
-    \underline{\underline A}^\text{fc}_l
-    \left(
-        \underline{\delta}^\text{fc}
-        \odot
-        \overset{\scriptscriptstyle \odot}{\func[\user]{\fc}{}{}{}} \left(
-            \underline{x}
-        \right)
-    \right)
-    + \underline b^\text{fc}_l
+    \R{\fcIn{l}} \rightarrow \R{\fcOut}
+    ;\quad 
+    \featvec[]{}{}{}{} \mapsto
+    \fcMat{l} \cdot \fcDropout \odot
+    \hadfct{\fcAct} \left(\featvec[]{}{}{}{}\right)
+    + \fcBias{l}
     .
 \end{align}
-The mapping of the multi-layer FC submodule is recursively defined
+In the multi-layer FC submodule, the first layer inputs 
+the given input feature vector,
+whereas all subsequent layers input the output from the previous layer
 \begin{align} \label{eq:fc}
-    \mathcal{F}^\text{fc}
-    :\ &
-    \mathbb{R}^{
-        \num[]{\text{fc}}{\text{in}, 1}{}{}
-    }
-    \rightarrow 
-    \mathbb{R}^{
-        \num[\user]{\text{fc}}{\text{out}, l}{}{}
-        }
-    \nonumber \\ &
-    \featvec[]{}{}{}{}
-    \mapsto
-    \mathcal{F}^\text{fc}_{\num[\user]{\fc}{\layer}{}{}} \left(
-        \mathcal{F}^\text{fc}_{\num[\user]{\fc}{\layer}{}{} - 1} \left(
-            \dots
-            \mathcal{F}^\text{fc}_{1} \left(
+    \fcMap{}
+    :\
+    \R{\fcIn{1}} \rightarrow \R{\fcOut}
+    ;\quad 
+    \featvec[]{}{}{}{} \mapsto
+    \fcMap{\fcLayer} \tuple{
+        \fcMap{\fcLayer - 1} \tuple{
+            \dots \fcMap{1} \tuple{
                 \featvec[]{}{}{}{}
-            \right)    
-        \right)
-    \right)
+            }
+        }    
+    }
     .
 \end{align}
 For the FC submodule,
 the user specifies:
 \begin{itemize}
-    \item the activation function
-    $\func[\user]{\fc}{}{}{}: \mathbb{R} \rightarrow \mathbb{R} $
-    from the non-linear activations
-    implemented by PyTorch\footnote{
+    \item the number of layers $\fcLayer$
+    \item the width $\fcOut$, i.e., output dimensionality shared by all layers
+    \item the activation function $\fcAct : \R{} \rightarrow \R{}$
+    from the non-linear activations implemented in PyTorch\footnote{
         \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
     },
-    which applies element-wise 
-    on the input (denoted with the overset ${}^\odot$)
-    \item the dropout probability 
-    $\prob[\user]{\fc}{}{}{} \in [0,1]$,
-    i.e., the probability that an entry of the vector 
-    $\underline{\delta}^\fc$ will be sampled with zero
-    \item the number of layers
-    $
-    \num[\user]{\fc}{\layer}{}{}
-    $
-    \item the width 
-    $
-    \num[\user]{\fc}{\outp}{}{}
-    $,
-    i.e., output dimensionality
-    shared by all layers.
+    which applies element-wise on the input feature vector (denoted with the overset ${}^\odot$)
+    \item the dropout probability $\fcDropoutProb \in \setR{0,1}$,
+    i.e., the probability to resample an entry of the vector 
+    $\fcDropout$ with zero
+    
+    
 \end{itemize}
 The input dimensionality of a layer
-adapts to the given input vector.
-For the first layer,
-it adapts to the feature vector
+adapts to the nuber of features in the given input vector.
+For the first layer, it adapts to the feature vector
 forwarded to the FC submodule
-$
-\num[]{\fc}{\inp,1}{}{} 
-= 
-\dim \left(\featvec[]{}{}{}{}\right)$.
+$\fcIn{1} = \dim \left(\featvec[]{}{}{}{}\right)$.
 For all subsequent layers $l \ge 2$,
-it adapts to
-the width of the FC submodule
-$
-\num[]{\fc}{\inp,l}{}{} 
-= \num[]{\fc}{\outp}{}{}
-$.
+it adapts to the width of the FC submodule $ \fcIn{l} = \fcOut$.
 The biased linear transformation of the $l$-th layer
 consists of the multiplication with the matrix of trainable weights
 and the addition of the vector of trainable biases
 \begin{equation}
-    \underline{\underline A}^\fc_l
-    \in 
-    \mathbb{R}^{
-        \num[]{\fc}{\inp,l}{}{}
-        \times
-        \num[]{\fc}{\outp}{}{}
-    }, \quad
-    \underline b^\text{fc}_l 
-    \in \mathbb{R}^{
-        \num[]{\fc}{\outp}{}{}
-    }.
+    \fcMat{l} \in \R{\fcIn{l} \times \fcOut}
+    , \quad
+    \fcBias{l} \in \R{\fcOut}
+    .
 \end{equation}
-As a single layer therewith has
-$
-\left( \num[]{\fc}{\inp,l}{}{} + 1 \right)
-\num[]{\fc}{\outp}{}{}
-$
+As a single layer therewith has $\tuple{\fcIn{l} + 1} \fcOut$
 trainable parameters,
 the total number of trainable parameters of the FC submodule is
-\begin{align}
-    \num[]{\fc}{\params}{}{}
-    = \begin{cases}
-        \left( \num[]{\fc}{\inp,1}{}{} + 1 \right)
-        \num[\user]{\fc}{\outp}{}{}
-        ,& \text{ if } \num[\user]{\fc}{\layer}{}{} = 1
-        \\
-        \left( \num[]{\fc}{\inp,1}{}{} + 1 \right)
-        \num[\user]{\fc}{\outp}{}{}
-        +
-        \left( \num[\user]{\fc}{\layer}{}{} - 1 \right)
-        \left( \num[\user]{\fc}{\outp}{}{} + 1 \right)
-        \num[\user]{\fc}{\outp}{}{}
-        ,& \text{ else.}
-    \end{cases}
+\begin{align} \label{eq:fc_param}
+    \fcParam = \tuple{
+        \fcIn{1} + 1 + 
+        \tuple{\fcLayer -1} \tuple{\fcOut +1}
+    } \fcOut
+    .
 \end{align}
-Depending on the user specification,
-the FC submodule applies 
-on the batch of visual feature vectors,
-concatenated feature vectors
-or hidden states
-outputted by the CNN, the CAT or the GRU submodule, respectively.
-In general, the submodule applies 
-to a batch of single non-sequential feature vectors $\featvec[]{}{i}{}{}$
-and 
-hence outputs the batch
+The FC submodule maps
+the batch of hidden states
+outputted by the GRU submodule
+to the batch of feature vectors
 \begin{equation}
-    \mathcal{F}^\text{fc}\left(
-        \featvec[]{}{}{}{}
-    \right)_i
-    , \quad 
-    i \in \left\{1, \dots, \num[\user]{\ann}{\batch}{}{}\right\}
+    \fcMap{} \tuple{\hiddenstate[]{}{}{}{}}_i
+    , \quad
+    i \in \setOfInts{1, \dots, \batchSize}
     .
 \end{equation}
 
 
 
+
+
+
 \subsection*{HEAD}
 The mandatory HEAD submodule
-ensures the mapping 
-to the final output of the ANN module,
-which is,
-depending on the user specification,
-either a navigation decision
-or a control command.
+performs the function of mapping
+to the final output of the ANN module.
+Depending on the user's selection,
+the final output is either a navigation decision or a control command.
 A navigation decision 
-\begin{equation} \label{eq:navigation_decision}
-    (
-        \speed[\norm]{\drone}{\desired}{}{}
-        ,\ 
-        \pos[]{\wayp}{}{\irs}{}
-    )
+\begin{equation} \label{eq:head_nav_dec}
+    \headNavDec
 \end{equation}
-consists of a normalized desired speed 
-$\speed[\norm]{\drone}{\desired}{}{} \in [0, 1]$
+comprises a normalized desired speed 
+$\normDesSpeed \in \setR{0,1}$
+of the drone
 and a waypoint
-$\pos[]{\wayp}{}{\irs}{} \in [-1, 1]^2$
+$\waypIRS \in \setR{\text{-}1,1}$
 in the image reference system
 (see fig. \ref{fig:image_reference_system}).
 A control command 
 \begin{equation}
-    (
-        \angvel[]{\drone}{\desired}{\lrs}{},\ 
-        \angvel[\dot]{\drone}{\desired}{\lrs}{},\ 
-        \anything[]{\drone}{\desired}{}{}{c}
-    )
+    \headCtrlCmd
 \end{equation}
 comprises the desired angular velocity
-$\angvel[]{\drone}{\desired}{\lrs}{}$
-(also referred to as body rates)
+$\desAngVel$
 and acceleration
-$\angvel[\dot]{\drone}{\desired}{\lrs}{}$
+$\desAngAcc$
 of the drone in the local reference system 
 (see fig. \ref{fig:local_reference_system})
 as well as the desired collective thrust 
-$\anything[]{\drone}{\desired}{}{}{c}$
-of the drone rotors.
+$\desColThrust$
+of the drone's rotors.
 In the limited scope of this master's thesis,
-the option to output control commands,
+the control command output option,
 which is a shortcut to the position controller output 
 (see section \ref{sec:control_stack}),
-is only partly implemented and not further investigated.
+is only partly implemented and 
+not examined in the experiments in section \ref{maintwo}.
 
-The head submodule applies 
-a user-specified activation function 
-elementwise
-and a biased linear transformation
+The head submodule
+corresponds to a single layer of the FC submodule
+without dropout (see equ. \ref{eq:fc_layer})
+as it
+applies an activation and a biased linear transformation on the
+input feature vector
 \begin{align} \label{eq:head}
-    \mathcal{F}^\head
-    :\ &
-    \mathbb{R}^{ \num[]{\head}{\inp}{}{} }
+    \headMap
+    :\ 
+    \R{\headIn}
     \rightarrow 
-    \mathbb{R}^{ \num[\user]{\head}{\outp}{}{} }
-    %\nonumber \\ &
+    \R{\headOut}
     ;\quad 
     \featvec[]{}{}{}{}
     \mapsto
-    \underline{\underline A}^\head
-    \left(
-        \overset{\scriptscriptstyle \odot}{\func[\user]{\head}{}{}{}}
-        \left(\featvec[]{}{}{}{}\right)
-    \right)
-    + \underline b^\head
-    ,
+    \headMat \cdot \hadfct{\headAct}\left(\featvec[]{}{}{}{}\right)
+    + \headBias
+    .
 \end{align}
-which corresponds to a layer of the FC submodule
-without dropout (see equ. \ref{eq:fc_layer}).
+For the HEAD submodule, the user selects
+the activation function $\fcAct : \R{} \rightarrow \R{}$
+from the non-linear activations implemented in PyTorch\footnote{
+        \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
+    },
+which applies element-wise on the input feature vector (denoted with the overset ${}^\odot$).
 The input dimensionality adapts to the
-number of features in the given input
+number of features of the given input vector
 \begin{equation}
-    \num[]{\head}{\inp}{}{}
+    \headIn
     =
     \dim \left(\featvec[]{}{}{}{}\right),
 \end{equation}
-while the output dimensionality
-is determined by the user-specified output
+whereas the output dimensionality
+adapts to the user-selected output option
 \begin{equation}
-    \num[\user]{\head}{\outp}{}{}
+    \headOut
     = 
     \begin{cases}
         3
@@ -1242,11 +1207,8 @@ is determined by the user-specified output
     \end{cases}
 \end{equation}
 The total number of trainable parameters of the HEAD submodule is
-\begin{equation}
-    \num[]{\head}{\params}{}{}
-    = 
-    \left( \num[]{\head}{\inp}{}{} + 1 \right)
-    \num[\user]{\head}{\outp}{}{}
+\begin{equation} \label{eq:head_param}
+    \headParam = \left( \headIn + 1 \right) \headOut
     .
 \end{equation}
 
@@ -1293,7 +1255,7 @@ i.e., the latest navigation decision and the latest drone state estimate.
 
 The latest navigation decision
 stems from either the ANN module
-(see equ. \ref{eq:navigation_decision}) 
+(see equ. \ref{eq:head_nav_dec}) 
 or, if it has intervened at training data generation,
 the expert system (see equ. \ref{eq:nav_dec_by_expert}).
 A navigation decision comprises the normalized desired speed 
@@ -1670,7 +1632,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     (see equ. \ref{eq:pl_global_wayp}) 
     that was computed based
     on the ANN module's latest navigation decision
-    (see equ. \ref{eq:navigation_decision}).
+    (see equ. \ref{eq:head_nav_dec}).
     
 
     \item [\textbf{F2}] The drone's latest position and quaternion orientation estimate,

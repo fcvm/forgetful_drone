@@ -331,7 +331,7 @@ which are required by, e.g., the expert system.
     &10&-24.25&-1.0          &2.0& 0.07\\
     \hline
     \end{tabular}
-    \end{table}
+\end{table}
 
 
 
@@ -339,15 +339,83 @@ which are required by, e.g., the expert system.
 
 
 \section{ANN Module Variants}
+In the experiments, several
+variants of the ANN module (see section \ref{sec:ann_module})
+are examined for their performance.
+Table \ref{tab:ann_module_variants} shows the variant configurations
+with respect to the input, output and the 
+CNN, GRU, FC, and HEAD submodule.
+The input configuration includes:
+the sequence length $\seqLen$ of the samples the variant is trained on,
+the resize factor $\resizeFact$ of the image preprocessing (see equ. ??)
+as well as the switchable optional inputs
+$\rawRGBTimeStep$, 
+$(\IMULinAcc,\IMUAngVel)$
+and
+$\IMUTimeStep$ (see ...).
+The output configuration includes
+the two options of navigation decisions 
+$\headNavDec$
+and control commands 
+$\headCtrlCmd$ (see section ...).
+For the CNN, GRU, FC and HEAD configuration
+see the corresponding paragraphs in section \ref{sec:ann_module}. 
+
+
+All of the examined variants have three configurational aspects in common.
+First, all available optional inputs are activated.
+Second, navigation decisions are selected as output option.
+Third, the CNN submodule implements the backbone of the ResNet18 PyTorch implementation
+whose parameters are trainable and pretrained on ImageNet !!!.
+The ResNet18 contains 18 layers and has ... trainable parameters ...
+
+
+
+
+
+
+
+
+\begin{table}[h]
+    \caption{ANN module variants\label{tab:ann_module_variants}}
+    \centering
+    \begin{tabular}{|l|c|l|} \hline
+                            & & A \\\hline\hline
+\multirow{5}{*}{Input}  &$\seqLen$&$\setOfInts{2,3,5,10,25}$             \\\cline{2-3}
+                        &$\resizeFact$              &$\setOfInts{\sfrac{1}{2}, \sfrac{1}{3}}$   \\\cline{2-3}
+                        &$\rawRGBTimeStep$          &\cmark         \\\cline{2-3}
+                        &$(\IMULinAcc,\IMUAngVel)$  &\cmark         \\\cline{2-3}
+                        &$\IMUTimeStep$             &\cmark         \\\hline
+\multirow{1}{*}{Output} &$\headNavDec$              &\cmark         \\\cline{2-3}
+                        &$\headCtrlCmd$             &\xmark         \\\hline
+\multirow{3}{*}{CNN}    &Model                      &resnet18       \\\cline{2-3}
+                        &Pretrained                 &\cmark         \\\cline{2-3}
+                        &Trainable                  &\cmark         \\\hline
+\multirow{3}{*}{GRU}    &$\GRUNumLayer$             &3              \\\cline{2-3}
+                        &$\GRUHiddenSize$           &16             \\\cline{2-3}
+                        &$\GRUDropoutP$             &0.5            \\\hline
+\multirow{4}{*}{FC}     &$\fcLayer$                 &deactivated    \\\cline{2-3}
+                        &$\fcOut$                   &deactivated    \\\cline{2-3}
+                        &$\fcDropoutProb$           &deactivated    \\\cline{2-3}
+                        &$\fcAct$                   &ReLU           \\\hline
+\multirow{1}{*}{HEAD}   &$\headAct$                 &ReLU           \\\hline
+    
+    \end{tabular}
+\end{table}
+
+\begin{table}[h]
+    \caption{ANN module variants: number of trainable parameters\label{tab:ann_module_variants_nparams}}
+    \centering
+    \begin{tabular}{|r|l|r|r|} \hline
+            &Equ.& A & B\\\hline\hline
+        CNN &n/a&\multicolumn{2}{|c|}{11,689,512}\\\hline
+        GRU &\ref{eq:gru_param}&0&28,704\\\hline
+        FC  &\ref{eq:fc_param}&262,144&0\\\hline
+        HEAD&\ref{eq:head_param}&1,536&51\\\hline\hline
+        Total&n/a&11,953,192&11,718,267\\\hline
+    \end{tabular}
+\end{table}
 
 \section{Data Generation and Training}
 
 \section{Racing Tests}
-
-
-
-
-
-
-
-\section{}
