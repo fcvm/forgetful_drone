@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'#!/home/fm/env/pytorch/bin/python3'
 DEBUG = False
 
 
@@ -24,6 +25,7 @@ import torch
 from torch.optim import Optimizer
 from torch.nn import Module
 
+import torchinfo
 
 import cv2
 from tqdm import tqdm
@@ -983,6 +985,19 @@ class ForgetfulBrain:
 
     ##############################################################################################################
     ##############################################################################################################
+
+    def getModelSummary (self) -> None:
+        C = self._cnf.prc_rgb_N
+        H = self._cnf.prc_rgb_H
+        W = self._cnf.prc_rgb_W
+        x_shape = (1, 1, C, H, W)
+        o_shape = (1, 1, len (self._cnf.opt_inp))
+        h_shape = tuple(self.model.getZeroInitializedHiddenState (1, TORCH_DEVICE).shape)
+        torchinfo.summary (self.model, input_size=(x_shape, o_shape, h_shape))
+
+    ##############################################################################################################
+    ##############################################################################################################
+
 
     # BUILD RUN
 
