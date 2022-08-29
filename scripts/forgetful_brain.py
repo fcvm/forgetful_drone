@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'#!/home/fm/env/pytorch/bin/python3'
 DEBUG = False
 
 
