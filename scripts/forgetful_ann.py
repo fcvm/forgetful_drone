@@ -144,7 +144,9 @@ class ForgetfulANN (torch.nn.Module):
         c['gru']['bias'] = True if gru_enabled else None
         c['gru']['batch_first'] = False if gru_enabled else None
         c['gru']['bidirectional'] = False if gru_enabled else None
-        c['head']['bias'] = False if gru_enabled else None
+        
+        try: c['head']['bias']
+        except: c['head']['bias'] = True
 
         c['cnn']['output_size'] = None
         c['cat']['output_size'] = None
@@ -202,6 +204,7 @@ class ForgetfulANN (torch.nn.Module):
          # Set the model parameters to trainable or frozen
         for p in self.CNN.parameters():
             p.requires_grad = trainable
+        #list(list(self.CNN.children())[-2].children())[-1].requires_grad_(True)
 
         self.addToConsoleRepresentation('|  CNN  |'\
             + f'    - Model: {torchvision_model_id}'\
@@ -255,11 +258,18 @@ class ForgetfulANN (torch.nn.Module):
                 torch.nn.Linear(input_size, width),
             ]
 
-            layers += [
+            for _ in range (num_layers - 1):
+                layers += [
                 activation_function,
                 torch.nn.Dropout(p=dropout, inplace=False),
                 torch.nn.Linear(width, width),
-            ] * (num_layers - 1)
+            ]
+
+            #layers += [
+            #    activation_function,
+            #    torch.nn.Dropout(p=dropout, inplace=False),
+            #    torch.nn.Linear(width, width),
+            #] * (num_layers - 1)
                         
             self.FC = torch.nn.Sequential(*layers)
             self.config['fc']['output_size'] = width
@@ -342,6 +352,7 @@ class ForgetfulANN (torch.nn.Module):
 
 
     def exportAsAnnotatedTorchScriptModule (self, fpath: pathlib.Path) -> None:
+        changed = False
         if self.training:
             self.eval()
             changed = True
