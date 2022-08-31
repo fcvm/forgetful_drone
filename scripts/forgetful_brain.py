@@ -313,6 +313,7 @@ class Config:
         self.prc_rgb_N      : int   = self._data ['data'] ['processed'] ['rgb'] ['num_channels']
         self.seq_len        : int   = self._data ['data'] ['sequential'] ['length']
         self.seq_stp        : int   = self._data ['data'] ['sequential'] ['step']
+        self.val_share      : float = self._data ['data'] ['validation_share']
         self.batch_size     : int   = self._data ['learn'] ['batch_size']
         self.loss_id        : str   = self._data ['learn'] ['loss'] ['id']
         self.lrsched_id     : str   = self._data ['learn'] ['lr_scheduler'] ['id']
@@ -566,10 +567,12 @@ class ForgetfulBrain:
     def _exp_dat_imd_RID        (self, rid:str) -> Path: return self._exp_dat_idm_()/f"{rid}.csv"
     
     def _exp_dat_prc_           (self)          -> Path: return self._exp_dat_()/'processed'
-    def _exp_dat_prc_PRC        (self)          -> Path: return self._exp_dat_prc_()/f"processed.csv"
+    def _exp_dat_prc_TRN        (self)          -> Path: return self._exp_dat_prc_()/f"training.csv"
+    def _exp_dat_prc_VAL        (self)          -> Path: return self._exp_dat_prc_()/f"validation.csv"
     def _exp_dat_prc_rid_       (self, rid:str) -> Path: return self._exp_dat_prc_()/rid
     def _exp_dat_prc_rid_rgb_   (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'rgb'
-    def _exp_dat_prc_rid_CSV    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'data.csv'
+    def _exp_dat_prc_rid_TRN    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'training.csv'
+    def _exp_dat_prc_rid_VAL    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'validation.csv'
     
     def _exp_out_               (self)          -> Path: return self._exp_()/'output'
     def _exp_out_BRC            (self)          -> Path: return self._exp_out_()/'build_records.json'
@@ -584,7 +587,8 @@ class ForgetfulBrain:
 
     def _exp_out_tmp_           (self)          -> Path: return self._exp_out_()/'tmp'
     def _exp_out_tmp_RBI        (self, rid:str) -> Path: return self._exp_out_tmp_()/f'_{rid}_build_incomplete.info'
-    def _exp_out_tmp_PRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_dat_prc_PRC().name
+    def _exp_out_tmp_TRN        (self)          -> Path: return self._exp_out_tmp_()/self._exp_dat_prc_TRN().name
+    def _exp_out_tmp_VAL        (self)          -> Path: return self._exp_out_tmp_()/self._exp_dat_prc_VAL().name
     def _exp_out_tmp_BRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_BRC().name
     def _exp_out_tmp_TRC        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_TRC().name
     def _exp_out_tmp_CPT        (self)          -> Path: return self._exp_out_tmp_()/self._exp_out_CPT().name
@@ -614,7 +618,8 @@ class ForgetfulBrain:
                 self._exp_cnf_YML (),
             ] if exist else [
                 self._exp_cnf_CNF (),
-                self._exp_dat_prc_PRC (),
+                self._exp_dat_prc_TRN (),
+                self._exp_dat_prc_VAL (),
                 self._exp_out_BRC (),
                 self._exp_out_TRC (),
                 self._exp_out_CPT (),
@@ -644,7 +649,8 @@ class ForgetfulBrain:
                 self._exp_dat_raw_rid_TXT (rid),
             ] if exist else [
                 self._exp_dat_imd_RID (rid),
-                self._exp_dat_prc_rid_CSV (rid),
+                self._exp_dat_prc_rid_TRN (rid),
+                self._exp_dat_prc_rid_VAL (rid),
             ]
 
         
@@ -700,7 +706,7 @@ class ForgetfulBrain:
             self.model.exportAsAnnotatedTorchScriptModule (p)
         else:
             p = self._exp_out_TRA () if pmn else self._exp_out_tmp_TRA ()
-            batch = next (iter (self.dataloader))
+            batch = next (iter (self.dataloader_trn))
             self.model.exportAsTracedTorchScriptModule (
                 batch ['input'] ['cnn'].to (TORCH_DEVICE),
                 batch ['input'] ['cat'].to (TORCH_DEVICE),
@@ -837,13 +843,21 @@ class ForgetfulBrain:
         self.log_create (
             self._cnf.save (pmn=PMN), LOGLVL)
         
-        self._prc = DataFrameFile (                 # processed data file
-            self._exp_dat_prc_PRC (), 
-            self._exp_out_tmp_PRC (), 
+        self._prc_trn = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_TRN (), 
+            self._exp_out_tmp_TRN (), 
             self.PRC_SEQ_COLS
         )
         self.log_create (
-            self._prc.save (pmn=PMN), LOGLVL)
+            self._prc_trn.save (pmn=PMN), LOGLVL)
+
+        self._prc_val = DataFrameFile (                 # processed data file
+            self._exp_out_prc_VAL (), 
+            self._exp_out_tmp_VAL (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_create (
+            self._prc_val.save (pmn=PMN), LOGLVL)
 
         self._bldRec = RecordsFile (                # data building recordings
             self._exp_out_BRC (), 
@@ -899,13 +913,21 @@ class ForgetfulBrain:
         self.log_load (
             self._cnf.load (pmn=PMN), LOGLVL)
         
-        self._prc = DataFrameFile (                 # processed data file
-            self._exp_dat_prc_PRC (), 
-            self._exp_out_tmp_PRC (), 
+        self._prc_trn = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_TRN (), 
+            self._exp_out_tmp_TRN (), 
             self.PRC_SEQ_COLS
         )
         self.log_load (
-            self._prc.load (pmn=PMN), LOGLVL)
+            self._prc_trn.load (pmn=PMN), LOGLVL)
+
+        self._prc_val = DataFrameFile (             # processed data file
+            self._exp_dat_prc_VAL (), 
+            self._exp_out_tmp_VAL (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_load (
+            self._prc_val.load (pmn=PMN), LOGLVL)
 
         self._bldRec = RecordsFile (                # data building recordings
             self._exp_out_BRC (), 
@@ -993,7 +1015,27 @@ class ForgetfulBrain:
         x_shape = (1, 1, C, H, W)
         o_shape = (1, 1, len (self._cnf.opt_inp))
         h_shape = tuple(self.model.getZeroInitializedHiddenState (1, TORCH_DEVICE).shape)
-        torchinfo.summary (self.model, input_size=(x_shape, o_shape, h_shape))
+        torchinfo.summary (
+            self.model, 
+            input_size=(x_shape, o_shape, h_shape),
+            col_names=[
+                "input_size",
+                "output_size",
+                "num_params",
+                #"kernel_size",
+                "mult_adds",
+                "trainable",
+            ]
+        )
+
+    def adjustProcessedRGBs2Config (self) -> None:
+        H = self._cnf.prc_rgb_H
+        W = self._cnf.prc_rgb_W
+        RGBS = [x/'rgb' for x in self._exp_dat_prc_ ().iterdir () if x.is_dir ()]
+        for RGB in RGBS:
+            for rgb in RGB.iterdir ():
+                cv2.imwrite(str(rgb), cv2.resize(cv2.imread(str(rgb)), (W,H)))
+
 
     ##############################################################################################################
     ##############################################################################################################
@@ -1062,15 +1104,22 @@ class ForgetfulBrain:
         dfIMD = self.buildRun__Imd (self.runID, log_lvl=2)
         
         self.log ('Build sequential data of run', 1)
-        dfSEQ, eis = self.buildRun__Seq (self.runID, dfIMD=dfIMD, log_lvl=2)
+        dfSEQ_train, dfSEQ_valid, eis = self.buildRun__Seq (self.runID, dfIMD=dfIMD, log_lvl=2)
 
         # PROCESSED DATA
-        self.log ('Update processed data of experiment', 1)
-        self.log_load (self._prc.load (pmn=True), 2)
-        prv_ns = self._prc.num_samples ()
-        self._prc.add (dfSEQ)
-        self.log (f"# samples: {prv_ns} -> {self._prc.num_samples ()}", 2)
-        self.log_save (self._prc.save (pmn=False), 2)
+        self.log ('Update processed training data', 1)
+        self.log_load (self._prc_trn.load (pmn=True), 2)
+        prv_ns = self._prc_trn.num_samples ()
+        self._prc_trn.add (dfSEQ_train)
+        self.log (f"# samples: {prv_ns} -> {self._prc_trn.num_samples ()}", 2)
+        self.log_save (self._prc_trn.save (pmn=False), 2)
+        
+        self.log ('Update processed validation data', 1)
+        self.log_load (self._prc_val.load (pmn=True), 2)
+        prv_ns = self._prc_val.num_samples ()
+        self._prc_val.add (dfSEQ_valid)
+        self.log (f"# samples: {prv_ns} -> {self._prc_val.num_samples ()}", 2)
+        self.log_save (self._prc_val.save (pmn=False), 2)
 
         # RECORDINGS
         self.log ('Update build records', 1)
@@ -1083,7 +1132,8 @@ class ForgetfulBrain:
         self._exp_out_tmp_RBI (self.runID).unlink ()
 
         self.log ('Save permanently', 1)
-        self.log_save (self._prc.save (pmn=True), 1)
+        self.log_save (self._prc_trn.save (pmn=True), 1)
+        self.log_save (self._prc_val.save (pmn=True), 1)
         self.log_save (self._bldRec.save (pmn=True), 1)
         self.saveEISPlot (log_lvl=1)
         
@@ -1129,7 +1179,8 @@ class ForgetfulBrain:
         
         # PATHS
         RGB = self._exp_dat_prc_rid_rgb_ (run_id)     # to the run's dir of processed rgbs (destination)
-        SEQ = self._exp_dat_prc_rid_CSV (run_id)     # to the run's processed csv file (destination)
+        TRN = self._exp_dat_prc_rid_TRN (run_id)     # to the run's processed training csv file (destination)
+        VAL = self._exp_dat_prc_rid_VAL (run_id)     # to the run's processed validation csv file (destination)
 
         # DATA FRAMES
         if dfIMD is None: dfIMD = pd.read_csv (self._exp_dat_imd_RID (run_id))
@@ -1211,15 +1262,23 @@ class ForgetfulBrain:
                 # Add the above data frame
                 dfSEQ = pd.concat ([dfSEQ, df_seq], ignore_index=True)
         
-        dfSEQ.to_csv (SEQ, index=False)
+        # Train and Test
+        msk = np.random.rand (len (dfSEQ)) < self._cnf.val_share
+        dfSEQ_valid = dfSEQ[msk]
+        dfSEQ_train = dfSEQ[~msk]
+        
+        dfSEQ_train.to_csv (TRN, index=False)
+        dfSEQ_valid.to_csv (VAL, index=False)
+        
         eis = float (ei_cnt) / len (dfIMD)
 
         # LOGGING 
         self.log (f"# samples: {len (dfSEQ)}", log_lvl)
         self.log (f"Expert intervention share: {100 * eis} %", log_lvl)
-        self.log_save (SEQ, log_lvl)
+        self.log_save (TRN, log_lvl)
+        self.log_save (VAL, log_lvl)
 
-        return dfSEQ, eis
+        return dfSEQ_train, dfSEQ_valid, eis
         
         
 
@@ -1282,7 +1341,8 @@ class ForgetfulBrain:
 
 
         self.log (f"START TRAIN", 0)
-        self.log_load (self._prc.load (pmn=True), 2)
+        self.log_load (self._prc_trn.load (pmn=True), 2)
+        self.log_load (self._prc_val.load (pmn=True), 2)
         self.log_load (self._bldRec.load (pmn=True), 2)
         self.log_load (self._trnRec.load (pmn=True), 2)
         self.log_load (self._cpt.load(pmn=True), 2)
@@ -1298,10 +1358,10 @@ class ForgetfulBrain:
 
 
         log (1, '...')
-        self.dataloader = torch.utils.data.DataLoader (
+        self.dataloader_trn = torch.utils.data.DataLoader (
             dataset=ForgetfulDataset (
-                df=self._prc.get (),
-                id=self.expID,
+                df=self._prc_trn.get (),
+                id=self.expID+ ': training',
                 cnn_cols=self._cnf.cnn_inp,
                 cat_cols=self._cnf.opt_inp,
                 lbl_cols=self._cnf.lables,
@@ -1311,10 +1371,25 @@ class ForgetfulBrain:
             shuffle=True,
             drop_last=True
         )
-        log (1, '...')
-        log (1, 'Data loader')
-        log (2, f"Batch size: {self._cnf.batch_size}")
-        log (2, f"Shuffle & drop last")
+        #log (1, '...')
+        #log (1, 'Data loader')
+        #log (2, f"Batch size: {self._cnf.batch_size}")
+        #log (2, f"Shuffle & drop last")
+
+        self.dataloader_val = torch.utils.data.DataLoader (
+            dataset=ForgetfulDataset (
+                df=self._prc_val.get (),
+                id=self.expID + ': validation',
+                cnn_cols=self._cnf.cnn_inp,
+                cat_cols=self._cnf.opt_inp,
+                lbl_cols=self._cnf.lables,
+                msg_pfx='|  '
+            ),
+            batch_size=self._cnf.batch_size,
+            shuffle=False,
+            drop_last=True
+        )
+        
         
 
         log (1, 'Training')
@@ -1324,6 +1399,7 @@ class ForgetfulBrain:
             pfx = '|    - '
             for i in pbar:
                 epochRec = self.startTrain_trainOneEpoch ()
+                epochRec ['valid_loss'] = self.startTrain_validOneEpoch ()
 
                 print ()                
                 PMN = True if (i + 1 == num_epochs) else False          # save only permanently after last epoch
@@ -1353,12 +1429,12 @@ class ForgetfulBrain:
 
     def startTrain_trainOneEpoch (self) -> EpochRecord:
         self.model.train ()
-        self.h = self.model.getZeroInitializedHiddenState (self.dataloader.batch_size, TORCH_DEVICE)
+        self.h = self.model.getZeroInitializedHiddenState (self.dataloader_trn.batch_size, TORCH_DEVICE)
 
         agg_loss = 0.0      # aggregated loss 
         batch_cnt = 0       # number of batches
 
-        with tqdm (self.dataloader, leave=False, desc='|  Batches  ', position=1, ncols=NCOLS) as pbar:
+        with tqdm (self.dataloader_trn, leave=False, desc='|  (Train) Batches  ', position=1, ncols=NCOLS) as pbar:
             for batch in pbar:
 
                 batch_cnt += 1
@@ -1383,6 +1459,31 @@ class ForgetfulBrain:
 
 
         return EpochRecord (agg_loss / batch_cnt, None, self.lrSched.get_last_lr () [0])
+
+
+    def startTrain_validOneEpoch (self) -> float:
+        self.model.eval ()
+        self.h = self.model.getZeroInitializedHiddenState (self.dataloader_val.batch_size, TORCH_DEVICE)
+
+        agg_loss = 0.0      # aggregated loss 
+        batch_cnt = 0       # number of batches
+
+        with torch.no_grad ():
+            with tqdm (self.dataloader_val, leave=False, desc='|  (Valid) Batches  ', position=1, ncols=NCOLS) as pbar:
+                for batch in pbar:
+
+                    batch_cnt += 1
+
+                    out, self.h = self.model.forward (
+                        x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE), 
+                        x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE), 
+                        h=self.h.data
+                    )
+
+                    batch_loss = self.loss (out, batch ['label'].to (TORCH_DEVICE))   
+                    agg_loss += batch_loss.item ()
+
+        return agg_loss / batch_cnt
 
 
     
@@ -1670,7 +1771,7 @@ class ForgetfulBrain:
         bs = self.cnf['learn']['batch_size']
         sffl = True
         dl = True
-        self.dataloader = torch.utils.data.DataLoader (
+        self.dataloader_trn = torch.utils.data.DataLoader (
             dataset=self.dataset,
             batch_size=bs,
             shuffle=sffl,
@@ -2003,13 +2104,21 @@ class ForgetfulBrain:
         self.log_load (
             self._cnf.load (pmn=PMN), LOGLVL)
         
-        self._prc = DataFrameFile (                 # processed data file
-            self._exp_dat_prc_PRC (), 
-            self._exp_out_tmp_PRC (), 
+        self._prc_trn = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_TRN (), 
+            self._exp_out_tmp_TRN (), 
             self.PRC_SEQ_COLS
         )
         self.log_load (
-            self._prc.load (pmn=PMN), LOGLVL)
+            self._prc_trn.load (pmn=PMN), LOGLVL)
+        
+        self._prc_val = DataFrameFile (                 # processed data file
+            self._exp_dat_prc_VAL (), 
+            self._exp_out_tmp_VAL (), 
+            self.PRC_SEQ_COLS
+        )
+        self.log_load (
+            self._prc_val.load (pmn=PMN), LOGLVL)
 
         self._bldRec = RecordsFile (                # data building recordings
             self._exp_out_BRC (), 

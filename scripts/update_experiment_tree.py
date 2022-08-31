@@ -17,6 +17,7 @@ for EXP_ID in [
     #'UTC_2022_07_01_07_27_56___SEQLEN_3___RF3',
     #'UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 
     #'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
+    'cnn1third'
 ]:
 
     def rmtree (p: Path) -> None:
@@ -113,7 +114,7 @@ for EXP_ID in [
     if new.is_file (): print (f"[{name}]  Already done")
     else:
         print (f"[{name}]  Process")
-        #input (f"Create symlink to raw data (ln -s <target> {RAW}), then press Enter to continue...")
+        input (f"Create symlink to raw data (ln -s <target> {RAW}), then press Enter to continue...")
 
         if IMD.is_dir (): IMD.rmtree ()
         if PRC.is_dir (): PRC.rmtree ()
@@ -121,7 +122,8 @@ for EXP_ID in [
         IMD.mkdir ()
         PRC.mkdir ()
         
-        (PRC/'processed.csv').touch ()
+        (PRC/'training.csv').touch ()
+        (PRC/'validation.csv').touch ()
         with open (OUT/'build_records.json', 'w') as f: 
             f.write (json.dumps ([], sort_keys=True, indent=4))
 
