@@ -375,47 +375,72 @@ The ResNet18 contains 18 layers and has ... trainable parameters ...
 
 
 
-
+\newcommand{\numColumns}{5}
 \begin{table}[h]
     \caption{ANN module variants\label{tab:ann_module_variants}}
     \centering
-    \begin{tabular}{|l|c|l|} \hline
-                            & & A \\\hline\hline
-\multirow{5}{*}{Input}  &$\seqLen$&$\setOfInts{2,3,5,10,25}$             \\\cline{2-3}
-                        &$\resizeFact$              &$\setOfInts{\sfrac{1}{2}, \sfrac{1}{3}}$   \\\cline{2-3}
-                        &$\rawRGBTimeStep$          &\cmark         \\\cline{2-3}
-                        &$(\IMULinAcc,\IMUAngVel)$  &\cmark         \\\cline{2-3}
-                        &$\IMUTimeStep$             &\cmark         \\\hline
-\multirow{1}{*}{Output} &$\headNavDec$              &\cmark         \\\cline{2-3}
-                        &$\headCtrlCmd$             &\xmark         \\\hline
-\multirow{3}{*}{CNN}    &Model                      &resnet18       \\\cline{2-3}
-                        &Pretrained                 &\cmark         \\\cline{2-3}
-                        &Trainable                  &\cmark         \\\hline
-\multirow{3}{*}{GRU}    &$\GRUNumLayer$             &3              \\\cline{2-3}
-                        &$\GRUHiddenSize$           &16             \\\cline{2-3}
-                        &$\GRUDropoutP$             &0.5            \\\hline
-\multirow{4}{*}{FC}     &$\fcLayer$                 &deactivated    \\\cline{2-3}
-                        &$\fcOut$                   &deactivated    \\\cline{2-3}
-                        &$\fcDropoutProb$           &deactivated    \\\cline{2-3}
-                        &$\fcAct$                   &ReLU           \\\hline
-\multirow{1}{*}{HEAD}   &$\headAct$                 &ReLU           \\\hline
+    \begin{tabular}{|l|l|l|l|l|} \hline
+                        &                           &Baseline    &Baseline+     & Sequential \\\hline\hline
+\multirow{5}{*}{Input}  &$\seqLen$                  &1           &1             &$\setOfInts{2,3,5,10,25}$             \\\cline{2-\numColumns}
+                        &$\resizeFact$              &\sfrac{1}{2}&\sfrac{1}{2}  &$\setOfInts{\sfrac{1}{2}, \sfrac{1}{3}}$   \\\cline{2-\numColumns}
+                        &$\rawRGBTimeStep$          &\xmark      &\cmark        &\cmark         \\\cline{2-\numColumns}
+                        &$(\IMULinAcc,\IMUAngVel)$  &\xmark      &\cmark        &\cmark         \\\cline{2-\numColumns}
+                        &$\IMUTimeStep$             &\xmark      &\cmark        &\cmark         \\\hline
+\multirow{1}{*}{Output} &$\headNavDec$              &\cmark      &\cmark        &\cmark         \\\cline{2-\numColumns}
+                        &$\headCtrlCmd$             &\xmark      &\xmark        &\xmark         \\\hline
+\multirow{3}{*}{CNN}    &Model                      &resnet8     &resnet18      &resnet18       \\\cline{2-\numColumns}
+                        &Pretrained                 &\xmark      &\cmark        &\cmark         \\\cline{2-\numColumns}
+                        &Trainable                  &\cmark      &\xmark        &\cmark         \\\hline
+\multirow{3}{*}{GRU}    &$\GRUNumLayer$             &\xmark      &\xmark        &3              \\\cline{2-\numColumns}
+                        &$\GRUHiddenSize$           &\xmark      &\xmark        &16             \\\cline{2-\numColumns}
+                        &$\GRUDropoutP$             &\xmark      &\xmark        &0.5            \\\hline
+\multirow{4}{*}{FC}     &$\fcLayer$                 &1           &3             &\xmark         \\\cline{2-\numColumns}
+                        &$\fcOut$                   &256         &32            &\xmark         \\\cline{2-\numColumns}
+                        &$\fcDropoutProb$           &0.5         &0.2063        &\xmark         \\\cline{2-\numColumns}
+                        &$\fcAct$                   &ReLU        &ReLU          &ReLU           \\\hline
+\multirow{1}{*}{HEAD}   &$\headAct$                 &ReLU        &ReLU          &ReLU           \\\hline
     
     \end{tabular}
 \end{table}
 
+%https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation
+%https://ai.stackexchange.com/questions/23482/are-mult-adds-and-flops-equivalent
+%https://github.com/TylerYep/torchinfo
 \begin{table}[h]
-    \caption{ANN module variants: number of trainable parameters\label{tab:ann_module_variants_nparams}}
+    \caption{ANN module variants: 
+        number of trainable and non-trainable parameters 
+        and number of multiply-accumulate operations\label{tab:ann_module_variants_nparams}}
     \centering
-    \begin{tabular}{|r|l|r|r|} \hline
-            &Equ.& A & B\\\hline\hline
-        CNN &n/a&\multicolumn{2}{|c|}{11,689,512}\\\hline
-        GRU &\ref{eq:gru_param}&0&28,704\\\hline
-        FC  &\ref{eq:fc_param}&262,144&0\\\hline
-        HEAD&\ref{eq:head_param}&1,536&51\\\hline\hline
-        Total&n/a&11,953,192&11,718,267\\\hline
+    \begin{tabular}{|l|l|r|r|r|} \hline
+                        &\#                     &Baseline       &Baseline+      &Sequential \\\hline\hline
+\multirow{3}{*}{CNN}    &Trainables             &               &0              &0          \\\cline{2-\numColumns}
+                        &Non-trainables         &               &11,176,512     &11,689,512 \\\cline{2-\numColumns}
+                        &MAC Operations         &               &1,408,910,720  &           \\\hline
+\multirow{3}{*}{CAT}    &Trainables             &0              &0              &0          \\\cline{2-\numColumns}
+                        &Non-trainables         &0              &0              &0          \\\cline{2-\numColumns}
+                        &MAC Operations         &0              &0              &0          \\\hline                        
+\multirow{3}{*}{GRU}    &Trainables             &0              &0              &           \\\cline{2-\numColumns}
+                        &Non-trainables         &0              &0              &           \\\cline{2-\numColumns}
+                        &MAC Operations         &0              &0              &           \\\hline
+\multirow{3}{*}{FC}     &Trainables             &               &41,664         &0          \\\cline{2-\numColumns}
+                        &Non-trainables         &               &0              &0          \\\cline{2-\numColumns}
+                        &MAC Operations         &               &41,664         &0          \\\hline                        
+\multirow{3}{*}{HEAD}   &Trainables             &               &195            &           \\\cline{2-\numColumns}
+                        &Non-trainables         &               &0              &           \\\cline{2-\numColumns}
+                        &MAC Operations         &               &195            &           \\\hline\hline
+\multirow{3}{*}{Total}  &Trainables             &               &41,859         &           \\\cline{2-\numColumns}
+                        &Non-trainables         &               &11,176,512     &           \\\cline{2-\numColumns}
+                        &MAC Operations         &               &1,408,952,579  &           \\\hline
+
+%        CNN &n/a&\multicolumn{2}{|c|}{11,689,512}\\\hline
+%        GRU &\ref{eq:gru_param}&0&28,704\\\hline
+%        FC  &\ref{eq:fc_param}&262,144&0\\\hline
+%        HEAD&\ref{eq:head_param}&1,536&51\\\hline\hline
+%        Total&n/a&11,953,192&11,718,267\\\hline
     \end{tabular}
 \end{table}
 
 \section{Data Generation and Training}
+The 
 
 \section{Racing Tests}

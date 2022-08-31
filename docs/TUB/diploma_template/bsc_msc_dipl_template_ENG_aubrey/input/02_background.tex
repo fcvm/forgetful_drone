@@ -16,7 +16,213 @@ DELETEME: Related work respresents results from work that handled the same or a 
 %###################################################################################
 %###################### Topic B             ########################################
 %###################################################################################
-\section{Topic 2}
+\section{Direct Policy Imitation Learning}
+\textit{In this tutorial, 
+we aim to present to researchers and industry practitioners a broad overview 
+of imitation learning techniques and recent applications. 
+Imitation learning is a powerful and practical alternative 
+to reinforcement learning for learning sequential decision-making policies. 
+Also known as learning from demonstrations or apprenticeship learning, 
+imitation learning has benefited from recent progress in core learning techniques, 
+increased availability and fidelity of demonstration data, 
+as well as the computational advancements brought on by deep learning. 
+We expect this tutorial to be highly relevant for researchers and 
+practitioners who have interests in reinforcement learning, 
+structured prediction, planning and control. 
+The ideal audience member should have familiarity with basic 
+supervised learning concepts. 
+No knowledge of reinforcement learning techniques will be assumed.
+}
+
+\newcommand{\state}[1]{\underline{x}_{#1}}
+\newcommand{\action}[1]{\underline{u}_{#1}}
+\newcommand{\timestep}{t}
+\newcommand{\probability}{p}
+\newcommand{\parentheses}[1]{\left({#1}\right)}
+\newcommand{\brackets}[1]{\left[{#1}\right]}
+\newcommand{\braces}[1]{\left\{{#1}\right\}}
+\newcommand{\stateDomain}{\mathcal{X}}
+\newcommand{\actionDomain}{\mathcal{U}}
+\newcommand{\policy}[2]{\pi^{#1}_{#2}}
+\newcommand{\demonstration}{\xi}
+\newcommand{\expertt}{*}
+\newcommand{\parameterVector}{\underline{\theta}}
+\newcommand{\trajectory}{\tau}
+
+
+Imitation learning is an area of machine learning 
+that relates to the problem 
+%of training a policy
+%with the intent to 
+of learning to
+imitate (i.e., behave like) an expert.
+Depending on the reference, 
+imitation learning is categorized as an
+"approach"
+%@misc{Cunha13,
+%  author        = {},
+%  title         = {Lecture in Principles of Robot Autonomy II},
+%  year          = {2022},
+%  publisher={Autonomous Systems Lab of Stanford University}
+%}
+or "alternative"
+%https://drive.google.com/file/d/12QdNmMll-bGlSWnm8pmD_TawuRN7xagX/view
+to RL (reinforcement learning),
+or the "fusion" 
+%https://www.cl.uni-heidelberg.de/courses/ws18/iml/L1.pdf
+of reinforcement learning and supervised learning.
+With respect to the degree of supervision,
+imitation learning relates to the three major categories of machine learning as follows.
+%https://www.cl.uni-heidelberg.de/courses/ws18/iml/L1.pdf
+Supervised learning defines goals explicitly 
+and thus has the highest degree of supervision.
+Imitation learning weakens the degree of supervision,
+by not defining goals, but demonstrating how to achieve them. 
+Reinforcement learning further weakens the degree
+by defining rewards, replacing the concept of goals. 
+Unsupervised learning has the lowest level 
+because it defines neither goals nor rewards.
+
+
+An imitation learning problem includes:
+a system, an expert, a policy class, a loss function
+and a learning algorithm.
+%https://drive.google.com/file/d/12QdNmMll-bGlSWnm8pmD_TawuRN7xagX/view
+
+The system interacts with its real or simulated environment
+by taking a state $\state{} \in \stateDomain$
+and executing an action $\action{} \in \actionDomain$
+where $\stateDomain$ and $\actionDomain$ are the 
+domains of all possible states and actions, respectively.
+Under the assumption that the dynamics of the system in its environment
+are a MDP (Markov decision process),
+a probabilistic transition model can describe the system dynamics.
+Such a model provides
+the conditional probability distribution over the system state
+given the system state and action at the previous time step 
+\begin{align}
+    \probability \parentheses{
+        \state{\timestep} | \state{\timestep -1}, \action{\timestep -1}
+    }.
+\end{align}
+The system dynamics are typically unknown to the policy to be found.
+
+The expert (also referred to as demonstrator) is a human or system.
+The expert's behaviour, i.e,
+the mapping from the state to the action of the same time step, 
+is characterized by the expert policy
+\begin{align}
+    \policy{\expertt}{}
+    :\ \stateDomain \rightarrow \actionDomain
+    ;\quad \state{\timestep} \mapsto \action{\timestep}
+    .
+\end{align}
+Applying the expert policy generates demonstrations.
+A demonstration is a state-action pair $\parentheses{\state{\timestep}, \action{\timestep}}$.
+All demonstrations constitute a training dataset, on which the imitating policy can be trained.
+In this sense, ?? introduced imitation learning as a variant of supervised learning,
+which does not predict single iid samples at a time (assumption ...)
+but instead learns to predict a sequence ("learning sequential decision-making policies").
+
+The policy class specifies the possible policies, which map from state to action.
+Usually, the class contains parameterized ANNs
+\begin{equation}
+    \policy{}{\parameterVector}
+    :\ \stateDomain \rightarrow \actionDomain
+    ;\quad \state{\timestep} \mapsto \action{\timestep}
+\end{equation}
+where $\parameterVector$ is the parameter vector of the ANNs.
+The policy class can be rolled out, i.e.,
+to repeatedly apply the policy on an inital state.
+Thereby, it generates the trajectory 
+\begin{align}
+    \tau = \braces{
+        \parentheses{\state{\timestep}, \policy{}{} \parentheses{\state{\timestep}}}
+    }_{\timestep \in \braces{0, 1, \dots}}
+    .
+\end{align}
+
+The imitation loss function quantifies 
+the deviation between the decisions (trajectories)
+made by the imitating policy in the environment
+from the demonstrations of the expert.
+
+The learning algorithm to optimize the 
+model within the model class with respect to
+the imitation loss and the training data.
+
+%that, while acting in the environment,
+%produces state-action pairs (also referred to as demonstrations)
+%\begin{equation}
+%    \left(s, a\right).
+%\end{equation}
+
+
+The target is to find a policy that, within a time step,
+maps states to action
+\begin{align}
+    \action{\timestep} = \policy{}{} \parentheses{ 
+        \state{\timestep} 
+    }.
+\end{align}
+To do this, a set of demonstrations/trajectories is given.
+Each demonstration is a sequence of state-action pairs
+\begin{equation}
+    \demonstration = \braces{
+        \parentheses{\state{\timestep},\action{\timestep}}
+    }_{\timestep \in \braces{0, 1, \dots}}
+    .
+\end{equation}
+generate at the roll out of the expert policy $\policy{*}{}$.
+
+
+
+The methods to solve an imitation learning problem can be devided into 
+direct policy learning and inverse reinforcement learning.
+Direct policy learning targets at imitating the expert by learning its policy.
+Inverse reinforcement learning targets at learning the reward function
+that implicetly underlies the expert policy.
+As the experiments of this thesis apply direct policy learning 
+(see section ...),
+this form of imitation learning is introduced in this section.
+
+
+----------
+
+
+
+First, the expert policy (also referred to as demonstrator) is a human or system
+that, while acting in the environment,
+produces state-action pairs (also referred to as demonstrations)
+\begin{equation}
+    \left(s, a\right).
+\end{equation}
+
+
+The environment, which is either real or simulated, 
+determines the state dynamics
+\begin{equation}
+    P(s_{t+1}|s_{t},a_t).
+\end{equation}
+
+The model class of ANNs.
+
+
+
+
+The training dataset is the collection of demonstrations.
+
+Applications 
+
+%https://proceedings.neurips.cc/paper/1988/file/812b4ba287f5ee0bc9d43bbf5bbe87fb-Paper.pdf
+
+
+
+
+
+
+
+
 
 %###################################################################################
 %###################### Topic C             ########################################
