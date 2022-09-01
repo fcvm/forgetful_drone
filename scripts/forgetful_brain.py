@@ -1013,7 +1013,7 @@ class ForgetfulBrain:
         H = self._cnf.prc_rgb_H
         W = self._cnf.prc_rgb_W
         x_shape = (1, 1, C, H, W)
-        o_shape = (1, 1, len (self._cnf.opt_inp))
+        o_shape = (1, 1, max(len (self._cnf.opt_inp),1))
         h_shape = tuple(self.model.getZeroInitializedHiddenState (1, TORCH_DEVICE).shape)
         torchinfo.summary (
             self.model, 

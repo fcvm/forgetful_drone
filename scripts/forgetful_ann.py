@@ -200,10 +200,15 @@ class ForgetfulANN (torch.nn.Module):
             self.CNN, self.config['cnn']['output_size'] = cnn_model_output_size_dict[torchvision_model_id]
         except:
             raise ValueError(f"Unknown torchvision model ID: {torchvision_model_id}.")
+        # only first three layers
+        #self.CNN = torch.nn.Sequential(*list(self.CNN.children())[:-3], list(self.CNN.children())[-1])
+        #self.config['cnn']['output_size'] = 128#256
 
-         # Set the model parameters to trainable or frozen
+        # Set the model parameters to trainable or frozen
         for p in self.CNN.parameters():
             p.requires_grad = trainable
+        
+        #list(self.CNN.children())[-2].requires_grad_(True)
         #list(list(self.CNN.children())[-2].children())[-1].requires_grad_(True)
 
         self.addToConsoleRepresentation('|  CNN  |'\
