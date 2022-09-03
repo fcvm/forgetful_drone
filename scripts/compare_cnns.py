@@ -34,8 +34,8 @@ for EXP in [
     VL.append ([x ['valid_loss'] for x in rec])
     LR.append ([x ['learn_rate'] for x in rec])
 
-    ax1.plot ([x ['train_loss'] for x in rec][:100], EXP[1], label=EXP[0])#, linestyle=':' if EXP.split('_')[1]=='1third' else '-')
-    ax2.plot ([x ['valid_loss'] for x in rec][:100], EXP[1], label=EXP[0])#, linestyle=':' if EXP.split('_')[1]=='1third' else '-')
+    ax1.plot ([x ['train_loss'] for x in rec][:100], EXP[1], label=EXP[0])
+    ax2.plot ([x ['valid_loss'] for x in rec][:100], EXP[1], label=EXP[0])
     #ax3.plot ([x ['learn_rate'] for x in rec][:100], label=EXP, linestyle=':' if EXP.split('_')[1]=='1third' else '-')
 
     cnt+=1
