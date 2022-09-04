@@ -958,9 +958,9 @@ class ForgetfulBrain:
             self._cpt.load (pmn=PMN), LOGLVL)
         self.log (f"last epoch idx: {self._cpt.get () ['epoch']}", LOGLVL + 1)
         self.loadCheckpoint (reset_lrsched=False)
+
         
 
-    
     def initModelEtc (self) -> None:
         self.model = self.initModel ()
         self.optim = self.initOptimizer ()
@@ -1036,6 +1036,22 @@ class ForgetfulBrain:
         for RGB in RGBS:
             for rgb in RGB.iterdir ():
                 cv2.imwrite(str(rgb), cv2.resize(cv2.imread(str(rgb)), (W,H)))
+
+    def saveCNNWeights (self) -> None:
+        # SAVE CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_ ()/'cnn_checkpoint.pt',
+            self._exp_out_tmp_ ()/'cnn_checkpoint.pt'
+        )
+        self._cpt.set (
+            self._trnRec.num_records (),
+            self.model.CNN,
+            self.optim,
+            self.loss
+        )
+        self.log_create (
+            self._cpt.save (pmn=True), 1)
+
 
 
     ##############################################################################################################
@@ -1349,6 +1365,18 @@ class ForgetfulBrain:
         self.log_load (self._trnRec.load (pmn=True), 2)
         self.log_load (self._cpt.load(pmn=True), 2)
         self.loadCheckpoint (reset_lrsched)
+
+        try:
+            cnn = CheckpointFile (
+                self._exp_out_ ()/'cnn_checkpoint.pt',
+                self._exp_out_tmp_ ()/'cnn_checkpoint.pt'
+            )
+            self.log_load (cnn.load (pmn=True), 1)
+            self.log (f"CNN epoch idx: {cnn.get () ['epoch']}", 1 + 1)
+            self.model.CNN.load_state_dict (cnn.get () ['model_state_dict'])
+            print('!!!!!!!!!!!!!!!!!!!!!!! CNN TRANSFER LEARNING !!!!!!!!!!!!!!!!!!!!!1 ')
+        except:
+            pass
         
         self.log (f"Experiment", 1)
         self.log (f"ID: {self.expID}", 2)
@@ -1396,7 +1424,7 @@ class ForgetfulBrain:
             pin_memory=False
         )
         
-        
+        self.getModelSummary ()
 
         log (1, 'Training')
     
