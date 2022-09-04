@@ -568,7 +568,7 @@ class ForgetfulBrain:
     
     def _exp_dat_prc_           (self)          -> Path: return self._exp_dat_()/'processed'
     def _exp_dat_prc_TRN        (self)          -> Path: return self._exp_dat_prc_()/f"training.csv"
-    def _exp_dat_prc_VAL        (self)          -> Path: return self._exp_dat_prc_()/f"validation.csv"
+    def _exp_dat_prc_VAL        (self)          -> Path: return self._exp_dat_prc_()/f"validation.csv" 
     def _exp_dat_prc_rid_       (self, rid:str) -> Path: return self._exp_dat_prc_()/rid
     def _exp_dat_prc_rid_rgb_   (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'rgb'
     def _exp_dat_prc_rid_TRN    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'training.csv'
@@ -744,6 +744,7 @@ class ForgetfulBrain:
         #ax.yaxis.set_major_formatter (mtick.FormatStrFormatter ('%.3e'))
         ax.legend (loc='lower left')
         ax.set_yscale('log')
+        ax.grid ()
 
         # SAVE FIG
         fig.tight_layout()
@@ -852,7 +853,7 @@ class ForgetfulBrain:
             self._prc_trn.save (pmn=PMN), LOGLVL)
 
         self._prc_val = DataFrameFile (                 # processed data file
-            self._exp_out_prc_VAL (), 
+            self._exp_dat_prc_VAL (), 
             self._exp_out_tmp_VAL (), 
             self.PRC_SEQ_COLS
         )
@@ -1338,6 +1339,7 @@ class ForgetfulBrain:
         self.asrExpInit ()
         self.switchInferTopics (register=False)
 
+        torch.backends.cudnn.benchmark = True
 
 
         self.log (f"START TRAIN", 0)
@@ -1369,7 +1371,9 @@ class ForgetfulBrain:
             ),
             batch_size=self._cnf.batch_size,
             shuffle=True,
-            drop_last=True
+            drop_last=True,
+            num_workers=8,
+            pin_memory=False
         )
         #log (1, '...')
         #log (1, 'Data loader')
@@ -1387,7 +1391,9 @@ class ForgetfulBrain:
             ),
             batch_size=self._cnf.batch_size,
             shuffle=False,
-            drop_last=True
+            drop_last=True,
+            num_workers=8,
+            pin_memory=False
         )
         
         
@@ -1438,17 +1444,17 @@ class ForgetfulBrain:
             for batch in pbar:
 
                 batch_cnt += 1
-                self.optim.zero_grad ()
+                self.optim.zero_grad (set_to_none=True)
 
                 out, self.h = self.model.forward (
-                    x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE), 
-                    x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE), 
+                    x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE, non_blocking=True), 
+                    x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE, non_blocking=True), 
                     h=self.h.data
                 )
 
                 batch_loss = self.loss (out, batch ['label'].to (TORCH_DEVICE))   
-                try: batch_loss += self.model.get_regularization_term ()
-                except: pass
+                #try: batch_loss += self.model.get_regularization_term ()
+                #except: pass
                 
                 agg_loss += batch_loss.item ()
 

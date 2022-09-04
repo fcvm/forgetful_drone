@@ -113,6 +113,8 @@
 
         <!-- FORGETFUL DRONES -->
             <rosparam file="$(find forgetful_drones)/parameters/forgetful_drone.yaml"/>
+            <param name="SIMULATOR_TEST_ENABLED" value="false"/>
+            <param name="SIM_TRACKGEN_ENABLED" value="false"/>
             
             <node 
                 pkg="forgetful_drones" 

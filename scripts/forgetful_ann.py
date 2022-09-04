@@ -183,6 +183,9 @@ class ForgetfulANN (torch.nn.Module):
         
         backbone: Callable[[torch.nn.Module], torch.nn.Sequential]\
             = lambda tm : torch.nn.Sequential(*list(tm.children())[:-1])
+        
+        rmchild: Callable[[torch.nn.Module, int], torch.nn.Sequential]\
+            = lambda m, n : torch.nn.Sequential(*list(m.children())[:-1-n], list(m.children())[-1])
 
         tm = torchvision.models
         pt = pretrained
@@ -193,6 +196,7 @@ class ForgetfulANN (torch.nn.Module):
             'efficientnet_b0': (backbone(tm.efficientnet_b0(pretrained=pt)), 1280),
             'efficientnet_b5': (backbone(tm.efficientnet_b5(pretrained=pt)), 2048),
             'mobilenet_v3_small': (backbone(tm.mobilenet_v3_small(pretrained=pt)), 576),
+            'resnet18_first3': (rmchild(backbone(tm.resnet18(pretrained=pt)), 1), 256),
             #"convnext_tiny": (backbone(tm..convnext_tiny(pretrained=pt), 576),
         }
 

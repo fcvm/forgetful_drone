@@ -12,8 +12,8 @@ for EXP_ID in [
     #'UTC_2022_07_01_07_27_56___SEQLEN_3___RF3',
     #'UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 
     #'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
-    'resnet8_1third'
+    'UTC_2022_09_03_16_49_12'
 ]:
 
     fb.initExp (EXP_ID)
-    fb.startTrain (500, reset_lrsched=False)
+    fb.startTrain (3, reset_lrsched=True)
