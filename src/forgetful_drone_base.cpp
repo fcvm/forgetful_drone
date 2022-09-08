@@ -299,7 +299,7 @@ bool ForgetfulDrone::initROSParameters () {
         {"NAV_INPUTPERTURBATION_ELEMENTWISEAMP", &p_NAV_INPUTDISTURBAMP},
         {"RVIZ_LOCTRAJ_SAMPLINGDURATION", &p_RVIZ_LOCAL_TRAJECTORY_DURATION},
         {"RVIZ_LOCTRAJ_SAMPLINGFREQUENCY", &p_RVIZ_LOCAL_TRAJECTORY_SAMPLING_FREQUENCY},
-        {"DAGGER_EXPIVSHARE_THRESHOLD", &p_EIS_THRSH},
+        //{"DAGGER_EXPIVSHARE_THRESHOLD", &p_EIS_THRSH},
     };
 
     // String
@@ -318,6 +318,9 @@ bool ForgetfulDrone::initROSParameters () {
         && fetchROSArrayParameter ("ARF_POSE_WRF",           p_ARF_POSE_WRF,    m_rosRNH, false)
         && fetchROSArrayParameter ("MAX_SPEEDS",     p_MAXSPEEDS,       m_rosRNH, false)
         && fetchROSArrayParameter ("DAGGER_MARGINS",   p_DAGGERMARGINS,   m_rosRNH, false)
+        && fetchROSArrayParameter ("DAGGER_EXPIVSHARE_THRESHOLD",   p_EXPINTVSHARES,   m_rosRNH, false)
+
+        
         && fetchROSParameters (m_rosRNH, kd_bool, kd_int, kd_dbl, kd_str, /*log_enabled*/ false);
 }
 
@@ -1267,6 +1270,9 @@ void ForgetfulDrone::runMission_DAGGER () {
 
     m_RunIdx = 0;
     
+
+    for (size_t ii = 0; ii < p_DAGGERMARGINS.size (); ii++)
+    //for (const double& dagger_margin : p_DAGGERMARGINS)
     for (const int& unity_scene      : p_SCENES)
     for (const int& scene_site       : p_SITES)
     for (const int& track_type       : p_TRACK_TYPES)
@@ -1274,7 +1280,7 @@ void ForgetfulDrone::runMission_DAGGER () {
     for (const int& track_direc      : p_TRACK_DIRECS)
     for (const int& gate_type        : p_GATES) 
     for (const double& max_speed     : p_MAXSPEEDS)
-    for (const double& dagger_margin : p_DAGGERMARGINS) {
+    {
         
         m_SceneIdx      = static_cast <uint8_t> (unity_scene);
         m_SiteIdx       = static_cast <uint8_t> (scene_site);
@@ -1283,7 +1289,7 @@ void ForgetfulDrone::runMission_DAGGER () {
         m_TrackDirecIdx = static_cast <uint8_t> (track_direc);
         m_GateIdx       = static_cast <uint8_t> (gate_type);
         m_MaxSpeed      = max_speed;
-        m_DaggerMargin  = dagger_margin;
+        m_DaggerMargin  = p_DAGGERMARGINS [ii];
 
         m_RunRepIdx = 0;
         bool repeat_run {true};
@@ -1297,7 +1303,7 @@ void ForgetfulDrone::runMission_DAGGER () {
                 m_NavInputDisturbed = true;
             }
             else {
-                m_DaggerMargin = dagger_margin;
+                m_DaggerMargin = p_DAGGERMARGINS [ii];
                 m_RunNumLaps = p_RUN_NUMLAPS;
                 m_NavInputDisturbed = false;
             }
@@ -1311,8 +1317,8 @@ void ForgetfulDrone::runMission_DAGGER () {
 
                 double eis = readExpIvShare (m_RunIdx);
                 ROSINFO ("Expert intervention share: " << 100 * eis 
-                    << " %   (threshold " << 100 * p_EIS_THRSH << " %)");
-                if (eis > p_EIS_THRSH) m_RunRepIdx ++;
+                    << " %   (threshold " << 100 * p_EXPINTVSHARES [ii] << " %)");
+                if (eis > p_EXPINTVSHARES [ii]) m_RunRepIdx ++;
                 else repeat_run = false;
                 
                 m_RunIdx ++;
@@ -1379,10 +1385,10 @@ void ForgetfulDrone::runMission_DAGGER () {
                 
                 double eis = readExpIvShare (m_RunIdx);
                 ROSINFO ("Last run's expert intervention share: " << 100 * eis 
-                    << " %   (threshold " << 100 * p_EIS_THRSH << " %)");                
+                    << " %   (threshold " << 100 * p_EXPINTVSHARES [ii] << " %)");                
                 
 
-                repeat_run = (eis > p_EIS_THRSH);
+                repeat_run = (eis > p_EXPINTVSHARES [ii]);
                 m_RunRepIdx ++;
                 m_RunIdx ++;
             } else {

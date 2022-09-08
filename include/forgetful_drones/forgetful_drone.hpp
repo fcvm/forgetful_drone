@@ -476,6 +476,7 @@ const std::vector<int> p_GATES {};
 const std::vector<double> p_ARF_POSE_WRF {};
 const std::vector<double> p_MAXSPEEDS {};
 const std::vector<double> p_DAGGERMARGINS {};
+const std::vector<double> p_EXPINTVSHARES {};
 
 
 

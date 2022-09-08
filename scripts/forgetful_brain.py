@@ -772,6 +772,8 @@ class ForgetfulBrain:
         ax.set_xlabel ('Runs')
         ax.set_ylabel ('Expert Intervention Share', color=clr)
         ax.tick_params(axis='y', labelcolor=clr)
+        ax.set_yscale('log')
+        ax.grid ()
 
         # SAVE FIG
         fig.tight_layout()
