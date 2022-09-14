@@ -1769,11 +1769,11 @@ void ForgetfulDrone::expIntervention (Eigen::Vector3d& wayp_ARF, double& speed, 
             += Eigen::Vector3d::Ones() * p_NAV_INPUTDISTURBAMP * std::sin (0.5 * ros::WallTime::now ().toSec ());    
         
         procNavInput (wayp_ARF, speed);
-        if (m_LapIdx >= 0) m_ExpDecCnt++;
+        if (m_SaveEnabled) m_ExpDecCnt++;
         intervened = true;
 
     } else {
-        if (m_LapIdx >= 0) m_ANNDecCnt++;
+        if (m_SaveEnabled) m_ANNDecCnt++;
         intervened = false;
     }
 }
