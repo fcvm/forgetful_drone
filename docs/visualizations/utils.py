@@ -16,12 +16,13 @@ def initRCParams () -> None:
     ]
     plt.rcParams['legend.fontsize'] = 10
 
-def figFpath (file: str):
-    return pathlib.Path(file).parent.resolve()/f"{pathlib.Path(file).stem}.pdf"
+def figFpath (file: str, suffix : str = ''):
+    p = pathlib.Path(file)
+    return p.parent.resolve()/f"{p.stem + suffix}.pdf"
 
-def saveFig (file: str):
+def saveFig (file: str, suffix : str = ''):
     plt.savefig(
-        figFpath(file),
+        figFpath(file, suffix),
         bbox_inches='tight'
     )
 
