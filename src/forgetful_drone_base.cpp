@@ -1294,6 +1294,7 @@ void ForgetfulDrone::runMission_DAGGER () {
         m_RunRepIdx = 0;
         bool repeat_run {true};
 
+        bool track_completed {false};
         while (repeat_run) {
             playAudio ("Start run " + std::to_string (m_RunIdx));
 
@@ -1311,7 +1312,7 @@ void ForgetfulDrone::runMission_DAGGER () {
             logRunInfo ();
             newRunReset ();
 
-
+            
             if (BuildRecorded (RunID ())) {
                 ROSINFO ("Run \"" << RunID () << "already recorded");
 
@@ -1367,10 +1368,10 @@ void ForgetfulDrone::runMission_DAGGER () {
                 }
             }
 
-            bool track_completed = startNavigation ();
+            track_completed = startNavigation ();
             stopSimulation ();
 
-            if (track_completed) {
+            //if (track_completed) {
                 
                 playAudio ("Build run");
                 forgetful_drones::String srv0;
@@ -1389,13 +1390,14 @@ void ForgetfulDrone::runMission_DAGGER () {
                 
 
                 repeat_run = (eis > p_EXPINTVSHARES [ii]);
+                if (!track_completed) repeat_run = true;
                 m_RunRepIdx ++;
                 m_RunIdx ++;
-            } else {
-                playAudio ("Race track not completed. Delete data and repeat run.");
-                ROSINFO ("Race track not completed. Delete data and repeat run.");
-                std::experimental::filesystem::remove_all (_exp_dat_raw_rid_ ());
-            }
+            //} else {
+            //    playAudio ("Race track not completed. Delete data and repeat run.");
+            //    ROSINFO ("Race track not completed. Delete data and repeat run.");
+            //    std::experimental::filesystem::remove_all (_exp_dat_raw_rid_ ());
+            //}
         }
     }
 }
