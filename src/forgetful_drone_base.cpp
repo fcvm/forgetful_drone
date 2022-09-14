@@ -31,7 +31,7 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_SUB__fbOutput         {m_rosRNH.subscribe("brain/output", 1, &ForgetfulDrone::CB__fbOutput, this)},
     m_PUB__fbTrigger   {m_rosRNH.advertise     <std_msgs::Empty>          ("brain/trigger_inference", 0)},
     m_SCL__fbExpment        {m_rosRNH.serviceClient <forgetful_drones::String> ("brain/init_experiment")},
-    m_SCL__fbBuild       {m_rosRNH.serviceClient <forgetful_drones::String> ("brain/build_run")},
+    m_SCL__fbBuild       {m_rosRNH.serviceClient <forgetful_drones::BuildRun> ("brain/build_run")},
     m_SCL__fbTrain     {m_rosRNH.serviceClient <forgetful_drones::Int>    ("brain/start_training")},
     m_SCL__fbInfer     {m_rosRNH.serviceClient <forgetful_drones::Float>  ("brain/start_inference")},
 
@@ -85,6 +85,7 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_RunIdx {0},
     m_DroneLaunched {false},
     m_RGBCnt {0},
+    m_NotSavedCnt {0},
     m_LapIdx {-1}
 {
     if (initROSParameters () && initTrafoArf2Wrf ()) {
@@ -913,6 +914,7 @@ void ForgetfulDrone::newRunReset () {
     m_LocTraj = {Vec3(), Vec3(), Vec3(), Vec3()};
     m_LocTraj_t0 = {};
     m_RGBCnt = 0;
+    m_NotSavedCnt = 0;
     m_SaveEnabled = false;
 }
 
@@ -1374,8 +1376,9 @@ void ForgetfulDrone::runMission_DAGGER () {
             //if (track_completed) {
                 
                 playAudio ("Build run");
-                forgetful_drones::String srv0;
+                forgetful_drones::BuildRun srv0;
                 srv0.request.data = RunID ();
+                srv0.request.crashed = !track_completed;
                 callRosSrv (ROS_LOG_PREFIX, m_SCL__fbBuild, srv0);
 
                 playAudio ("Start training");
@@ -2328,9 +2331,16 @@ void ForgetfulDrone::saveOdometry () {
 void ForgetfulDrone::runDataSaver (const bool& expert_intervened) {
     
     // start saving data after passing the first gate
-    if (!m_SaveEnabled && m_CurrGateIdx == 0) {
-        m_SaveEnabled = true;
-        ROSINFO("Data saving enabled");
+    //if (!m_SaveEnabled && m_CurrGateIdx == 0) {
+    //    m_SaveEnabled = true;
+    //    ROSINFO("Data saving enabled");
+    //} if (!m_SaveEnabled) return;
+
+    if (!m_SaveEnabled) {
+        if (m_NotSavedCnt++ > 50) {
+            m_SaveEnabled = true;
+            ROSINFO("Data saving enabled");
+        }
     } if (!m_SaveEnabled) return;
 
     // save rgb

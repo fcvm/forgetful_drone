@@ -485,7 +485,7 @@ class ForgetfulBrain:
         # ROS
         #  - service servers
         self.srv_initExp = rospy.Service ("brain/init_experiment", fdsrv.String, self.cb_initExp)
-        self.srv_buildRun = rospy.Service ("brain/build_run", fdsrv.String, self.cb_buildRun)
+        self.srv_buildRun = rospy.Service ("brain/build_run", fdsrv.BuildRun, self.cb_buildRun)
         self.srv_startTrain = rospy.Service ("brain/start_training", fdsrv.Int, self.cb_startTrain)
         self.srv_startInfer = rospy.Service ("brain/start_inference", fdsrv.Float, self.cb_startInfer)
     
@@ -501,9 +501,9 @@ class ForgetfulBrain:
         self.initExp (id=req.data)
         return fdsrv.StringResponse ()
     
-    def cb_buildRun (self, req : fdsrv.StringRequest) -> fdsrv.StringResponse: 
-        self.buildRun (id=req.data)
-        return fdsrv.StringResponse ()
+    def cb_buildRun (self, req : fdsrv.BuildRunRequest) -> fdsrv.BuildRunResponse: 
+        self.buildRun (id=req.data, crashed=req.crashed)
+        return fdsrv.BuildRunResponse ()
 
     def cb_startTrain (self, req : fdsrv.IntRequest) -> fdsrv.IntResponse:
         self.startTrain (num_epochs=req.data, reset_lrsched=True)
@@ -1062,7 +1062,7 @@ class ForgetfulBrain:
 
     # BUILD RUN
 
-    def buildRun (self, id : str) -> None:
+    def buildRun (self, id : str, crashed : bool) -> None:
         """
         1) Sets run ID
         2) If run is built: Do nothing
@@ -1080,6 +1080,7 @@ class ForgetfulBrain:
         self.log ('BUILD RUN', 0)
         
         self.runID = id
+        self.runCrashed = crashed
         self.log (f"ID: {self.runID}", 1)
 
         if self._bldRec.recorded (self.runID):
@@ -1290,6 +1291,7 @@ class ForgetfulBrain:
         dfSEQ_valid.to_csv (VAL, index=False)
         
         eis = float (ei_cnt) / len (dfIMD)
+        if self.runCrashed: eis = 1
 
         # LOGGING 
         self.log (f"# samples: {len (dfSEQ)}", log_lvl)
@@ -1402,7 +1404,7 @@ class ForgetfulBrain:
             batch_size=self._cnf.batch_size,
             shuffle=True,
             drop_last=True,
-            num_workers=8,
+            num_workers=4,
             pin_memory=False
         )
         #log (1, '...')
@@ -1422,7 +1424,7 @@ class ForgetfulBrain:
             batch_size=self._cnf.batch_size,
             shuffle=False,
             drop_last=True,
-            num_workers=8,
+            num_workers=4,
             pin_memory=False
         )
         
@@ -2210,8 +2212,9 @@ def debug ():
     res = fb.cb_initExp (req)
 
     # Build Run
-    req = fdsrv.StringRequest ()
+    req = fdsrv.BuildRunRequest ()
     req.data = '0000___2_0_1_1_0_1_04.00_00.00___000'
+    req.crashed = False
     res = fb.cb_buildRun (req)
 
     # Start Training

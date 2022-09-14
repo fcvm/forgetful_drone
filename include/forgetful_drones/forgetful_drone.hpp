@@ -51,6 +51,7 @@
 #include "forgetful_drones/String.h"
 #include "forgetful_drones/Int.h"
 #include "forgetful_drones/Float.h"
+#include "forgetful_drones/BuildRun.h"
 
 
 namespace forgetful_drone {
@@ -194,6 +195,7 @@ private:// CONST MEMBER VARIABLES //
     int m_RunRepIdx;
     int m_RunRepSuccCnt;
     unsigned int m_RGBCnt;
+    unsigned int m_NotSavedCnt;
     int m_LapIdx;
     int m_RunNumLaps;
     int m_ExpDecCnt;
