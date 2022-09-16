@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.6.7)  13 JUN 2022 12:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.7.4)  6 SEP 2022 17:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -153,16 +153,12 @@ File: babel.def 2020/02/14 3.40 Babel common definitions
 \bbl@readstream=\read2
 \bbl@dirlevel=\count178
 )
-Package babel Info: \l@british = using hyphenrules for english
-(babel)             (\language0) on input line 82.
-Package babel Info: \l@UKenglish = using hyphenrules for english
-(babel)             (\language0) on input line 83.
 Package babel Info: \l@canadian = using hyphenrules for english
 (babel)             (\language0) on input line 102.
-Package babel Info: \l@australian = using hyphenrules for english
-(babel)             (\language0) on input line 105.
-Package babel Info: \l@newzealand = using hyphenrules for english
-(babel)             (\language0) on input line 108.
+Package babel Info: \l@australian = using hyphenrules for ukenglish
+(babel)             (\language67) on input line 105.
+Package babel Info: \l@newzealand = using hyphenrules for ukenglish
+(babel)             (\language67) on input line 108.
 ))) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2020/01/20 v2.17e AMS math features
 \@mathmargin=\skip64
@@ -626,7 +622,7 @@ chapter 4.
 <figures/Software Development.png, id=152, 2381.89874pt x 3854.4pt>
 File: figures/Software Development.png Graphic file (type png)
 <use figures/Software Development.png>
-Package pdftex.def Info: figures/Software Development.png  used on input line 405.
+Package pdftex.def Info: figures/Software Development.png  used on input line 399.
 (pdftex.def)             Requested size: 256.07744pt x 414.33994pt.
 [9
 
@@ -642,50 +638,50 @@ chapter 6.
 <figures/camera_frame_00180.jpg, id=184, 722.7pt x 481.8pt>
 File: figures/camera_frame_00180.jpg Graphic file (type jpg)
 <use figures/camera_frame_00180.jpg>
-Package pdftex.def Info: figures/camera_frame_00180.jpg  used on input line 532.
+Package pdftex.def Info: figures/camera_frame_00180.jpg  used on input line 526.
 (pdftex.def)             Requested size: 157.91072pt x 105.26851pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 543--543
+Underfull \hbox (badness 10000) in paragraph at lines 537--537
 
  []
 
 <figures/camera_frame_00400.jpg, id=185, 722.7pt x 481.8pt>
 File: figures/camera_frame_00400.jpg Graphic file (type jpg)
 <use figures/camera_frame_00400.jpg>
-Package pdftex.def Info: figures/camera_frame_00400.jpg  used on input line 550.
+Package pdftex.def Info: figures/camera_frame_00400.jpg  used on input line 544.
 (pdftex.def)             Requested size: 157.91072pt x 105.26851pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 561--561
+Underfull \hbox (badness 10000) in paragraph at lines 555--555
 
  []
 
 <figures/camera_frame_00600.jpg, id=186, 722.7pt x 481.8pt>
 File: figures/camera_frame_00600.jpg Graphic file (type jpg)
 <use figures/camera_frame_00600.jpg>
-Package pdftex.def Info: figures/camera_frame_00600.jpg  used on input line 568.
+Package pdftex.def Info: figures/camera_frame_00600.jpg  used on input line 562.
 (pdftex.def)             Requested size: 157.91072pt x 105.26851pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 579--579
+Underfull \hbox (badness 10000) in paragraph at lines 573--573
 
  []
 
 <figures/camera_frame_00800.jpg, id=187, 722.7pt x 481.8pt>
 File: figures/camera_frame_00800.jpg Graphic file (type jpg)
 <use figures/camera_frame_00800.jpg>
-Package pdftex.def Info: figures/camera_frame_00800.jpg  used on input line 587.
+Package pdftex.def Info: figures/camera_frame_00800.jpg  used on input line 581.
 (pdftex.def)             Requested size: 157.91072pt x 105.26851pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 598--598
+Underfull \hbox (badness 10000) in paragraph at lines 592--592
 
  []
 
 <figures/camera_frame_01000.jpg, id=188, 722.7pt x 481.8pt>
 File: figures/camera_frame_01000.jpg Graphic file (type jpg)
 <use figures/camera_frame_01000.jpg>
-Package pdftex.def Info: figures/camera_frame_01000.jpg  used on input line 605.
+Package pdftex.def Info: figures/camera_frame_01000.jpg  used on input line 599.
 (pdftex.def)             Requested size: 157.91072pt x 105.26851pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 616--616
+Underfull \hbox (badness 10000) in paragraph at lines 610--610
 
  []
 
@@ -698,7 +694,7 @@ pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/thesis_pr
 <figures/implementation_concept_training_data_generation.drawio.pdf, id=207, 563.2242pt x 371.46779pt>
 File: figures/implementation_concept_training_data_generation.drawio.pdf Graphic file (type pdf)
 <use figures/implementation_concept_training_data_generation.drawio.pdf>
-Package pdftex.def Info: figures/implementation_concept_training_data_generation.drawio.pdf  used on input line 633.
+Package pdftex.def Info: figures/implementation_concept_training_data_generation.drawio.pdf  used on input line 627.
 (pdftex.def)             Requested size: 426.7914pt x 281.48523pt.
 
 
@@ -706,7 +702,7 @@ pdfTeX warning: pdflatex (file /home/fcvm/git/forgetful_drone/docs/TUB/thesis_pr
 <figures/implementation_concept_network_testing.drawio.pdf, id=208, 440.6061pt x 371.46779pt>
 File: figures/implementation_concept_network_testing.drawio.pdf Graphic file (type pdf)
 <use figures/implementation_concept_network_testing.drawio.pdf>
-Package pdftex.def Info: figures/implementation_concept_network_testing.drawio.pdf  used on input line 653.
+Package pdftex.def Info: figures/implementation_concept_network_testing.drawio.pdf  used on input line 647.
 (pdftex.def)             Requested size: 426.7914pt x 359.82452pt.
 [16 </home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/figures/implementation_concept_training_data_generation.drawio.pdf>]) [17 </home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/figures/implementation_concept_network_testing.drawio.pdf>] (/home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/DiplomarbeitProposal.bbl (/home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/DiplomarbeitProposal.brf)
 \tf@brf=\write5
@@ -771,18 +767,18 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 91.
  ) 
 Here is how much of TeX's memory you used:
- 12760 strings out of 483130
- 215258 string characters out of 5963884
- 604567 words of memory out of 5000000
- 27449 multiletter control sequences out of 15000+600000
+ 12758 strings out of 481239
+ 215238 string characters out of 5920378
+ 609253 words of memory out of 5000000
+ 27682 multiletter control sequences out of 15000+600000
  551119 words of font info for 69 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
+ 1141 hyphenation exceptions out of 8191
  53i,12n,72p,10171b,621s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1095.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1095.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0800.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsl1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2488.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/fcvm/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/DiplomarbeitProposal.pdf (23 pages, 1270879 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on /home/fcvm/git/forgetful_drone/docs/TUB/thesis_proposal/DiplomarbeitProposal.pdf (23 pages, 1373560 bytes).
 PDF statistics:
- 917 PDF objects out of 1000 (max. 8388607)
- 389 compressed objects within 4 object streams
+ 450 PDF objects out of 1000 (max. 8388607)
+ 375 compressed objects within 4 object streams
  71 named destinations out of 1000 (max. 500000)
  142 words of extra memory for PDF output out of 10000 (max. 10000000)
 

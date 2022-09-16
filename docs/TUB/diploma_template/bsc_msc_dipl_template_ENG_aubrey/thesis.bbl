@@ -1,10 +1,34 @@
 \begin{thebibliography}{10}
 
+\bibitem{Equinox}
+Visual drone inspection across different industries.
+\newblock
+  \url{https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{RobotAutonomy2}
+Lecture in principles of robot autonomy 2.
+\newblock {\em Autonomous Systems Lab of Stanford University}, 2022.
+
+\bibitem{Abuhasira}
+Dor Abuhasira.
+\newblock In 2022, percepto is bringing visual inspection automation to all.
+\newblock
+  \url{https://www.equinoxsdrones.com/blog/visual-drone-inspection-across-different-industries}.
+\newblock Accessed: 2021-11-30.
+
 \bibitem{Bengio1994}
 Y.~Bengio, P.~Simard, and P.~Frasconi.
 \newblock Learning long-term dependencies with gradient descent is difficult.
 \newblock {\em {IEEE} Transactions on Neural Networks}, 5(2):157--166, mar
   1994.
+
+\bibitem{Bircher2016}
+Andreas Bircher, Mina Kamel, Kostas Alexis, Helen Oleynikova, and Roland
+  Siegwart.
+\newblock Receding horizon path planning for 3d exploration and surface
+  inspection.
+\newblock {\em Autonomous Robots}, 42(2):291--306, nov 2016.
 
 \bibitem{Brookes2020}
 Mike Brookes.
@@ -13,6 +37,13 @@ Mike Brookes.
 \newblock URL:
   \url{http://www.ee.imperial.ac.uk/hp/staff/dmb/matrix/intro.html} (accessed
   on 08/07/2022).
+
+\bibitem{brunner2019urban}
+Gino Brunner, Bence Szebedy, Simon Tanner, and Roger Wattenhofer.
+\newblock The urban last mile problem: Autonomous drone delivery to your
+  balcony.
+\newblock In {\em 2019 international conference on unmanned aircraft systems
+  (icuas)}, pages 1005--1012. IEEE, 2019.
 
 \bibitem{Cho2014}
 Kyunghyun Cho, Bart van Merrienboer, Dzmitry Bahdanau, and Yoshua Bengio.
@@ -24,6 +55,33 @@ Kyunghyun Cho, Bart van Merrienboer, Dzmitry Bahdanau, and Yoshua Bengio.
 Junyoung Chung, Caglar Gulcehre, KyungHyun Cho, and Yoshua Bengio.
 \newblock Empirical evaluation of gated recurrent neural networks on sequence
   modeling, 2014.
+
+\bibitem{Cieslewski2017}
+Titus Cieslewski, Elia Kaufmann, and Davide Scaramuzza.
+\newblock Rapid exploration with multi-rotors: A frontier selection method for
+  high speed flight.
+\newblock In {\em 2017 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems ({IROS})}. {IEEE}, sep 2017.
+
+\bibitem{Cohn}
+Pamela Cohn, Alastair Green, Meredith Langstaff, and Melanie Roller.
+\newblock Commercial drones are here: The future of unmanned aerial systems.
+\newblock
+  \url{https://www.mckinsey.com/industries/travel-logistics-and-infrastructure/our-insights/commercial-drones-are-here-the-future-of-unmanned-aerial-systems}.
+\newblock Accessed: 2021-11-30.
+
+\bibitem{Dosovitskiy2017}
+Alexey Dosovitskiy, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen
+  Koltun.
+\newblock Carla: An open urban driving simulator.
+\newblock November 2017.
+
+\bibitem{Dunn}
+Jason Dunn.
+\newblock Drone use taking flight on small farms.
+\newblock
+  \url{https://www.munichre.com/topics-online/en/mobility-and-transport/drone-use-taking-flight-on-small-farms.html}.
+\newblock Accessed: 2021-11-30.
 
 \bibitem{Faessler2017}
 Matthias Faessler, Davide Falanga, and Davide Scaramuzza.
@@ -50,6 +108,15 @@ Fadri Furrer, Michael Burri, Markus Achtelik, and Roland Siegwart.
 \newblock {RotorS}{\textemdash}a modular gazebo {MAV} simulator framework.
 \newblock In {\em Studies in Computational Intelligence}, pages 595--625.
   Springer International Publishing, 2016.
+
+\bibitem{Giusti2016}
+Alessandro Giusti, Jerome Guzzi, Dan~C. Ciresan, Fang-Lin He, Juan~P.
+  Rodriguez, Flavio Fontana, Matthias Faessler, Christian Forster, Jurgen
+  Schmidhuber, Gianni~Di Caro, Davide Scaramuzza, and Luca~M. Gambardella.
+\newblock A machine learning approach to visual perception of forest trails for
+  mobile robots.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 1(2):661--667, jul
+  2016.
 
 \bibitem{Greff2017}
 Klaus Greff, Rupesh~K. Srivastava, Jan Koutnik, Bas~R. Steunebrink, and Jurgen
@@ -109,6 +176,11 @@ Elia Kaufmann, Antonio Loquercio, Rene Ranftl, Alexey Dosovitskiy, Vladlen
 \newblock Deep drone racing: Learning agile flight in dynamic environments.
 \newblock 2018.
 
+\bibitem{le2017data}
+Hoang~M Le, Peter Carr, Yisong Yue, and Patrick Lucey.
+\newblock Data-driven ghosting using deep imitation learning.
+\newblock 2017.
+
 \bibitem{LearnedMiller}
 Erik Learned-Miller.
 \newblock Vector, matrix, and tensor derivatives.
@@ -122,11 +194,60 @@ Minchen Li.
 \newblock {\em Dept. Comput. Sci., Univ. British Columbia, Vancouver, BC,
   Canada, Tech. Rep}, 2016.
 
+\bibitem{Lin2017}
+Yi~Lin, Fei Gao, Tong Qin, Wenliang Gao, Tianbo Liu, William Wu, Zhenfei Yang,
+  and Shaojie Shen.
+\newblock Autonomous aerial navigation using monocular visual-inertial fusion.
+\newblock {\em Journal of Field Robotics}, 35(1):23--51, jul 2017.
+
+\bibitem{Loianno2017}
+Giuseppe Loianno, Chris Brunner, Gary McGrath, and Vijay Kumar.
+\newblock Estimation, control, and planning for aggressive flight with a small
+  quadrotor with a single camera and {IMU}.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 2(2):404--411, apr
+  2017.
+
+\bibitem{Loquercio2018}
+Antonio Loquercio, Ana~I. Maqueda, Carlos~R. del Blanco, and Davide Scaramuzza.
+\newblock {DroNet}: Learning to fly by driving.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 3(2):1088--1095, apr
+  2018.
+
+\bibitem{Loquercio2018a}
+Antonio Loquercio and Davide Scaramuzza.
+\newblock Learning to control drones in natural environments: A survey.
+\newblock In {\em e ICRA Workshop on Perception, Inference, and Learning for
+  Joint Semantic, Geometric, and Physical Understanding}, number CONF, 2018.
+
+\bibitem{Mazur2016a}
+Micha? Mazur, Adam Wi?niewski, Jeffery McMillan, Vicki Huff, Richard Abadie,
+  Julian Smith, Stefan Stroh, Piotr Romanowski, Adam Kraso?, Filip Orli?ski,
+  Agnieszka Babicz, Paulina Lulkowska, Ewa Boguszewska, Bartosz Czerkies, Adam
+  G??b, Rozalia Ho?oga, Jakub Jagie??o, Weronika Jankowska-Tofani, Arkadiusz
+  Kramza, Sandra Kuprijaniuk, Remigiusz Piwowarski, Jacek Sygutowski, Grzegorz
+  Urban, Marek Walczak, Marek Wolski, and Ewa Zdrojowy.
+\newblock {\em Clarity from above}.
+\newblock PwC Poland, May 2016.
+
 \bibitem{Mellinger2011}
 Daniel Mellinger and Vijay Kumar.
 \newblock Minimum snap trajectory generation and control for quadrotors.
 \newblock In {\em 2011 {IEEE} International Conference on Robotics and
   Automation}. {IEEE}, may 2011.
+
+\bibitem{Mero2022}
+Luc~Le Mero, Dewei Yi, Mehrdad Dianati, and Alexandros Mouzakitis.
+\newblock A survey on imitation learning techniques for end-to-end autonomous
+  vehicles.
+\newblock {\em {IEEE} Transactions on Intelligent Transportation Systems},
+  pages 1--20, 2022.
+
+\bibitem{Meyer2012}
+Johannes Meyer, Alexander Sendobry, Stefan Kohlbrecher, Uwe Klingauf, and Oskar
+  von Stryk.
+\newblock Comprehensive simulation of quadrotor {UAVs} using {ROS} and gazebo.
+\newblock In {\em Simulation, Modeling, and Programming for Autonomous Robots},
+  pages 400--411. Springer Berlin Heidelberg, 2012.
 
 \bibitem{Minai1993}
 Ali~A. Minai and Ronald~D. Williams.
@@ -138,6 +259,17 @@ Mark~W. Mueller, Markus Hehn, and Raffaello D'Andrea.
 \newblock A computationally efficient algorithm for state-to-state quadrocopter
   trajectory generation and feasibility verification.
 \newblock pages 3480--3486, Tokyo, Japan, 2013. IEEE.
+
+\bibitem{MurArtal2015}
+Raul Mur-Artal, J.~M.~M. Montiel, and Juan~D. Tardos.
+\newblock {ORB}-{SLAM}: A versatile and accurate monocular {SLAM} system.
+\newblock {\em {IEEE} Transactions on Robotics}, 31(5):1147--1163, oct 2015.
+
+\bibitem{Nikolov2018}
+Artem Nikolov.
+\newblock Introduction into imitation learning.
+\newblock {\em Institute for Computational Linguistics, Heidelberg University},
+  2018.
 
 \bibitem{Parent}
 Rick Parent.
@@ -156,11 +288,54 @@ Ra{\'{u}}l Rojas.
 \newblock In {\em Neural Networks}, pages 149--182. Springer Berlin Heidelberg,
   1996.
 
+\bibitem{Rosen2019}
+Ellen Rosen.
+\newblock Skies aren?t clogged with drones yet, but don?t rule them out.
+\newblock {\em The New York Times}, March 2019.
+
+\bibitem{Ross2010}
+Stephane Ross, Geoffrey~J. Gordon, and J.~Andrew Bagnell.
+\newblock A reduction of imitation learning and structured prediction to
+  no-regret online learning, 2010.
+
+\bibitem{Ross2013}
+Stephane Ross, Narek Melik-Barkhudarov, Kumar~Shaurya Shankar, Andreas Wendel,
+  Debadeepta Dey, J.~Andrew Bagnell, and Martial Hebert.
+\newblock Learning monocular reactive {UAV} control in cluttered natural
+  environments.
+\newblock In {\em 2013 {IEEE} International Conference on Robotics and
+  Automation}. {IEEE}, may 2013.
+
 \bibitem{D.1966}
 D.~S., Milton Abramowitz, and Irene~A. Stegun.
 \newblock Handbook of mathematical functions with formulas, graphs, and
   mathematical tables.
 \newblock {\em Mathematics of Computation}, 20(93):167, jan 1966.
+
+\bibitem{Sa2018}
+Inkyu Sa, Mina Kamel, Michael Burri, Michael Bloesch, Raghav Khanna, Marija
+  Popovic, Juan Nieto, and Roland Siegwart.
+\newblock Build your own visual-inertial drone: A cost-effective and
+  open-source autonomous drone.
+\newblock {\em {IEEE} Robotics {\&} Automation Magazine}, 25(1):89--103, mar
+  2018.
+
+\bibitem{Sadeghi2016}
+Fereshteh Sadeghi and Sergey Levine.
+\newblock Cad2rl: Real single-image flight without a single real image.
+\newblock November 2016.
+
+\bibitem{Scaramuzza2014}
+Davide Scaramuzza, Michael~C. Achtelik, Lefteris Doitsidis, Fraundorfer
+  Friedrich, Elias Kosmatopoulos, Agostino Martinelli, Markus~W. Achtelik,
+  Margarita Chli, Savvas Chatzichristofis, Laurent Kneip, Daniel Gurdan, Lionel
+  Heng, Gim~Hee Lee, Simon Lynen, Marc Pollefeys, Alessandro Renzaglia, Roland
+  Siegwart, Jan~Carsten Stumpf, Petri Tanskanen, Chiara Troiani, Stephan Weiss,
+  and Lorenz Meier.
+\newblock Vision-controlled micro flying robots: From system design to
+  autonomous navigation and mapping in {GPS}-denied environments.
+\newblock {\em {IEEE} Robotics {\&} Automation Magazine}, 21(3):26--40, sep
+  2014.
 
 \bibitem{schmidhuber_2021}
 Jürgen Schmidhuber.
@@ -170,16 +345,63 @@ Jürgen Schmidhuber.
   \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed
   on 04/07/2022).
 
+\bibitem{Shah2017}
+Shital Shah, Debadeepta Dey, Chris Lovett, and Ashish Kapoor.
+\newblock {AirSim}: High-fidelity visual and physical simulation for autonomous
+  vehicles.
+\newblock In {\em Field and Service Robotics}, pages 621--635. Springer
+  International Publishing, nov 2017.
+
+\bibitem{Smolyanskiy2017}
+Nikolai Smolyanskiy, Alexey Kamenev, Jeffrey Smith, and Stan Birchfield.
+\newblock Toward low-flying autonomous {MAV} trail navigation using deep neural
+  networks for environmental awareness.
+\newblock In {\em 2017 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems ({IROS})}. {IEEE}, sep 2017.
+
 \bibitem{Song2020}
 Yunlong Song, Selim Naji, Elia Kaufmann, Antonio Loquercio, and Davide
   Scaramuzza.
 \newblock Flightmare: A flexible quadrotor simulator.
 \newblock September 2020.
 
+\bibitem{Taylor2017}
+Sarah Taylor, Taehwan Kim, Yisong Yue, Moshe Mahler, James Krahe,
+  Anastasio~Garcia Rodriguez, Jessica Hodgins, and Iain Matthews.
+\newblock A deep learning approach for generalized speech animation.
+\newblock {\em {ACM} Transactions on Graphics}, 36(4):1--11, jul 2017.
+
+\bibitem{thurau2004imitation}
+Christian Thurau, Christian Bauckhage, and Gerhard Sagerer.
+\newblock Imitation learning at all levels of game-ai.
+\newblock In {\em Proceedings of the international conference on computer
+  games, artificial intelligence, design and education}, volume~5, 2004.
+
 \bibitem{Yin2017}
 Wenpeng Yin, Katharina Kann, Mo~Yu, and Hinrich Schütze.
 \newblock Comparative study of cnn and rnn for natural language processing,
   2017.
+
+\bibitem{yue2018imitation}
+Yisong Yue and Hoang Le.
+\newblock Imitation learning tutorial.
+\newblock {\em Tutorial at ICML}, 2018:3, 2018.
+
+\bibitem{Zhu2017}
+Yuke Zhu, Roozbeh Mottaghi, Eric Kolve, Joseph~J. Lim, Abhinav Gupta,
+  Li~Fei-Fei, and Ali Farhadi.
+\newblock Target-driven visual navigation in indoor scenes using deep
+  reinforcement learning.
+\newblock In {\em 2017 {IEEE} International Conference on Robotics and
+  Automation ({ICRA})}. {IEEE}, may 2017.
+
+\bibitem{Ziebart2009}
+Brian~D. Ziebart, Nathan Ratliff, Garratt Gallagher, Christoph Mertz, Kevin
+  Peterson, J.~Andrew Bagnell, Martial Hebert, Anind~K. Dey, and Siddhartha
+  Srinivasa.
+\newblock Planning-based prediction for pedestrians.
+\newblock In {\em 2009 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems}. {IEEE}, oct 2009.
 
 \bibitem{Zimmermann2012}
 Hans-Georg Zimmermann, Christoph Tietz, and Ralph Grothmann.

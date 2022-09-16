@@ -5,53 +5,60 @@ The style file: plain.bst
 Database file #1: input/mybib.bib
 Warning--I didn't find a database entry for "oberheide:2008:cloudav"
 Warning--I didn't find a database entry for "latexcookbook2007"
+Warning--to sort, need author or key in Equinox
+Warning--to sort, need author or key in RobotAutonomy2
+Warning--empty author in RobotAutonomy2
 Warning--empty journal in Brookes2020
 Warning--empty journal in Cho2014
+Warning--empty journal in Dosovitskiy2017
 Warning--empty journal in Hinton2012
 Warning--empty journal in osti_5675197
 Warning--empty journal in Kaufmann2018
+Warning--empty journal in le2017data
+Warning--there's a number but no series in Loquercio2018a
 Warning--empty booktitle in Mueller2013
 Warning--empty year in Parent
+Warning--empty journal in Sadeghi2016
 Warning--empty journal in Song2020
-You've used 31 entries,
+You've used 64 entries,
             2118 wiz_defined-function locations,
-            697 strings with 9370 characters,
-and the built_in function-call counts, 10272 in all, are:
-= -- 1010
-> -- 489
-< -- 6
-+ -- 199
-- -- 162
-* -- 683
-:= -- 1697
-add.period$ -- 100
-call.type$ -- 31
-change.case$ -- 172
+            875 strings with 16979 characters,
+and the built_in function-call counts, 23607 in all, are:
+= -- 2217
+> -- 1460
+< -- 12
++ -- 589
+- -- 514
+* -- 1772
+:= -- 3976
+add.period$ -- 208
+call.type$ -- 64
+change.case$ -- 446
 chr.to.int$ -- 0
-cite$ -- 39
-duplicate$ -- 399
-empty$ -- 796
-format.name$ -- 162
-if$ -- 2154
+cite$ -- 79
+duplicate$ -- 803
+empty$ -- 1640
+format.name$ -- 514
+if$ -- 4818
 int.to.chr$ -- 0
-int.to.str$ -- 31
-missing$ -- 29
-newline$ -- 158
-num.names$ -- 62
-pop$ -- 218
+int.to.str$ -- 64
+missing$ -- 58
+newline$ -- 324
+num.names$ -- 124
+pop$ -- 543
 preamble$ -- 1
-purify$ -- 143
+purify$ -- 385
 quote$ -- 0
-skip$ -- 294
+skip$ -- 558
 stack$ -- 0
-substring$ -- 565
-swap$ -- 84
-text.length$ -- 6
+substring$ -- 1074
+swap$ -- 158
+text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 120
-warning$ -- 8
-while$ -- 95
-width$ -- 33
-write$ -- 326
-(There were 10 warnings)
+type$ -- 250
+warning$ -- 15
+while$ -- 188
+width$ -- 66
+write$ -- 675
+(There were 17 warnings)

@@ -571,11 +571,11 @@ the above compositions are expected to also approximately invert each other with
 %
 The ANN module performs the function of making navigation decisions
 within the autonomous navigation method.
-Figure \ref{fig:perception_and_reasoning} shows the module's information flow.
-The module infers its decisions exclusively 
+Figure \ref{fig:perception_and_reasoning} shows the 
+information flow of this decision making process.
+The ANN module infers its decisions exclusively 
 on the basis of preprocessed data from sensors onboard the drone.
-It comprises the five submodules named
-CNN, CAT, GRU, FC and HEAD.
+It comprises the five submodules named CNN, CAT, GRU, FC and HEAD.
 This modular design enables a high flexibility for the experiments
 with the different ANN module variants in chapter \ref{maintwo}.
 All variants have in common that,
@@ -586,13 +586,11 @@ The latter ensures the minimum functionality of the ANN module
 of extracting visual features of the preprocessed 
 RGB images from the drone's onboard camera
 and mapping them to navigation decisions.
-The variants differ in that
+The variants can differ in that
 the user specifies the design parameters of 
-all (inner and outer) individual submodules.
-This includes, among other things, the de-/activation 
-of individual inner submodules 
-(CAT, GRU and FC).
-A deactivated inner submodule recedes to the identity map.
+the (inner and outer) individual submodules.
+This can include the deactivation (reduction to the identity map)
+of the individual inner submodules (CAT, GRU and FC).
 The inner submodules perform the functions of
 inputting optional features (CAT),
 extracting temporal features (GRU)
@@ -602,42 +600,44 @@ and increasing the general complexity of the ANN module (FC).
     \centering
     \includegraphics[width=1.0\textwidth]{own/ann_module.drawio.pdf}
     \caption[
-        Perception and Reasoning
+        Information flow of the navigation decision making
     ]{
-        Perception and Reasoning
+        Information flow of the navigation decision making
     \label{fig:perception_and_reasoning}
     }
 \end{figure}
 
 
-The ANN module is trained with supervised learning on
-batches whose elements are randomly sampled from training data
-of sequential samples.
-The user specifies
-the batch size 
-$
-    \batchSize \in \setOfAllPosInts
-$ 
-and the sequence length 
-$
-    \seqLen \in \setOfAllPosInts
-$
-of the training samples 
-for the individual ANN module variant.
+The ANN module learns by
+imitation with dataset aggregation
+(see section \ref{sec:imitation_learning} for background).
+Thereby, the dataset is aggregated from samples demonstrated by the expert
+system (see section \ref{sec:expert_system}).
+Each sample is a pair of an input sequence and a single lable.
+For the individual ANN variant,
+the user specifies the sequence length of the samples
+\begin{equation} \label{eq:seq_len}
+    \seqLen \in \setOfAllPosInts.
+\end{equation}
+The ANN module is trained on
+batches of the aggregated dataset with supervised learning.
+The user specifies the batch size
+\begin{equation}
+    \batchSize \in \setOfAllPosInts.
+\end{equation}
 The submodules prior to the GRU submodule (CNN and CAT)
-have no awareness of sequential connections 
-and, thus, process sequence elements in parallel like batch elements.
-The GRU submodule,
-which has the sequential awareness,
-operates in many-to-one mode, i.e.,
-each input sequence of feature vectors is mapped to a 
+have no sequential awareness and, thus, 
+process sequence elements in parallel like batch elements.
+In contrast, the GRU submodule
+operates in many-to-one mode,
+whereby each input sequence of feature vectors is mapped to a 
 single non-sequential output feature vector.
 The subsequent submodules (FC and HEAD)
 then process batches of non-sequential data, 
 as is common in conventional feedforward networks.
 In this sense,
 the GRU submodule is mandatory in case the user specifies
-$\seqLen > 1$ for the training data.
+$\seqLen > 1$ for the samples of the training dataset.
 
 At racing,
 when the autonomous navigation method flies the drone through the racetrack,
@@ -723,7 +723,7 @@ The available optional input features are
 The user-activated optional inputs are stacked into the optional input vector
 before being fed to the CAT submodule.
 For example, the fully activated optional input vector is
-\begin{align}
+\begin{align} \label{eq:opt_inp_vec}
     \optFeatVec{} =
     \begin{bmatrix}
         \rawRGBTimeStep \\
@@ -1140,7 +1140,7 @@ $\waypIRS \in \setR{\text{-}1,1}$
 in the image reference system
 (see fig. \ref{fig:image_reference_system}).
 A control command 
-\begin{equation}
+\begin{equation} \label{eq:head_ctrl_cmd}
     \headCtrlCmd
 \end{equation}
 comprises the desired angular velocity
@@ -1286,7 +1286,7 @@ the planning module takes the following 5 steps
 to re-compute its local trajectory.
 \begin{enumerate}
     \item Compute the desired speed
-    \begin{equation}
+    \begin{equation} \label{eq:planning_des_speed}
         \speed[]{\drone}{\desired}{}{}
         = 
         \maxof{

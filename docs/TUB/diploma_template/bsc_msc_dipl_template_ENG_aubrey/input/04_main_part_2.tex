@@ -1,11 +1,10 @@
-\chapter{Experiments}
+\chapter{Experiments in Simulation}
 \label{maintwo}
 
-\section{Simulation Setup}
+\section{Simulation Setup} \label{sec:sim_setup}
 The experiments of this thesis 
 are conducted in a drone racing simulation,
-which includes the drone,
-the gates constituting the racetrack
+which comprises the drone, the gates that constitute the racetrack
 and the scenery.
 The implementation of the simulation
 is devided into physics modelling and image rendering
@@ -26,7 +25,7 @@ The Gazebo\footnote{
 } 
 simulator is deployed to model the physics with high accuracy.
 This includes the drone's dynamics and
-potential collisions of the drone with the gates.
+possible collisions of the drone and the gates.
 The RotorS \cite{Furrer2016} plugin
 actuates the drone model with the inputted motor speed commands
 and outputs the drone state estimate, the motor speed estimate and the data 
@@ -35,21 +34,21 @@ from the drone's IMU unit.
 %The 
 
 The Flightmare \cite{Song2020} simulator is deployed to render 
-images that are almost photo-realistic.
+RGB images that are almost photo-realistic.
 At a user-specified frequency,
 the Flightlib interface
-updates the drone's pose, and therewith its onboard camera,
+updates the drone's pose, and therewith the drone's onboard camera,
 within the Unity\footnote{
     \url{https://unity.com/}, visited on 20/08/2022
 } Engine and fetches an RGB image from the onboard camera.
 The Unity Engine is built from a Unity project
-that integrates the functionalities of the RPG Flightmare Unity Project\footnote{
+that bases on the RPG Flightmare Unity Project\footnote{
     \url{https://github.com/uzh-rpg/flightmare_unity}, visited on 20/08/2022
 }.
-The Unity project of this thesis 
-and entails five scenes named
+The Unity project
+entails five scenes named
 spaceship interior\footnote{
-    based on the "3D Free Modular Kit" from the Unity Asset Store
+    based on "3D Free Modular Kit" from the Unity Asset Store
 },
 destroyed city\footnote{
     based on "Destroyed City FREE" from the Unity Asset Store
@@ -64,9 +63,9 @@ and desert mountain\footnote{
     based on "Free Island Collection" from the Unity Asset Store
 }
 (see figure \ref{fig:unity_scenes}).
-Each scene has three sites (A, B, C) to locate a racetrack.
+Each scene has three sites (A, B, C) to place a racetrack.
 Two different gate covers, 
-one with TU Berlin/DAI-Labor and one with Tsinghua University/DME logos, 
+one with TU Berlin/DAI-Labor logos and the other with Tsinghua University/DME logos, 
 are available (see figure \ref{fig:unity_gates}).
 \begin{figure}[h]
     \centering
@@ -139,7 +138,7 @@ Second, it fetches the RGB images from the Flightmare simulator
 and makes them available as output.
 Third, it setups the simulation
 as requested by the inputted 
-simulation configuration.
+simulation configuration as follows.
 
 The simulation configuration specifies the scene
 (spaceship interior,
@@ -150,22 +149,24 @@ desert mountain)
 , the site (A, B, C),
 the gate cover (TUB-DAI or THU-DME) and the racetrack configuration.
 The racetrack configuration, in turn, specifies 
-the type (figure-8 or gap), the generation (deterministic or randomized) 
-and the direction (clockwise or counterclockwise).
+the racetrack type (figure-8 or gap), the racetrack generation (deterministic or randomized) 
+and the racetrack direction (clockwise or counterclockwise).
 The Forgetful Simulator, 
 which stores the data of the deterministic, 
 counterclockwise gate poses
 of the available racetrack types (see table \ref{tab:gate_pos}), 
-processes the simulation configuration as shown in figure
+processes the racetrack configuration as shown in figure
 \ref{fig:racetrack_comp}.
-
-If it was specified, randomize the stored gate poses of the specified racetrack type
-with the following steps.
+If specified,
+the generation of the racetrack is randomized.
+The randomization starts from 
+the stored gate poses of the specified racetrack type
+and includes the following steps.
 \begin{enumerate}
-    \item This step applies only to the gap racetrack type
+    \item This step only applies to the gap racetrack type
     as it explicitely randomizes the gap distance.
     Sample the y-position values 
-    of the gates \#3 -6 from the uniform real distribution
+    of the gates \#3-6 from the uniform real distribution
     over the intervals specified in table \ref{tab:gate_pos}.
     
     \item Shift the gate positions along the $x$-, $y$- and $z$-axis
@@ -192,19 +193,21 @@ with the following steps.
         -\dist[\user]{\text{sim}}{\text{twist},\mxm}{}{},
         \dist[\user]{\text{sim}}{\text{twist},\mxm}{}{}\right]$.
 \end{enumerate}
-Then, if it was specified, redirect the gate poses from counterclockwise to clockwise.
-Compute the drone's starting pose to face towards the last gate
-and to be located between
-the second last and the last gate.
-The Forgetful Simulator loads the specified scene and site in 
-the Flightmare Simulator
-and spawns the drone model 
+Further, if specified, the gate poses
+are redirected from counterclockwise to clockwise.
+The drone's start position is computed so that
+the drone is located 
+between the second last and the last gate
+and faces towards the last gate.
+After processing the racetrack configuration,
+the Forgetful Simulator loads the specified scene and site in 
+the Flightmare Simulator and spawns the drone model 
 and the gate models (with the specified cover)
 at the computed poses
 in both, the Flightmare and the Gazebo, simulator.
 Finally, the Forgetful Simulator
 outputs the computed initial drone and gate poses,
-which are required by, e.g., the expert system.
+which for example are required by the expert system.
 
 
 
@@ -271,14 +274,16 @@ which are required by, e.g., the expert system.
         %}
     }
     \caption[
-        Computation of the racetrack
+        Processing of the racetrack configuration
     ]{
-        Computation of the racetrack for
+        Processing of the racetrack configuration for
         the figure-8 (left) 
         and the gap (right) racetrack type.
-        In the xy-plane, the drone's starting pose (arrow) and the gate poses (numbered bars)
+        In the xy-plane, the drone's starting pose (arrow) and the gate poses 
+        (numbered bars)
         are depicted before (grey) and after (blue) the individual processing step.
-        The randomizing processing step exclusive to the gap racetrack is not shown.
+        The randomizing processing step, which is exclusive to the gap racetrack type,
+        is not shown.
         \label{fig:racetrack_comp}
     }
 \end{figure}
@@ -297,7 +302,7 @@ which are required by, e.g., the expert system.
     %\hline
     %\multicolumn{3}{|c|}{Team sheet} \\
     \hline
-    racetrack & gate & x & y & z & yaw\\ 
+    Racetrack & Gate & x & y & z & yaw\\ 
     \hline
     \hline
     \multirow{14}{*}{Figure-8}   
@@ -341,39 +346,40 @@ which are required by, e.g., the expert system.
 \section{ANN Module Variants}
 In the experiments, several
 variants of the ANN module (see section \ref{sec:ann_module})
-are examined for their performance.
-Table \ref{tab:ann_module_variants} shows the variant configurations
-with respect to the input, output and the 
+are examined for their racing performance.
+Table \ref{tab:ann_module_variants} shows these variants
+and their configurations.
+The configuration of a variant
+is structured into
+input, output and the 
 CNN, GRU, FC, and HEAD submodule.
+
 The input configuration includes:
-the sequence length $\seqLen$ of the samples the variant is trained on,
-the resize factor $\resizeFact$ of the image preprocessing (see equ. ??)
+the sequence length $\seqLen$ of the training samples 
+(see equ. \ref{eq:seq_len}),
+the resize factor $\resizeFact$ 
+of the image preprocessing (see equ. \ref{eq:rgb_preproc})
 as well as the switchable optional inputs
 $\rawRGBTimeStep$, 
 $(\IMULinAcc,\IMUAngVel)$
 and
-$\IMUTimeStep$ (see ...).
-The output configuration includes
-the two options of navigation decisions 
-$\headNavDec$
-and control commands 
-$\headCtrlCmd$ (see section ...).
-For the CNN, GRU, FC and HEAD configuration
+$\IMUTimeStep$ (see equ. \ref{eq:opt_inp_vec}).
+The output configuration includes:
+navigation decision
+$\headNavDec$ (see equ. \ref{eq:head_nav_dec})
+and control command
+$\headCtrlCmd$ (see equ. \ref{eq:head_ctrl_cmd}).
+For the
+configurations regarding the CNN, GRU, FC and HEAD submodules,
 see the corresponding paragraphs in section \ref{sec:ann_module}. 
 
 
-All of the examined variants have three configurational aspects in common.
-First, all available optional inputs are activated.
-Second, navigation decisions are selected as output option.
-Third, the CNN submodule implements the backbone of the ResNet18 PyTorch implementation
-whose parameters are trainable and pretrained on ImageNet !!!.
-The ResNet18 contains 18 layers and has ... trainable parameters ...
-
-
-
-
-
-
+%All of the examined variants have three configurational aspects in common.
+%First, all available optional inputs are activated.
+%Second, navigation decisions are selected as output option.
+%Third, the CNN submodule implements the backbone of the ResNet18 PyTorch implementation
+%whose parameters are trainable and pretrained on ImageNet !!!.
+%The ResNet18 contains 18 layers and has ... trainable parameters ...
 
 \newcommand{\numColumns}{5}
 \begin{table}[h]
@@ -406,6 +412,13 @@ The ResNet18 contains 18 layers and has ... trainable parameters ...
 %https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation
 %https://ai.stackexchange.com/questions/23482/are-mult-adds-and-flops-equivalent
 %https://github.com/TylerYep/torchinfo
+
+Table \ref{tab:ann_module_variants_nparams}
+shows the number of trainable and non-trainable parameters 
+as well as multiply-accumulate operations.
+
+
+For each variant, the num
 \begin{table}[h]
     \caption{ANN module variants: 
         number of trainable and non-trainable parameters 
@@ -440,7 +453,95 @@ The ResNet18 contains 18 layers and has ... trainable parameters ...
     \end{tabular}
 \end{table}
 
-\section{Data Generation and Training}
-The 
+\section{Data Generation and Training} \label{sec:training}
+The training of the ANN submodule
+for autonomous racing is considered 
+an imitation learning problem.
+The ANN submodule variants
+(see table \ref{tab:ann_module_variants})
+are trained with dataset aggregation,
+which is a type of interactive direct policy learning
+for imitation learning (see section \ref{sec:imitation_learning}).
+Thereby, the interactive expert system (see section \ref{sec:expert_system})
+demonstrates the desired behaviour.
+For the imitation learning problem,
+the user specifies a set of 
+simulation configurations (see section \ref{sec:sim_setup}),
+a set of maximum drone speeds (see equ. \ref{eq:planning_des_speed})
+a set of pairs of a margin and a threshold expert intervention share.
+For every simulation configuration,
+every maximum drone speed 
+and every margin-threshold shair pair in the specified sets,
+the following iterative method is carried out.
+\begin{enumerate}
+    \item Run the simulation with the current simulation configuration.
+    \item Set the drone's maximum speed to the current maximum speed.
+    \item Compute the global trajectory of the expert system.
+    \item Roll out the ANN submodule with the interactive expert system
+    until the drone completes one round of the racetrack.
+    At the main frequency, the following steps are taken.
+    \begin{enumerate}
+        \item The ANN module makes a navigation decision.
+        \item The planning module computes the corresponding local trajectory.
+        \item If the end position of the local trajectory 
+        is more distant from the expert's global trajectory 
+        than the current margin,
+        the expert system intervenes by demonstrating a navigation decision,
+        whereupon the planner recomputes the local trajectory.
+        \item The local trajectory is forwarded to the control stack,
+        where it is tracked at a higher frequency.
+    \end{enumerate}
+    \item For every expert intervention, 
+    add a sample to the training dataset.
+    The sample comprises the expert navigation decision as a label
+    and the corresponding sequence of inputs.
+    The sequence starts $\seqLen$ timesteps back in time and
+    ends at the time step of the label, where $\seqLen$
+    is the user-specified sequence length for the ANN variant.
+    Record the share of the expert's navigation decisions 
+    in the total navigation decisions made during the rollout.
+    \item Train the ANN variant on the 
+    aggregated training dataset with supervised learning
+    for a user-specified number of epochs.
+    \item If the recorded expert intervention share is less
+    than the current threshold share, go to the next 
+    tuple of simulation configuration, maximum drone speed and
+    margin-threshold pair. Else, repeat the steps for the current tuple.
+\end{enumerate}
 
 \section{Racing Tests}
+After completing the iterative imitation learning,
+the ANN module variants are tested.
+The user specifies a set of 
+simulation configurations and
+a set of maximum drone speeds.
+For every simulation configuration
+and every maximum drone speed,
+the autonomous navigation method flies the drone through the racetrack.
+In contrast to the imitation learning process,
+the expert system does not intervene.
+Further, the randomized racetracks are precomputed
+in order to increase comparability
+between the ANN module variants.
+For each tuple of simulation configuration and maximum speed,
+the following is recorded:
+\begin{enumerate}
+    \item racetrack completion, i.e., 
+    whether the drone completed the racetrack by traversing all gates without crashing.
+    \item trajectory, i.e., the time-stamped positions the drone traveled.
+\end{enumerate}
+For the evaluation, 
+the racetrack completions over multiple simulation configurations
+and maximum speeds can be expressed as a racetrack completion percentage.
+This percentage 
+is an indicator 
+of how robust the method of autonomous navigation 
+with the ANN module variant is for a given setup.
+The recorded trajectories can be used to measure the 
+optimality
+with respect to, e.g., jerk, snap or time,
+induced by the ANN module variant.
+
+
+
+
