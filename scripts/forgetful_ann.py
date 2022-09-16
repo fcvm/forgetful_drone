@@ -183,6 +183,9 @@ class ForgetfulANN (torch.nn.Module):
         
         backbone: Callable[[torch.nn.Module], torch.nn.Sequential]\
             = lambda tm : torch.nn.Sequential(*list(tm.children())[:-1])
+        
+        rmchild: Callable[[torch.nn.Module, int], torch.nn.Sequential]\
+            = lambda m, n : torch.nn.Sequential(*list(m.children())[:-1-n], list(m.children())[-1])
 
         tm = torchvision.models
         pt = pretrained
@@ -193,6 +196,7 @@ class ForgetfulANN (torch.nn.Module):
             'efficientnet_b0': (backbone(tm.efficientnet_b0(pretrained=pt)), 1280),
             'efficientnet_b5': (backbone(tm.efficientnet_b5(pretrained=pt)), 2048),
             'mobilenet_v3_small': (backbone(tm.mobilenet_v3_small(pretrained=pt)), 576),
+            'resnet18_first3': (rmchild(backbone(tm.resnet18(pretrained=pt)), 1), 256),
             #"convnext_tiny": (backbone(tm..convnext_tiny(pretrained=pt), 576),
         }
 
@@ -200,10 +204,15 @@ class ForgetfulANN (torch.nn.Module):
             self.CNN, self.config['cnn']['output_size'] = cnn_model_output_size_dict[torchvision_model_id]
         except:
             raise ValueError(f"Unknown torchvision model ID: {torchvision_model_id}.")
+        # only first three layers
+        #self.CNN = torch.nn.Sequential(*list(self.CNN.children())[:-3], list(self.CNN.children())[-1])
+        #self.config['cnn']['output_size'] = 128#256
 
-         # Set the model parameters to trainable or frozen
+        # Set the model parameters to trainable or frozen
         for p in self.CNN.parameters():
             p.requires_grad = trainable
+        
+        #list(self.CNN.children())[-2].requires_grad_(True)
         #list(list(self.CNN.children())[-2].children())[-1].requires_grad_(True)
 
         self.addToConsoleRepresentation('|  CNN  |'\

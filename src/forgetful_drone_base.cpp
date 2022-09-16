@@ -31,7 +31,7 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_SUB__fbOutput         {m_rosRNH.subscribe("brain/output", 1, &ForgetfulDrone::CB__fbOutput, this)},
     m_PUB__fbTrigger   {m_rosRNH.advertise     <std_msgs::Empty>          ("brain/trigger_inference", 0)},
     m_SCL__fbExpment        {m_rosRNH.serviceClient <forgetful_drones::String> ("brain/init_experiment")},
-    m_SCL__fbBuild       {m_rosRNH.serviceClient <forgetful_drones::String> ("brain/build_run")},
+    m_SCL__fbBuild       {m_rosRNH.serviceClient <forgetful_drones::BuildRun> ("brain/build_run")},
     m_SCL__fbTrain     {m_rosRNH.serviceClient <forgetful_drones::Int>    ("brain/start_training")},
     m_SCL__fbInfer     {m_rosRNH.serviceClient <forgetful_drones::Float>  ("brain/start_inference")},
 
@@ -85,6 +85,7 @@ ForgetfulDrone::ForgetfulDrone (const ros::NodeHandle& rnh, const ros::NodeHandl
     m_RunIdx {0},
     m_DroneLaunched {false},
     m_RGBCnt {0},
+    m_NotSavedCnt {0},
     m_LapIdx {-1}
 {
     if (initROSParameters () && initTrafoArf2Wrf ()) {
@@ -299,7 +300,7 @@ bool ForgetfulDrone::initROSParameters () {
         {"NAV_INPUTPERTURBATION_ELEMENTWISEAMP", &p_NAV_INPUTDISTURBAMP},
         {"RVIZ_LOCTRAJ_SAMPLINGDURATION", &p_RVIZ_LOCAL_TRAJECTORY_DURATION},
         {"RVIZ_LOCTRAJ_SAMPLINGFREQUENCY", &p_RVIZ_LOCAL_TRAJECTORY_SAMPLING_FREQUENCY},
-        {"DAGGER_EXPIVSHARE_THRESHOLD", &p_EIS_THRSH},
+        //{"DAGGER_EXPIVSHARE_THRESHOLD", &p_EIS_THRSH},
     };
 
     // String
@@ -318,6 +319,9 @@ bool ForgetfulDrone::initROSParameters () {
         && fetchROSArrayParameter ("ARF_POSE_WRF",           p_ARF_POSE_WRF,    m_rosRNH, false)
         && fetchROSArrayParameter ("MAX_SPEEDS",     p_MAXSPEEDS,       m_rosRNH, false)
         && fetchROSArrayParameter ("DAGGER_MARGINS",   p_DAGGERMARGINS,   m_rosRNH, false)
+        && fetchROSArrayParameter ("DAGGER_EXPIVSHARE_THRESHOLD",   p_EXPINTVSHARES,   m_rosRNH, false)
+
+        
         && fetchROSParameters (m_rosRNH, kd_bool, kd_int, kd_dbl, kd_str, /*log_enabled*/ false);
 }
 
@@ -910,6 +914,7 @@ void ForgetfulDrone::newRunReset () {
     m_LocTraj = {Vec3(), Vec3(), Vec3(), Vec3()};
     m_LocTraj_t0 = {};
     m_RGBCnt = 0;
+    m_NotSavedCnt = 0;
     m_SaveEnabled = false;
 }
 
@@ -1267,6 +1272,9 @@ void ForgetfulDrone::runMission_DAGGER () {
 
     m_RunIdx = 0;
     
+
+    for (size_t ii = 0; ii < p_DAGGERMARGINS.size (); ii++)
+    //for (const double& dagger_margin : p_DAGGERMARGINS)
     for (const int& unity_scene      : p_SCENES)
     for (const int& scene_site       : p_SITES)
     for (const int& track_type       : p_TRACK_TYPES)
@@ -1274,7 +1282,7 @@ void ForgetfulDrone::runMission_DAGGER () {
     for (const int& track_direc      : p_TRACK_DIRECS)
     for (const int& gate_type        : p_GATES) 
     for (const double& max_speed     : p_MAXSPEEDS)
-    for (const double& dagger_margin : p_DAGGERMARGINS) {
+    {
         
         m_SceneIdx      = static_cast <uint8_t> (unity_scene);
         m_SiteIdx       = static_cast <uint8_t> (scene_site);
@@ -1283,11 +1291,12 @@ void ForgetfulDrone::runMission_DAGGER () {
         m_TrackDirecIdx = static_cast <uint8_t> (track_direc);
         m_GateIdx       = static_cast <uint8_t> (gate_type);
         m_MaxSpeed      = max_speed;
-        m_DaggerMargin  = dagger_margin;
+        m_DaggerMargin  = p_DAGGERMARGINS [ii];
 
         m_RunRepIdx = 0;
         bool repeat_run {true};
 
+        bool track_completed {false};
         while (repeat_run) {
             playAudio ("Start run " + std::to_string (m_RunIdx));
 
@@ -1297,7 +1306,7 @@ void ForgetfulDrone::runMission_DAGGER () {
                 m_NavInputDisturbed = true;
             }
             else {
-                m_DaggerMargin = dagger_margin;
+                m_DaggerMargin = p_DAGGERMARGINS [ii];
                 m_RunNumLaps = p_RUN_NUMLAPS;
                 m_NavInputDisturbed = false;
             }
@@ -1305,14 +1314,14 @@ void ForgetfulDrone::runMission_DAGGER () {
             logRunInfo ();
             newRunReset ();
 
-
+            
             if (BuildRecorded (RunID ())) {
                 ROSINFO ("Run \"" << RunID () << "already recorded");
 
                 double eis = readExpIvShare (m_RunIdx);
                 ROSINFO ("Expert intervention share: " << 100 * eis 
-                    << " %   (threshold " << 100 * p_EIS_THRSH << " %)");
-                if (eis > p_EIS_THRSH) m_RunRepIdx ++;
+                    << " %   (threshold " << 100 * p_EXPINTVSHARES [ii] << " %)");
+                if (eis > p_EXPINTVSHARES [ii]) m_RunRepIdx ++;
                 else repeat_run = false;
                 
                 m_RunIdx ++;
@@ -1332,12 +1341,17 @@ void ForgetfulDrone::runMission_DAGGER () {
             startSim ();
             rvizGloTraj ();
 
+            if (!carryDroneBack ()) {
+                ROS_ERROR ("Failed to carry drone back");
+                ros::shutdown ();
+            }
+
             if (!launchDrone ()) {
                 ROS_WARN ("Drone failed to launch -> repeat run");
                 stopSimulation ();
                 continue;
             }
-            if (!flyDroneToInitPose (true)) {
+            if (!flyDroneToInitPose (false)) {
                 ROS_WARN ("Drone failed to arrive at start -> repeat run");
                 stopSimulation ();
                 continue;
@@ -1356,18 +1370,15 @@ void ForgetfulDrone::runMission_DAGGER () {
                 }
             }
 
-            bool track_completed = startNavigation ();
+            track_completed = startNavigation ();
             stopSimulation ();
-            if (!carryDroneBack ()) {
-                ROS_ERROR ("Failed to carry drone back");
-                ros::shutdown ();
-            }
 
-            if (track_completed) {
+            //if (track_completed) {
                 
                 playAudio ("Build run");
-                forgetful_drones::String srv0;
+                forgetful_drones::BuildRun srv0;
                 srv0.request.data = RunID ();
+                srv0.request.crashed = !track_completed;
                 callRosSrv (ROS_LOG_PREFIX, m_SCL__fbBuild, srv0);
 
                 playAudio ("Start training");
@@ -1378,17 +1389,18 @@ void ForgetfulDrone::runMission_DAGGER () {
                 
                 double eis = readExpIvShare (m_RunIdx);
                 ROSINFO ("Last run's expert intervention share: " << 100 * eis 
-                    << " %   (threshold " << 100 * p_EIS_THRSH << " %)");                
+                    << " %   (threshold " << 100 * p_EXPINTVSHARES [ii] << " %)");                
                 
 
-                repeat_run = (eis > p_EIS_THRSH);
+                repeat_run = (eis > p_EXPINTVSHARES [ii]);
+                if (!track_completed) repeat_run = true;
                 m_RunRepIdx ++;
                 m_RunIdx ++;
-            } else {
-                playAudio ("Race track not completed. Delete data and repeat run.");
-                ROSINFO ("Race track not completed. Delete data and repeat run.");
-                std::experimental::filesystem::remove_all (_exp_dat_raw_rid_ ());
-            }
+            //} else {
+            //    playAudio ("Race track not completed. Delete data and repeat run.");
+            //    ROSINFO ("Race track not completed. Delete data and repeat run.");
+            //    std::experimental::filesystem::remove_all (_exp_dat_raw_rid_ ());
+            //}
         }
     }
 }
@@ -1757,11 +1769,11 @@ void ForgetfulDrone::expIntervention (Eigen::Vector3d& wayp_ARF, double& speed, 
             += Eigen::Vector3d::Ones() * p_NAV_INPUTDISTURBAMP * std::sin (0.5 * ros::WallTime::now ().toSec ());    
         
         procNavInput (wayp_ARF, speed);
-        if (m_LapIdx >= 0) m_ExpDecCnt++;
+        if (m_SaveEnabled) m_ExpDecCnt++;
         intervened = true;
 
     } else {
-        if (m_LapIdx >= 0) m_ANNDecCnt++;
+        if (m_SaveEnabled) m_ANNDecCnt++;
         intervened = false;
     }
 }
@@ -2319,9 +2331,16 @@ void ForgetfulDrone::saveOdometry () {
 void ForgetfulDrone::runDataSaver (const bool& expert_intervened) {
     
     // start saving data after passing the first gate
-    if (!m_SaveEnabled && m_CurrGateIdx == 0) {
-        m_SaveEnabled = true;
-        ROSINFO("Data saving enabled");
+    //if (!m_SaveEnabled && m_CurrGateIdx == 0) {
+    //    m_SaveEnabled = true;
+    //    ROSINFO("Data saving enabled");
+    //} if (!m_SaveEnabled) return;
+
+    if (!m_SaveEnabled) {
+        if (m_NotSavedCnt++ > 50) {
+            m_SaveEnabled = true;
+            ROSINFO("Data saving enabled");
+        }
     } if (!m_SaveEnabled) return;
 
     // save rgb

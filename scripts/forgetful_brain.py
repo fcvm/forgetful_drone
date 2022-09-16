@@ -485,7 +485,7 @@ class ForgetfulBrain:
         # ROS
         #  - service servers
         self.srv_initExp = rospy.Service ("brain/init_experiment", fdsrv.String, self.cb_initExp)
-        self.srv_buildRun = rospy.Service ("brain/build_run", fdsrv.String, self.cb_buildRun)
+        self.srv_buildRun = rospy.Service ("brain/build_run", fdsrv.BuildRun, self.cb_buildRun)
         self.srv_startTrain = rospy.Service ("brain/start_training", fdsrv.Int, self.cb_startTrain)
         self.srv_startInfer = rospy.Service ("brain/start_inference", fdsrv.Float, self.cb_startInfer)
     
@@ -501,9 +501,9 @@ class ForgetfulBrain:
         self.initExp (id=req.data)
         return fdsrv.StringResponse ()
     
-    def cb_buildRun (self, req : fdsrv.StringRequest) -> fdsrv.StringResponse: 
-        self.buildRun (id=req.data)
-        return fdsrv.StringResponse ()
+    def cb_buildRun (self, req : fdsrv.BuildRunRequest) -> fdsrv.BuildRunResponse: 
+        self.buildRun (id=req.data, crashed=req.crashed)
+        return fdsrv.BuildRunResponse ()
 
     def cb_startTrain (self, req : fdsrv.IntRequest) -> fdsrv.IntResponse:
         self.startTrain (num_epochs=req.data, reset_lrsched=True)
@@ -568,7 +568,7 @@ class ForgetfulBrain:
     
     def _exp_dat_prc_           (self)          -> Path: return self._exp_dat_()/'processed'
     def _exp_dat_prc_TRN        (self)          -> Path: return self._exp_dat_prc_()/f"training.csv"
-    def _exp_dat_prc_VAL        (self)          -> Path: return self._exp_dat_prc_()/f"validation.csv"
+    def _exp_dat_prc_VAL        (self)          -> Path: return self._exp_dat_prc_()/f"validation.csv" 
     def _exp_dat_prc_rid_       (self, rid:str) -> Path: return self._exp_dat_prc_()/rid
     def _exp_dat_prc_rid_rgb_   (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'rgb'
     def _exp_dat_prc_rid_TRN    (self, rid:str) -> Path: return self._exp_dat_prc_rid_(rid)/'training.csv'
@@ -744,6 +744,7 @@ class ForgetfulBrain:
         #ax.yaxis.set_major_formatter (mtick.FormatStrFormatter ('%.3e'))
         ax.legend (loc='lower left')
         ax.set_yscale('log')
+        ax.grid ()
 
         # SAVE FIG
         fig.tight_layout()
@@ -771,6 +772,8 @@ class ForgetfulBrain:
         ax.set_xlabel ('Runs')
         ax.set_ylabel ('Expert Intervention Share', color=clr)
         ax.tick_params(axis='y', labelcolor=clr)
+        ax.set_yscale('log')
+        ax.grid ()
 
         # SAVE FIG
         fig.tight_layout()
@@ -852,7 +855,7 @@ class ForgetfulBrain:
             self._prc_trn.save (pmn=PMN), LOGLVL)
 
         self._prc_val = DataFrameFile (                 # processed data file
-            self._exp_out_prc_VAL (), 
+            self._exp_dat_prc_VAL (), 
             self._exp_out_tmp_VAL (), 
             self.PRC_SEQ_COLS
         )
@@ -957,9 +960,9 @@ class ForgetfulBrain:
             self._cpt.load (pmn=PMN), LOGLVL)
         self.log (f"last epoch idx: {self._cpt.get () ['epoch']}", LOGLVL + 1)
         self.loadCheckpoint (reset_lrsched=False)
+
         
 
-    
     def initModelEtc (self) -> None:
         self.model = self.initModel ()
         self.optim = self.initOptimizer ()
@@ -1013,7 +1016,7 @@ class ForgetfulBrain:
         H = self._cnf.prc_rgb_H
         W = self._cnf.prc_rgb_W
         x_shape = (1, 1, C, H, W)
-        o_shape = (1, 1, len (self._cnf.opt_inp))
+        o_shape = (1, 1, max(len (self._cnf.opt_inp),1))
         h_shape = tuple(self.model.getZeroInitializedHiddenState (1, TORCH_DEVICE).shape)
         torchinfo.summary (
             self.model, 
@@ -1036,6 +1039,22 @@ class ForgetfulBrain:
             for rgb in RGB.iterdir ():
                 cv2.imwrite(str(rgb), cv2.resize(cv2.imread(str(rgb)), (W,H)))
 
+    def saveCNNWeights (self) -> None:
+        # SAVE CHECKPOINT
+        self._cpt = CheckpointFile (
+            self._exp_out_ ()/'cnn_checkpoint.pt',
+            self._exp_out_tmp_ ()/'cnn_checkpoint.pt'
+        )
+        self._cpt.set (
+            self._trnRec.num_records (),
+            self.model.CNN,
+            self.optim,
+            self.loss
+        )
+        self.log_create (
+            self._cpt.save (pmn=True), 1)
+
+
 
     ##############################################################################################################
     ##############################################################################################################
@@ -1043,7 +1062,7 @@ class ForgetfulBrain:
 
     # BUILD RUN
 
-    def buildRun (self, id : str) -> None:
+    def buildRun (self, id : str, crashed : bool) -> None:
         """
         1) Sets run ID
         2) If run is built: Do nothing
@@ -1061,6 +1080,7 @@ class ForgetfulBrain:
         self.log ('BUILD RUN', 0)
         
         self.runID = id
+        self.runCrashed = crashed
         self.log (f"ID: {self.runID}", 1)
 
         if self._bldRec.recorded (self.runID):
@@ -1271,6 +1291,7 @@ class ForgetfulBrain:
         dfSEQ_valid.to_csv (VAL, index=False)
         
         eis = float (ei_cnt) / len (dfIMD)
+        if self.runCrashed: eis = 1
 
         # LOGGING 
         self.log (f"# samples: {len (dfSEQ)}", log_lvl)
@@ -1338,6 +1359,7 @@ class ForgetfulBrain:
         self.asrExpInit ()
         self.switchInferTopics (register=False)
 
+        torch.backends.cudnn.benchmark = True
 
 
         self.log (f"START TRAIN", 0)
@@ -1347,6 +1369,18 @@ class ForgetfulBrain:
         self.log_load (self._trnRec.load (pmn=True), 2)
         self.log_load (self._cpt.load(pmn=True), 2)
         self.loadCheckpoint (reset_lrsched)
+
+        try:
+            cnn = CheckpointFile (
+                self._exp_out_ ()/'cnn_checkpoint.pt',
+                self._exp_out_tmp_ ()/'cnn_checkpoint.pt'
+            )
+            self.log_load (cnn.load (pmn=True), 1)
+            self.log (f"CNN epoch idx: {cnn.get () ['epoch']}", 1 + 1)
+            self.model.CNN.load_state_dict (cnn.get () ['model_state_dict'])
+            print('!!!!!!!!!!!!!!!!!!!!!!! CNN TRANSFER LEARNING !!!!!!!!!!!!!!!!!!!!!1 ')
+        except:
+            pass
         
         self.log (f"Experiment", 1)
         self.log (f"ID: {self.expID}", 2)
@@ -1369,7 +1403,9 @@ class ForgetfulBrain:
             ),
             batch_size=self._cnf.batch_size,
             shuffle=True,
-            drop_last=True
+            drop_last=True,
+            num_workers=8,
+            pin_memory=False
         )
         #log (1, '...')
         #log (1, 'Data loader')
@@ -1387,10 +1423,12 @@ class ForgetfulBrain:
             ),
             batch_size=self._cnf.batch_size,
             shuffle=False,
-            drop_last=True
+            drop_last=True,
+            num_workers=8,
+            pin_memory=False
         )
         
-        
+        self.getModelSummary ()
 
         log (1, 'Training')
     
@@ -1438,17 +1476,17 @@ class ForgetfulBrain:
             for batch in pbar:
 
                 batch_cnt += 1
-                self.optim.zero_grad ()
+                self.optim.zero_grad (set_to_none=True)
 
                 out, self.h = self.model.forward (
-                    x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE), 
-                    x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE), 
+                    x_img=batch ['input'] ['cnn'].to (TORCH_DEVICE, non_blocking=True), 
+                    x_cat=batch ['input'] ['cat'].to (TORCH_DEVICE, non_blocking=True), 
                     h=self.h.data
                 )
 
                 batch_loss = self.loss (out, batch ['label'].to (TORCH_DEVICE))   
-                try: batch_loss += self.model.get_regularization_term ()
-                except: pass
+                #try: batch_loss += self.model.get_regularization_term ()
+                #except: pass
                 
                 agg_loss += batch_loss.item ()
 
@@ -2174,8 +2212,9 @@ def debug ():
     res = fb.cb_initExp (req)
 
     # Build Run
-    req = fdsrv.StringRequest ()
+    req = fdsrv.BuildRunRequest ()
     req.data = '0000___2_0_1_1_0_1_04.00_00.00___000'
+    req.crashed = False
     res = fb.cb_buildRun (req)
 
     # Start Training

@@ -14,8 +14,9 @@ for EXP_ID in [
     #'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
     #
     #'UTC_2022_06_13_10_13_56_+'
-    'cnn1third'
+    #'resnet18_1third_first2layers'
+    'UTC_2022_09_04_19_35_20'
 ]:
 
     fb.initExp_resetTraining (EXP_ID)
-    fb.startTrain (1, reset_lrsched=True)
+    fb.startTrain (3, reset_lrsched=True)
