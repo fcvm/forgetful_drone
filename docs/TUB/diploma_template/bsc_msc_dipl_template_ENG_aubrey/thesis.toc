@@ -23,11 +23,11 @@
 \contentsline {chapter}{\numberline {5}Evaluation}{52}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Results}{52}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Discussions}{52}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{53}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Summary}{53}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Conclusion}{53}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Future Work}{53}{section.6.3}%
-\contentsline {chapter}{Bibliography}{54}{section.6.3}%
-\contentsline {chapter}{Appendices}{60}{chapter*.41}%
-\contentsline {section}{Appendix A: Abbreviations}{60}{chapter*.42}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{61}{section*.43}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{57}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{57}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Conclusion}{57}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{57}{section.6.3}%
+\contentsline {chapter}{Bibliography}{58}{section.6.3}%
+\contentsline {chapter}{Appendices}{64}{chapter*.45}%
+\contentsline {section}{Appendix A: Abbreviations}{64}{chapter*.46}%
+\contentsline {section}{Appendix B: {\LaTeX } Help}{65}{section*.47}%
