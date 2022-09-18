@@ -95,7 +95,7 @@
 Advances in drone technology in recent years
 have opened the door to many civilian application possibilities,
 especially in the commercial sector \cite{Dunn}.
-Drones have already become today's standard in 
+Today, drones are already standard in 
 aerial inspection services
 \cite{Cohn, Equinox, Abuhasira}.
 In the near future, the areas of
@@ -112,162 +112,137 @@ In contrast,
 real breakthroughs of more visionary applications, 
 such as drone delivery or drone taxis
 are, if at all, only expected in the more distant future \cite{Rosen2019}.
-Decisive reasons for this are partly of a technical nature.
-In particular, autonomous navigation methods are not yet 
-robust enough for the reliable deployment in densely populated urban areas. 
-\cite{brunner2019urban}
-Research in the field of autonomous navigation is therefore very relevant.
-
+Reasons for this are strict
+regulations, skeptical public attitudes
+and technical problems \cite{Rosen2019}.
+With regard to the latter,
+autonomous navigation methods are not yet 
+robust enough for the reliable deployment in 
+open-world environments of high uncertainty such as
+densely populated urban areas \cite{brunner2019urban}.
+This makes the autonomous navigation of drones
+of great importance in current research.
 Loquercio and Scaramuzza \cite{Loquercio2018a} 
 categorize existing autonomous navigation methods for drones 
-into classical methods and modern machine learning based methods as follows. 
-%which follow the scheme of mapping-localization-planning-tracking,
-%and modern methods which
-%use machine learning to 
-%to learn more or less end-to-end navigation policies.
-%They further subdivide the machine learning approaches
-%into imitation learning and reinforcement learning.
+into classical methods and modern, machine learning based methods.
 
 Classical autonomous navigation methods 
 follow the scheme of mapping-localization-planning-tracking.
-Simple approaches may localize the drone
-in a given 2D map based on the data from the drone's GNSS sensor
-and track preprogrammed flight mission specific waypoints.
-These approaches can only be safely deployed in flight environments,
-which first provide a reliable GNSS signal 
-(this is often not the case, e.g., for urban areas, mountains, indoor sites and caves)
-and second are free of obstacles and other agents
-as functions to cope with them are absent.
-More sophisticated classical approaches integrate 
-simultaneous localization and mapping (SLAM) algorithms
-in order to generate a map of the flight environment
-and simultaneously localize the drone in this map
+Simple approaches track pre-programmed waypoints based on GNSS
+and are thus limited to flight environments that
+first, have a reliable GNSS signal
+(which often is not the case for 
+urban areas, mountains, indoor sites, caves, etc.)
+and second, are free of obstacles,
+since functions to cope with them are absent.
+More complex approaches use SLAM algorithms
+to generate a map of the flight environment
+and localize in it
 based on the drone's visual or range sensors. \cite{MurArtal2015}
-Path planning algorithms (e.g., \cite{Bircher2016}, \cite{Cieslewski2017})
-are applied to generate collision-free trajectories through the generated maps.
-These trajectories are tracked while estimating the drone state
+Path planning algorithms 
+(e.g., \cite{Bircher2016}, \cite{Cieslewski2017})
+are applied to generate collision-free 
+trajectories through the generated maps,
+which are tracked
+while estimating the drone state
 based on data from the drone's inertial measurement unit (IMU)
 and the output of SLAM algorithms 
 (e.g., \cite{Lin2017}, \cite{Scaramuzza2014}, \cite{Sa2018}, \cite{Loianno2017}).
-Because SLAM algorithms input data from the drone's visual or range sensors,
-the related autonomous navigation methods are not restricted
-to flight environments with GNSS signal.
-Furthermore, obstacles may be mapped and can therewith be avoided.
-The main disadvantage of SLAM methods is that 
-generating the map of the environment coerces global consistency,
-which increases computational complexity especially for dynamic environments.
-Due to the fact that drones are limited in computational power,
-SLAM based methods reach their limits in dynamic environments.
-Moreover, SLAM is sensitive to visual aliasing occuring at high speeds.
+Theoretically, these apporaches can be deployed
+in uncontrolled environments with unknown obstacles and other agents.
+Practically, 
+the mapping coerces global consistency
+which likely makes the computation too complex 
+to be run in real-time onboard drones,
+especially for non-static environments.
+
+Modern autonomous navigation methods use machine learning
+to replace the classical mapping-localization 
+(or even the planning and tracking for more end-to-end methods) 
+with the perception of the drone's onboard sensors
+(e.g., visual, range, IMU)
+and the decisions making of an ANN.
+These methods can be further subdivided by their way of learning
+into reinforcement learning (RL) and imitation learning (IL).
+RL has the advantage that
+they are not affected 
+by the "distributional mismatch" \cite{RobotAutonomy2} 
+between training and testing as 
+the ANN learns with "trial-and-error" \cite{Sadeghi2016} 
+from direct environmental interaction.
+However, this comes with the expense of a
+substantially higher sample complexity 
+compared to IL. \cite{Zhu2017}
+This disadvantage is severe for drones because 
+their limited flight endurance 
+makes the learning process inefficient 
+and collisions are uncontrolled and 
+hence costly and dangerous. \cite{Sadeghi2016}
+
+A popular research playground is autonomous drone racing
+(e.g., \cite{Moon2019}, \cite{Jung2018}, \cite{Song2021})
+due to the controlled flight environment,
+the straightforward definition of goals
+and the measureability and comparability of performance.
+Methods for autonomous drone racing usually
+integrate feedforward
+convolutional neural networks (CNN) 
+to map the current color or depth image to action
+(e.g., \cite{RojasPerez2020}, \cite{Kaufmann2019}, \cite{Jung2018a}).
+CNNs already achieve 
+a high, spatial comprehension of how the drone's sensors perceive
+the immediate environment, 
+however, this alone may not
+be enough for the long-term objective of safely 
+applying autonomous drones in open-world environments.
+As humans are able to safely navigate there,
+it seems promising to learn human-like abilities.
+Temporal comprehension,
+besides spatial comprehension,
+has an important function in human navigation. 
+For example, 
+after entering a room through a door, 
+a person can leave the room knowing 
+that the door is behind him and 
+does not need to keep the door in sight to do so.
+Further, a person requires 
+to observe a sequence of images to
+estimate the velocity and motion direction of herself or himself, 
+obstacles or other agents.
+In machine learning, recurrent neural networks
+can establish temporal connections.
+It is interesting to research the 
+effect of using a recurrent neural networks in autonomous drone racing.
 
 
-More recent research has publicized 
-various autonomous navigation methods based on machine learning
-to learn control policies that map raw vision or range sensor data 
-to complex flight control commands, thereby covering
-more or less of the mapping-localization-planning-tracking scope.
-These methods are further subdivided 
-into reinforcement learning (RL) and imitation learning (IL) problems.
-The foremost benefit of deep RL methods 
-is that policies are not affected by 
-the control shift problem that occurs with IL methods,
-because the policies are learned with "trial-and-error" \cite{Sadeghi2016} 
-from direct environmental interaction without the need for expert intervention.
-However, this way of learning requires an 
-enormously high degree of sample complexity 
-to achieve generalizing policies. \cite{Zhu2017}
-For drones, limited flight endurance 
-makes the learning process inefficient. \cite{Sadeghi2016}
-Moreover, collisions are uncontrolled 
-and thus likely to be critical for the system 
-health and the safety of the environment. \cite{Sadeghi2016}
-This may be circumvented 
-by transferring part or all of the learning process to simulation 
-while still testing the learned policies in the real world. 
-For example, Sadeghi and Levine \cite{Sadeghi2016} propose a vision-based policy 
-for collision avoidance in real world indoor flight 
-which is exclusively trained with simulated training data.
-%From raw monocular RGB images, a deep convolutional neural network directly outputs velocity motor commands.
-A variety of highly randomized environments, textures and lighting, 
-produces control policies that can generalize to the real world
-as they proved in real-world indoor tests.
-However, the drone flies with extremely low agility.
-State-of-the-art simulation environments are capable of 
-comprehensively modelling the dynamics of a drone. \cite{Meyer2012}
-Nevertheless, complex aerodynamic effects such as rotor drag, 
-which become important with the flight 
-close to structures, cannot yet be modelled realisticly. \cite{Faessler2018}
-Furthermore, learned policies are affected by a domain shift 
-between simulation and the real world,
-even in the presence of photorealistic simulators 
-(e.g., AirSim \cite{Shah2017}, CARLA \cite{Dosovitskiy2017}).
-
-Autonomous navigation methods leveraging imitation learning are,
-compared to reinforcement learning, 
-easier to implement and have a significantly lower sample complexity. 
-This means that smaller amounts of training data 
-are necessary to generalize learned control policies to test scenarios.
-However, the collection of training data 
-as well as the evaluation of learned control policies
-may be yet inefficient and dangerous, especially in uncontrolled environments.
-Therefore, alternative ways to collect training data exists.
-Loquercio at al. \cite{Loquercio2018} trained a deep neural network 
-with real world data that has been safely gathered by cars and 
-bicycles driving through urban areas.
-They achieved a control policy 
-that also could safely navigate the MAV 
-at high altitude in urban areas and also through indoor environments.
-Similarly, Giusti et al. \cite{Giusti2016}
-as well as Smolyanskiy et al. \cite{Smolyanskiy2017} 
-used image data collected by human hikers.
-The derived control policies could safely navigate MAVs through forest trails.
-Alternatively, the learning process can be shifted to simulation,
-i.e., train the network on simulated data.
-Many navigation methods are restricted to planar motion 
-not exploiting the agile dynamics of drones.
-Ross et al. \cite{Ross2013}
-developed a navigation system that inputs images from a monocular camera and
-reactively controls the MAV in planar motion in order to avoid trees.
-The policy, is trained to mimic yaw control of human pilot experts.
-They could demonstrate collision-free flight with velocities up to 1.5 $\frac{\text m}{\text s}$
-in a controlled indoor environment as well as in outdoor forest environments.
-Giusti et al. \cite{Giusti2016}  used a deep convolutional neural network to map images
-to the direction of forest trails relative to the MAV.
-They could achieve a classification accuracy that is comparable to human decision.
-However, the flight control of the MAV was restricted to planar motion (i.e., yaw and speed control)
-The convolutional neural network of Loquercio et al. \cite{Loquercio2018}
-outputs a steering angle and a collision probability.
-The policy can follow roadways and simultaneously avoid obstacles
-but is also limited to planar control, i.e., forward velocity and yaw control.
 
 
-The controlled environment of autonomous drone racing 
-represents a convenient ground
-for basic research on autonomous navigation of drones
-because it clearly defines high-level goals, 
-i.e., to complete the racetrack,
-as well as intermediate goals, i.e., to fly through the next race gate.
-Moreover, the attainment of these goals can be intuitively assessed,
-for example, by considering the racetrack completion vs. the 
-maximum speed.
-The 
+%The controlled environment of autonomous drone racing 
+%represents a convenient ground
+%for basic research on autonomous navigation of drones
+%because it clearly defines high-level goals, 
+%i.e., to complete the racetrack,
+%as well as intermediate goals, i.e., to fly through the next race gate.
+%Moreover, the attainment of these goals can be intuitively assessed,
+%for example, by considering the racetrack completion vs. the 
+%maximum speed.
 
 
 
 
 
-The performance and robustness of different methods 
-can be assessed intuitively. 
-by means of 
-Moreover, several metrics to measure performance are provided,
-e.g., 
-
-high-level goals
-(i.e., completing the racetrack as fast/robust as possible)
-are defined and their 
-attainment can be measured (e.g., racetrack completions, flight time).
-Moreover, the racing environment is controlled
-and obsticles are known.
+%The performance and robustness of different methods 
+%can be assessed intuitively. 
+%by means of 
+%Moreover, several metrics to measure performance are provided,
+%e.g., 
+%
+%high-level goals
+%(i.e., completing the racetrack as fast/robust as possible)
+%are defined and their 
+%attainment can be measured (e.g., racetrack completions, flight time).
+%Moreover, the racing environment is controlled
+%and obsticles are known.
 
 %Advanced methods for autonomous navigation of MAVs
 %integrate feedforward, 

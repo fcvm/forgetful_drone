@@ -2,9 +2,9 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Deterministic gate poses\relax }}{48}{table.caption.38}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces ANN module variants\relax }}{49}{table.caption.39}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces ANN module variants: number of trainable and non-trainable parameters and number of multiply-accumulate operations\relax }}{50}{table.caption.40}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Deterministic gate poses\relax }}{47}{table.caption.38}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces ANN module variants\relax }}{48}{table.caption.39}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces ANN module variants: number of trainable and non-trainable parameters and number of multiply-accumulate operations\relax }}{49}{table.caption.40}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {6.1}{\ignorespaces Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }}{70}{table.caption.61}%

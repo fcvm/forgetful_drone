@@ -245,7 +245,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/02_background.tex
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/02_background.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
@@ -276,6 +275,7 @@ INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_temp
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /home/fcvm/git/forgetful_drone/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/sigmoid_tanh.pdf

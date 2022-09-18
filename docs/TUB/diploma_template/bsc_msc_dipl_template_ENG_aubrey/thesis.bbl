@@ -70,12 +70,6 @@ Pamela Cohn, Alastair Green, Meredith Langstaff, and Melanie Roller.
   \url{https://www.mckinsey.com/industries/travel-logistics-and-infrastructure/our-insights/commercial-drones-are-here-the-future-of-unmanned-aerial-systems}.
 \newblock Accessed: 2021-11-30.
 
-\bibitem{Dosovitskiy2017}
-Alexey Dosovitskiy, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen
-  Koltun.
-\newblock Carla: An open urban driving simulator.
-\newblock November 2017.
-
 \bibitem{Dunn}
 Jason Dunn.
 \newblock Drone use taking flight on small farms.
@@ -108,15 +102,6 @@ Fadri Furrer, Michael Burri, Markus Achtelik, and Roland Siegwart.
 \newblock {RotorS}{\textemdash}a modular gazebo {MAV} simulator framework.
 \newblock In {\em Studies in Computational Intelligence}, pages 595--625.
   Springer International Publishing, 2016.
-
-\bibitem{Giusti2016}
-Alessandro Giusti, Jerome Guzzi, Dan~C. Ciresan, Fang-Lin He, Juan~P.
-  Rodriguez, Flavio Fontana, Matthias Faessler, Christian Forster, Jurgen
-  Schmidhuber, Gianni~Di Caro, Davide Scaramuzza, and Luca~M. Gambardella.
-\newblock A machine learning approach to visual perception of forest trails for
-  mobile robots.
-\newblock {\em {IEEE} Robotics and Automation Letters}, 1(2):661--667, jul
-  2016.
 
 \bibitem{Greff2017}
 Klaus Greff, Rupesh~K. Srivastava, Jan Koutnik, Bas~R. Steunebrink, and Jurgen
@@ -166,9 +151,30 @@ P~Jackson.
 \newblock Introduction to expert systems.
 \newblock 1 1986.
 
+\bibitem{Jung2018}
+Sunggoo Jung, Sunyou Hwang, Heemin Shin, and David~Hyunchul Shim.
+\newblock Perception, guidance, and navigation for indoor autonomous drone
+  racing using deep learning.
+\newblock {\em {IEEE} Robotics and Automation Letters}, 3(3):2539--2544, jul
+  2018.
+
+\bibitem{Jung2018a}
+Sunggoo Jung, Hanseob Lee, Sunyou Hwang, and David~Hyunchul Shim.
+\newblock Real time embedded system framework for autonomous drone racing using
+  deep learning techniques.
+\newblock In {\em 2018 {AIAA} Information Systems-{AIAA} Infotech @ Aerospace}.
+  American Institute of Aeronautics and Astronautics, jan 2018.
+
 \bibitem{Kaiser2015}
 Lukasz Kaiser and Ilya Sutskever.
 \newblock Neural gpus learn algorithms, 2015.
+
+\bibitem{Kaufmann2019}
+Elia Kaufmann, Mathias Gehrig, Philipp Foehn, Rene Ranftl, Alexey Dosovitskiy,
+  Vladlen Koltun, and Davide Scaramuzza.
+\newblock Beauty and the beast: Optimal methods meet learning for drone racing.
+\newblock In {\em 2019 International Conference on Robotics and Automation
+  ({ICRA})}. {IEEE}, may 2019.
 
 \bibitem{Kaufmann2018}
 Elia Kaufmann, Antonio Loquercio, Rene Ranftl, Alexey Dosovitskiy, Vladlen
@@ -207,12 +213,6 @@ Giuseppe Loianno, Chris Brunner, Gary McGrath, and Vijay Kumar.
 \newblock {\em {IEEE} Robotics and Automation Letters}, 2(2):404--411, apr
   2017.
 
-\bibitem{Loquercio2018}
-Antonio Loquercio, Ana~I. Maqueda, Carlos~R. del Blanco, and Davide Scaramuzza.
-\newblock {DroNet}: Learning to fly by driving.
-\newblock {\em {IEEE} Robotics and Automation Letters}, 3(2):1088--1095, apr
-  2018.
-
 \bibitem{Loquercio2018a}
 Antonio Loquercio and Davide Scaramuzza.
 \newblock Learning to control drones in natural environments: A survey.
@@ -242,17 +242,19 @@ Luc~Le Mero, Dewei Yi, Mehrdad Dianati, and Alexandros Mouzakitis.
 \newblock {\em {IEEE} Transactions on Intelligent Transportation Systems},
   pages 1--20, 2022.
 
-\bibitem{Meyer2012}
-Johannes Meyer, Alexander Sendobry, Stefan Kohlbrecher, Uwe Klingauf, and Oskar
-  von Stryk.
-\newblock Comprehensive simulation of quadrotor {UAVs} using {ROS} and gazebo.
-\newblock In {\em Simulation, Modeling, and Programming for Autonomous Robots},
-  pages 400--411. Springer Berlin Heidelberg, 2012.
-
 \bibitem{Minai1993}
 Ali~A. Minai and Ronald~D. Williams.
 \newblock On the derivatives of the sigmoid.
 \newblock {\em Neural Networks}, 6(6):845--853, jan 1993.
+
+\bibitem{Moon2019}
+Hyungpil Moon, Jose Martinez-Carranza, Titus Cieslewski, Matthias Faessler,
+  Davide Falanga, Alessandro Simovic, Davide Scaramuzza, Shuo Li, Michael Ozo,
+  Christophe~De Wagter, Guido de~Croon, Sunyou Hwang, Sunggoo Jung, Hyunchul
+  Shim, Haeryang Kim, Minhyuk Park, Tsz-Chiu Au, and Si~Jung Kim.
+\newblock Challenges and implemented technologies used in autonomous drone
+  racing.
+\newblock {\em Intelligent Service Robotics}, 12(2):137--148, jan 2019.
 
 \bibitem{Mueller2013}
 Mark~W. Mueller, Markus Hehn, and Raffaello D'Andrea.
@@ -288,6 +290,11 @@ Ra{\'{u}}l Rojas.
 \newblock In {\em Neural Networks}, pages 149--182. Springer Berlin Heidelberg,
   1996.
 
+\bibitem{RojasPerez2020}
+Leticia~Oyuki Rojas-Perez and Jose Martinez-Carranza.
+\newblock {DeepPilot}: A {CNN} for autonomous drone racing.
+\newblock {\em Sensors}, 20(16):4524, aug 2020.
+
 \bibitem{Rosen2019}
 Ellen Rosen.
 \newblock Skies aren?t clogged with drones yet, but don?t rule them out.
@@ -297,14 +304,6 @@ Ellen Rosen.
 Stephane Ross, Geoffrey~J. Gordon, and J.~Andrew Bagnell.
 \newblock A reduction of imitation learning and structured prediction to
   no-regret online learning, 2010.
-
-\bibitem{Ross2013}
-Stephane Ross, Narek Melik-Barkhudarov, Kumar~Shaurya Shankar, Andreas Wendel,
-  Debadeepta Dey, J.~Andrew Bagnell, and Martial Hebert.
-\newblock Learning monocular reactive {UAV} control in cluttered natural
-  environments.
-\newblock In {\em 2013 {IEEE} International Conference on Robotics and
-  Automation}. {IEEE}, may 2013.
 
 \bibitem{D.1966}
 D.~S., Milton Abramowitz, and Irene~A. Stegun.
@@ -345,25 +344,17 @@ Jürgen Schmidhuber.
   \url{https://people.idsia.ch/~juergen/most-cited-neural-nets.html} (accessed
   on 04/07/2022).
 
-\bibitem{Shah2017}
-Shital Shah, Debadeepta Dey, Chris Lovett, and Ashish Kapoor.
-\newblock {AirSim}: High-fidelity visual and physical simulation for autonomous
-  vehicles.
-\newblock In {\em Field and Service Robotics}, pages 621--635. Springer
-  International Publishing, nov 2017.
-
-\bibitem{Smolyanskiy2017}
-Nikolai Smolyanskiy, Alexey Kamenev, Jeffrey Smith, and Stan Birchfield.
-\newblock Toward low-flying autonomous {MAV} trail navigation using deep neural
-  networks for environmental awareness.
-\newblock In {\em 2017 {IEEE}/{RSJ} International Conference on Intelligent
-  Robots and Systems ({IROS})}. {IEEE}, sep 2017.
-
 \bibitem{Song2020}
 Yunlong Song, Selim Naji, Elia Kaufmann, Antonio Loquercio, and Davide
   Scaramuzza.
 \newblock Flightmare: A flexible quadrotor simulator.
 \newblock September 2020.
+
+\bibitem{Song2021}
+Yunlong Song, Mats Steinweg, Elia Kaufmann, and Davide Scaramuzza.
+\newblock Autonomous drone racing with deep reinforcement learning.
+\newblock In {\em 2021 {IEEE}/{RSJ} International Conference on Intelligent
+  Robots and Systems ({IROS})}. {IEEE}, sep 2021.
 
 \bibitem{Taylor2017}
 Sarah Taylor, Taehwan Kim, Yisong Yue, Moshe Mahler, James Krahe,

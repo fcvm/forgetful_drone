@@ -1,34 +1,34 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded RNN }}{10}{figure.caption.12}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Folded }}}{10}{subfigure.1.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Unfolded }}}{10}{subfigure.1.2}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions deployed within a standard GRU }}{15}{figure.caption.14}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer operating in many-to-one mode. }}{16}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded RNN }}{9}{figure.caption.12}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Folded }}}{9}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Unfolded }}}{9}{subfigure.1.2}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions deployed within a standard GRU }}{14}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer operating in many-to-one mode. }}{15}{figure.caption.16}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{24}{figure.caption.17}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{24}{subfigure.1.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{24}{subfigure.1.2}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Information flow of the navigation decision making }}{27}{figure.caption.21}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{36}{figure.caption.29}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{41}{figure.caption.32}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{23}{figure.caption.17}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{23}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{23}{subfigure.1.2}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Information flow of the navigation decision making }}{26}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{35}{figure.caption.29}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{40}{figure.caption.32}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{44}{figure.caption.34}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes implemented in simulation }}{45}{figure.caption.35}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{45}{subfigure.2.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{45}{subfigure.2.2}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{45}{subfigure.2.3}%
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{45}{subfigure.2.4}%
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{45}{subfigure.2.5}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Gate covers implemented in simulation }}{46}{figure.caption.36}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{46}{subfigure.3.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{46}{subfigure.3.2}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Processing of the racetrack configuration }}{47}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{43}{figure.caption.34}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes implemented in simulation }}{44}{figure.caption.35}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{44}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{44}{subfigure.2.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{44}{subfigure.2.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{44}{subfigure.2.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{44}{subfigure.2.5}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Gate covers implemented in simulation }}{45}{figure.caption.36}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{45}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{45}{subfigure.3.2}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Processing of the racetrack configuration }}{46}{figure.caption.37}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces ??? }}{53}{figure.caption.41}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces ??? }}{54}{figure.caption.42}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces ??? }}{55}{figure.caption.43}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces ??? }}{56}{figure.caption.44}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces ??? }}{52}{figure.caption.41}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces ??? }}{53}{figure.caption.42}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces ??? }}{54}{figure.caption.43}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces ??? }}{55}{figure.caption.44}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{69}{figure.caption.57}%
 \contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{69}{figure.caption.58}%
