@@ -26,7 +26,7 @@ def selection (
     _trackdirs = ['0', '1']
     _gatetypes = ['1', '2']
     _maxspeeds = ['04.00', '05.00', '06.00', '07.00', '08.00', '09.00', '10.00']
-    _repetitions = ['000']
+    _repetitions = ['000', '001', '002', '003', '004', '005', '006', '007', '008', '009']
 
     if scenes is not None: _scenes = scenes
     if sites is not None: _sites = sites
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     #    'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
     #]
 
-    i = 3
+    i = 5
     experiments = [
         {
             'UTC_2022_06_13_10_13_56': {
@@ -94,6 +94,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -102,6 +103,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -110,6 +112,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
             },
@@ -123,6 +126,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -131,6 +135,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -139,6 +144,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     },
                 ]
                 
@@ -156,6 +162,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     },
                 ]
                 
@@ -170,6 +177,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -184,6 +192,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -198,6 +207,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -212,6 +222,7 @@ if __name__ == '__main__':
                             'linestyle': '-'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -226,6 +237,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -240,6 +252,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -254,6 +267,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -268,6 +282,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': None,
+                        'tracktypes': ['1'],
                     }
                 ]
             },
@@ -284,6 +299,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -292,6 +308,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     },
                 ]
                 
@@ -306,6 +323,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -314,6 +332,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -328,6 +347,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -336,6 +356,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -350,6 +371,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -358,6 +380,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -372,6 +395,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -380,6 +404,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -397,6 +422,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -405,6 +431,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     },
                 ]
                 
@@ -419,6 +446,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -427,6 +455,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -441,6 +470,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -449,6 +479,7 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
@@ -463,6 +494,7 @@ if __name__ == '__main__':
                             'linestyle': ':'
                         },
                         'scenes': ['0', '1', '2', '3'],
+                        'tracktypes': ['1'],
                     },
                     {
                         'kwargs': {
@@ -471,11 +503,205 @@ if __name__ == '__main__':
                             'linestyle': '--'
                         },
                         'scenes': ['4'],
+                        'tracktypes': ['1'],
                     }
                 ]
                 
             },
-        }
+        },
+        #4
+        {
+            'UTC_2022_09_04_17_43_31': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:blue',
+                            'label': 'resnet8-fc3x256',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'UTC_2022_09_14_11_47_07': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:orange',
+                            'label': 'resnet14-fc3x256',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'zUTC_2022_09_14_07_18_53': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:green',
+                            'label': 'resnet14-gru3x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'zUTC_2022_09_15_15_02_44': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:red',
+                            'label': 'resnet14-gru3x64-opt',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'zUTC_2022_09_04_19_35_20___pretrainedCNN': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:purple',
+                            'label': 'resnet14-gru3x64-pretrained',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+        },
+        #5
+        {
+            'UTC_2022_09_14_07_18_53___E1R1_1GRUlayer': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:blue',
+                            'label': 'resnet14-gru1x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'UTC_2022_09_14_07_18_53___E1R1_2GRUlayer': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:orange',
+                            'label': 'resnet14-gru2x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'UTC_2022_09_14_07_18_53___E1R1_3GRUlayer': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:green',
+                            'label': 'resnet14-gru3x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'zUTC_2022_09_14_07_18_53': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:green',
+                            'label': 'resnet14-gru3x64.',
+                            'linestyle': ':'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'UTC_2022_09_14_07_18_53___E1R1_5GRUlayer': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:red',
+                            'label': 'resnet14-gru5x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+            'UTC_2022_09_14_07_18_53___E1R1_10GRUlayer': {
+                'data': None,
+                'plot_options': [
+                    {
+                        'kwargs': {
+                            'color': 'tab:purple',
+                            'label': 'resnet14-gru10x64',
+                            'linestyle': '-'
+                        },
+                        'scenes': ['0'],
+                        'sites': ['0'],
+                        'tracktypes' : ['0'],
+                        'trackdirs' : ['0'],
+                    }
+                ]
+                
+            },
+        },
     ][i]
 
     
@@ -504,7 +730,7 @@ if __name__ == '__main__':
 
     #print ('exps', json.dumps (exps, sort_keys=True, indent=4))
     #print ('idx_maps', json.dumps (idx_maps, sort_keys=True, indent=4))
-    #print ('size', json.dumps (size, sort_keys=True, indent=4))
+    print ('size', json.dumps (size, sort_keys=True, indent=4))
 
     
     for en in experiments.keys ():
@@ -528,10 +754,24 @@ if __name__ == '__main__':
         for po in experiments [en] ['plot_options']:
             succRate = []
             for v in maxSpeed:
-                try:
-                    sels = selection (scenes = po ['scenes'], tracktypes=['1'], maxspeeds=[v])
-                except:
-                    sels = selection (tracktypes=['1'], maxspeeds=[v])
+                
+                try: scenes = po ['scenes'] 
+                except: scenes = None
+                try: sites = po ['sites'] 
+                except: sites = None
+                try: tracktypes = po ['tracktypes'] 
+                except: tracktypes = None
+                try: trackgens = po ['trackgens'] 
+                except: trackgens = None
+                try: trackdirs = po ['trackdirs'] 
+                except: trackdirs = None
+
+
+                sels = selection (scenes=scenes, sites=sites, tracktypes=tracktypes, trackgens=trackgens, trackdirs=trackdirs, maxspeeds=[v])
+                #try:
+                #    sels = selection (scenes = po ['scenes'], tracktypes=['1'], maxspeeds=[v])
+                #except:
+                #    sels = selection (tracktypes=['1'], maxspeeds=[v])
             
                 index = []
                 for idx_map, sel in zip (idx_maps, sels):
