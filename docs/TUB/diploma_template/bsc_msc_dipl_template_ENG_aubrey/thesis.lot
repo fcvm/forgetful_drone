@@ -2,12 +2,16 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Deterministic gate poses\relax }}{46}{table.caption.36}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces ANN module variants\relax }}{47}{table.caption.37}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces ANN module variants: number of trainable and non-trainable parameters and number of multiply-accumulate operations\relax }}{48}{table.caption.38}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Available options for the simulation configuration \relax }}{45}{table.caption.37}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Deterministic gate poses\relax }}{46}{table.caption.39}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Learning configuration \relax }}{47}{table.caption.40}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Testing configuration \relax }}{49}{table.caption.41}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces ANN Module Variants of Experiment 1\relax }}{51}{table.caption.42}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Learning configuration of Experiment 1 \relax }}{52}{table.caption.43}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Numbers of trainable parameters and multiply-accumulate operations of the ANN module variants of experiment 1 }}{53}{table.caption.44}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }}{60}{table.caption.55}%
-\contentsline {table}{\numberline {6.2}{\ignorespaces Table using vertical and horizontal lines\relax }}{60}{table.caption.56}%
-\contentsline {table}{\numberline {6.3}{\ignorespaces Table with column width specification on last column\relax }}{60}{table.caption.57}%
-\contentsline {table}{\numberline {6.4}{\ignorespaces Table using multi-column and multirow\relax }}{61}{table.caption.58}%
+\contentsline {table}{\numberline {6.1}{\ignorespaces Simple table using vertical lines. Note that the caption is always above the table! Please check code for finding the right place for the table label.\relax }}{75}{table.caption.65}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Table using vertical and horizontal lines\relax }}{75}{table.caption.66}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces Table with column width specification on last column\relax }}{75}{table.caption.67}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Table using multi-column and multirow\relax }}{76}{table.caption.68}%

@@ -16,34 +16,20 @@ DELETEME: Related work respresents results from work that handled the same or a 
 %###################################################################################
 %###################### Topic B             ########################################
 %###################################################################################
-\section{Direct Policy Imitation Learning}
-\textit{In this tutorial, 
-we aim to present to researchers and industry practitioners a broad overview 
-of imitation learning techniques and recent applications. 
-Imitation learning is a powerful and practical alternative 
-to reinforcement learning for learning sequential decision-making policies. 
-Also known as learning from demonstrations or apprenticeship learning, 
-imitation learning has benefited from recent progress in core learning techniques, 
-increased availability and fidelity of demonstration data, 
-as well as the computational advancements brought on by deep learning. 
-We expect this tutorial to be highly relevant for researchers and 
-practitioners who have interests in reinforcement learning, 
-structured prediction, planning and control. 
-The ideal audience member should have familiarity with basic 
-supervised learning concepts. 
-No knowledge of reinforcement learning techniques will be assumed.
-}
+\section{Imitation Learning with Dataset Aggregation} \label{sec:imitation_learning}
 
-\newcommand{\state}[1]{\underline{x}_{#1}}
-\newcommand{\action}[1]{\underline{u}_{#1}}
-\newcommand{\timestep}{t}
-\newcommand{\probability}{p}
 \newcommand{\parentheses}[1]{\left({#1}\right)}
 \newcommand{\brackets}[1]{\left[{#1}\right]}
 \newcommand{\braces}[1]{\left\{{#1}\right\}}
+
+\newcommand{\timestep}{t}
+\newcommand{\state}{\underline{x}}
 \newcommand{\stateDomain}{\mathcal{X}}
+\newcommand{\action}{\underline{u}}
 \newcommand{\actionDomain}{\mathcal{U}}
-\newcommand{\policy}[2]{\pi^{#1}_{#2}}
+\newcommand{\probability}{p}
+
+\newcommand{\policy}{\pi}
 \newcommand{\demonstration}{\xi}
 \newcommand{\expertt}{*}
 \newcommand{\parameterVector}{\underline{\theta}}
@@ -51,174 +37,388 @@ No knowledge of reinforcement learning techniques will be assumed.
 
 
 Imitation learning is an area of machine learning 
-that relates to the problem 
-%of training a policy
-%with the intent to 
-of learning to
-imitate (i.e., behave like) an expert.
-Depending on the reference, 
-imitation learning is categorized as an
-"approach"
-%@misc{Cunha13,
-%  author        = {},
-%  title         = {Lecture in Principles of Robot Autonomy II},
-%  year          = {2022},
-%  publisher={Autonomous Systems Lab of Stanford University}
-%}
-or "alternative"
-%https://drive.google.com/file/d/12QdNmMll-bGlSWnm8pmD_TawuRN7xagX/view
-to RL (reinforcement learning),
-or the "fusion" 
-%https://www.cl.uni-heidelberg.de/courses/ws18/iml/L1.pdf
-of reinforcement learning and supervised learning.
-With respect to the degree of supervision,
-imitation learning relates to the three major categories of machine learning as follows.
-%https://www.cl.uni-heidelberg.de/courses/ws18/iml/L1.pdf
-Supervised learning defines goals explicitly 
-and thus has the highest degree of supervision.
-Imitation learning weakens the degree of supervision,
-by not defining goals, but demonstrating how to achieve them. 
-Reinforcement learning further weakens the degree
-by defining rewards, replacing the concept of goals. 
-Unsupervised learning has the lowest level 
-because it defines neither goals nor rewards.
+that considers the task of learning to
+imitate (i.e., behave like) an expert 
+in a sequential decision-making problem.
+It is a potential solution to
+learning problems where it is easier 
+to demonstrate the desired behavior of attaining a goal
+than to define intermediate goals and rewards 
+(as in supervised and reinforcement learning, respectively)
+that lead to the desired behavior.
+In terms of supervision,
+imitation learning is therefore
+located between supervised learning
+and reinforcement learning. \cite{Nikolov2018}
+Imitation learning tends to apply successfully on tasks
+related to human intent/behaviour, e.g.,
+pedestrian avoidance \cite{Ziebart2009},
+speech animation \cite{Taylor2017},
+sport analytics \cite{le2017data}
+and gaming \cite{thurau2004imitation}.
+With respect to 
+planning and control
+in autonomous navigation,
+imitation learning has become 
+state-of-the-art. \cite{Mero2022}
+The methods of imitation learning
+can be divided by their approch into
+direct policy learning 
+and inverse reinforcement learning. \cite{RobotAutonomy2}
+Direct policy learning 
+optimizes a policy class 
+to approximate the expert's behaviour
+by reducing the imitation learning problem
+to a single or a sequence of supervised learning problems.
+Inverse reinforcement learning
+optimizes a reward function 
+to approximate the expert's underlying intent
+and deploys reinforcement learning methods
+to optimize a policy class to maximize the identified reward. 
+
+In this thesis,
+the training of the ANN module of the autonomous navigation method 
+(see section \ref{sec:ann_module})
+is considered an imitation learning problem.
+In the experiments
+(see section \ref{sec:training}),
+direct policy learning with dataset aggregation
+is applied to solve this problem.
+Therefore this section introduces
+the core concept of dataset aggregation,
+which was proposed as DAgger by Ross et al. \cite{Ross2010}.
+Prior to this, the general imiation learning problem is defined
+and behavioural cloning, the simplest
+form of direct policy learning is presented.
 
 
-An imitation learning problem includes:
-a system, an expert, a policy class, a loss function
-and a learning algorithm.
-%https://drive.google.com/file/d/12QdNmMll-bGlSWnm8pmD_TawuRN7xagX/view
 
-The system interacts with its real or simulated environment
-by taking a state $\state{} \in \stateDomain$
-and executing an action $\action{} \in \actionDomain$
+
+
+\paragraph*{Problem definition}$\ $\\
+An imitation learning problem includes: 
+a system, 
+an expert, 
+a policy class, 
+a loss function, 
+and a learning algorithm. 
+The goal is to find the policy 
+within the policy class 
+that approximates the expert's decision making 
+as closely as possible. \cite{yue2018imitation}
+
+The system interacts with its real or simulated environment.
+At time step $\timestep$,
+the system is in the state $\state_\timestep \in \stateDomain$
+and executes the action $\action_\timestep \in \actionDomain$
 where $\stateDomain$ and $\actionDomain$ are the 
-domains of all possible states and actions, respectively.
-Under the assumption that the dynamics of the system in its environment
-are a MDP (Markov decision process),
-a probabilistic transition model can describe the system dynamics.
-Such a model provides
-the conditional probability distribution over the system state
-given the system state and action at the previous time step 
+spaces of all possible system states and actions, respectively.
+The system is considered a MDP (Markov decision process)
+whose initial state is sampled 
+from the distribution $\probability \parentheses{\state_0}$.
+The system dynamics can be described
+with a probabilistic transition model,
+which provides the conditional probability distribution 
+over the system state 
+given the system state and action 
+from the previous time step 
 \begin{align}
     \probability \parentheses{
-        \state{\timestep} | \state{\timestep -1}, \action{\timestep -1}
+        \state_\timestep | \state_{\timestep -1}, \action_{\timestep -1}
     }.
 \end{align}
-The system dynamics are typically unknown to the policy to be found.
 
-The expert (also referred to as demonstrator) is a human or system.
-The expert's behaviour, i.e,
-the mapping from the state to the action of the same time step, 
-is characterized by the expert policy
+%Note that the explicit system dynamics are typically unknown 
+%for the policy class to be trained.
+
+The expert 
+%(also referred to as demonstrator)
+is a human or a computer program 
+that makes state-based action decisions,
+which cause the system to act as desired.
+This decision making process is 
+described by the expert policy
+which maps system states to expert actions
 \begin{align}
-    \policy{\expertt}{}
+    \policy^\expertt
     :\ \stateDomain \rightarrow \actionDomain
-    ;\quad \state{\timestep} \mapsto \action{\timestep}
+    ;\quad 
+    \state_\timestep 
+    \mapsto 
+    \action_\timestep^\expertt
+    %\policy^\expertt\parentheses{\state_\timestep}
     .
 \end{align}
-Applying the expert policy generates demonstrations.
-A demonstration is a state-action pair $\parentheses{\state{\timestep}, \action{\timestep}}$.
-All demonstrations constitute a training dataset, on which the imitating policy can be trained.
-In this sense, ?? introduced imitation learning as a variant of supervised learning,
-which does not predict single iid samples at a time (assumption ...)
-but instead learns to predict a sequence ("learning sequential decision-making policies").
+Applying the expert policy on a system state
+yields a demonstration,
+i.e., the state-action pair 
+$\parentheses{\state_\timestep, \action_\timestep^\expertt}$.
 
-The policy class specifies the possible policies, which map from state to action.
-Usually, the class contains parameterized ANNs
+
+The policy class defines the search space
+the optimal policy, i.e., 
+the policy that most closely imitates the expert policy.
+In the following, 
+the policy class is considered to be
+an ANN (artifical neural network)
 \begin{equation}
-    \policy{}{\parameterVector}
+    \policy_{\parameterVector}
     :\ \stateDomain \rightarrow \actionDomain
-    ;\quad \state{\timestep} \mapsto \action{\timestep}
+    ;\quad \state_\timestep \mapsto 
+    \policy_{\parameterVector} \parentheses{\state_\timestep}
 \end{equation}
-where $\parameterVector$ is the parameter vector of the ANNs.
-The policy class can be rolled out, i.e.,
-to repeatedly apply the policy on an inital state.
-Thereby, it generates the trajectory 
+where the vector $\parameterVector$ 
+contains the trainable parameters of the ANN.
+
+Both, the expert policy 
+and members of the policy class, can be rolled out.
+%Rolling out the expert policy
+%yields a trajectory of demonstrations
+%$\trajectory = \parentheses{\state_\timestep, \action_\timestep^\expertt}
+%_{\timestep \in \braces{0, 1, \dots}}$.
+The rollout of a general policy 
+$\policy :\ \stateDomain \rightarrow \actionDomain$
+denotes the process, 
+in which the system, 
+starting from the initial state 
+$\state_0 \sim \probability \parentheses{\state_0}$,
+interacts with the environment 
+based on the actions infered by that policy
+for a certain number of time steps
 \begin{align}
-    \tau = \braces{
-        \parentheses{\state{\timestep}, \policy{}{} \parentheses{\state{\timestep}}}
-    }_{\timestep \in \braces{0, 1, \dots}}
-    .
+    \probability \parentheses{
+        \state_\timestep | \state_{\timestep -1}, \policy\parentheses{\state_{\timestep-1}}
+    },\ \timestep \in \braces{0,\dots, T}.
+\end{align}
+A rollout produces a trajectory,
+which is the sequence of the state-action pairs visited during rollout
+\begin{align}
+    \trajectory = \parentheses{\state_\timestep, 
+    \policy\parentheses{\state_\timestep}}
+    _{\timestep \in \braces{0, \dots, T}}.    
 \end{align}
 
-The imitation loss function quantifies 
-the deviation between the decisions (trajectories)
-made by the imitating policy in the environment
-from the demonstrations of the expert.
+The state distribution of a policy rollout, i.e.,
+the probability that a state is visited 
+during the rollout of the policy
+and becomes therewith 
+part of the corresponding trajectory,
+is induced by the policy itself.
+It is calculated by averaging
+the state distributions
+over the time steps of the rollout
+\begin{equation}
+    \probability \parentheses{\state | \policy}
+    = \frac{1}{T+1} \sum_{\timestep = 0}^T
+    \probability \parentheses{\state_\timestep | \policy}.
+\end{equation}
 
-The learning algorithm to optimize the 
-model within the model class with respect to
-the imitation loss and the training data.
 
-%that, while acting in the environment,
-%produces state-action pairs (also referred to as demonstrations)
-%\begin{equation}
-%    \left(s, a\right).
-%\end{equation}
+%Multiple expert trajectories constitute a training dataset
+%%on which the policy class can be trained
+%\begin{align}
+%    D = \braces{\trajectory_i}_{i \in \braces{1, 2, \dots}}.
+%\end{align}
 
 
-The target is to find a policy that, within a time step,
-maps states to action
+%The rollout of a member of the policy class also produces
+%a trajectory ...
+%The policy class can be rolled out, i.e.,
+%to repeatedly apply the policy on an inital state.
+%Thereby, it generates the trajectory 
+%\begin{align}
+%    \tau = \braces{
+%        \parentheses{\state_\timestep, \policy \parentheses{\state_\timestep}}
+%    }_{\timestep \in \braces{0, 1, \dots}}
+%    .
+%\end{align}
+The loss function quantifies
+how closely a policy $\policy$ imitates the expert policy $\policy^\expertt$.
+For a state, 
+it measures the deviation 
+of the action predicted by the general policy
+from the action demonstrated by the expert
 \begin{align}
-    \action{\timestep} = \policy{}{} \parentheses{ 
-        \state{\timestep} 
+    L_{\policy}
+    :\ \stateDomain \rightarrow \mathbb{R}
+    ;\quad
+    \state_\timestep
+    \mapsto
+    L_{\policy}
+    \parentheses{
+        \policy\parentheses{\state_\timestep},
+        \policy^\expertt\parentheses{\state_\timestep}
     }.
 \end{align}
-To do this, a set of demonstrations/trajectories is given.
-Each demonstration is a sequence of state-action pairs
+
+
+
+The learning algorithm 
+finds the policy $\hat{\policy}^\expertt$ 
+within the policy class 
+that is closest to the expert policy. 
+For this purpose, the algorithm 
+minimizes the total imitation loss 
+evaluated for states sampled 
+from the distribution 
+induced by the identified policy itself. 
+In machine learning, the optimization 
+is realized with the training of the ANN,
+whereby its trainable parameters 
+are updated according to the evaluated loss
 \begin{equation}
-    \demonstration = \braces{
-        \parentheses{\state{\timestep},\action{\timestep}}
-    }_{\timestep \in \braces{0, 1, \dots}}
+    \hat{\policy}^\expertt
+    =
+    \argmin{\parameterVector}
+    \sum_{
+        \state \sim \probability \parentheses{
+            \state | \policy_{\parameterVector}}
+    }
+    L_{\policy_{\parameterVector}} \parentheses{\state}
+    %L \parentheses{
+    %    \policy_{\parameterVector}\parentheses{\state_\timestep},
+    %    \policy^\expertt\parentheses{\state_\timestep}
+    %}
     .
 \end{equation}
-generate at the roll out of the expert policy $\policy{*}{}$.
+The above optimization corresponds to a 
+"non-i.i.d. supervised learning problem" \cite{Ross2010}.
+Note that, as generally 
+the system dynamics are unknown or too complex,
+the training data cannot be computed
+to be independent and identically distributed (i.i.d.)
+across the state space $\stateDomain$.
+In fact, the only way to generate training data
+is to sample it during policy rollouts.
+General optimization learning 
+takes the most reliable, available option
+of generating training data 
+from rollouts of the identified policy itself.
+This has the advantage, that the state distributions
+at training and testing (rollout) do not differ and
+thus, a low training loss is likely 
+to transfer to good test performance.
+On the downside, the interdependence of the ANN
+and the training state distribution
+renders the optimization to be non-convex
+and thus complex in contrast to common supervised learning.
 
 
 
-The methods to solve an imitation learning problem can be devided into 
-direct policy learning and inverse reinforcement learning.
-Direct policy learning targets at imitating the expert by learning its policy.
-Inverse reinforcement learning targets at learning the reward function
-that implicetly underlies the expert policy.
-As the experiments of this thesis apply direct policy learning 
-(see section ...),
-this form of imitation learning is introduced in this section.
 
 
-----------
-
-
-
-First, the expert policy (also referred to as demonstrator) is a human or system
-that, while acting in the environment,
-produces state-action pairs (also referred to as demonstrations)
+\paragraph*{Behavioural cloning}$\ $\\
+Behavioural cloning reduces the imitation learning problem 
+to a single standard supervised learning problem
+on a precollected training dataset of expert trajectories
 \begin{equation}
-    \left(s, a\right).
+    D = \braces{\trajectory_i^\expertt}_{i \in \braces{1, 2, \dots}}
+    ,\quad
+    \trajectory_i^\expertt = \parentheses{
+        \state_{i,\timestep}, \action_{i,\timestep}^\expertt}
+    _{\timestep \in \braces{0, 1, \dots}}.
 \end{equation}
-
-
-The environment, which is either real or simulated, 
-determines the state dynamics
+Each trajectory 
+is the product of an expert policy rollout 
+and contains the thereby demonstrated state-action pairs.
+The state distribution of an expert rollout is
 \begin{equation}
-    P(s_{t+1}|s_{t},a_t).
+    \probability \parentheses{\state | \policy^\expertt}
+    = \frac{1}{T+1} \sum_{\timestep = 0}^T
+    \probability \parentheses{\state_\timestep | \policy^\expertt}.
 \end{equation}
+The optimization problem of BC is thus
+to minimize the 
+accumulated imitation loss
+of all demonstrations
+$\parentheses{\state_\timestep, \action_\timestep^\expertt}$ 
+of all trajectories 
+$\trajectory_i$
+within the dataset $D$ precollected
+\begin{align}
+    \hat{\policy}^\expertt
+    &=
+    \argmin{\parameterVector}
+    \sum_{\trajectory_i \in D} \quad
+    \sum_{\parentheses{\state_\timestep, \action_\timestep^\expertt} \in \trajectory_i
+    }
+    L \parentheses{
+        \policy_{\parameterVector} \parentheses{\state_\timestep},
+        \action_\timestep^\expertt
+    }
+    \nonumber\\ &=
+    \argmin{\parameterVector}
+    \sum_{
+        \state \sim \probability \parentheses{
+            \state | \policy^\expertt}
+    }
+    L_{\policy_{\parameterVector}} \parentheses{\state}
+    .
+\end{align}
+In comparison to general imitation learning,
+behavioural cloning generally exhibits different distributions
+at training and testing
+\begin{equation}
+    \probability \parentheses{\state | \policy^\expertt}
+    \neq 
+    \probability \parentheses{\state | \policy_{\parameterVector}}.
+\end{equation}
+This plus the fact that the training data
+is generally not iid across the state space
+makes it likely that the ANN is confronted with states
+not seen during training.
+As a result, a good test performance cannot be generally 
+infered from a low training loss.
+This is especially true for a long task horizon $T$
+of a rollout.
+The above optimization can be interpreted
+as minimizing the one-step
+loss of the trained ANN along the expert trajectories.
+However, as the trained ANN rolls out at testing,
+these one-step errors, even though minimized,
+accumulate along the ANN trajectory
+and will likely cause non-negligible deviation
+from the expert's behaviour. 
+In fact, on a ANN trajectory the upper bound of the error 
+grows quadratically with the number of timesteps. \cite{yue2018imitation}
 
-The model class of ANNs.
 
 
-
-
-The training dataset is the collection of demonstrations.
-
-Applications 
-
-%https://proceedings.neurips.cc/paper/1988/file/812b4ba287f5ee0bc9d43bbf5bbe87fb-Paper.pdf
-
-
-
-
+\paragraph*{DAgger}$\ $\\
+DAgger\cite{Ross2010} is an iterative method 
+for direct policy learning
+that reduces the imitation learning problem
+to a sequence of convex supervised learning problems:
+\begin{enumerate}
+    \item 
+    Roll out the expert policy 
+    to generate a dataset.
+    Train the initial ANN 
+    $\policy_{\parameterVector, 0}$
+    with behavioural cloning on that dataset.
+    \item For $i = 1,2,\dots$
+    \begin{enumerate}
+        \item Rollout the initial/intermediate ANN 
+        $\policy_{\parameterVector, i-1}$
+        to generate trajectories.
+        \item Label the trajectories using the expert policy
+        and add them to the training dataset.
+        \item Train the next intermediate ANN 
+        $\policy_{\parameterVector, i}$
+        on the aggregated dataset.
+    \end{enumerate}
+\end{enumerate}
+In contrast to behavioural cloning,
+DAgger requires an interactive expert,
+that provides feedback 
+on the state distributions induced by the ANN,
+and access on the system
+to execute ANN rollouts.
+The DAgger algorithm makes sure that
+mistakes made by the ANN during rollout become part 
+of the aggregated dataset.
+Ideally, this training converges to the 
+optimal ANN parameters for the general IL problem.
 
 
 
