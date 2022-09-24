@@ -12,8 +12,12 @@ for EXP_ID in [
     #'UTC_2022_07_01_07_27_56___SEQLEN_3___RF3',
     #'UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 
     #'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
-    'UTC_2022_09_04_19_35_20'
+    'UTC_2022_09_14_07_18_53___E1R1_1GRUlayer',
+    'UTC_2022_09_14_07_18_53___E1R1_2GRUlayer',
+    'UTC_2022_09_14_07_18_53___E1R1_3GRUlayer',
+    'UTC_2022_09_14_07_18_53___E1R1_5GRUlayer',
+    'UTC_2022_09_14_07_18_53___E1R1_10GRUlayer'
 ]:
 
     fb.initExp (EXP_ID)
-    fb.startTrain (3, reset_lrsched=False) #20
+    fb.startTrain (50, reset_lrsched=False) #20
