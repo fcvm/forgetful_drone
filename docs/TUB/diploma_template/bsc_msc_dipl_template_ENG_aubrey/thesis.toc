@@ -17,17 +17,17 @@
 \contentsline {section}{\numberline {3.6}Racing vs. Training Data Generation}{42}{section.3.6}%
 \contentsline {chapter}{\numberline {4}Experiments in Simulation}{43}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Simulation Setup}{43}{section.4.1}%
-\contentsline {section}{\numberline {4.2}ANN Module Variants}{47}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Data Generation and Training}{48}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Racing Tests}{50}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Evaluation}{51}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Results}{51}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Discussions}{51}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{56}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Summary}{56}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Conclusion}{56}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Future Work}{56}{section.6.3}%
-\contentsline {chapter}{Bibliography}{57}{section.6.3}%
-\contentsline {chapter}{Appendices}{63}{chapter*.45}%
-\contentsline {section}{Appendix A: Abbreviations}{64}{chapter*.46}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{65}{section*.47}%
+\contentsline {section}{\numberline {4.2}Imitation learning process of the ANN Module}{47}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Racing Tests}{49}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Experiment 1}{50}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Evaluation}{56}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Results}{56}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Discussions}{56}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{61}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{61}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Conclusion}{61}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{61}{section.6.3}%
+\contentsline {chapter}{Bibliography}{62}{section.6.3}%
+\contentsline {chapter}{Appendices}{68}{chapter*.49}%
+\contentsline {section}{Appendix A: Abbreviations}{69}{chapter*.50}%
+\contentsline {section}{Appendix B: {\LaTeX } Help}{70}{section*.51}%

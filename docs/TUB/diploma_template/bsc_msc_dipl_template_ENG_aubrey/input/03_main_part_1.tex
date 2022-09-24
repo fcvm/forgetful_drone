@@ -1420,7 +1420,7 @@ to re-compute its local trajectory.
     is deployed to find the polynomial trajectory with minimum jerk
     (third time derivative of position)
     by solving the optimization problem
-    \begin{align}
+    \begin{align} \label{eq:loc_traj_opt_prob}
         &\qquad \min 
         \int_0^{\dur[]{\loctraj}{}{}{}}
             \left\|
@@ -1708,7 +1708,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     are found for fixed gate arrival times 
     $\timepnt[]{\gate}{i}{}{}$
     by solving the optimization problem
-    \begin{align}
+    \begin{align} \label{eq:glo_traj_opt_prob}
         &\qquad \argmin{\pos[]{\glotraj}{}{\grs}{}}
         \int_{\timepnt[]{\gate}{0}{}{}}^{\timepnt[]{\gate}{\num[]{\gate}{}{}{}}{}{}}
             \left\|
