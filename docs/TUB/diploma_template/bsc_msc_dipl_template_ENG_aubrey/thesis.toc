@@ -19,15 +19,19 @@
 \contentsline {section}{\numberline {4.1}Simulation Setup}{43}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Imitation learning process of the ANN Module}{47}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Racing Tests}{49}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Experiment 1}{50}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Evaluation}{56}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Results}{56}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Discussions}{56}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{61}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Summary}{61}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Conclusion}{61}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Future Work}{61}{section.6.3}%
-\contentsline {chapter}{Bibliography}{62}{section.6.3}%
-\contentsline {chapter}{Appendices}{68}{chapter*.49}%
-\contentsline {section}{Appendix A: Abbreviations}{69}{chapter*.50}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{70}{section*.51}%
+\contentsline {section}{\numberline {4.4}Design of Experiment 1}{50}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Design of Experiment 2}{53}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Design of Experiment 3}{54}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Design of Experiment 4}{55}{section.4.7}%
+\contentsline {chapter}{\numberline {5}Evaluation}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Results}{61}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Discussions}{61}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{66}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{66}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Conclusion}{66}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{66}{section.6.3}%
+\contentsline {chapter}{Bibliography}{67}{section.6.3}%
+\contentsline {chapter}{Appendices}{73}{chapter*.51}%
+\contentsline {section}{Appendix A: Abbreviations}{74}{chapter*.52}%
+\contentsline {section}{Appendix B: {\LaTeX } Help}{75}{section*.53}%
+\contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{82}{table.caption.70}%

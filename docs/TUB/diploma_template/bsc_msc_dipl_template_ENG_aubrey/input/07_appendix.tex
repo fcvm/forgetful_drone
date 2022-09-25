@@ -53,3 +53,85 @@ DELETEME: everything that does not fit into your work, e.g. a 5 page table that 
 \section*{Appendix B: {\LaTeX} Help}
 %remove this
 \input{__help/latex_hinweise}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newpage
+\clearpage
+\addcontentsline{toc}{section}{Appendix B: Racetrack Randomization and Redirection}
+\section*{Appendix B: Racetrack Randomization and Redirection}
+\begin{figure}[H]
+    \newcommand{\dimmm}{0.47\textwidth}
+    \newcommand{\dimmmb}{0.05\textwidth}
+    \newcommand{\vertspace}{-2ex}
+    \centering
+        \subfloat{\footnotesize \textbf{$\downarrow$ Shift}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_shift.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_shift.pdf}
+            %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ Scale}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_scale.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_scale.pdf}
+            %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ Twist}}
+    \\[\vertspace]
+        \subfloat{
+            %\fbox{
+                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_twist.pdf}
+            %}
+        }
+        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+        \subfloat{
+           %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_twist.pdf}
+        %}
+        }
+    \\[\vertspace]
+        \subfloat{\footnotesize \textbf{$\downarrow$ Redirect}}
+    \\[\vertspace]
+    \subfloat{
+        %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_redir.pdf}
+        %}
+    }
+    \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
+    \subfloat{
+        %\fbox{
+            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_redir.pdf}
+        %}
+    }
+    \caption[
+        Racetrack randomization and redirection
+    ]{
+        Racetrack randomization and redirection for
+        the figure-8 (left) 
+        and the gap (right) racetrack types.
+        In the xy-plane, the start pose of the drone (arrow) and the gate poses 
+        (numbered bars)
+        are shown before (low-opacity blue) and after (orange) 
+        the randomizing processing steps Shift, Scale and Twist
+        and the Redirect processing step.
+        \label{fig:racetrack_comp}
+    }
+\end{figure}

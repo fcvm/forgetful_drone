@@ -19,15 +19,19 @@
 \BOOKMARK [1][-]{section.4.1}{Simulation Setup}{chapter.4}% 19
 \BOOKMARK [1][-]{section.4.2}{Imitation learning process of the ANN Module}{chapter.4}% 20
 \BOOKMARK [1][-]{section.4.3}{Racing Tests}{chapter.4}% 21
-\BOOKMARK [1][-]{section.4.4}{Experiment 1}{chapter.4}% 22
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 23
-\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 24
-\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 25
-\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 26
-\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 27
-\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 28
-\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 29
-\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 30
-\BOOKMARK [0][-]{chapter*.49}{Appendices}{}% 31
-\BOOKMARK [1][-]{chapter*.50}{Appendix A: Abbreviations}{chapter*.49}% 32
-\BOOKMARK [1][-]{section*.51}{Appendix B: LaTeX Help}{chapter*.49}% 33
+\BOOKMARK [1][-]{section.4.4}{Design of Experiment 1}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.5}{Design of Experiment 2}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.6}{Design of Experiment 3}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.7}{Design of Experiment 4}{chapter.4}% 25
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 26
+\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 27
+\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 28
+\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 29
+\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 30
+\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 31
+\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 32
+\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 33
+\BOOKMARK [0][-]{chapter*.51}{Appendices}{}% 34
+\BOOKMARK [1][-]{chapter*.52}{Appendix A: Abbreviations}{chapter*.51}% 35
+\BOOKMARK [1][-]{section*.53}{Appendix B: LaTeX Help}{chapter*.51}% 36
+\BOOKMARK [1][-]{table.caption.70}{Appendix B: Racetrack Randomization and Redirection}{chapter*.51}% 37

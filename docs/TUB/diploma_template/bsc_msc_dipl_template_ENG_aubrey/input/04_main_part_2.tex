@@ -248,81 +248,7 @@ whenever the drone has passed the currently targeted race gate.
 
 
 
-\begin{figure}[h]
-    \newcommand{\dimmm}{0.42\textwidth}
-    \newcommand{\dimmmb}{0.1\textwidth}
-    \newcommand{\vertspace}{-3ex}
 
-    \centering
-        \subfloat{\footnotesize \textbf{$\downarrow$ shift}}
-    \\[\vertspace]
-        \subfloat{
-            %\fbox{
-                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_shift.pdf}
-            %}
-        }
-        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
-        \subfloat{
-            %\fbox{
-                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_shift.pdf}
-            %}
-        }
-    \\[\vertspace]
-        \subfloat{\footnotesize \textbf{$\downarrow$ scale}}
-    \\[\vertspace]
-        \subfloat{
-            %\fbox{
-                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_scale.pdf}
-            %}
-        }
-        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
-        \subfloat{
-            %\fbox{
-                \includegraphics[width=\dimmm]{own/computeRacetrack_gap_scale.pdf}
-            %}
-        }
-    \\[\vertspace]
-        \subfloat{\footnotesize \textbf{$\downarrow$ twist}}
-    \\[\vertspace]
-        \subfloat{
-            %\fbox{
-                \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_twist.pdf}
-            %}
-        }
-        \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
-        \subfloat{
-           %\fbox{
-            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_twist.pdf}
-        %}
-        }
-    \\[\vertspace]
-        \subfloat{\footnotesize \textbf{$\downarrow$ redirect}}
-    \\[\vertspace]
-    \subfloat{
-        %\fbox{
-            \includegraphics[width=\dimmm]{own/computeRacetrack_fig8_redir.pdf}
-        %}
-    }
-    \subfloat{\begin{minipage}[c]{\dimmmb}$\ $\end{minipage}}
-    \subfloat{
-        %\fbox{
-            \includegraphics[width=\dimmm]{own/computeRacetrack_gap_redir.pdf}
-        %}
-    }
-    \caption[
-        Racetrack randomization and redirection
-    ]{
-        Racetrack randomization and redirection for
-        the figure-8 (left) 
-        and the gap (right) racetrack type.
-        In the xy-plane, the drone starting pose (arrow) and the gate poses 
-        (numbered bars)
-        are shown before (grey) and after (blue) the individual processing step.
-        The first randomization step, which is exclusive to the gap racetrack type,
-        is not depicted.
-        \label{fig:racetrack_comp}
-    }
-\end{figure}
 
 
 
@@ -743,113 +669,152 @@ of the global and the local trajectory
 
 
 
-\section{Experiment 1}
-Experiment 1 studies the racing performance of 
-several feedforward and recurrent ANN module variants 
-on the randomized, counterclockwise figure-8 racetrack
-for varying maximum drone speeds.
-Table \ref{tab:e1_ann_config} shows 
-the configurations of the variants examined in this experiment.
-\providecommand{\ncols}{}\renewcommand{\ncols}{8}
+\section{Design of Experiment 1}
+Experiment 1 studies the
+racing performance of 
+two feedforward and three recurrent ANN module variants 
+on the randomized figure-8 racetrack 
+in a single simulation environment.
+Table \ref{tab:e1_config} shows the
+configuration of experiment 1,
+which includes the ANN module configuration
+and the rollout and training configuration 
+of the imitation learning process
+for all variants examined.
+A variant's ANN module configuration
+determines its number of trainable parameters and 
+multiply-accumulate (MAC) operations at a single inference.
+Table \ref{tab:exp1_nums} shows these
+numbers
+obtained with 
+torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08/2022}
+for all variants examined.
+A variant's number of trainable parameters
+determines its degree of freedom to fit the aggregate training data
+and thus,
+can correlate with 
+how well the variant performs at training
+and eventually at racing.
+For this reason, the numbers of trainable parameters 
+are taken into account
+when comparing the performance of the variants examined.
+Furthermore, it has a great impact on
+how memory- and time-consuming the variant's training is.
+A variant's number of MAC operations 
+measures the computing effort of a single inference
+and, thus, has great impact on the inference time
+on a computing platform.
+As drones are limited in computing power,
+a variant's inference time 
+is critical at racing when 
+navigation decisions
+must be made at a relatively high frequency.
+However, this experiment
+can only list the MAC numbers of the variants examined
+without further investigations on the inference time,
+because the experiments in this thesis
+could only be conducted in simulation on a desktop computer.
+
+
+%\providecommand{\ncols}{}\renewcommand{\ncols}{8}
+%\providecommand{\wcols}{}\renewcommand{\wcols}{1.3cm}
+%\begin{table}[h]
+%    \caption{ANN Module Variants of Experiment 1\label{tab:e1_ann_config}}
+%    \centering
+%    \begin{tabular}{|c|c|c|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|} 
+%        \cline{4-\ncols}
+%        \multicolumn{3}{c|}{}
+%        &\multicolumn{2}{c|}{Feedforward}
+%        &\multicolumn{3}{c|}{Recurrent}
+%        \\\cline{4-\ncols}
+%        \multicolumn{3}{c|}{}
+%        &F1
+%        &F2
+%        &R1
+%        &R2
+%        &R3
+%        \\\hline
+%        %
+%        \multirow{14}{*}{\rotcell{ANN}}
+%        &\multirow{4}{*}{CNN}
+%        &Input
+%        &\multicolumn{5}{c|}{240x160 RGB}
+%        \\\cline{3-\ncols}
+%        %
+%        &&Model
+%        &Resnet8
+%        &\multicolumn{4}{c|}{Resnet14}
+%        \\\cline{3-\ncols}
+%        %
+%        &&Pretrained
+%        &\multicolumn{4}{c|}{No}
+%        &Yes
+%        \\\cline{3-\ncols}
+%        %
+%        &&Trainable
+%        &\multicolumn{4}{c|}{Yes}
+%        &Partly
+%        \\\cline{2-\ncols}
+%        %
+%        &\multirow{1}{*}{CAT}
+%        &Opt. Input
+%        &\multicolumn{3}{c|}{None}
+%        &All
+%        &None
+%        \\\cline{2-\ncols}
+%        %
+%        &\multirow{3}{*}{GRU}
+%        &\# Layers
+%        &\multicolumn{2}{c|}{\multirow{3}{*}{None}}
+%        &\multicolumn{3}{c|}{3}
+%        \\\cline{3-3}\cline{6-\ncols}
+%        %
+%        &&Hidden size
+%        &\multicolumn{2}{c|}{}
+%        &\multicolumn{3}{c|}{64}
+%        \\\cline{3-3}\cline{6-\ncols}
+%        %
+%        &&Dropout
+%        &\multicolumn{2}{c|}{}
+%        &\multicolumn{3}{c|}{0.00346}
+%        \\\cline{2-\ncols}
+%        %
+%        &\multirow{4}{*}{FC}
+%        &\# Layers
+%        &\multicolumn{2}{c|}{3}
+%        &\multicolumn{3}{c|}{\multirow{4}{*}{None}}
+%        \\\cline{3-5}
+%        %
+%        &&Width
+%        &\multicolumn{2}{c|}{256}
+%        &\multicolumn{3}{c|}{}
+%        \\\cline{3-5}
+%        %
+%        &&dropout
+%        &\multicolumn{2}{c|}{0.206299}
+%        &\multicolumn{3}{c|}{}
+%        \\\cline{3-5}
+%        %
+%        &&Activation
+%        &\multicolumn{2}{c|}{ReLU}
+%        &\multicolumn{3}{c|}{}
+%        \\\cline{2-\ncols}
+%        %
+%        &\multirow{2}{*}{HEAD}
+%        &Activation
+%        &\multicolumn{5}{c|}{ReLU}
+%        \\\cline{3-\ncols}
+%        &&Output
+%        &\multicolumn{5}{c|}{Navigation decision}
+%        \\\hline
+%    \end{tabular}
+%\end{table}
+\providecommand{\ncols}{}\renewcommand{\ncols}{9}
 \providecommand{\wcols}{}\renewcommand{\wcols}{1.3cm}
+\definecolor{light-gray}{gray}{0.90}
 \begin{table}[h]
-    \caption{ANN Module Variants of Experiment 1\label{tab:e1_ann_config}}
-    \centering
-    \begin{tabular}{|c|c|c|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|} 
-        \cline{4-\ncols}
-        \multicolumn{3}{c|}{}
-        &\multicolumn{2}{c|}{Feedforward}
-        &\multicolumn{3}{c|}{Recurrent}
-        \\\cline{4-\ncols}
-        \multicolumn{3}{c|}{}
-        &F1
-        &F2
-        &R1
-        &R2
-        &R3
-        \\\hline
-        %
-        \multirow{14}{*}{\rotcell{ANN}}
-        &\multirow{4}{*}{CNN}
-        &Input
-        &\multicolumn{5}{c|}{240x160 RGB}
-        \\\cline{3-\ncols}
-        %
-        &&Model
-        &Resnet8
-        &\multicolumn{4}{c|}{Resnet14}
-        \\\cline{3-\ncols}
-        %
-        &&Pretrained
-        &\multicolumn{4}{c|}{No}
-        &Yes
-        \\\cline{3-\ncols}
-        %
-        &&Trainable
-        &\multicolumn{4}{c|}{Yes}
-        &Partly
-        \\\cline{2-\ncols}
-        %
-        &\multirow{1}{*}{CAT}
-        &Opt. Input
-        &\multicolumn{3}{c|}{None}
-        &All
-        &None
-        \\\cline{2-\ncols}
-        %
-        &\multirow{3}{*}{GRU}
-        &\# Layers
-        &\multicolumn{2}{c|}{\multirow{3}{*}{None}}
-        &\multicolumn{3}{c|}{3}
-        \\\cline{3-3}\cline{6-\ncols}
-        %
-        &&Hidden size
-        &\multicolumn{2}{c|}{}
-        &\multicolumn{3}{c|}{64}
-        \\\cline{3-3}\cline{6-\ncols}
-        %
-        &&Dropout
-        &\multicolumn{2}{c|}{}
-        &\multicolumn{3}{c|}{0.00346}
-        \\\cline{2-\ncols}
-        %
-        &\multirow{4}{*}{FC}
-        &\# Layers
-        &\multicolumn{2}{c|}{3}
-        &\multicolumn{3}{c|}{\multirow{4}{*}{None}}
-        \\\cline{3-5}
-        %
-        &&Width
-        &\multicolumn{2}{c|}{256}
-        &\multicolumn{3}{c|}{}
-        \\\cline{3-5}
-        %
-        &&dropout
-        &\multicolumn{2}{c|}{0.206299}
-        &\multicolumn{3}{c|}{}
-        \\\cline{3-5}
-        %
-        &&Activation
-        &\multicolumn{2}{c|}{ReLU}
-        &\multicolumn{3}{c|}{}
-        \\\cline{2-\ncols}
-        %
-        &\multirow{2}{*}{HEAD}
-        &Activation
-        &\multicolumn{5}{c|}{ReLU}
-        \\\cline{3-\ncols}
-        &&Output
-        &\multicolumn{5}{c|}{Navigation decision}
-        \\\hline
-    \end{tabular}
-\end{table}
-Table \ref{tab:e1_learn_config} shows the learning configuration 
-for the variants examined in this experiment.
-\providecommand{\ncols}{}\renewcommand{\ncols}{7}
-\providecommand{\wcols}{}\renewcommand{\wcols}{1.0cm}
-\begin{table}[h]
-    \caption{Learning configuration of Experiment 1
-    \label{tab:e1_learn_config}}
+    \caption{Configuration of Experiment 1
+    \label{tab:e1_config}}
     \centering
     \begin{tabular}{|c|c|c|c|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|p{\wcols}|} 
         \cline{5-9}
@@ -863,7 +828,94 @@ for the variants examined in this experiment.
         &R1
         &R2
         &R3
-        \\\cline{5-9}\hline
+        \\\hline
+        %
+        \multicolumn{2}{|c|}{\multirow{14}{*}{\rotcell{ANN}}}
+        &\multirow{4}{*}{CNN}
+        &Input
+        &\multicolumn{5}{c|}{240x160 RGB}
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Model
+        &Resnet8
+        &\multicolumn{4}{c|}{Resnet14}
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Pretrained
+        &\multicolumn{4}{c|}{No}
+        &Yes
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Trainable
+        &\multicolumn{4}{c|}{Yes}
+        &Partly
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{1}{*}{CAT}
+        &Opt. Input
+        &\multicolumn{3}{c|}{None}
+        &All
+        &None
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{3}{*}{GRU}
+        &\# Layers
+        &\multicolumn{2}{c|}{\multirow{3}{*}{None}}
+        &\multicolumn{3}{c|}{3}
+        \\\cline{4-4}\cline{7-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Hidden size
+        &\multicolumn{2}{c|}{}
+        &\multicolumn{3}{c|}{64}
+        \\\cline{4-4}\cline{7-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Dropout
+        &\multicolumn{2}{c|}{}
+        &\multicolumn{3}{c|}{0.013767}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{4}{*}{FC}
+        &\# Layers
+        &\multicolumn{2}{c|}{3}
+        &\multicolumn{3}{c|}{\multirow{4}{*}{None}}
+        \\\cline{4-6}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Width
+        &\multicolumn{2}{c|}{256}
+        &\multicolumn{3}{c|}{}
+        \\\cline{4-6}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Dropout
+        &\multicolumn{2}{c|}{0.206299}
+        &\multicolumn{3}{c|}{}
+        \\\cline{4-6}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Activation
+        &\multicolumn{2}{c|}{ReLU}
+        &\multicolumn{3}{c|}{}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{2}{*}{HEAD}
+        &Activation
+        &\multicolumn{5}{c|}{ReLU}
+        \\\cline{4-\ncols}
+        \multicolumn{2}{|c|}{}
+        &&Output
+        &\multicolumn{5}{c|}{Navigation decision}
+        \\\hline
+        %
         \multirow{14}{*}{\rotcell{Learning}} 
         &
         \multirow{8}{*}{\rotcell{Rollout}}
@@ -892,7 +944,7 @@ for the variants examined in this experiment.
         &\multicolumn{5}{c|}{4, 5, 6, 7, 8, 9, 10 m/s}
         \\\cline{3-9}
         &
-        &\multicolumn{2}{c|}{Margin-threshold pairs}
+        &\multicolumn{2}{c|}{Margin-threshold}
         &\multicolumn{5}{c|}{(0.5, 10), (0.75, 5), (1.0 m, 1 \%)}
         \\\cline{2-9}        
         &
@@ -923,7 +975,7 @@ for the variants examined in this experiment.
         \\\cline{3-9}
         &
         &\multicolumn{2}{c|}{Learning rate}
-        &\multicolumn{5}{c|}{Exponential: $0.0001*0.95^\text{epoch}$}
+        &\multicolumn{5}{c|}{Exponential: $10^{-4}\cdot 0.95^\text{epoch}$}
         \\\hline
         %\multicolumn{2}{|c|}{\multirow{8}{*}{\rotcell{Testing}}}
         %&\multirow{2}{*}{\shortstack{Environ-\\ments}}
@@ -957,30 +1009,7 @@ for the variants examined in this experiment.
         %\\\hline
     \end{tabular}
 \end{table}
-The variant's learning process \textbf{and the racing tests} of this experiment
-\textbf{are} limited to a single simulation environment,
-i.e., spaceship interior - A,
 
-
-for the learning process
-is limited to a single site in a single scene,
-i.e., spaceship interior - A,
-due to the high time expenditure of the process.
-Thus, 
-this experiment only compares the variants 
-in terms of their ability to generalize 
-to the randomized figure-8 racetrack
-located in a fixed simulation environment.
-It does not provide insights 
-regarding the generalization to simulation environments 
-not seen in the learning process.
-
-Table \ref{tab:exp1_num_params} shows the variants'
-number of trainable parameters and 
-number of multiply-accumulate (MAC) operations 
-performed during a single inference,
-both obtained with 
-torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08/2022}.
 \providecommand{\ncols}{}\renewcommand{\ncols}{7}
 \begin{table}[h]
     \caption[
@@ -988,16 +1017,14 @@ torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08
         and multiply-accumulate operations
         of the ANN module variants of experiment 1
     ]{
-        Numbers of trainable parameters (TP)
+        Numbers (in the format $m\text{e}n = m\times 10^n$) of trainable parameters (TP)
         and multiply-accumulate operations (MAC)
-        of the ANN module variants of experiment 1
-        in the format $m\text{e}n = m\times 10^n$.
-        Note that, 
-        the table for the R3 variant does not reflect 
+        of the ANN module variants of experiment 1.
+        For R3, the table does not reflect 
         the negligible number of single trainings 
         in the learning process
         where the CNN parameters are momentarily trainable.
-        \label{tab:exp1_num_params}}        
+        \label{tab:exp1_nums}}        
     \centering
     \begin{tabular}{|c|c|r|r|r|r|r|} 
         \hline
@@ -1161,171 +1188,255 @@ torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08
         \\\hline
     \end{tabular}
 \end{table}
-%A variant's number of trainable parameters,
-%which determines the degree of freedom 
-%of its architecture to fit the training data,
-%can correlate with 
-%how well the variant performs at training
-%and eventually at racing.
-%Furthermore, it has a great impact on
-%how memory- and time-consuming the variant's training is.
-%The number of MAC operations is a platform-independent indicator
-%of how time-consuming the single inference of a variant is.
-%As first, drones are highly limited in computation power and
-%second,
-%navigation decisions for relatively high speeds 
-%must be made at a relatively high frequency,
-%a variant's inference time is critical at racing.
-%However, since the experiments of this thesis are only conducted
-%in simulation on a desktop computer,
-%the inference time is not detailly investigated.
 
-All variants have in common that
+Common to all ANN module variants is that
 first, the CNN submodule inputs 240x160 preprocessed RGB images
 from the drone's onboard camera.
 Second, the HEAD submodule is a
 ReLU-activated, fully-connected layer 
 that outputs navigation decisions.
-And third, the resultant dropout probability is 50 \%.
+And third, the input sequences of the training samples 
+are processed with a dropout with a 
+resultant dropout probability of 50 \%.
 For a variant that during inference applies dropout $x$ times 
 with the same dropout probability
 and that trains on samples with the input sequence length $y$, 
 the dropout probability at a single application is
-\begin{align}
+calculated with
+\begin{align} \label{eq:single_dropout}
     \probability = 1 -\sqrt[xy]{0.5}.
 \end{align}
 
+
 The two feedforward variants 
-are characterized by their
-deactivated GRU submodule and their FC submodule,
+are characterized by 
+deactivated GRU submodule and an activated FC submodule,
 which consists of three
 ReLU-activated, dropout-subjected, fully-connected layers
 with a width of 256 neurons.
+For a resultant dropout probability of 50 \%
+when processing input sequences of length 1,
+equation \ref{eq:single_dropout} yields the dropout probability 
+at single application of approximately 20.63 \%.
 The first feedforward variant (F1)
 is a slightly extended version of the ANN 
 deployed in the baseline autonomous navigation method 
 of Kaufmann et. al. \cite{Kaufmann2018}.
-The CNN submodule of the F1 variant is,
+The CNN submodule of F1 is,
 like the baseline, 
 implemented with an 8-layer Resnet.
 Unlike the baseline, its FC submodule 
 has three instead of one layer.
-This extension adjusts the F1 variant 
+This extension adjusts F1
 to the other examined variants in terms of
 the number of trainable parameters of the FC/GRU submodule
 in order to increase the variants' comparability.
-The second feedforward variant (F2) differs from the F1 variant
+The second feedforward variant (F2) differs from F1
 only in the CNN submodule
 as it uses a 14-layer instead of a 8-layer Resnet.
-Preliminary experiments (not documented here)
-suggested that more complex Resnets than the one used in the baseline work
+Preliminary experiments on Resnet
+implementations of different complexity
+\textbf{(not documented here)}
+suggest that more complex Resnets 
+than the one used in the baseline work
 yield significantly better results.
-The Resnet14 was chosen for the F2 variant
+The Resnet14 was chosen for F2
 because it represents a good compromise
 in terms of the increase in trainable parameters,
 thus keeping the variant's
 memory occupation 
 and training duration within tolerable limits.
-In this experiment, 
-the comparison between the F1 and F2 variant 
-aims to investigate the influence of the CNN complexity 
-on a variant's racing performance.
-
-
-The three recurrent variants
-are characterized by their deactivated FC submodule and 
-their GRU submodule,
-which consist of three layers
-with a hidden size of 64,
-of which the second and the third layer
-are subjected to dropout.
-All three variants use the Resnet14 
-because the F2 variant performs significantly stronger
-(see results in section ??).
-\textbf{recurrent with resnet8 not converged}
-For a resultant dropout probability of 50 \% at inference, 
-equation ?? with $x=2$ and $y=25$ yields the dropout probability 
-at single application shown in table \ref{tab:e1_ann_config}.
-The first recurrent variant (R1)
-is the recurrent equivalent of the feedforward F2 variant.
-The comparison between the F2 and R1 variant, thus,
-aims to investigate the impact of the GRU submodule's 
-temporal comprehension
-on a variant's racing performance.
-The second recurrent variant (R2) differs 
-from the R1 variant with respect to the CAT submodule.
-While the CAT submodule for R1 is deactivated,
-for R2 it introduces 
-all available optional inputs (see section )
-into the variant's decision making.
-The comparison of R1 and R2, thus,
-aims to investigate the impact of 
-the optional inputs
-on a variant's racing performance.
-The third recurrent variant (R3) differs 
-from R1 with respect to the CNN submodule.
-While the CNN submodule for R1 is trainable and not pretrained,
-for R2 it is pretrained and only partly trainable.
-\textbf{imagenet clasifier not converged}
-The CNN submodule of R2 is pretrained with preliminary final layer 
-on training data from 
-preliminary experiments \textbf{(not documented here)}
-and only trainable at the single trainings
-whenever a margin-threshold pair is completed in the learning process.
-This significantly speeds up the training of R3.
-
-To summarize: F1 represents the feedforward ANN of the baseline work.
-F2 integrates a 14-layer instead of an 8-layer Resnet.
-R1 is the recurrent counterpart of F2.
-R2 additionally uses the optional inputs.
-The CNN submodule of R3 is pretrained  
-and trainable only partly in time.
-
-Table \ref{tab:exp1_num_params} shows
-the number of trainable parameters and 
-the number of multiply-accumulate (MAC) operations 
-performed during a single inference,
-both obtained with 
-torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08/2022}.
-The number of trainable parameters 
-determines the degree of freedom 
-of a variant's architecture to fit the training data, 
-which can correlate with 
-how well the variant performs at training
-and eventually at racing. 
-Furthermore, it is a platform-independent indicator 
-of how memory- and time-consuming the training of a variant is.
-The number of MAC operations is a platform-independent indicator
-of how time-consuming the single inference of a variant is.
-As drones are highly limited in computation power and
-navigation decisions must be made at a relatively high frequency,
-the inference time of a variant is critical at racing.
-However, since the experiments of this thesis are only conducted
-in simulation on a desktop computer,
-whether a variant has a sufficiently small inference time
-cannot be examined.
-
-Using the 8-layer or the 14-layer Resnet
+Nonetheless, using the 8-layer or the 14-layer Resnet
 has by far the largest impact on the 
 total number of both, parameters and MAC operations, of a variant.
 Compared to Resnet8, 
 Resnet14 has approximately 
 9 times more parameters and 
 performs approximately 20 times more MAC operations
-during a single inference.
-The F1 variant (from the baseline work) 
-is the only variant using Resnet8
+at a single inference.
+F1 is the only variant using Resnet8
 and has thus by far the lowest MAC number.
+This experiment compares F1 and F2 
+to investigate whether the higher CNN complexity of F2 
+is reflected in the racing performance of the variant.
 
 
-The CAT submodule is not listed in the table because
-it neither has parameters nor performs MAC operations.
+The three recurrent variants
+are characterized by a deactivated FC submodule and 
+an activated GRU submodule,
+which consist of three layers
+with a hidden size of 64,
+of which the second and the third layer
+are subjected to dropout.
+For a resultant dropout probability of 50 \%
+when processing input sequences of length 25,
+equation \ref{eq:single_dropout} yields the dropout probability 
+at single application of approximately 1.38 \%.
 Care was taken to ensure that the GRU submodule 
 of the three recurrent variants has fewer trainable parameters
 than the FC submodule of the two feedforward variants,
 in order to rule out the possibility 
 that the recurrent variants perform better only 
 because of a higher number of trainable parameters.
+All three variants use the Resnet14 
+because F2 performs significantly stronger than F1
+(see results in section \ref{results}).
+\textbf{recurrent with resnet8 not converged}
+The first recurrent variant (R1)
+is the recurrent equivalent of F2.
+The comparison of F2 and R1, thus,
+aims to investigate the impact of the GRU submodule's 
+temporal comprehension on the racing performance of a variant.
+The second recurrent variant (R2) differs 
+from R1 with respect to the CAT submodule.
+While the CAT submodule for R1 is deactivated,
+for R2 it inputs
+all optional inputs available.
+The comparison of R1 and R2, thus,
+aims to investigate the impact of 
+using the optional inputs
+within a variant's navigation decision making
+on the variant's racing performance.
+The third recurrent variant (R3) differs 
+from R1 with respect to the CNN submodule.
+While the CNN submodule for R1 is trainable and not pretrained,
+for R2 it is pretrained and only partly trainable.
+\textbf{imagenet clasifier not converged}
+The pre-training of the CNN submodule
+was carried out with a preliminary final layer
+on training data from 
+preliminary experiments \textbf{(not documented here)}.
+The CNN is only trainable at the single trainings
+whenever a margin-threshold pair is completed in the learning process.
+As a result, R3 has by far the lowest number of trainable parameters
+for most trainings, whereby 
+the learning of R3 can be highly accelerated.
+The comparison of R1 and R2, thus,
+aims to investigate 
+whether this shortcut
+has a tolerable impact on a
+variant's racing performance.
+
+To summarize the relation of the ANN module configurations of the variants examined: 
+F1 represents the feedforward ANN of the baseline work.
+F2 integrates a 14-layer instead of an 8-layer Resnet.
+R1 is the recurrent counterpart of F2.
+R2 additionally uses the optional inputs.
+The CNN submodule of R3 is pretrained  
+and trainable only partly in time.
+
+The rollout configuration of the learning process
+is the same for all variants examined.
+The variants learn to navigate through 
+the randomized, counterclockwise figure-8 racetrack
+built with the TUB-DAI or THU-DME gate type.
+The racetrack is thereby located in
+site A of the spaceship interior scene.
+This limitation to a single simulation environment
+is motivated by the 
+high time expenditure of the imitation learning process.
+As a result,
+this experiment can only compare the variants 
+in terms of their ability to generalize 
+to the randomized figure-8 racetrack
+located in a single, fixed simulation environment
+and does not provide insights 
+regarding the generalization to simulation environments 
+unseen in the learning process.
+The maximum drone speeds of the planning module
+during the learning rollouts
+range from 4 to 10 m/s in 1 m/s steps.
+The learning at different speeds is motivated
+by the fact that the maximum drone speed 
+influences the state distribution of a variant's rollout.
+For the intervening expert system, 
+there are three margin-threshold pairs, 
+with the margins becoming wider 
+and the thresholds becoming more stringent.
+To complete the learning on a rollout configuration,
+the variant must perform a rollout 
+with less than 10/5/1 \% expert interventions
+that are triggered whenever the variant
+would navigate the drone further than 0.5/0.75/1.0 m
+from the expert's global trajectory.
+
+With respect to the training configuration of the learning process,
+all variants share that they 
+determine loss with
+the standard 
+SmoothL1Loss\footnote{\url{https://pytorch.org/docs/stable/nn.html}, visited on 18/08/2022}
+PyTorch implementation
+and update the variants' trainable parameters accordingly 
+with the standard 
+ADAM\footnote{\url{https://pytorch.org/docs/stable/optim.html}, visited on 18/08/2022}
+PyTorch implementation,
+whereby the learning rate is exponentially scheduled
+with the initial value of $10^{-4}$ for each training and a decay of 
+95 \% per epoch.
+Moreover, all variants share that the batch size 
+is set to the maximum value containable by
+the GPU memory of my desktop computer.
+The feedforward and the recurrent variants differ 
+by the aggregate training samples
+and the number of epochs per training.
+While for the feedforward variants,
+the inputs of the samples are non-sequential,
+for the recurrent variants,
+they have a sequence length of 25.
+As a result, the training epochs of the
+recurrent variants consume significantly more time.
+However, preliminary experiments 
+\textbf{(not documented here)}
+suggest that these recurrent training epochs 
+also lower the loss more effectively.
+Therefore, the number or epochs per training
+is set to 10 and 3 for the feedforward
+and the recurrent variants, respectively.
+
+After the learning process, the variants are tested.
+Table \ref{tab:e1_test_config} shows 
+the configuration of the racing test.
+For testing, the variants roll out on the same 
+simulation configuration
+(environment and racetrack)
+with the same maximum drone speeds as for learning.
+For every combination in the testing configuration,
+each variant rolls out 10 times.
+\begin{table}[h]
+    \caption{Testing configuration for experiment 1
+    \label{tab:e1_test_config}}
+    \centering
+    \begin{tabular}{|c|c|c|c|} 
+        \hline
+        \multirow{8}{*}{\rotcell{Testing}}   
+        &\multirow{2}{*}{\shortstack{Environ-\\ments}}
+        &Scenes
+        &\multicolumn{1}{c|}{Spaceship interior}
+        \\\cline{3-4}
+        &&Sites
+        &\multicolumn{1}{c|}{A}
+        \\\cline{2-4}
+        &\multirow{4}{*}{\shortstack{Race-\\tracks}}
+        &Types
+        &\multicolumn{1}{c|}{Figure-8}
+        \\\cline{3-4}
+        &&Generations
+        &\multicolumn{1}{c|}{Randomized}
+        \\\cline{3-4}
+        &&Directions
+        &\multicolumn{1}{c|}{Counterclockwise}
+        \\\cline{3-4}
+        &&Gates
+        &\multicolumn{1}{c|}{TUB-DAI, THU-DME}
+        \\\cline{2-4}
+        &\multicolumn{2}{c|}{Max. drone speeds}
+        &\multicolumn{1}{c|}{4, 5, 6, 7, 8, 9, 10 m/s}
+        \\\cline{2-4}
+        &\multicolumn{2}{c|}{Number of repetitions}
+        &\multicolumn{1}{c|}{10}
+        \\\hline
+    \end{tabular}
+\end{table}
 
 
 
@@ -1333,29 +1444,495 @@ because of a higher number of trainable parameters.
 
 
 
+\section{Design of Experiment 2}
+Experiment 2 takes 
+the ANN module variant R1 
+of experiment 1 (see table \ref{tab:e1_config})
+as a starting point
+to study the impact of the depth
+of the GRU submodule on a variant's
+racing performance.
+The starting point R1 exhibits the best racing performance
+among all variants examined in experiment 1,
+which can be attributed to the use of the recurrent 
+GRU submodule
+(see section \ref{results}).
+The following briefly recalls 
+the configuration of R1 in experiment 1.
+
+R1 integrates
+a trainable, not pretrained 14-layer Resnet, 
+a three-layer GRU with a hidden size of 64
+and a resultant dropout probability of 50 \%
+and a final, ReLU-activated, fully-connected layer 
+in order to map 240x160 preprocessed RGB images
+from the drone's onboard camera
+to navigation decisions forwarded to the planning module.
+The variant rolls out on the randomized figure-8 racetrack
+in a single simulation environment
+for maximum drone speeds of $4,5,\dots,10$ m/s.
+Thereby, a training sample of sequence length 25 
+is generated whenever the expert system intervenes
+to correct a navigation decision that would navigate
+the drone out of the current margin.
+After each rollout, R1 trains on
+the aggregate training dataset 
+for 3 epochs with supervised learning.
+
+
+
+Experiment 2 studies the racing performance
+of five ANN module variants
+that are configured like R1
+(see table \ref{tab:e1_config})
+except that the GRU submodule has
+1, 2, 3 (this is the original number of R2), 5, or 10 layers
+and the dropout at a single application
+has a probability of approximately
+none (by design, the first layer applies no dropout), 
+2.73, 1.38, 0.69 or 0.31 \%
+, respectively,
+in order to maintain
+a resultant dropout probability of 50 \%
+(see equ. \ref{eq:single_dropout}).
+A variant examined in this experiment 
+with $L$ GRU layers
+of a hidden size of $H$
+is referred to as R1-$L$x$H$.
+
+The five variants are trained for
+200 epochs on 
+the final training dataset of R1
+which contains X samples collected from Y rollouts
+of the learning process.
+Thereafter, the variants perform
+racing tests with the same
+configuration as R1 (see table \ref{tab:test_config}).
 
 
 
 
-%The variants are trained with dataset aggregation.
-%The rollouts have the following simulation setup
-%\begin{itemize}
-%    \item Scenes: spaceship interior
-%    \item Sites: A
-%    \item Racetrack \begin{itemize}
-%        \item Gates: TUB-DAI, THU-DME
-%        \item Types: Figure-8
-%        \item Generation: Randomized
-%        \item Direction: Clockwise
-%    \end{itemize}
-%    \item Max. speed: 4, 5, 6, 7, 8, 9, 10 m/s
-%    \item Margin-Treshold: (0.5 m, 10 \%), (0.75 m, 5 \%), (1.0 m, 1 \%)
-%\end{itemize}
-%After each rollout,
-%the variant is trained.
+
+\section{Design of Experiment 3}
+Experiment 3 studies the racing performance of a
+feedforward and a recurrent ANN module variant
+on the randomized gap racetrack in several
+simulation environments.
+Table \ref{tab:e3_config} shows the configuration of experiment 3
+including the ANN module configuration
+and the learning configuration.
+Table \ref{tab:exp3_nums} shows the number of trainable parameters
+and MAC operations for both examined variants.
+
+\providecommand{\ncols}{}\renewcommand{\ncols}{6}
+\providecommand{\wcols}{}\renewcommand{\wcols}{2.7cm}
+\definecolor{light-gray}{gray}{0.90}
+\begin{table}[h]
+    \caption{Configuration of Experiment 3
+    \label{tab:e3_config}}
+    \centering
+    \begin{tabular}{|c|c|c|c|p{\wcols}|p{\wcols}|} 
+        \cline{5-\ncols}
+        \multicolumn{4}{c|}{}
+        &\multicolumn{1}{c|}{Feedforward}
+        &\multicolumn{1}{c|}{Recurrent}
+        \\\cline{5-\ncols}
+        %
+        \multicolumn{4}{c|}{}
+        &E3F
+        &E3R
+        \\\hline
+        %
+        \multicolumn{2}{|c|}{\multirow{14}{*}{\rotcell{ANN}}}
+        &\multirow{4}{*}{CNN}
+        &Input
+        &\multicolumn{2}{c|}{360x240 RGB}
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Model
+        &\multicolumn{2}{c|}{Resnet18}
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Pretrained
+        &\multicolumn{2}{c|}{No}
+        \\\cline{4-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Trainable
+        &\multicolumn{2}{c|}{Yes}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{1}{*}{CAT}
+        &Opt. Input
+        &\multicolumn{2}{c|}{All}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{3}{*}{GRU}
+        &\# Layers
+        &\multicolumn{1}{c|}{\multirow{3}{*}{None}}
+        &\multicolumn{1}{c|}{3}
+        \\\cline{4-4}\cline{6-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Hidden size
+        &\multicolumn{1}{c|}{}
+        &\multicolumn{1}{c|}{16}
+        \\\cline{4-4}\cline{6-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Dropout
+        &\multicolumn{1}{c|}{}
+        &\multicolumn{1}{c|}{0.109101}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{4}{*}{FC}
+        &\# Layers
+        &\multicolumn{1}{c|}{1}
+        &\multicolumn{1}{c|}{\multirow{4}{*}{None}}
+        \\\cline{4-5}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Width
+        &\multicolumn{1}{c|}{512}
+        &\multicolumn{1}{c|}{}
+        \\\cline{4-5}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Dropout
+        &\multicolumn{1}{c|}{0.5}
+        &\multicolumn{1}{c|}{}
+        \\\cline{4-5}
+        %
+        \multicolumn{2}{|c|}{}
+        &&Activation
+        &\multicolumn{1}{c|}{ReLU}
+        &\multicolumn{1}{c|}{}
+        \\\cline{3-\ncols}
+        %
+        \multicolumn{2}{|c|}{}
+        &\multirow{2}{*}{HEAD}
+        &Activation
+        &\multicolumn{2}{c|}{ReLU}
+        \\\cline{4-\ncols}
+        \multicolumn{2}{|c|}{}
+        &&Output
+        &\multicolumn{2}{c|}{Navigation decision}
+        \\\hline
+        %
+        \multirow{14}{*}{\rotcell{Learning}} 
+        &
+        \multirow{8}{*}{\rotcell{Rollout}}
+        &\multirow{3}{*}{\shortstack{Environ-\\ments}}
+        &\multirow{2}{*}{Scenes}
+        %&\multicolumn{2}{c|}{Spaceship interior, destroyed city, industrial site, polygon city}
+        &\multicolumn{2}{c|}{\multirow{2}{*}{\shortstack{Spaceship interior, destroyed city,\\industrial site, polygon city}}}
+        \\&&&&\multicolumn{2}{c|}{}
+        \\\cline{4-\ncols}
+        &&&Sites
+        &\multicolumn{2}{c|}{A, B, C}
+        \\\cline{3-\ncols}
+        &&\multirow{4}{*}{\shortstack{Race-\\tracks}}
+        &Types
+        &\multicolumn{2}{c|}{Gap}
+        \\\cline{4-\ncols}
+        &&&Generations
+        &\multicolumn{2}{c|}{Randomized}
+        \\\cline{4-\ncols}
+        &&&Directions
+        &\multicolumn{2}{c|}{Counterclockwise, Clockwise}
+        \\\cline{4-\ncols}
+        &&&Gates
+        &\multicolumn{2}{c|}{TUB-DAI, THU-DME}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Max. drone speeds}
+        &\multicolumn{2}{c|}{4, 6, 8 m/s}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Margin-threshold}
+        &\multicolumn{2}{c|}{(0.7, 6), (0.5 m, 6 \%)}
+        \\\cline{2-\ncols}        
+        &
+        \multirow{6}{*}{\rotcell{Training}}
+        %\multirow{6}{*}{Training}   
+        &\multicolumn{2}{c|}{Sequence length}
+        &\multicolumn{1}{c|}{1}
+        &\multicolumn{1}{c|}{3}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{\# Epochs}
+        &\multicolumn{2}{c|}{5}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Batch size}
+        &\multicolumn{1}{c|}{32}
+        &\multicolumn{1}{c|}{16}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Loss}
+        &\multicolumn{2}{c|}{SmoothL1Loss}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Optimizer}
+        &\multicolumn{2}{c|}{ADAM}
+        \\\cline{3-\ncols}
+        &
+        &\multicolumn{2}{c|}{Learning rate}
+        &\multicolumn{2}{c|}{Exponential: $10^{-4}\cdot 0.99^\text{epoch}$}
+        \\\hline
+    \end{tabular}
+\end{table}
+
+
+\providecommand{\ncols}{}\renewcommand{\ncols}{4}
+\begin{table}[h]
+    \caption[
+        Numbers of trainable parameters 
+        and multiply-accumulate operations
+        of the ANN module variants of experiment 3
+    ]{
+        Numbers (in the format $m\text{e}n = m\times 10^n$) of trainable parameters (TP)
+        and multiply-accumulate operations (MAC)
+        of the ANN module variants of experiment 3.
+        \label{tab:exp3_nums}}        
+    \centering
+    \begin{tabular}{|c|c|r|r|} 
+        \hline
+        ANN
+        &\#
+        &E3F
+        &E3R
+        \\\hline
+        %
+        \multirow{2}{*}{CNN}
+        &TP
+        &\multicolumn{2}{c|}{11.2e6}
+        \\\cline{2-\ncols}
+        %
+        &MAC
+        &\multicolumn{2}{c|}{3.24e9}
+        \\\hline
+        %
+        \multirow{2}{*}{GRU}
+        &TP
+        &\multirow{2}{*}{None}
+        &29.1e3
+        \\\cline{2-2}\cline{4-\ncols}
+        %
+        &MAC
+        &
+        &29.1e3
+        \\\hline
+        %
+        \multirow{2}{*}{FC}
+        &TP
+        &267e3
+        &\multirow{2}{*}{None}
+        \\\cline{2-3}
+        %
+        &MAC
+        &267e3
+        &
+        \\\hline
+        %
+        \multirow{2}{*}{HEAD}
+        &TP
+        &1.54e3
+        &48
+        \\\cline{2-\ncols}
+        %
+        &MAC
+        &1.54e3
+        &48
+        \\\hline
+        %
+        \multirow{2}{*}{Total}
+        &TP
+        &11.4e6
+        &11.2e6
+        \\\cline{2-\ncols}
+        %
+        &MAC
+        &\multicolumn{2}{c|}{3.24e9}
+        \\\hline
+    \end{tabular}
+\end{table}
+
+Both variants integrate a trainable,
+not pretrained 18-layer Resnet
+to process 360x240 RGB images,
+the CAT submodule to input 
+all available, optional inputs
+and the ReLU activated HEAD submodule 
+to output navigation decisions.
+Moreover, both variants process a training sample 
+input with a resultant dropout probability of 
+50 \% (see equation \ref{eq:single_dropout}).
+
+The feedforward variant (E3F)
+is characterized by the deactivated GRU submodule
+and the activated FC submodule,
+which is a single, ReLU activated,
+dropout-subjected, fully-connected layer with 512 neurons.
+Therewith, 
+E3F corresponds to the ANN design in the baseline work
+with the Resnet8 extended to a Resnet18.
+The recurrent variant (E3R)
+is characterized by the deactivated FC submodule
+and the activated GRU submodule,
+which consist of three layers with a hidden size of 16, of
+which the second and the third layer are subjected to dropout.
+
+The Resnet18 dominates the numbers of trainable parameters
+and (even more) MAC operations for both variants.
+Nonetheless, care was taken that the
+GRU submodule of E3R
+has less trainable parameters
+than the FC submodule of E3F
+in order to rule out
+the possibility that E3R performs 
+better only because of a higher complexity.
+
+The rollout configuration of the learning process 
+is the same for both variants examined.
+For a maximum drone speed of 
+4, 6 and 8 m/s,
+the variants learn to navigate 
+through the randomized, counterclockwise 
+and clockwise gap racetrack 
+built with the TUB-DAI or THU-DME gate type,
+which is located in all three sites of the scenes
+spaceship interior, destroyed city,
+industrial site and polygon city.
+For the intervening expert system,
+there are two margin-threshold pairs.
+The first margin is wider than the second,
+while the threshold remains to be 6 \%.
+\textbf{compare with e1}
+
+
+The training configuration of the learning process 
+is partly the same for both variants.
+Both are trained for 5 epochs 
+with the SmoothL1Loss, the ADAM optimizer
+and an exponentially scheduled learning rate.
+The batch size for both variants 
+is set to the maximum value containable by the GPU
+memory of my desktop computer.
+E3F trains on samples with non-sequential input,
+while E3R trains on samples with an input sequence length
+of 3.
+
+Table \ref{tab:e3_test_config} shows the configuration for the racing tests.
+The variants roll out on the four scenes seen during learning
+as well as the desert mountain scene unseen during learning.
+Thereby, the maximum drone speed is set to 
+4, 5, ..., 10 m/s  of which only 4, 6 and 8 m/s
+were experienced during learning.
+For every combination in the testing configuration,
+each variant rolls out only once
+due to the large number of combinations.
+
+\begin{table}[h]
+    \caption{Testing configuration for experiment 3
+    \label{tab:e3_test_config}}
+    \centering
+    \begin{tabular}{|c|c|c|c|} 
+        \hline
+        \multirow{8}{*}{\rotcell{Testing}}   
+        &\multirow{3}{*}{\shortstack{Environ-\\ments}}
+        &\multirow{2}{*}{Scenes}
+        &\multicolumn{1}{c|}{\multirow{2}{*}{\shortstack{Spaceship interior, destroyed city,\\industrial site, polygon city, desert mountain}}}
+        \\&&&\multicolumn{1}{c|}{}
+        \\\cline{3-4}
+        &&Sites
+        &\multicolumn{1}{c|}{A, B, C}
+        \\\cline{2-4}
+        &\multirow{4}{*}{\shortstack{Race-\\tracks}}
+        &Types
+        &\multicolumn{1}{c|}{Gap}
+        \\\cline{3-4}
+        &&Generations
+        &\multicolumn{1}{c|}{Randomized}
+        \\\cline{3-4}
+        &&Directions
+        &\multicolumn{1}{c|}{Counterclockwise, Clockwise}
+        \\\cline{3-4}
+        &&Gates
+        &\multicolumn{1}{c|}{TUB-DAI, THU-DME}
+        \\\cline{2-4}
+        &\multicolumn{2}{c|}{Max. drone speeds}
+        &\multicolumn{1}{c|}{4, 5, 6, 7, 8, 9, 10 m/s}
+        \\\cline{2-4}
+        &\multicolumn{2}{c|}{Number of repetitions}
+        &\multicolumn{1}{c|}{1}
+        \\\hline
+    \end{tabular}
+\end{table}
 
 
 
+
+
+\section{Design of Experiment 4}
+Experiment 4 takes the better performing
+of both ANN module variant examined in experiment 3,
+i.e., the recurrent variant E3R
+(see table \ref{tab:e3_config}),
+and its final, aggregated training dataset
+as a starting point
+for studying the impact of the 
+input sequence length and the image size
+of the training data
+on the racing performance of a recurrent variant.
+
+The training dataset of E3R obtained in experiment 3
+contains ?? samples 
+whose input is a sequence of 
+three pairs of an 360x240 RGB image 
+and an optional input vector.
+In experiment 4, 
+the training dataset is rebuilt from the raw data
+recorded during the learning process of E3R
+with a varying input sequence length of 
+2, 3, 5 and 10
+and a varying RGB image size of 
+240x160 and 360x240,
+which yields eight different datasets.
+Then, 
+the eight variants
+named 
+E3R-2*240x160,
+E3R-3*240x160,
+E3R-5*240x160,
+E3R-10*240x160,
+E3R-2*360x240,
+E3R-3*360x240 (the starting point),
+E3R-5*360x240
+and
+E3R-10*360x240
+train on these datasets.
+The ANN module of these eight variants
+are configured like the starting point.
+However, for a resultant dropout probability
+of 50 \%, the dropout probability
+for a single dropout application of the GRU submodule
+is adjusted with equation \ref{eq:single_dropout}.
+
+Finally,
+the variants perform
+racing tests with the same
+configuration as R1 (see table \ref{tab:test_config}).
+
+%A variant examined in this experiment 
+%with $L$ GRU layers
+%of a hidden size of $H$
+%is referred to as R1-$L$x$H$.
 
 
 

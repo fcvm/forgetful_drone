@@ -5,7 +5,8 @@ from typing import List, Tuple
 import utils
 import math
 
-
+precolor = 'tab:blue'
+postcolor = 'tab:orange'
 
 class Pos:
 
@@ -223,7 +224,7 @@ class Figure8:
             dx = np.cos (yaw) * self.gateWidth / 2 
             dy = np.sin (yaw) * self.gateWidth / 2 
             ax.arrow (x - dx, y - dy, 2 * dx, 2 * dy, 
-                width=0.3, head_width=0.0, color=color,
+                width=0.1, head_width=0.0, color=color,
                 alpha=alpha
             )
 
@@ -283,13 +284,15 @@ class Figure8:
         alpha_pre = 0.4
         
         fig, ax = plt.subplots ()
+        
+
         self.plotTrackXY (ax, 
             gate_poses, self.compDronePose (gate_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             shift_poses, self.compDronePose (shift_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -302,11 +305,11 @@ class Figure8:
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             shift_poses, self.compDronePose (shift_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             scale_poses, self.compDronePose (scale_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -319,13 +322,13 @@ class Figure8:
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             scale_poses, self.compDronePose (scale_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         twist_drone = self.compDronePose (twist_poses)
         twist_drone.q = Quat.multiply (twist_drone.q, Quat.fromAngAx (np.pi, UnitVecZ) )
         self.plotTrackXY (ax, 
             twist_poses, twist_drone,
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -338,11 +341,11 @@ class Figure8:
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             twist_poses, twist_drone,
-            'k', alpha_pre, False
+            postcolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             redir_poses, self.compDronePose (redir_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -449,12 +452,12 @@ class Gap (Figure8):
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             avg_poses, self.compDronePose (avg_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         for pn, pw in zip (gate_poses_n, gate_poses_w):
             x = [pn.p [0], pw.p [0]]
             y = [pn.p [1], pw.p [1]]
-            ax.plot (x, y, color='k')#, alpha=alpha_pre)
+            ax.plot (x, y, color=precolor)#, alpha=alpha_pre)
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
         ax.set_ylim (ylim)
@@ -466,11 +469,11 @@ class Gap (Figure8):
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             avg_poses, self.compDronePose (avg_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             shift_poses, self.compDronePose (shift_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -483,11 +486,11 @@ class Gap (Figure8):
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             shift_poses, self.compDronePose (shift_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             scale_poses, self.compDronePose (scale_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -500,13 +503,13 @@ class Gap (Figure8):
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             scale_poses, self.compDronePose (scale_poses),
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         twist_drone = self.compDronePose (twist_poses)
         twist_drone.q = Quat.multiply (twist_drone.q, Quat.fromAngAx (np.pi, UnitVecZ) )
         self.plotTrackXY (ax, 
             twist_poses, twist_drone,
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
@@ -519,11 +522,11 @@ class Gap (Figure8):
         fig, ax = plt.subplots ()
         self.plotTrackXY (ax, 
             twist_poses, twist_drone,
-            'k', alpha_pre, False
+            precolor, alpha_pre, False
         )
         self.plotTrackXY (ax, 
             redir_poses, self.compDronePose (redir_poses),
-            'tab:blue', 1.0, True
+            postcolor, 1.0, True
         )
         ax.set_aspect ('equal', adjustable='box')
         ax.set_xlim (xlim)
