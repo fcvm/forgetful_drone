@@ -13,7 +13,7 @@ for EXP_ID in [
     #'UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 
     #'UTC_2022_07_01_07_27_56___SEQLEN_10___RF3',
     #'resnet18_1third_trainable'
-    'UTC_2022_09_04_19_35_20'
+    'UTC_2022_07_01_07_27_56'
 ]:
 
     fb.initExp (EXP_ID)
