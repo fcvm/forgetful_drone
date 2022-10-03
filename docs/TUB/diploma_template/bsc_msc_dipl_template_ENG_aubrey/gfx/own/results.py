@@ -176,10 +176,11 @@ class ResultPlot:
         ylabel: str = None,
         yscale: str = None,
         legend_loc: str = None,
-        grid: bool = True
+        grid: bool = True,
+        start_cnt: int = 0
     ) -> None:
 
-        self._cnt = count (0)
+        self._cnt = count (start_cnt)
         self._name = name
         self._handles = handles
         self._xlabel = xlabel
@@ -226,6 +227,21 @@ if __name__ == '__main__':
         ResultPlot (
             name='e1_learning_recurrent',
             handles=[
+                TrainHandle ('zUTC_2022_09_14_07_18_53', 'R1',     tl=True, vl=True),
+                TrainHandle ('zUTC_2022_09_15_15_02_44', 'R2',     tl=True, vl=True),
+                TrainHandle ('zUTC_2022_09_04_19_35_20___pretrainedCNN', 'R3',   tl=True, vl=True),
+            ],
+            xlabel='Epochs',
+            ylabel='SmoothL1Loss',
+            yscale='log',
+            grid=True,
+            start_cnt=2
+        ),
+        ResultPlot (
+            name='e1_learning',
+            handles=[
+                TrainHandle ('UTC_2022_09_04_17_43_31', 'F1', tl=True, vl=True),
+                TrainHandle ('UTC_2022_09_14_11_47_07', 'F2', tl=True, vl=True),
                 TrainHandle ('zUTC_2022_09_14_07_18_53', 'R1',     tl=True, vl=True),
                 TrainHandle ('zUTC_2022_09_15_15_02_44', 'R2',     tl=True, vl=True),
                 TrainHandle ('zUTC_2022_09_04_19_35_20___pretrainedCNN', 'R3',   tl=True, vl=True),
@@ -288,8 +304,8 @@ if __name__ == '__main__':
         ResultPlot (
             name='e3_learning',
             handles=[
-                TrainHandle ('UTC_2022_06_13_10_13_56', 'F', tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56', 'R', tl=True, vl=True),
+                TrainHandle ('UTC_2022_06_13_10_13_56', 'E3F', tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56', 'E3R', tl=True, vl=True),
             ],
             xlabel='Epochs',
             ylabel='SmoothL1Loss',
@@ -299,8 +315,8 @@ if __name__ == '__main__':
         ResultPlot (
             name='e3_racing',
             handles=[
-                RacingHandle ('UTC_2022_06_13_10_13_56', 'F',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56', 'R',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_06_13_10_13_56', 'E3F',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56', 'E3R',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
             ],
             xlabel='Max. Speed [m/s]',
             ylabel='Racetrack Completions [%]',
@@ -312,17 +328,17 @@ if __name__ == '__main__':
         # EXPERIMENT 4
 
         ResultPlot (
-            name='e4_learning',
+            name='e4_learning_360x240',
             handles=[
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'R-2*360x240',           tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56', 'R-3*360x240',                      tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'R-5*360x240',           tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10', 'R-10*360x240',         tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25', 'R-25*360x240',         tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'R-2*240x160',     tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'R-3*240x160',     tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'R-5*240x160',     tl=True, vl=True),
-                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3', 'R-10*240x160',   tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'E3R-2*360x240',           tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3', 'E3R-3*360x240',                      tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'E3R-5*360x240',           tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10','E3R-10*360x240',         tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25','E3R-25*360x240',         tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'R-2*240x160',     tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'R-3*240x160',     tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'R-5*240x160',     tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3', 'R-10*240x160',   tl=True, vl=True),
             ],
             xlabel='Epochs',
             ylabel='SmoothL1Loss',
@@ -330,17 +346,53 @@ if __name__ == '__main__':
             grid=True
         ),
         ResultPlot (
-            name='e4_racing',
+            name='e4_racing_360x240',
             handles=[
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'R-2*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56', 'R-3*360x240',                      l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'R-5*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10', 'R-10*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25', 'R-25*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'R-2*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'R-3*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'R-5*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
-                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3', 'R-10*240x160',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'E3R-2*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3', 'E3R-3*360x240',                      l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'E3R-5*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10','E3R-10*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25','E3R-25*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'R-2*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'R-3*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'R-5*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3', 'R-10*240x160',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+            ],
+            xlabel='Max. Speed [m/s]',
+            ylabel='Racetrack Completions [%]',
+            yscale='linear',
+            grid=True
+        ),
+        ResultPlot (
+            name='e4_learning_240x160',
+            handles=[
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'R-2*360x240',           tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3', 'R-3*360x240',                      tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'R-5*360x240',           tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10', 'R-10*360x240',         tl=True, vl=True),
+                #TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25', 'R-25*360x240',         tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'E3R-2*240x160',     tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'E3R-3*240x160',     tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'E3R-5*240x160',     tl=True, vl=True),
+                TrainHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3','E3R-10*240x160',   tl=True, vl=True),
+            ],
+            xlabel='Epochs',
+            ylabel='SmoothL1Loss',
+            yscale='log',
+            grid=True
+        ),
+        ResultPlot (
+            name='e4_racing_240x160',
+            handles=[
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2', 'R-2*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3', 'R-3*360x240',                      l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5', 'R-5*360x240',           l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10', 'R-10*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                #RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_25', 'R-25*360x240',         l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_2___RF3', 'E3R-2*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_3___RF3', 'E3R-3*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_5___RF3', 'E3R-5*240x160',     l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
+                RacingHandle ('UTC_2022_07_01_07_27_56___SEQLEN_10___RF3','E3R-10*240x160',   l_sc=[0, 1, 2, 3], l_si=[0, 1, 2], l_tt=[1], l_tg=[1], l_td=[0, 1], l_gt=[1, 2], l=True, v=True),
             ],
             xlabel='Max. Speed [m/s]',
             ylabel='Racetrack Completions [%]',
