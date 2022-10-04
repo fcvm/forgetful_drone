@@ -1,36 +1,35 @@
-\BOOKMARK [0][-]{chapter*.5}{List of Figures}{}% 1
-\BOOKMARK [0][-]{chapter*.6}{List of Tables}{}% 2
+\BOOKMARK [0][-]{chapter*.4}{List of Figures}{}% 1
+\BOOKMARK [0][-]{chapter*.5}{List of Tables}{}% 2
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 3
 \BOOKMARK [1][-]{section.1.1}{Motivation}{chapter.1}% 4
 \BOOKMARK [1][-]{section.1.2}{Approach and Goals}{chapter.1}% 5
 \BOOKMARK [1][-]{section.1.3}{Structure of the Thesis}{chapter.1}% 6
 \BOOKMARK [0][-]{chapter.2}{Background}{}% 7
-\BOOKMARK [1][-]{section.2.1}{Topic 1}{chapter.2}% 8
-\BOOKMARK [1][-]{section.2.2}{Imitation Learning with Dataset Aggregation}{chapter.2}% 9
-\BOOKMARK [1][-]{section.2.3}{Gated recurrent unit}{chapter.2}% 10
-\BOOKMARK [0][-]{chapter.3}{Autonomous Navigation Method}{}% 11
-\BOOKMARK [1][-]{section.3.1}{Reference systems}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.2}{ANN module}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.3}{Planning module}{chapter.3}% 14
-\BOOKMARK [1][-]{section.3.4}{Control stack}{chapter.3}% 15
-\BOOKMARK [1][-]{section.3.5}{Expert system}{chapter.3}% 16
-\BOOKMARK [0][-]{chapter.4}{Experiments in Simulation}{}% 17
-\BOOKMARK [1][-]{section.4.1}{Simulation Setup}{chapter.4}% 18
-\BOOKMARK [1][-]{section.4.2}{Imitation learning process of the ANN Module}{chapter.4}% 19
-\BOOKMARK [1][-]{section.4.3}{Racing Tests}{chapter.4}% 20
-\BOOKMARK [1][-]{section.4.4}{Design of Experiment 1}{chapter.4}% 21
-\BOOKMARK [1][-]{section.4.5}{Design of Experiment 2}{chapter.4}% 22
-\BOOKMARK [1][-]{section.4.6}{Design of Experiment 3}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.7}{Design of Experiment 4}{chapter.4}% 24
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 25
-\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 26
-\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 27
-\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 28
-\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 29
-\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 30
-\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 31
-\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 32
-\BOOKMARK [0][-]{chapter*.57}{Appendices}{}% 33
-\BOOKMARK [1][-]{chapter*.58}{Appendix A: Abbreviations}{chapter*.57}% 34
-\BOOKMARK [1][-]{section*.59}{Appendix B: LaTeX Help}{chapter*.57}% 35
-\BOOKMARK [1][-]{table.caption.76}{Appendix B: Racetrack Randomization and Redirection}{chapter*.57}% 36
+\BOOKMARK [1][-]{section.2.1}{Imitation Learning with Dataset Aggregation}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.2}{Gated Recurrent Unit}{chapter.2}% 9
+\BOOKMARK [0][-]{chapter.3}{Autonomous Navigation Method}{}% 10
+\BOOKMARK [1][-]{section.3.1}{Reference systems}{chapter.3}% 11
+\BOOKMARK [1][-]{section.3.2}{ANN module}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.3}{Planning module}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.4}{Control stack}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.5}{Expert system}{chapter.3}% 15
+\BOOKMARK [0][-]{chapter.4}{Experiments in Simulation}{}% 16
+\BOOKMARK [1][-]{section.4.1}{Simulation Setup}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.2}{Imitation learning process of the ANN Module}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.3}{Racing Tests}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.4}{Design of Experiment 1}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.5}{Design of Experiment 2}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.6}{Design of Experiment 3}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.7}{Design of Experiment 4}{chapter.4}% 23
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 24
+\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 25
+\BOOKMARK [1][-]{section.5.2}{Discussions}{chapter.5}% 26
+\BOOKMARK [0][-]{chapter.6}{Conclusion and Future Work}{}% 27
+\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 28
+\BOOKMARK [1][-]{section.6.2}{Conclusion}{chapter.6}% 29
+\BOOKMARK [1][-]{section.6.3}{Future Work}{chapter.6}% 30
+\BOOKMARK [0][-]{section.6.3}{Bibliography}{}% 31
+\BOOKMARK [0][-]{chapter*.56}{Appendices}{}% 32
+\BOOKMARK [1][-]{chapter*.57}{Appendix A: Abbreviations}{chapter*.56}% 33
+\BOOKMARK [1][-]{section*.58}{Appendix B: LaTeX Help}{chapter*.56}% 34
+\BOOKMARK [1][-]{table.caption.75}{Appendix B: Racetrack Randomization and Redirection}{chapter*.56}% 35

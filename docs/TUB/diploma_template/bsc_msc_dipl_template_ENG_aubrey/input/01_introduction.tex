@@ -107,15 +107,15 @@ telecommunication,
 agriculture,
 safety
 and mining 
-are considered to be particularly promising \cite{Mazur2016a}.
+are particularly promising for drones \cite{Mazur2016a}.
 In contrast, 
-real breakthroughs of more visionary applications, 
-such as drone delivery or drone taxis
+genuine breakthroughs of more visionary applications, 
+such as drone delivery or drone taxis,
 are, if at all, only expected in the more distant future \cite{Rosen2019}.
 Reasons for this are strict
 regulations, skeptical public attitudes
 and technical problems \cite{Rosen2019}.
-With regard to the latter,
+Regarding the latter,
 autonomous navigation methods are not yet 
 robust enough for the reliable deployment in 
 open-world environments of high uncertainty such as
@@ -126,9 +126,9 @@ Loquercio and Scaramuzza \cite{Loquercio2018a}
 categorize existing autonomous navigation methods for drones 
 into classical methods and modern, machine learning based methods.
 
-Classical autonomous navigation methods 
+Classical autonomous navigation methods
 follow the scheme of mapping-localization-planning-tracking.
-Simple approaches track pre-programmed waypoints based on GNSS
+Simpler approaches track pre-programmed waypoints based on GNSS
 and are thus limited to flight environments that
 first, have a reliable GNSS signal
 (which often is not the case for 
@@ -141,35 +141,33 @@ and localize in it
 based on the drone's visual or range sensors. \cite{MurArtal2015}
 Path planning algorithms 
 (e.g., \cite{Bircher2016}, \cite{Cieslewski2017})
-are applied to generate collision-free 
+apply to generate collision-free 
 trajectories through the generated maps,
 which are tracked
 while estimating the drone state
 based on data from the drone's inertial measurement unit (IMU)
 and the output of SLAM algorithms 
 (e.g., \cite{Lin2017}, \cite{Scaramuzza2014}, \cite{Sa2018}, \cite{Loianno2017}).
-Theoretically, these apporaches can be deployed
+Theoretically, these approaches are deployable
 in uncontrolled environments with unknown obstacles and other agents.
 Practically, 
-the mapping coerces global consistency
-which likely makes the computation too complex 
-to be run in real-time onboard drones,
+the mapping coerces global consistency,
+which likely makes computations too complex 
+for real-time execution onboard drones,
 especially for non-static environments.
 
 Modern autonomous navigation methods use machine learning
 to replace the classical mapping-localization 
 (or even the planning and tracking for more end-to-end methods) 
 with the perception of the drone's onboard sensors
-(e.g., visual, range, IMU)
-and the decisions making of an ANN.
-These methods can be further subdivided by their way of learning
-into reinforcement learning (RL) and imitation learning (IL).
-RL has the advantage that
-they are not affected 
-by the "distributional mismatch" \cite{RobotAutonomy2} 
-between training and testing as 
-the ANN learns with "trial-and-error" \cite{Sadeghi2016} 
-from direct environmental interaction.
+(e.g., camera, range, IMU)
+and the decision making of an ANN.
+The way of learning further subdivides these methods into
+reinforcement learning (RL) and imitation learning (IL) based methods.
+In RL, the ANN learns with ``trial-and-error" \cite{Sadeghi2016}
+from direct environmental interactions 
+and thus avoids ``distributional mismatch" \cite{RobotAutonomy2}  
+of training vs. testing, which is typical in IL.
 However, this comes with the expense of a
 substantially higher sample complexity 
 compared to IL. \cite{Zhu2017}
@@ -181,9 +179,9 @@ hence costly and dangerous. \cite{Sadeghi2016}
 
 A popular research playground is autonomous drone racing
 (e.g., \cite{Moon2019}, \cite{Jung2018}, \cite{Song2021})
-due to the controlled flight environment,
+because of the controlled flight environment,
 the straightforward definition of goals
-and the measureability and comparability of performance.
+and the measurability and comparability of performance.
 Methods for autonomous drone racing usually
 integrate feedforward
 convolutional neural networks (CNN) 
@@ -191,11 +189,11 @@ to map the current color or depth image to action
 (e.g., \cite{RojasPerez2020}, \cite{Kaufmann2019}, \cite{Jung2018a}).
 CNNs already achieve 
 a high, spatial comprehension of how the drone's sensors perceive
-the immediate environment, 
-however, this alone may not
+the immediate environment.
+However, this alone may not
 be enough for the long-term objective of safely 
 applying autonomous drones in open-world environments.
-As humans are able to safely navigate there,
+As humans are able to navigate safely there,
 it seems promising to learn human-like abilities.
 Temporal comprehension,
 besides spatial comprehension,
@@ -206,13 +204,13 @@ a person can leave the room knowing
 that the door is behind him and 
 does not need to keep the door in sight to do so.
 Further, a person requires 
-to observe a sequence of images to
+observing a sequence of images to
 estimate the velocity and motion direction of herself or himself, 
 obstacles or other agents.
 In machine learning, recurrent neural networks
 can establish temporal connections.
 It is interesting to research the 
-effect of using a recurrent neural networks in autonomous drone racing.
+effect of using recurrent neural networks in autonomous drone racing.
 
 
 
@@ -304,10 +302,10 @@ effect of using a recurrent neural networks in autonomous drone racing.
 
 
 This thesis aims to 
-investigate the question
+investigate
 whether temporal comprehension 
 induced by a recurrent neural network
-can be beneficial for the
+can be beneficial for
 autonomous navigation in drone racing.
 To do this, the thesis uses
 the vision-based autonomous navigation method
@@ -317,17 +315,17 @@ stood out from the compared methods
 with high reliability and agility 
 along dynamic flight curves through the racetrack.
 The baseline method has a hybrid structure:
-an artifical neural network 
+an artificial neural network 
 inferring navigation decisions 
 from the images of the drone's onboard camera
 and a planning-control stack 
 translating these decisions into flight movement.
 The baseline ANN is a serial connection
 of a convolutional neural network (CNN) 
-and fully-connected (FC) layers.
+and fully connected (FC) layers.
 The CNN extracts visual features from imagery,
-thereby enabling the baseline method
-to spatially comprehend what is in the field of view of 
+enabling the baseline method
+to comprehend spatially what is in view of 
 the drone's onboard camera.
 
 This thesis extends the baseline ANN
@@ -337,7 +335,7 @@ recurrent neural network variant
 enables the autonomous navigation method
 to remember and to establish temporal connections.
 Specifically, this means that navigation decisions 
-would be made based on both current and past sensor data.
+base on both current and past sensor data.
 Considering that, first, 
 navigation can be seen as 
 sequentially making decisions 
@@ -346,17 +344,16 @@ the thereby resulting trajectories
 are 4D objects in space and time, 
 the CNN-GRU approach of this thesis, 
 by incorporating both spatial and temporal understanding, 
-is expected to improve the racing performance.
-This hypothesis is investigated 
-in simulated drone races. 
+likely improves race performance.
+This thesis investigates this hypothesis in simulated drone races.
 Different variants of ANNs 
-are tested for their robustness 
+are tested for their performance 
 at different maximum speeds 
 and for their ability to cope 
 with intermediate target loss.
 The latter refers to the event
-that the next race gate intermediately leaves the FOV of the drone's camera
-(e.g., due to a sharp turn between two race gates)
+that the next race gate leaves the FOV of the drone's camera
+(e.g., because of a sharp turn between two race gates)
 and the drone can only make meaningful navigation decisions
 based on the memory induced by the GRU.
 
@@ -469,27 +466,22 @@ based on the memory induced by the GRU.
 
 
 %DELETEME: Example: 
-This thesis is structured as follows. 
 Chapter~\ref{background}
-provides background information on the thesis topic.
-This includes the machine learning field of 
-imitation learning, in particular with dataset aggregation,
-and recurrent neural networks, in particular the gated recurrent unit.
-Chapter~\ref{mainone} presents 
-the applied autonomous drone racing navigation method,
-which consists of the ANN, planning and control submodules.
-Special attention is paid here to the ANN submodule,
-as it is the part that enables temporal comprehension
-and therewith distinguishes this thesis from the original method.
-Chapter~\ref{maintwo} presents the 
-experiments of the thesis.
-Racing tests for the navigation method 
-with different ANN submodule variants are carried out in simulation.
-Thereby, the performance of the variants are measured.
+provides background information on the thesis topic,
+including imitation learning with dataset aggregation
+and the gated recurrent unit architecture.
+Chapter~\ref{mainone} presents
+the baseline autonomous navigation method
+comprising the ANN module, 
+the planning module, the control stack and the expert system.
+Special attention is paid to the ANN module,
+which extends the baseline ANN with the temporal comprehension of the GRU.
+Chapter~\ref{maintwo} presents the design of the
+experiments conducted in this thesis,
+including the simulation setup,
+the imitation learning process and the race tests.
 Chapter~\ref{evaluation} evaluates 
-the results of the racing experiments.
-The focus lies on the question,
-whether temporal comprehension is beneficial to the racing performance.
-Chapter~\ref{conclusion} is the conclusion of this thesis. 
-At last, Chapter~\ref{appendices} gives additional related information 
-on the topic of this thesis.
+the experimental results
+focussing on the impact of temporal comprehension on performance.
+Chapter~\ref{conclusion} concludes this thesis. 
+Chapter~\ref{appendices} provides additional related information.

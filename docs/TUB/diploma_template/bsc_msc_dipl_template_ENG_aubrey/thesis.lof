@@ -1,48 +1,48 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded RNN }}{9}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded representation of an RNN }}{9}{figure.caption.11}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Folded }}}{9}{subfigure.1.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Unfolded }}}{9}{subfigure.1.2}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions deployed within a standard GRU }}{14}{figure.caption.14}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer operating in many-to-one mode. }}{15}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions in the GRU }}{13}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer in many-to-one mode. }}{14}{figure.caption.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{23}{figure.caption.17}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{23}{subfigure.1.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{23}{subfigure.1.2}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Information flow of the navigation decision making }}{26}{figure.caption.21}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{35}{figure.caption.29}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{40}{figure.caption.32}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The local and the image reference system }}{22}{figure.caption.16}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{22}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{22}{subfigure.1.2}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Information flow of the navigation decision making }}{25}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{34}{figure.caption.28}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{39}{figure.caption.31}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{43}{figure.caption.34}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes available in simulation }}{44}{figure.caption.35}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{44}{subfigure.2.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{44}{subfigure.2.2}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{44}{subfigure.2.3}%
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{44}{subfigure.2.4}%
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{44}{subfigure.2.5}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Race gates available in simulation }}{45}{figure.caption.36}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{45}{subfigure.3.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{45}{subfigure.3.2}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{42}{figure.caption.33}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Scenes available in simulation }}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Spaceship Interior }}}{43}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Destroyed City }}}{43}{subfigure.2.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces { Industrial Site }}}{43}{subfigure.2.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces { Polygon City }}}{43}{subfigure.2.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces { Desert Mountain }}}{43}{subfigure.2.5}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Race gates available in simulation }}{44}{figure.caption.35}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { DAI-Labor at TU Berlin }}}{44}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { DME at Tsinghua University }}}{44}{subfigure.3.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Training and validation losses of experiment 1 }}{63}{figure.caption.48}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Feedforward variants }}}{63}{subfigure.1.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Recurrent variants }}}{63}{subfigure.1.2}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Racetrack completion shares of experiment 1 }}{64}{figure.caption.49}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Training and validation losses of experiment 2 }}{65}{figure.caption.50}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Racing test performances of experiment 2 }}{65}{figure.caption.51}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Training losses of of experiment 3 }}{67}{figure.caption.53}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Racetrack completion shares of experiment 3 }}{67}{figure.caption.54}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Training losses of experiment 4 }}{68}{figure.caption.55}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { 360x240 RGB images }}}{68}{subfigure.7.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { 240x160 RGB images }}}{68}{subfigure.7.2}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Racetrack completion shares of experiment 4 }}{70}{figure.caption.56}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { RGB image size of 360x240 }}}{70}{subfigure.8.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { RGB image size of 240x160 }}}{70}{subfigure.8.2}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Training and validation losses of experiment 1 }}{62}{figure.caption.47}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Feedforward variants }}}{62}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Recurrent variants }}}{62}{subfigure.1.2}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Racetrack completion shares of experiment 1 }}{63}{figure.caption.48}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Training and validation losses of experiment 2 }}{64}{figure.caption.49}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Racing test performances of experiment 2 }}{64}{figure.caption.50}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Training losses of of experiment 3 }}{66}{figure.caption.52}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Racetrack completion shares of experiment 3 }}{66}{figure.caption.53}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Training losses of experiment 4 }}{67}{figure.caption.54}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { 360x240 RGB images }}}{67}{subfigure.7.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { 240x160 RGB images }}}{67}{subfigure.7.2}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Racetrack completion shares of experiment 4 }}{69}{figure.caption.55}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces { RGB image size of 360x240 }}}{69}{subfigure.8.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces { RGB image size of 240x160 }}}{69}{subfigure.8.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{96}{figure.caption.69}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{96}{figure.caption.70}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{96}{figure.caption.71}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{96}{subfigure.3.1}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{96}{subfigure.3.2}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{96}{subfigure.3.3}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces Racetrack randomization and redirection }}{99}{figure.caption.78}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Including an Image}}{95}{figure.caption.68}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Short caption for list of figures}}{95}{figure.caption.69}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Placing images side by side}}{95}{figure.caption.70}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Small}}}{95}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Large}}}{95}{subfigure.3.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Medium}}}{95}{subfigure.3.3}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Racetrack randomization and redirection }}{98}{figure.caption.77}%

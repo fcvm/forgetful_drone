@@ -2,16 +2,16 @@
 %labels will help you to reference to certain images, tables, chapters, section, and so on...
 \label{background}
 
-DELETEME: This chapter will cover all of your background information and related work. Background and related work are directly related to your thesis. Please do not place irrelevant content here which is a common mistake. Citing will be handled in the appendices.
-
-DELETEME: Background represents underlaying knowledge that is required to understand your work. The expected knowledge level of your readers can be set to the one of a bachelor or master student who just finished his studies (depending on what kind of thesis you are writing). This means that you do not need to describe how computers work, unless your thesis topic is about this. Everything that an avarage alumni from your field of studies should now does not need to be described. It turn, background information that is very complex and content-wise very near to you problem, can be placed in the main parts. Everyting else should be written here. Note: it is important to connect each presented topic to your thesis. E.g. if you present the ISO/OSI layer model you should also write that this is needed to understand the protocols you plan to develop in the main parts.
-
-DELETEME: Related work respresents results from work that handled the same or a similar problem that you are addressing. This work might have used a different approach or might not have been that successful. Finding a paper / work that solved your problem in the same way you were planning to do is not good and you should contact your supervizor for solving this issue. Again, each paper / work has to be connected to your approach: other papers might have not chosen an optimal solution; they might not have been taking care of essential aspects; they might have chosen a different approach and you believe, yours will work better ...
+%DELETEME: This chapter will cover all of your background information and related work. Background and related work are directly related to your thesis. Please do not place irrelevant content here which is a common mistake. Citing will be handled in the appendices.
+%
+%DELETEME: Background represents underlaying knowledge that is required to understand your work. The expected knowledge level of your readers can be set to the one of a bachelor or master student who just finished his studies (depending on what kind of thesis you are writing). This means that you do not need to describe how computers work, unless your thesis topic is about this. Everything that an avarage alumni from your field of studies should now does not need to be described. It turn, background information that is very complex and content-wise very near to you problem, can be placed in the main parts. Everyting else should be written here. Note: it is important to connect each presented topic to your thesis. E.g. if you present the ISO/OSI layer model you should also write that this is needed to understand the protocols you plan to develop in the main parts.
+%
+%DELETEME: Related work respresents results from work that handled the same or a similar problem that you are addressing. This work might have used a different approach or might not have been that successful. Finding a paper / work that solved your problem in the same way you were planning to do is not good and you should contact your supervizor for solving this issue. Again, each paper / work has to be connected to your approach: other papers might have not chosen an optimal solution; they might not have been taking care of essential aspects; they might have chosen a different approach and you believe, yours will work better ...
 
 %###################################################################################
 %###################### Topic A             ########################################
 %###################################################################################
-\section{Topic 1}
+%\section{Topic 1}
 
 %###################################################################################
 %###################### Topic B             ########################################
@@ -35,39 +35,48 @@ DELETEME: Related work respresents results from work that handled the same or a 
 \newcommand{\parameterVector}{\underline{\theta}}
 \newcommand{\trajectory}{\tau}
 
+This section first, defines the general imitation learning problem, 
+second, presents behavioral cloning as the simplest form of direct policy learning 
+and third, introduces the more sophisticated direct policy learning method 
+of dataset aggregation, 
+which was originally proposed as DAgger by Ross et al. \cite{Ross2010}.
+The experiments of this thesis (see chapter \ref{mainone}) 
+dataset aggregation to the imitation learning problem 
+of the ANN module in the autonomous navigation method (see chapter \ref{maintwo}). 
+
+
 
 Imitation learning is an area of machine learning 
 that considers the task of learning to
 imitate (i.e., behave like) an expert 
-in a sequential decision-making problem.
-It is a potential solution to
-learning problems where it is easier 
-to demonstrate the desired behavior of attaining a goal
+in a sequential decision-making problem \cite{yue2018imitation}.
+It applies naturally to learning problems where it is easier 
+to demonstrate the desired behavior of how to attain a goal
 than to define intermediate goals and rewards 
 (as in supervised and reinforcement learning, respectively)
-that lead to the desired behavior.
+that lead to the desired behavior \cite{Nikolov2018}.
 In terms of supervision,
 imitation learning is therefore
-located between supervised learning
-and reinforcement learning. \cite{Nikolov2018}
-Imitation learning tends to apply successfully on tasks
-related to human intent/behaviour, e.g.,
+between supervised learning
+and reinforcement learning.
+Imitation learning performs well in tasks
+related to human intent or behavior, e.g.,
 pedestrian avoidance \cite{Ziebart2009},
 speech animation \cite{Taylor2017},
 sport analytics \cite{le2017data}
 and gaming \cite{thurau2004imitation}.
-With respect to 
+Regarding
 planning and control
 in autonomous navigation,
 imitation learning has become 
-state-of-the-art. \cite{Mero2022}
-The methods of imitation learning
-can be divided by their approch into
-direct policy learning 
-and inverse reinforcement learning. \cite{RobotAutonomy2}
+state-of-the-art \cite{Mero2022}.
+According to their approach, 
+imitation learning methods 
+divide into direct policy learning and 
+inverse reinforcement learning \cite{RobotAutonomy2}.
 Direct policy learning 
 optimizes a policy class 
-to approximate the expert's behaviour
+to approximate the expert's behavior
 by reducing the imitation learning problem
 to a single or a sequence of supervised learning problems.
 Inverse reinforcement learning
@@ -76,20 +85,7 @@ to approximate the expert's underlying intent
 and deploys reinforcement learning methods
 to optimize a policy class to maximize the identified reward. 
 
-In this thesis,
-the training of the ANN module of the autonomous navigation method 
-(see section \ref{sec:ann_module})
-is considered an imitation learning problem.
-In the experiments
-(see section \ref{sec:training}),
-direct policy learning with dataset aggregation
-is applied to solve this problem.
-Therefore this section introduces
-the core concept of dataset aggregation,
-which was proposed as DAgger by Ross et al. \cite{Ross2010}.
-Prior to this, the general imiation learning problem is defined
-and behavioural cloning, the simplest
-form of direct policy learning is presented.
+
 
 
 
@@ -101,27 +97,28 @@ a system,
 an expert, 
 a policy class, 
 a loss function, 
-and a learning algorithm. 
+and a learning algorithm \cite{yue2018imitation}.
 The goal is to find the policy 
 within the policy class 
-that approximates the expert's decision making 
-as closely as possible. \cite{yue2018imitation}
+that approximates the expert's decision-making 
+on the system's actions
+as closely as possible. 
 
 The system interacts with its real or simulated environment.
 At time step $\timestep$,
 the system is in the state $\state_\timestep \in \stateDomain$
 and executes the action $\action_\timestep \in \actionDomain$
 where $\stateDomain$ and $\actionDomain$ are the 
-spaces of all possible system states and actions, respectively.
-The system is considered a MDP (Markov decision process)
-whose initial state is sampled 
-from the distribution $\probability \parentheses{\state_0}$.
-The system dynamics can be described
-with a probabilistic transition model,
-which provides the conditional probability distribution 
+spaces of all existing system states and actions, respectively.
+The system is considered a Markov decision process
+whose initial state is randomly distributed 
+%$\probability \parentheses{\state_0}$
+\cite{RobotAutonomy2}.
+Thus, a probabilistic transition model can 
+describe the system dynamics 
+providing the conditional probability distribution 
 over the system state 
-given the system state and action 
-from the previous time step 
+given the system state and action from the previous time step
 \begin{align}
     \probability \parentheses{
         \state_\timestep | \state_{\timestep -1}, \action_{\timestep -1}
@@ -136,9 +133,8 @@ The expert
 is a human or a computer program 
 that makes state-based action decisions,
 which cause the system to act as desired.
-This decision making process is 
-described by the expert policy
-which maps system states to expert actions
+The expert policy, which maps system states to expert actions, 
+represents the expert's decision-making process
 \begin{align}
     \policy^\expertt
     :\ \stateDomain \rightarrow \actionDomain
@@ -151,16 +147,15 @@ which maps system states to expert actions
 \end{align}
 Applying the expert policy on a system state
 yields a demonstration,
-i.e., the state-action pair 
+i.e., a state-action pair 
 $\parentheses{\state_\timestep, \action_\timestep^\expertt}$.
 
 
-The policy class defines the search space
-the optimal policy, i.e., 
-the policy that most closely imitates the expert policy.
-In the following, 
-the policy class is considered to be
-an ANN (artifical neural network)
+The policy class defines the search space for
+finding the optimal policy, i.e., 
+the policy that most closely resembles the expert policy.
+Usually, 
+the policy class is an ANN
 \begin{equation}
     \policy_{\parameterVector}
     :\ \stateDomain \rightarrow \actionDomain
@@ -171,7 +166,7 @@ where the vector $\parameterVector$
 contains the trainable parameters of the ANN.
 
 Both, the expert policy 
-and members of the policy class, can be rolled out.
+and members of the policy class, can roll out.
 %Rolling out the expert policy
 %yields a trajectory of demonstrations
 %$\trajectory = \parentheses{\state_\timestep, \action_\timestep^\expertt}
@@ -183,7 +178,7 @@ in which the system,
 starting from the initial state 
 $\state_0 \sim \probability \parentheses{\state_0}$,
 interacts with the environment 
-based on the actions infered by that policy
+based on the actions inferred by that policy
 for a certain number of time steps
 \begin{align}
     \probability \parentheses{
@@ -197,16 +192,7 @@ which is the sequence of the state-action pairs visited during rollout
     \policy\parentheses{\state_\timestep}}
     _{\timestep \in \braces{0, \dots, T}}.    
 \end{align}
-
-The state distribution of a policy rollout, i.e.,
-the probability that a state is visited 
-during the rollout of the policy
-and becomes therewith 
-part of the corresponding trajectory,
-is induced by the policy itself.
-It is calculated by averaging
-the state distributions
-over the time steps of the rollout
+The policy induces the state distribution of a rollout, i.e., the probability that the system visits a state, which would therewith become part of the rollout trajectory. The rollout state distribution is the average of the state distributions over the time steps of the rollout.
 \begin{equation}
     \probability \parentheses{\state | \policy}
     = \frac{1}{T+1} \sum_{\timestep = 0}^T
@@ -232,12 +218,11 @@ over the time steps of the rollout
 %    }_{\timestep \in \braces{0, 1, \dots}}
 %    .
 %\end{align}
-The loss function quantifies
-how closely a policy $\policy$ imitates the expert policy $\policy^\expertt$.
-For a state, 
-it measures the deviation 
-of the action predicted by the general policy
-from the action demonstrated by the expert
+The loss function measures
+how much an action 
+predicted by a policy for a system state
+deviates
+from the action demonstrated by the expert for the same state
 \begin{align}
     L_{\policy}
     :\ \stateDomain \rightarrow \mathbb{R}
@@ -250,22 +235,37 @@ from the action demonstrated by the expert
         \policy^\expertt\parentheses{\state_\timestep}
     }.
 \end{align}
+Applied on a set of demonstrations,
+the loss function quantifies how closely a policy
+imitates the expert policy. 
 
 
 
-The learning algorithm 
-finds the policy $\hat{\policy}^\expertt$ 
-within the policy class 
-that is closest to the expert policy. 
-For this purpose, the algorithm 
-minimizes the total imitation loss 
-evaluated for states sampled 
-from the distribution 
-induced by the identified policy itself. 
-In machine learning, the optimization 
-is realized with the training of the ANN,
-whereby its trainable parameters 
-are updated according to the evaluated loss
+%The learning algorithm 
+%finds the policy $\hat{\policy}^\expertt$ 
+%within the policy class 
+%that is closest to the expert policy. 
+%For this purpose, the algorithm 
+%minimizes the total imitation loss 
+%evaluated on states sampled 
+%from the distribution 
+%induced by the identified policy itself.
+%In machine learning, 
+%this corresponds to the training of the ANN, 
+%whereby the algorithm updates the trainable parameters of the ANN 
+%in accordance to the evaluated loss
+
+The learning algorithm searches for the optimal policy 
+$\hat{\policy}^\expertt$
+within the policy class by minimizing the total imitation loss, 
+whereby the state distribution of the loss evaluation 
+is equal to the distribution when rolling out the optimal policy.
+As a result, the state distributions at learning and test rollouts 
+do not differ, which ensures that low training losses 
+transfer to high test performances.
+In machine learning, this corresponds to the training of the ANN, 
+in which the algorithm updates the trainable parameters of the ANN 
+in accordance to the evaluated loss
 \begin{equation}
     \hat{\policy}^\expertt
     =
@@ -281,36 +281,33 @@ are updated according to the evaluated loss
     %}
     .
 \end{equation}
-The above optimization corresponds to a 
-"non-i.i.d. supervised learning problem" \cite{Ross2010}.
-Note that, as generally 
-the system dynamics are unknown or too complex,
-the training data cannot be computed
-to be independent and identically distributed (i.i.d.)
-across the state space $\stateDomain$.
-In fact, the only way to generate training data
-is to sample it during policy rollouts.
-General optimization learning 
-takes the most reliable, available option
-of generating training data 
-from rollouts of the identified policy itself.
-This has the advantage, that the state distributions
-at training and testing (rollout) do not differ and
-thus, a low training loss is likely 
-to transfer to good test performance.
-On the downside, the interdependence of the ANN
-and the training state distribution
-renders the optimization to be non-convex
-and thus complex in contrast to common supervised learning.
+The above optimization is a 
+``non-i.i.d. supervised learning problem" \cite{Ross2010}. 
+As the system dynamics are unknown or too complex, 
+training data can only be collected in rollouts. 
+Thereby, the distribution of the training data is induced 
+by the rolled out policy and hence 
+neither independent and identically distributed (i.i.d.) 
+across the system state space $\stateDomain$ 
+nor equal to the distribution 
+induced by the optimal policy yet unknown. 
+Because of the interdependence of policies and training data distributions, 
+closing the ``distributional mismatch" \cite{RobotAutonomy2} 
+is a non-convex optimization problem, 
+which is significantly more difficult and time-consuming 
+than common supervised learning.
 
 
 
 
 
-\paragraph*{Behavioural cloning}$\ $\\
-Behavioural cloning reduces the imitation learning problem 
-to a single standard supervised learning problem
-on a precollected training dataset of expert trajectories
+\paragraph*{Behavioral cloning}$\ $\\
+Behavioral cloning reduces the imitation learning problem 
+to a single, convex supervised learning problem 
+on a pre-collected training dataset 
+of expert trajectories, where each trajectory is the product of an 
+expert policy rollout and 
+contains the thereby demonstrated state-action pairs
 \begin{equation}
     D = \braces{\trajectory_i^\expertt}_{i \in \braces{1, 2, \dots}}
     ,\quad
@@ -318,23 +315,13 @@ on a precollected training dataset of expert trajectories
         \state_{i,\timestep}, \action_{i,\timestep}^\expertt}
     _{\timestep \in \braces{0, 1, \dots}}.
 \end{equation}
-Each trajectory 
-is the product of an expert policy rollout 
-and contains the thereby demonstrated state-action pairs.
-The state distribution of an expert rollout is
-\begin{equation}
-    \probability \parentheses{\state | \policy^\expertt}
-    = \frac{1}{T+1} \sum_{\timestep = 0}^T
-    \probability \parentheses{\state_\timestep | \policy^\expertt}.
-\end{equation}
-The optimization problem of BC is thus
-to minimize the 
-accumulated imitation loss
-of all demonstrations
+The optimization problem of behavioral cloning
+is to minimize the 
+total imitation loss on the demonstrations
 $\parentheses{\state_\timestep, \action_\timestep^\expertt}$ 
-of all trajectories 
+in the trajectories 
 $\trajectory_i$
-within the dataset $D$ precollected
+of the pre-collected dataset $D$
 \begin{align}
     \hat{\policy}^\expertt
     &=
@@ -353,72 +340,88 @@ within the dataset $D$ precollected
             \state | \policy^\expertt}
     }
     L_{\policy_{\parameterVector}} \parentheses{\state}
-    .
+    ,
 \end{align}
-In comparison to general imitation learning,
-behavioural cloning generally exhibits different distributions
-at training and testing
+given the expert rollout state distribution
+\begin{equation}
+    \probability \parentheses{\state | \policy^\expertt}
+    = \frac{1}{T+1} \sum_{\timestep = 0}^T
+    \probability \parentheses{\state_\timestep | \policy^\expertt}.
+\end{equation}
+Compared to general imitation learning, behavioral cloning 
+generally exhibits different distributions at training and testing
 \begin{equation}
     \probability \parentheses{\state | \policy^\expertt}
     \neq 
     \probability \parentheses{\state | \policy_{\parameterVector}}.
 \end{equation}
-This plus the fact that the training data
-is generally not iid across the state space
-makes it likely that the ANN is confronted with states
-not seen during training.
-As a result, a good test performance cannot be generally 
-infered from a low training loss.
-This is especially true for a long task horizon $T$
-of a rollout.
-The above optimization can be interpreted
-as minimizing the one-step
-loss of the trained ANN along the expert trajectories.
-However, as the trained ANN rolls out at testing,
-these one-step errors, even though minimized,
-accumulate along the ANN trajectory
-and will likely cause non-negligible deviation
-from the expert's behaviour. 
-In fact, on a ANN trajectory the upper bound of the error 
-grows quadratically with the number of timesteps. \cite{yue2018imitation}
+This plus the fact that the training data is 
+generally not i.i.d. across the state space 
+makes it likely that the ANN, when rolling out, 
+faces states not seen during training. 
+As a result, low training losses do not guarantee high test performances. 
+This is especially true for a longer rollouts 
+because the upper bound of the error grows quadratically 
+with the number of time steps $T$ \cite{yue2018imitation}. 
+Although the above optimization minimizes 
+the one-step loss of the ANN along the expert trajectories, 
+when the ANN rolls out, these one-step errors accumulate 
+along the ANN trajectory and will very likely 
+cause non-negligible deviations from the expert trajectories 
+of the training dataset.
 
 
 
-\paragraph*{DAgger}$\ $\\
-DAgger\cite{Ross2010} is an iterative method 
-for direct policy learning
-that reduces the imitation learning problem
-to a sequence of convex supervised learning problems:
+
+\paragraph*{Dataset aggregation}$\ $\\
+Dataset aggregation (originally proposed as DAgger\cite{Ross2010}) 
+extends behavioral cloning iteratively.
+It reduces the imitation learning problem 
+to a sequence of convex supervised learning problems.
+The fundamental concept of the method takes the following steps.
 \begin{enumerate}
     \item 
-    Roll out the expert policy 
-    to generate a dataset.
-    Train the initial ANN 
-    $\policy_{\parameterVector, 0}$
-    with behavioural cloning on that dataset.
-    \item For $i = 1,2,\dots$
+    Roll out the expert policy $\policy^\expertt$,
+    record the thereby resulting trajectory
+    and initialize the aggregated dataset with that trajectory
+    $D_0 = \trajectory_0$.
+    Train the ANN with supervised learning on the aggregated dataset
+    to receive
+    $\policy_{\parameterVector, 0}$.
+    \item Until the ANN exhibits the desired behavior when rolling out, 
+    do for iteration $i = 1,2,\dots$
     \begin{enumerate}
-        \item Rollout the initial/intermediate ANN 
+        \item Rollout the ANN from the last training
         $\policy_{\parameterVector, i-1}$
-        to generate trajectories.
-        \item Label the trajectories using the expert policy
-        and add them to the training dataset.
-        \item Train the next intermediate ANN 
-        $\policy_{\parameterVector, i}$
-        on the aggregated dataset.
+        and record the thereby visited states
+        $\parentheses{\state_{i,\timestep}}_{t\in \braces{0, \dots, T_i}}$.
+        \item Apply the expert policy to the recorded states 
+        to receive a trajectory of demonstrations
+        $\trajectory_i = \parentheses{\state_{i,\timestep}, 
+    \policy^\expertt\parentheses{\state_{i,\timestep}}}
+    _{\timestep \in \braces{0, \dots, T_i}}$.
+        \item Add the labeled trajectory to the aggregated dataset
+        $D_i = D_{i-1} \cup \trajectory_i$.
+        \item Train the ANN with supervised learning on the aggregated dataset
+        to receive
+        $\policy_{\parameterVector, i}$.
     \end{enumerate}
 \end{enumerate}
-In contrast to behavioural cloning,
-DAgger requires an interactive expert,
-that provides feedback 
-on the state distributions induced by the ANN,
-and access on the system
-to execute ANN rollouts.
-The DAgger algorithm makes sure that
-mistakes made by the ANN during rollout become part 
-of the aggregated dataset.
-Ideally, this training converges to the 
-optimal ANN parameters for the general IL problem.
+In contrast to behavioral cloning,
+dataset aggregation requires first, 
+access to the system for executing ANN rollouts
+and second, 
+an interactive expert providing feedback 
+on the thereby visited states \cite{yue2018imitation}.
+In the iterative learning process,
+dataset aggregation
+remembers and confronts the ANN with
+its mistakes made in rollouts corrected by the expert.
+Ideally, this procedure reduces the 
+state distribution differences between learning and rollouts
+to the point where
+the trainable parameters of the ANN converge to their
+optimal values for the general imitation learning problem.
 
 
 
@@ -427,62 +430,56 @@ optimal ANN parameters for the general IL problem.
 %###################################################################################
 %###################### Topic C             ########################################
 %###################################################################################
-\section{Gated recurrent unit} \label{sec:gru}
-The artifical neural network (ANN) of the autonomous navigation method of this thesis
+\section{Gated Recurrent Unit} \label{sec:gru}
+In this thesis,
+the ANN module of the autonomous navigation method (see section \ref{mainone})
 integrates the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 09/07/2022
 }
-of the gated recurrent unit (GRU)
-with the objective to involve temporal comprehension in
-the navigation decision making.
-The GRU,
-published in 2014 by Cho et al. \cite{Cho2014},
-is a variant of the ANN class of recurrent neural networks (RNN).
-This section shortly introduces the RNN class
-and justifies the design choice for the GRU
-in light of standard RNNs and 
-the more prevalent RNN variant,
-the long short-term memory (LSTM).
-Moreover, it provides an insight into
-the mechanisms of the GRU that make temporal comprehension available
-as well as how the 
-GRU trains its temporal comprehension by backpropagating 
-loss through time.
+of the gated recurrent unit (GRU), 
+which is a special recurrent neural network (RNN) architecture
+proposed by Cho et al. \cite{Cho2014},
+with the aim to involve temporal comprehension in
+the navigation decision-making.
+This section introduces the class of RNNs
+and relates the GRU to standard RNNs
+and the more prevalent long short-term memory (LSTM).
+Moreover, it provides information regarding first,
+the state and gating mechanisms that make the GRU able to comprehend temporally
+and second, how the GRU learns with backpropagation through time.
 
 \paragraph*{Recurrent neural networks} ${}$\\
-RNNs contrasts with classical feedforward ANNs,
-which forward information exclusively towards subsequent layers,
-by featuring dynamic properties 
-that stem from the implementation of feedback connections
+RNNs contrasts with classical feedforward ANNs, 
+which forward information only towards subsequent layers, 
+by featuring dynamic properties that stem 
+from implementing feedback connections
 \cite{Hu2008} (see fig. \ref{fig:rnn_folded}).
-As previously infered states re-enter the network,
-the output of an RNN depends not only on the 
-current but also on prior inputs.
-In this sense, an RNN is qualified to process and reason on
-entire sequences of data points.
-In case of time-series data, this can be interpreted as 
-temporal comprehension and memory \cite{ICE2020}.
-RNNs train on sequential data with
-backpropagation through time (BPTT) \cite{pascanu2013difficulty}
+As previously inferred states re-enter the network, 
+the output of an RNN depends not only on the current 
+but also on prior inputs. 
+In this sense, RNNs are qualified to process and infer from 
+entire sequences of data points. 
+In the case of time-series data, 
+this equates to temporal comprehension and memory \cite{ICE2020}.
+RNNs train on sequential data with backpropagation through time (BPTT) 
+\cite{pascanu2013difficulty}
 which is basically the application of standard backpropagation
 (e.g., \cite{Rojas1996})
-on the unfolded representation of the RNN
-(see figure \ref{fig:rnn_unfolded}).
-The unfolded representation exhibits a layer for
-each data point in the given input sequence 
-and can be construed as a feedforward ANN
-that shares its trainable parameters across its layers.
+on the unfolded representation of an RNN
+(see fig. \ref{fig:rnn_unfolded}).
+This representation exhibits a layer 
+for each data point in the processed input sequence 
+and is construable as a feedforward ANN 
+that shares its trainable parameters across its layers. 
 The longer the input sequences,
-the deeper the unfolded representation of an RNN becomes.
-The training of RNNs on long sequences
-is hence prone to the vanishing gradient problem \cite{hochreiter1991untersuchungen},
-which manifests itself in the premature slowdown or standstill 
-of the convergence of the RNN.
+the deeper the unfolded representation of an RNN becomes. 
+The training of RNNs on long input sequences 
+is hence prone to the 
+vanishing gradient problem \cite{hochreiter1991untersuchungen},
+which slows down or ceases the convergence 
+of the trainable parameters of the RNN.
 As a result, standard RNNs have difficulties 
-learning to connect to information from inputs deep in the past
-\cite{Bengio1994}.
-
-
+learning to connect to information deep in the past \cite{Bengio1994}.
 \begin{figure}[h]
     \centering
     \subfloat[
@@ -499,112 +496,91 @@ learning to connect to information from inputs deep in the past
         \includegraphics[height=0.35\textwidth]{own/rnn_unfolded.drawio.pdf}
     }
     \caption[
-        Folded and unfolded RNN
+        Folded and unfolded representation of an RNN
     ]{
-        Folded schematic RNN with a single hidden layer 
-        that feeds the previous $h_{t-1}$ 
-        (or initial $h_{0}$) state  
-        back to the inference at the current time step $t$
+        Folded representation of a 
+        schematic RNN with a single hidden layer 
+        inferring from the current input $x_t$
+        and the previous hidden state $h_{t-1}$
         and its time-unfolded representation
-        when processing the input of a time-series 
-        consisting of the three data points 
+        when processing the input sequence
         $\left(x_i\right)_{i\in\{1, 2, 3\}}$.
-
         \label{fig:rnn_folded_unfolded}
     }
 \end{figure}
 
-In 1997, Hochreiter and Schmidhuber \cite{Hochreiter1997} introduced
-the long short-term memory (LSTM),
-which is today's predominant \cite{schmidhuber_2021} RNN variant.
-A standard LSTM layer
-(see, e.g., the PyTorch implementation\footnote{
+
+
+
+In 1997, Hochreiter and Schmidhuber \cite{Hochreiter1997} 
+introduced the long short-term memory (LSTM), 
+which is today's predominant RNN architecture \cite{schmidhuber_2021}. 
+A standard LSTM layer (e.g., the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html}, visited on 03/07/2022
-})
-recurrently maintains a cell and a hidden state.
-This means that,
-in addition to the current data point of the input sequence,
-the layer re-inputs the fed back cell and hidden state
-from the previous sequential step.
-%The cell state is able to 
-%conserve its information content
-%over an arbitrary amount of sequential steps \cite{pascanu2013difficulty}.
-Furthermore, the LSTM layer implements three gating mechanism
-that control the information flow within the layer.
-A gating mechanism is basically
-the Hadamard product of a state and a gate, which is a vector whose entries 
-are within the interval from zero to one. 
-Consequently, a gate applied on a state, controls the 
-flow of the elements of the state within the range from zero to full flow.
-The forget gate of the LSTM layer controls
-the flow from the previous to the current cell state.
-The input gate controls the flow from the
-previous hidden state and the current data point of the input sequence
-to the current cell state.
-And the output gate controls
-the flow from the current cell state to current hidden state.
-%All three gates are functions of 
-%the previous hidden state and the current element of the input sequence.
-%The LSTM integrates a cell
-%as well as the input, output and forget gate.
-%While the cell conserves its state
-%over an arbitrary amount of inferences,
-%the three gates determine the information 
-%that flows into the cell to update the cell state
-%and out of the cell to impact the output.
-By this design of recurrent states with gated information flow,
-the training of the LSTM is essentially 
-robust to the vanishing gradient problem \cite{pascanu2013difficulty}.
-As a result, the LSTM is, compared to standard RNNs, essentially 
-more capable of learning to remember long-term dependencies within input sequences.
+}) 
+recurrently maintains a cell state and a hidden state. 
+This means that, besides the current data point of the input sequence, 
+the layer re-inputs the fed back cell state and hidden state 
+from the previous sequential step. 
+Furthermore, the LSTM layer implements three gating mechanisms 
+to control the information flow within the layer. 
+A gating mechanism is basically the Hadamard product 
+of a state and a gate, 
+which is a vector whose entries are within the interval from zero to one. 
+Consequently, a gate applied to a state controls the flow 
+of the state elements within the range from zero to full flow. 
+The forget gate of the LSTM layer controls the flow 
+from the previous to the current cell state. 
+The input gate controls the flow from the previous hidden state 
+and the current data point of the input sequence 
+to the current cell state. 
+And the output gate controls the flow from the current cell state 
+to the current hidden state. 
+By this design of recurrent states with gated information flow, 
+the training of the LSTM is essentially robust 
+to the vanishing gradient problem \cite{pascanu2013difficulty}. 
+As a result, the LSTM is, compared to standard RNNs, 
+more capable of learning to remember long-term dependencies 
+within input sequences.
 
 
-
-
-The GRU,
-which was proposed 17 years after the LSTM by Cho et al. \cite{Cho2014},
-can be seen as a lighter version of the LSTM.
-It refrains from the cell state and therewith the output gate
-of the LSTM and maintains only a hidden state and two gating mechanisms.
-Therewith, the GRU has less trainable parameters than the LSTM
-and is less memory efficient during inference.
-Nevertheless, it preserves the robustness with respect to the 
-vanishing gradient problem that affects most standard RNNs \cite{ICE2020}.
-Various empirical studies show that the GRU, compared to the LSTM,
-performs equally well or even slightly better.
-Greff et al. \cite{Greff2017} evaluated 
-the "vanilla" LSTM and the GRU, among other LSTM variants,
-on speech and handwritten text recognition
-as well as music representation
-and could not detect substantial differences in performance.
-Chung et al. \cite{Chung2014} applied LSTM and GRU on
-raw speech and polyphonic music data and empirically
-observed that both performed equally well.
-In the comparative study of 
-Yin et al. \cite{Yin2017}, 
-the GRU slightly outperforms
-the LSTM on five of seven
-natural language processing tasks.
-In the field of algorithm learning, 
-Kaiser and Sutskever \cite{Kaiser2015} achieved notedly better results 
-with a network based on GRU
-than with a network based on LSTM.
-In consideration of these findings and the
-fact that the GRU has less trainable parameters
-and occupies less memory during inference,
-the GRU is chosen over the LSTM for the deployment 
-in the ANN module of the autonomous navigation method of this thesis.
+The GRU, which was proposed 17 years after the LSTM by 
+Cho et al. \cite{Cho2014}, 
+is a lighter version of the LSTM. 
+It refrains from the cell state and therewith the output gate of the LSTM 
+and only has a hidden state and two gating mechanisms. 
+Therewith, the GRU has less trainable parameters 
+than the LSTM and is less memory efficient. 
+Nevertheless, it preserves the robustness towards 
+the vanishing gradient problem \cite{ICE2020}. 
+Various empirical studies compared the GRU and the LSTM. 
+Greff et al. \cite{Greff2017} found no substantial performance 
+differences between the GRU and several LSTM variants 
+in speech and handwritten text recognition and music representation. 
+Chung et al. \cite{Chung2014} detected an equally well performance 
+of the GRU and the LSTM processing raw speech and polyphonic music data. 
+In the comparative study of Yin et al. \cite{Yin2017}, 
+the GRU slightly outperforms the LSTM 
+in five of seven natural language processing tasks. 
+Kaiser and Sutskever \cite{Kaiser2015} achieved better 
+results with a GRU-based than with an LSTM-based network 
+in algorithm learning. 
+Considering the above findings and the lower complexity, 
+this thesis uses the GRU and not the LSTM 
+for the ANN module of the autonomous navigation method.
 
 
 
 
 \paragraph*{Inference}$\ $\\
-The following presents the mathematics of a single GRU layer during inference
+The following presents the mathematics 
+of the inference
+of a single GRU layer
 in accordance with the PyTorch implementation\footnote{
     \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 09/07/2022
 }.
-This includes the GRU layer's two gating mechanisms
-as well as its computations of the candidate and the hidden state.
+This includes the layer's two gating mechanisms
+and its computations of the candidate state and the hidden state.
 
 
 
@@ -628,11 +604,11 @@ be a batch of time series of data points
     ,\quad
     i \in \left\{
         1, \dots, N^\text{batch}
-    \right\}
+    \right\},
 \end{equation}
-with the batch size $N^\text{batch}$, 
-the sequence length $N^\text{seq}$
-and the dimensionality $N^\text{in}$ of the data points.
+where $N^\text{batch}$ is the batch size, 
+$N^\text{seq}$ is the sequence length 
+and $N^\text{in}$ is the dimensionality of the data points.
 Let the initial batch of hidden states be
 \begin{equation} \label{eq:gru_init_hidden_state}
     \underline h_{0,i}
@@ -640,17 +616,17 @@ Let the initial batch of hidden states be
     ,\quad
     i \in \left\{
         1, \dots, N^\text{batch}
-    \right\}
+    \right\},
 \end{equation}
-with the dimensionality $N^\text{hidden}$ of the hidden state,
-which is a design parameter of the GRU layer.
-The values of the initial hidden states $\underline h_{0,i}$,
-are typically initialized with zeros or noise \cite{Zimmermann2012}
-but can also be learned by the network, e.g., \cite{Forcada1995}.
-The GRU layer processes the time series included in the batch parallely 
+where $N^\text{hidden}$ is the dimensionality
+of the hidden state, which is a design parameter of the GRU layer.
+The values of the initial hidden states $\underline h_{0,i}$
+are typically zero or noisy \cite{Zimmermann2012}
+but can also be learned (e.g., \cite{Forcada1995}).
+The GRU layer processes the time series included in the batch parallelly 
 and the data points of the individual time series successively.
 At the current time step $t$,
-the layer's input consists of 
+the layer's input comprises 
 the batch of the current data points
 and the fed back batch of previously outputted, hidden states
 \begin{equation}
@@ -664,13 +640,12 @@ and the fed back batch of previously outputted, hidden states
         1, \dots, N^\text{batch}
     \right\}.
 \end{equation}
-For reasons of simplification,
-the following text only refers to the parallely computed, 
-individual elements of the processed batch.
-However, the following equations yet explicitely refer to the entire batch.
+For simplification, the following text only refers 
+to the parallelly computed, individual elements of the processed batch. 
+However, the following equations yet explicitly refer to the entire batch.
 
 
-At every incoming input, the GRU layer at first computes its two gates.
+At every incoming input, the GRU layer initially computes its two gates. 
 The current reset gate 
 \begin{equation}
     \underline g^\text{r}_{t,i} 
@@ -678,8 +653,7 @@ The current reset gate
     \mathcal{F}^\text{r} \left( \underline x_{t,i}, \underline h_{t-1,i}\right)
     ,\quad i \in \left\{1, \dots, N^\text{batch}\right\}
 \end{equation}
-is obtained 
-by the mapping
+results from the map
 \begin{align} \label{eq:gru_reset}
     \mathcal{F}^\text{r}
     &:
@@ -699,12 +673,10 @@ by the mapping
         \underline b^\text{r}_{h}
     \right).
 \end{align}
-The above mapping to the reset gate can be devided into two steps. 
-First, the current data point 
-and the previous hidden state
-are linearly transformed 
-with the corresponding matrices of trainable weights 
-and vectors of trainable biases
+The above map to the reset gate comprises two steps. 
+First, it linearly transforms the current data point 
+and the previous hidden state 
+with the trainable weight matrices and bias vectors
 \begin{align} \label{eq:gru_reset_params}
     \underline{\underline A}^\text{r}_{x} & \in \mathbb{R}^{
         N^\text{hidden}
@@ -718,28 +690,25 @@ and vectors of trainable biases
         \times
         N^\text{hidden}
     },
-    & \underline{b}^\text{r}_{h} & \in \mathbb{R}^{N^\text{hidden}}.
+    & \underline{b}^\text{r}_{h} & \in \mathbb{R}^{N^\text{hidden}},
 \end{align}
-The user has the design option to disable all biases of the GRU layer.
-This is tantamount to set the above and the still upcoming biases of the layer 
-to zero and consider them not trainable.
-Second, the standard sigmoid function \cite{Han1995} (see figure \ref{fig:gru_activations})
-\begin{equation}
+whereby the user has the design option to disable all biases of the GRU layer.
+This is tantamount to set the above and the below biases of the layer to zero 
+and consider them not trainable.
+Second, the standard sigmoid function \cite{Han1995} 
+(see fig. \ref{fig:gru_activations})
+\begin{equation} \label{eq:sigmoid}
     \sigma :\ 
     \mathbb{R} \rightarrow \left[0,1\right] ;\ 
     x \mapsto \frac{1}{1 + e^{-x}}
 \end{equation}
-is applied element-wise (denoted with the accent $\odot$) 
-on the sum of these two linear transformations.
-The sigmoid function forces the values of the reset gate to be 
-in the interval between zero and one.
-This is characteristic for a gating mechanism
-since the gating of a state,
-which is in fact the calculation of the Hadamard product
-of the state and the gate,
-targets at only damping 
-not amplifying or reversing
-the individual values of the state.
+applies element-wise (denoted with the accent $\odot$) 
+to the sum of these two linear transformations.
+The sigmoid function limits the values of the reset gate 
+to the interval between zero and one. 
+This is characteristic of a gating mechanism, 
+which targets at only damping, 
+not amplifying or reversing the individual values of the state.
 
 The current update gate 
 \begin{equation}
@@ -748,7 +717,7 @@ The current update gate
     \mathcal{F}^\text{u} \left( \underline x_{t,i}, \underline h_{t-1,i}\right)
     ,\quad i \in \left\{1, \dots, N^\text{batch}\right\}
 \end{equation}
-is obtained with the mapping
+results from the map
 \begin{align} \label{eq:gru_update}
     \mathcal{F}^\text{u}
     &:
@@ -768,10 +737,9 @@ is obtained with the mapping
         \underline b^\text{u}_{h}
     \right).
 \end{align}
-The above mapping to the update gate 
-differs from the mapping to the reset gate 
-only in the fact that the ocurring linear transformations 
-rely on their seperate, trainable weights and biases
+The above map to the update gate is the same 
+as the map to the reset gate but has 
+its own trainable weight matrices and bias vectors
 \begin{align} \label{eq:gru_update_params}
     \underline{\underline A}^\text{u}_{x} & \in \mathbb{R}^{
         N^\text{hidden}
@@ -788,16 +756,14 @@ rely on their seperate, trainable weights and biases
     & \underline{b}^\text{u}_{h} & \in \mathbb{R}^{N^\text{hidden}}.
 \end{align}
 
-With the knowledge of the current reset gate,
-the GRU layer calculates the candidate for the current hidden state,
-hereinafter referred to as candidate state
+Knowing the current reset gate, the GRU layer computes the candidate state
 \begin{equation}
     h^\text{c}_{t,i}
     =
     \mathcal{F}^\text{c} \left( \underline x_{t,i}, \underline h_{t-1,i}\right)
-    ,\quad i \in \left\{1, \dots, N^\text{batch}\right\}.
+    ,\quad i \in \left\{1, \dots, N^\text{batch}\right\}
 \end{equation}
-The mapping to the candidate state
+with the map
 \begin{align} \label{eq:gru_candidate}
     \mathcal{F}^\text{c}
     &:
@@ -823,9 +789,9 @@ The mapping to the candidate state
             +
             \underline b^\text{c}_{h}
         \right)
-    \right]
+    \right],
 \end{align}
-contains the trainable weight matrices and bias vectors
+which has the trainable weight matrices and bias vectors
 \begin{align} \label{eq:gru_candidate_params}
     \underline{\underline A}^\text{c}_{x} & \in \mathbb{R}^{
         N^\text{hidden}
@@ -841,23 +807,19 @@ contains the trainable weight matrices and bias vectors
     },
     & \underline{b}^\text{c}_{h} & \in \mathbb{R}^{N^\text{hidden}}.
 \end{align}
-The above mapping to the candidate state
-resembles the mappings to the reset 
-%$\mathcal{F}^\text{r}$
-and update
-%$\mathcal{F}^\text{u}$
-gate
-by subjecting the current data point and the previous hidden state
-to a seperate, biased linear transformation.
-It differs in two aspects.
-First, before the two transformations are added together,
-the current reset gate is applied on the transformed, previous hidden state
+The above map to the candidate state 
+resembles the maps to the reset and the update gate 
+by subjecting the current data point and the previous hidden state 
+to a separate, biased linear transformation, 
+but differs in two aspects. 
+First, before adding the results of the two transformations, 
+the current reset gate applies to the transformed, previous hidden state 
 ($\odot$ denotes the Hadamard product).
-The function of the reset gate is, consequently,
-to mitigate the contribution of the previous hidden state to the candidate state.
-Second, instead of the sigmoid function,
-the hyperbolic tangent \cite{D.1966} (see figure \ref{fig:gru_activations})
-\begin{equation}
+Thereby, the reset gate mitigates the contribution 
+of the previous hidden state to the candidate state. 
+Second, instead of the sigmoid function, 
+the hyperbolic tangent \cite{D.1966} (see fig. \ref{fig:gru_activations})
+\begin{equation} \label{eq:tanh}
     \tanh
     :\ 
     \mathbb{R}
@@ -874,10 +836,10 @@ the hyperbolic tangent \cite{D.1966} (see figure \ref{fig:gru_activations})
         e^x + e^{-x}
     }
 \end{equation}
-is applied element-wise on the sum of the linearly transformed data point 
-and the gated, linearly transformed, previous hidden state.
-The hyperbolic tangent bounds the values
-of the candidate state to the interval from minus to plus one. 
+applies element-wise to the sum of the transformed data point 
+and the gated, transformed, previous hidden state, 
+which limits the values of the candidate state 
+to the interval from minus to plus one.
 
 
 
@@ -888,7 +850,7 @@ Finally, the GRU layer computes the current hidden state
     \mathcal{F}^\text{h} \left( \underline x_{t,i}, \underline h_{t-1,i}\right)
     ,\quad i \in \left\{1, \dots, N^\text{batch}\right\}
 \end{equation}
-on the basis of the mapping
+with the map
 \begin{align} \label{eq:gru_layer_map_hidden}
     \mathcal{F}^\text{h}
     &:
@@ -920,94 +882,52 @@ on the basis of the mapping
     \underline h
     .
 \end{align}
-The above mapping to the hidden state is basically a weighted arithmetic mean.
-Before the previous hidden state
-and the current candidate state are averaged,
-they are weighted by the current update gate and counter-update gate, respectively.
-In other words,
-the update gate,
-whose values are between zero and one,
-controls the element-wise percentage proportions of both states
-on the current hidden state.
-Due to the fact that the hyperbolic tangent
-normalizes the elements of the candidate state to the interval from 
-minus to plus one (equation \ref{eq:gru_candidate})
-and the values of the initial hidden state
-are typically initialized to be also within this interval
-(equation \ref{eq:gru_init_hidden_state}),
-the values of the current hidden state are
-also bounded to the interval from minus to plus one.
-
-
+The above map to the hidden state is a weighted arithmetic mean 
+of the previous hidden state and the current candidate state, 
+where the current update gate and its counter gate are the weights. 
+Therewith, the update gate controls the element-wise percentages 
+of the two states in the current hidden state. 
+The fact that the hyperbolic tangent normalizes the elements 
+of the candidate state to the interval from minus to plus one 
+(see equ. \ref{eq:gru_candidate})
+limits the values of the current hidden state to the same interval 
+(given that the values of initial hidden state
+(equ. \ref{eq:gru_init_hidden_state})
+are also in that interval).
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{own/sigmoid_tanh.pdf}
     \caption[
-        The non-linear activation functions deployed within a standard GRU
+        The non-linear activation functions in the GRU
     ]{
-        The non-linear activation functions deployed within a standard GRU.
+        The non-linear activation functions in the GRU.
         The standard sigmoid function
-        $\sigma (x) = \left(1 + e^{-x}\right)^{-1}$
+        (see equ. \ref{eq:sigmoid})
         normalizes the values
-        of the reset and update
+        of the reset and the update
         gate to the interval from zero to one
-        (equation \ref{eq:gru_reset} and \ref{eq:gru_update}).
+        (see equ. \ref{eq:gru_reset} and \ref{eq:gru_update}).
         The hyperbolic tangent
-        $\tanh \left(x\right) = \left(e^x - e^{-x}\right)\left(e^x + e^{-x}\right)^{-1}$
+        (see equ. \ref{eq:tanh})
         normalizes the values 
         of the candidate
-        and, consequently, the hidden state 
+        and therewith the hidden state 
         to the interval from minus to plus one
-        (equation \ref{eq:gru_candidate} and \ref{eq:gru_layer_map_hidden}).
+        (see equ. \ref{eq:gru_candidate} and \ref{eq:gru_layer_map_hidden}).
         \label{fig:gru_activations}}
 \end{figure}
 
 
-%\begin{figure}[h]
-%    \centering
-%    \subfloat[
-%        Folded
-%    ]{
-%        \label{fig:rnn_folded}
-%        \includegraphics[height=0.35\textwidth]{own/rnn_folded.drawio.pdf}
-%    }
-%    \hspace*{2cm}                
-%    \subfloat[
-%        Unfolded
-%    ]{
-%        \label{fig:rnn_unfolded}
-%        \includegraphics[height=0.35\textwidth]{own/rnn_unfolded.drawio.pdf}
-%    }
-%    \caption[
-%        Folded and unfolded RNN
-%    ]{
-%        Folded schematic RNN with a single hidden layer 
-%        that feeds the previous $h_{t-1}$ 
-%        (or initial $h_{0}$) state  
-%        back to the inference at the current time step $t$
-%        and its time-unfolded representation
-%        when processing the input of a time-series 
-%        consisting of the three data points 
-%        $\left(x_i\right)_{i\in\{1, 2, 3\}}$.
-%
-%        \label{fig:rnn_folded_unfolded}
-%    }
-%\end{figure}
 
 
-
-\subsection*{Backpropagation through time}
-The following presents the application 
-of backpropagation through time
-on a single integrated GRU layer
-operating in many-to-one mode
-in order to calculate
-the gradients of the loss with respect to 
-the GRU layer's trainable parameters.
-During training,
-these gradients are required
-by gradient-based methods which update the trainable 
-parameters with the target to minimize the loss.
+\paragraph*{Backpropagation through time}$\ $\\
+The following illustrates backpropagation through time (BPTT) 
+applied to a single integrated GRU layer, 
+which operates in many-to-one mode. 
+BPTT calculates the gradients of the loss with respect to the 
+trainable parameters of the GRU. 
+Learning algorithms update the trainable parameters 
+based on these gradients to minimize the loss.
 
 %During training,
 %the integrated GRU layers 
@@ -1033,7 +953,7 @@ parameters with the target to minimize the loss.
 %the GRU sub-module,
 %which integrates multiple, subsequent GRU layers,
 %operates in many-to-one mode,
-%i.e., the mapping of sequential inputs to single outputs.
+%i.e., the map of sequential inputs to single outputs.
 %The following provides the theoretical
 %background of training a single GRU layer in many-to-one mode.
 
@@ -1055,7 +975,7 @@ parameters with the target to minimize the loss.
 %of data points labeled with a single navigation decision.
 %The output of the gru layers is hence
 %not the whole sequence of hidden states 
-%but only the last infered hidden state of a sequence.
+%but only the last inferred hidden state of a sequence.
 %This last hidden state is then forwarded
 %through the remaining layers of the ANN module.
 %Then,
@@ -1065,17 +985,9 @@ parameters with the target to minimize the loss.
 %To update the weights of the network after an batch
 %the loss is backpropagated.
 
-
-Let a single GRU layer,
-integrated into any superior ANN,
-operate in many-to-one mode.
-With biases enabled, 
-the set of all structures 
-that contain trainable parameters of the GRU layer
-is aggregated from equation 
-\ref{eq:gru_reset_params},
-\ref{eq:gru_update_params} 
-and \ref{eq:gru_candidate_params}
+Let a single GRU layer, integrated into a superordinate ANN, o
+perate in many-to-one mode. 
+Given biases enabled, the set of all objects of trainable parameters is
 \begin{equation} \label{eq:gru_params}
     \Theta 
     = 
@@ -1092,10 +1004,12 @@ and \ref{eq:gru_candidate_params}
         \underline{b}^\text{c}_{x},
         \underline{\underline A}^\text{c}_{h},
         \underline{b}^\text{c}_{h}
-    \right\}.
+    \right\}
 \end{equation}
-The addition of the sizes of the structurs in the set $\Theta$
-yields the total number of trainable parameters of the GRU layer
+(see equ. \ref{eq:gru_reset_params},
+\ref{eq:gru_update_params} 
+and \ref{eq:gru_candidate_params}).
+The total number of trainable parameters of the GRU layer is
 \begin{align} \label{eq:gru_layer_nparams}
     N^\text{param} 
     = 
@@ -1115,99 +1029,99 @@ yields the total number of trainable parameters of the GRU layer
         & \text{else}.
     \end{cases}
 \end{align}
-At a single inference,
-the GRU layer receives a batch of sequences of feature vectors
-from the previous layer of the ANN
+At a single inference, the GRU layer inputs a 
+batch of sequences of feature vectors from the precedent layer of the ANN
 \begin{equation}
     \left(\underline x_t\right)_{t\in\{1,\dots,N^\text{seq}\},i}
     , \quad i \in \left\{1,\dots,N^\text{batch}\right\}.
 \end{equation}
-The GRU layer in many-to-one mode maps each incoming batch of sequences
-to a batch of single outputs,
-whereby a single output is the hidden state lastly infered from a sequence
+The GRU layer maps each incoming batch of sequences 
+to a batch of single outputs, 
+whereby a single output is the hidden state 
+from the last processing step in the sequence
 \begin{equation} \label{equ:gru_output_many_to_one}
     \underline y_i = \underline h_{N^{seq}, i},
     \quad i \in \left\{1,\dots,N^\text{batch}\right\}.
 \end{equation}
-The time-unfolded computation graph of the integrated GRU layer
-for a single batch element is shown in figure \ref{fig:gru_unfolded}.
+Figure \ref{fig:gru_unfolded} shows the time-unfolded computation graph 
+of the integrated GRU layer for a single batch element.
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{own/gru_unfolded_intra_inter_paths.drawio.pdf}
     \caption[
-        Time-unfolded computation graph of a GRU layer operating in many-to-one mode.
+        Time-unfolded computation graph of a GRU layer in many-to-one mode.
     ]{
-        Time-unfolded computation graph of a GRU layer operating in many-to-one mode.
-        The input sequence $\left(x_t\right)_{t\in\{1,\dots N\}}$ is mapped
-        to the single output $\underline y$ which is equal to the lastly inferred, 
-        hidden state $\underline h_N$.
-        Equation \ref{eq:gru_reset}, \ref{eq:gru_update} and \ref{eq:gru_candidate}
-        define the mapping to the 
-        reset gate $\mathcal{F}^\text{r}$,
-        update gate $\mathcal{F}^\text{u}$
-        and candidate state $\mathcal{F}^\text{c}$, respectively.
-        The hidden states 
-        $\left(h_t\right)_{t\in\{1,\dots N\}}$
-        are obtained with
-        the mapping 
+        Time-unfolded computation graph of a GRU layer in many-to-one mode,
+        which maps
+        the input sequence $\left(x_t\right)_{t\in\{1,\dots N\}}$ 
+        to the single output $\underline y$ equal to the
+        hidden state $\underline h_N$ of the last processing step.
+        $\mathcal{F}^\text{r}$,
+        $\mathcal{F}^\text{u}$
+        and $\mathcal{F}^\text{c}$
+        (see equ. \ref{eq:gru_reset}, \ref{eq:gru_update} and \ref{eq:gru_candidate})
+        are the maps to
+        reset gate, update gate and candidate state, respectively.
+        The map 
         $\mathcal{F}^\text{h}$ 
-        defined by equation \ref{eq:gru_layer_map_hidden}
-        whereas the initial hidden state $\underline h_0$ 
-        (equation \ref{eq:gru_init_hidden_state})
-        is defined by the user. 
+        (see equ. \ref{eq:gru_layer_map_hidden})
+        yields the hidden states 
+        $\left(h_t\right)_{t\in\{1,\dots N\}}$,
+        whereas $\underline h_0$ is initialized.
         The trainable parameters 
         $\underline{\underline{A}}^\square_\square, \underline{b}^\square_\square$
         of the GRU layer
         are shared across all unfolded time steps.
+
         The backpropagation path of the intra-gradient with respect to 
         $\underline{\underline{A}}^\text{r}_x$
-        (equation \ref{eq:gru_grad_intra_hidden_2_Arx}) is highlighted in red for the first time step $t=1$.
+        (see equ. \ref{eq:gru_grad_intra_hidden_2_Arx}) 
+        is highlighted in red for $t=1$.
         The backpropagation paths of the inter-gradient 
-        (equation \ref{eq:gru_grad_inter}) 
+        (see equ. \ref{eq:gru_grad_inter}) 
         is highlighted in green
-        for the time step $t$.
+        for $t$.
         \label{fig:gru_unfolded}}
 \end{figure}
-The batches of single GRU outputs are forwarded to the subsequent layer of the ANN.
-Whenever a batch has passed all the output layer of the ANN,
-the loss $L$ of the batch is computed by averaging the losses of
-the individual elements of the batch.
-Because the seperate losses depend on their corresponding single GRU output,
-the loss of the batch is a function of all of these outputs.
+The GRU layer forwards the batches of 
+single outputs to the subsequent layer of the ANN.
+After passing the output layer of the ANN, the loss
+of the batch is computed by averaging the losses of the batch elements
 \begin{equation} \label{eq:loss_of_batch}
     L\left(\underline y_1, \dots, \underline y_{N^\text{batch}}\right) 
     = 
     \frac{1}{N^\text{batch}}
     \sum_{i=1}^{N^\text{batch}} L_i \left(\underline y_i\right).
 \end{equation}
-Gradient-based methods update the trainable parameters of the ANN
-with the goal to minimize the loss of the batch.
-For this, they require the knwoledge of the gradients of the loss 
-with respect to the trainable parameters.
-The update of the trainable parameters of the integrated GRU layer complies with
+Gradient-based methods update the trainable parameters 
+of the ANN with the goal to minimize the batch loss. 
+To do this, they compute the gradients of the batch loss 
+with respect to the trainable parameters. 
+The update of the trainable parameters of the integrated GRU layer 
+complies with
 \begin{equation}
     \underset{\Theta}{\mathrm{argmin}}\ 
     L\left(\underline y_1, \dots, \underline y_{N^\text{batch}}\right).
 \end{equation}
-In conformity with Li \cite{li2016tutorial}, the gradient of the batch loss 
-with respect to a single element
-$\theta \in \Theta$ of the set of structures containing trainable parameters (equation \ref{eq:gru_params})
-is computed based on backpropagation through time
+In conformity with Li \cite{li2016tutorial}, 
+BPTT calculates the gradient of the batch loss 
+with respect to an element $\theta \in \Theta$ 
+in the set of trainable objects (see equ. \ref{eq:gru_params})
 \begin{align} \label{eq:gru_grad_loss_2_theta}
     &\frac{\partial}{\partial \theta}
         L\left(\underline y_1, \dots, \underline y_{N^\text{batch}}\right)
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(1)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(1)}}{=}
     \frac{1}{N^\text{batch}}
     \sum_{i=1}^{N^\text{batch}} 
     \frac{\partial}{\partial \theta}
     L_i \left(\underline y_i\right)
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(2)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(2)}}{=}
     \frac{1}{N^\text{batch}}
     \sum_{i=1}^{N^\text{batch}} \left(
         \frac{\partial L_i}{\partial \underline y_i}
         \frac{\partial \underline y_i}{\partial \theta}
     \right)
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(3)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(3)}}{=}
     \frac{1}{N^\text{batch}}
     \sum_{i=1}^{N^\text{batch}} \left[
         \frac{\partial L_i}{\partial \underline y_i}
@@ -1216,7 +1130,7 @@ is computed based on backpropagation through time
             \widehat{ \frac{\partial \underline h_{j, i}}{\partial \theta}}
         \right)
     \right]
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(4)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(4)}}{=}
     \frac{1}{N^\text{batch}}
     \sum_{i=1}^{N^\text{batch}} \left\{
         \frac{\partial L_i}{\partial \underline y_i}
@@ -1228,41 +1142,44 @@ is computed based on backpropagation through time
         \right]
     \right\}.
     \\[2ex]
-        &\textcolor{blue}{\text{\footnotesize (1) 
-            Loss of a batch (equ. \ref{eq:loss_of_batch})}} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (2) 
+        &\textcolor{black}{\text{\footnotesize (1) 
+            Batch loss (equ. \ref{eq:loss_of_batch})}} \nonumber \\
+        &\textcolor{black}{\text{\footnotesize (2) 
             Chain rule}} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (3) 
-            Backpropagation through time (gradient $\widehat{\square}$ considers previous hidden states constant)}} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (4) 
-            Many-to-one output (equ. \ref{equ:gru_output_many_to_one});
-            chain rule applied on $\partial \underline y_i / \partial \underline h_{j, i}$}} \nonumber
+        &\textcolor{black}{\text{\footnotesize (3) 
+            BPTT (gradient $\widehat{\square}$ considers previous hidden states constant)}} \nonumber \\
+        &\textcolor{black}{\text{\footnotesize (4) 
+            Many-to-one (equ. \ref{equ:gru_output_many_to_one});
+            chain rule applied to $\partial \underline y_i / \partial \underline h_{j, i}$}} \nonumber
 \end{align}
 In the above formula,
 the gradient
 $\widehat{\partial \underline h_{j, i} / \partial \theta}$,
-hereinafter referred to as intra-gradient,
+(hereinafter referred to as intra-gradient) 
 treats all previous hidden states 
 $\underline h_{\tilde j,\dots, i}, \ \tilde j \in \{0, j-1\}$ as constants.
-In doing so, the intra-gradient only covers 
-the backpropagation path from 
-the hidden state $\underline h_{j, i}$ to the 
-parameter structure $\theta$
-within the same time step $j$.
-In order to compute the full gradient covering all backpropagation paths to $\theta$,
-all intra-backpropagation paths are connected 
-through time
-to the GRU layer's output $\underline y _i$ 
-by multiplying the intra-gradients with their corresponding chain of time step inter-gradients
+In doing so, the intra-gradient covers the backpropagation path 
+from the hidden state 
+$\underline h_{j, i}$
+to the trainable object 
+$\theta$
+only within the same time step $j$.
+The full gradient covering all backpropagation paths to 
+$\theta$, 
+connects all intra-backpropagation paths through time to the output 
+$\underline y _i$ 
+by multiplying the intra-gradients with the corresponding chains 
+of time step inter-gradients
 $\partial \underline h_{k, i}/\partial \underline h_{k-1, i}$.
-For demonstration purposes,
-the intra-gradient with respect to 
+
+
+
+The following exemplarily derives the intra-gradient with respect to
 $\theta=\underline{\underline{A}}^\text{r}_x$ 
-(the corresponding backpropagation path is highlighted for the first time step in figure \ref{fig:gru_unfolded})
-is examplarily derived as
+(see fig \ref{fig:gru_unfolded} for the corresponding backpropagation path):
 \begin{align} \label{eq:gru_grad_intra_hidden_2_Arx}
     \widehat{\frac{\partial \underline h_{t, i}}{\partial \underline{\underline{A}}^\text{r}_x}}
-    &\overset{\textcolor{blue}{(1)}}{=}
+    &\overset{\textcolor{black}{(1)}}{=}
     \widehat{\frac{\partial}{\partial \underline{\underline{A}}^\text{r}_x}} \left\{
         \left[
             \underline 1 
@@ -1276,8 +1193,8 @@ is examplarily derived as
         \odot
         \underline h_{t\text -1,i}
     \right\}
-    %\nonumber \\ & \quad \overset{\textcolor{blue}{(2)}}{=}
-    \nonumber \\ &\overset{\textcolor{blue}{(2)}}{=}
+    %\nonumber \\ & \quad \overset{\textcolor{black}{(2)}}{=}
+    \nonumber \\ &\overset{\textcolor{black}{(2)}}{=}
     \mathrm{diag} \left[
         \underline 1 
         -
@@ -1288,22 +1205,22 @@ is examplarily derived as
             {\partial \underline{\underline{A}}^\text{r}_x} 
     }
     \\[2ex]
-    &\textcolor{blue}{\text{\footnotesize (1) 
-            Mapping to hidden state (equ. \ref{eq:gru_layer_current_hidden}, \ref{eq:gru_layer_map_hidden}); 
+    &\textcolor{black}{\text{\footnotesize (1) 
+            Map to hidden state (equ. \ref{eq:gru_layer_current_hidden}, \ref{eq:gru_layer_map_hidden}); 
             $\chi :=  \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)$}} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize (2) 
-        Sum rule of differentiation;
+    &\textcolor{black}{\text{\footnotesize (2) 
+        Sum rule;
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize \qquad
-        Mapping to update gate (equ. \ref{eq:gru_update}): 
+    &\textcolor{black}{\text{\footnotesize \qquad
+        Map to update gate (equ. \ref{eq:gru_update}): 
         $\widehat{\partial \mathcal{F}^\text{u} / \partial \underline{\underline{A}}^\text{r}_x} = 0$ 
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize \qquad
-        Consider previous hidden states constant: 
+    &\textcolor{black}{\text{\footnotesize \qquad
+        Consider
         $\widehat{\partial \underline h_{t\text -1, i} / \partial \underline{\underline{A}}^\text{r}_x} = 0$;
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize \qquad
-        Hadamard product of two vectors (equ. \ref{eq:hadamard_product_two_vectors})
+    &\textcolor{black}{\text{\footnotesize \qquad
+        Hadamard product of 2 vectors (equ. \ref{eq:hadamard_product_two_vectors})
     }} \nonumber
 \end{align}
 with
@@ -1312,7 +1229,7 @@ with
         \frac{\partial \mathcal{F}^\text{c} \left(\chi\right)}
             {\partial \underline{\underline{A}}^\text{r}_x}
     }
-    & \overset{\textcolor{blue}{(1)}}{=}
+    & \overset{\textcolor{black}{(1)}}{=}
     \widehat{
         \frac{\partial}{\partial \underline{\underline{A}}^\text{r}_x} 
     }
@@ -1334,7 +1251,7 @@ with
             \right)}_{:=\chi^\text{c}}
         \right]
     \right\}
-    \nonumber \\ & \overset{\textcolor{blue}{(2)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(2)}}{=}
     \mathrm{diag} \left[
         \frac{\partial}{\partial \chi^\text{c}}
         \overset{\scriptscriptstyle \odot}{\tanh} \left(\chi^\text{c}\right)
@@ -1344,7 +1261,7 @@ with
         \frac{\partial \chi^\text{c}}
             {\partial \underline{\underline{A}}^\text{r}_x} 
     }
-    \nonumber \\ & \overset{\textcolor{blue}{(3)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(3)}}{=}
     \mathrm{diag} \left[
         1 - \overset{\scriptscriptstyle \odot}{\tanh}{}^2 \left(\chi^\text{c}\right)
     \right] 
@@ -1360,21 +1277,21 @@ with
             {\partial \underline{\underline{A}}^\text{r}_x} 
     }
     \\[2ex]
-    &\textcolor{blue}{\text{\footnotesize (1) 
-            Mapping to candidate state (equ. \ref{eq:gru_candidate}); 
+    &\textcolor{black}{\text{\footnotesize (1) 
+            Map to candidate state (equ. \ref{eq:gru_candidate}); 
             $\chi :=  \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)$}} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize (2) 
-        Chain rule of differentiation;  
+    &\textcolor{black}{\text{\footnotesize (2) 
+        Chain rule;  
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize \qquad
-        Derivative of function applied element-wise on vector
+    &\textcolor{black}{\text{\footnotesize \qquad
+        Derivative of element-wise function
         (equ. \ref{eq:derivative_vector_elementwise_applied_function})
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize (3) 
-        Derivative of hyperbolic tangent (equ. \ref{eq:derivative_tanh}); 
+    &\textcolor{black}{\text{\footnotesize (3) 
+        Derivative of tanh (equ. \ref{eq:derivative_tanh}); 
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize \qquad
-    Hadamard product of two vectors (equ. \ref{eq:hadamard_product_two_vectors})
+    &\textcolor{black}{\text{\footnotesize \qquad
+    Hadamard product of 2 vectors (equ. \ref{eq:hadamard_product_two_vectors})
     }} \nonumber
 \end{align}
 and
@@ -1383,7 +1300,7 @@ and
         \frac{\partial \mathcal{F}^\text{r}\left(\underline x_{t, i}, \underline h_{t\text -1, i}\right)}
             {\partial \underline{\underline{A}}^\text{r}_x} 
     }
-    &\overset{\textcolor{blue}{(1)}}{=}
+    &\overset{\textcolor{black}{(1)}}{=}
     \widehat{
         \frac{\partial}{\partial \underline{\underline{A}}^\text{r}_x} 
     }
@@ -1401,7 +1318,7 @@ and
             \underline b^\text{r}_{h}}_{:=\chi^\text{r}}
         \right)
     \right]
-    \nonumber \\ & \overset{\textcolor{blue}{(2)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(2)}}{=}
     \mathrm{diag} \left[
         \frac{\partial}{\partial \chi^\text{r}}
         \overset{\scriptscriptstyle \odot}{\sigma} \left(\chi^\text{r}\right)
@@ -1411,7 +1328,7 @@ and
         \frac{\partial \chi^\text{u}{}}
             {\partial \underline{\underline{A}}^\text{r}_x} 
     }
-    \nonumber \\ & \overset{\textcolor{blue}{(3)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(3)}}{=}
     \mathrm{diag} \left\{
         \overset{\scriptscriptstyle \odot}{\sigma} \left(\chi^\text{r}\right)
         \odot
@@ -1424,45 +1341,41 @@ and
         {\partial \underline{\underline{A}}^\text{r}_x} 
         .
     \\[2ex]
-        &\textcolor{blue}{\text{\footnotesize (1) 
-            Mapping to reset gate (equ. \ref{eq:gru_reset})}} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (2) 
-            Chain rule of differentiation;
+        &\textcolor{black}{\text{\footnotesize (1) 
+            Map to reset gate (equ. \ref{eq:gru_reset})}} \nonumber \\
+        &\textcolor{black}{\text{\footnotesize (2) 
+            Chain rule;
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize \qquad
-            Derivative of function applied element-wise on vector
+        &\textcolor{black}{\text{\footnotesize \qquad
+            Derivative of element-wise function
             (equ. \ref{eq:derivative_vector_elementwise_applied_function})
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (3) 
-            Derivative of sigmoid function (equ. \ref{eq:derivative_sigmoid})
+        &\textcolor{black}{\text{\footnotesize (3) 
+            Derivative of sigmoid (equ. \ref{eq:derivative_sigmoid})
         }} \nonumber
 \end{align}
-For the computation of the gradient
+For the calculation of the gradient
 $\partial \left(\underline{\underline A}^\text{r}_{x}\underline x_{t,i}\right)
         /\partial \underline{\underline{A}}^\text{r}_x
 $,
-which is a 3-dimensional matrix
-whose information content is only 2-dimensional,
+which is a three-dimensional tensor 
+of only two-dimensional information content, 
 refer to \cite{LearnedMiller}, for example.
 
-
-
-The in equation \ref{eq:gru_grad_loss_2_theta} required inter-gradient
-(the corresponding backpropagation path is highlighted in figure \ref{fig:gru_unfolded})
-, i.e., 
-the gradient of the current hidden state with respect to the previous hidden state,
-is derived as
+As required by equation \ref{eq:gru_grad_loss_2_theta}, 
+the following derives the inter-gradient
+(see fig \ref{fig:gru_unfolded} for the corresponding backpropagation path):
 %$\underline h_{t, i} = 
 %\mathcal{F}^\text{h} \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)$
 %and 
 %$\chi :=  \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)$:
 \begin{align} \label{eq:gru_grad_inter}
     \frac{\partial \underline h_{t, i}}{\partial \underline h_{t\text{-}1, i}}
-    %\nonumber \\ & \quad \overset{\textcolor{blue}{(1)}}{=}
+    %\nonumber \\ & \quad \overset{\textcolor{black}{(1)}}{=}
     %\frac{\partial}{\partial \underline h_{t\text{-}1, i}}
     %\mathcal{F}^\text{h} \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)
-    %\nonumber \\ & \quad \overset{\textcolor{blue}{(1)}}{=}
-    &\overset{\textcolor{blue}{(1)}}{=}
+    %\nonumber \\ & \quad \overset{\textcolor{black}{(1)}}{=}
+    &\overset{\textcolor{black}{(1)}}{=}
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}} \left\{
         \left[
             \underline 1 
@@ -1476,8 +1389,8 @@ is derived as
         \odot
         \underline h_{t\text -1,i}
     \right\}
-    %\nonumber \\ & \quad \overset{\textcolor{blue}{(2)}}{=}
-    \nonumber \\ &\overset{\textcolor{blue}{(2)}}{=}
+    %\nonumber \\ & \quad \overset{\textcolor{black}{(2)}}{=}
+    \nonumber \\ &\overset{\textcolor{black}{(2)}}{=}
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}} \left\{
         \left[
             \underline 1 
@@ -1493,8 +1406,8 @@ is derived as
         \odot
         \underline h_{t-1,i}
     \right\}
-    %\nonumber \\ & \quad \overset{\textcolor{blue}{(3)}}{=}
-    \nonumber \\ & \overset{\textcolor{blue}{(3)}}{=}
+    %\nonumber \\ & \quad \overset{\textcolor{black}{(3)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(3)}}{=}
     - \mathrm{diag}\left[\mathcal{F}^\text{c} \left(\chi\right)\right] 
     \frac{\partial \mathcal{F}^\text{u}\left(\chi\right)}
         {\partial \underline h_{t\text{-}1, i}}
@@ -1515,24 +1428,23 @@ is derived as
         \mathcal{F}^\text{u}\left(\chi\right)
     \right].
     \\[2ex]
-    &\textcolor{blue}{\text{\footnotesize (1) 
-            Mapping to current hidden state (equ. \ref{eq:gru_layer_current_hidden}, \ref{eq:gru_layer_map_hidden}); 
+    &\textcolor{black}{\text{\footnotesize (1) 
+            Map to hidden state (equ. \ref{eq:gru_layer_current_hidden}, \ref{eq:gru_layer_map_hidden}); 
             $\chi :=  \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)$}} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize (2) 
-        Sum rule of differentiation
+    &\textcolor{black}{\text{\footnotesize (2) 
+        Sum rule
     }} \nonumber \\
-    &\textcolor{blue}{\text{\footnotesize (3) 
-        Differentiation of Hadamard product of two vectors 
+    &\textcolor{black}{\text{\footnotesize (3) 
+        Differentiation of Hadamard product of 2 vectors 
         (equ. \ref{eq:differentiation_hadamard_product_two_vectors})
     }} \nonumber
 \end{align}
-The in equation \ref{eq:gru_grad_inter} required gradient 
-of the current update gate with respect to the previous hidden state is derived as 
+with
 \begin{align} \label{eq:gru_grad_update_2_previous_hidden} 
     \frac{\partial
     \mathcal{F}^\text{u} \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)
     }{\partial \underline h_{t\text{-}1, i}}
-    &\overset{\textcolor{blue}{(1)}}{=}
+    &\overset{\textcolor{black}{(1)}}{=}
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}}
     \left[
         \overset{\scriptscriptstyle \odot}{\sigma} \left(
@@ -1548,13 +1460,13 @@ of the current update gate with respect to the previous hidden state is derived 
             \underline b^\text{u}_{h}}_{:=\chi^\text{u}}
         \right)
     \right]
-    \nonumber \\ & \overset{\textcolor{blue}{(2)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(2)}}{=}
     \mathrm{diag} \left[
         \frac{\partial}{\partial \chi^\text{u}}
         \overset{\scriptscriptstyle \odot}{\sigma} \left(\chi^\text{u}\right)
     \right]
     \cdot \frac{\partial}{\partial \underline h_{t\text{-}1, i}} \chi^\text{u}{}
-    \nonumber \\ & \overset{\textcolor{blue}{(3)}}{=}
+    \nonumber \\ & \overset{\textcolor{black}{(3)}}{=}
     \mathrm{diag} \left\{
         \overset{\scriptscriptstyle \odot}{\sigma} \left(\chi^\text{u}\right)
         \odot
@@ -1562,28 +1474,26 @@ of the current update gate with respect to the previous hidden state is derived 
             1 -  \overset{\scriptscriptstyle \odot}{\sigma} \left(\chi^\text{u}\right)
         \right]
     \right\}
-    \cdot \underline{\underline A}^\text{u}_{h}.
+    \cdot \underline{\underline A}^\text{u}_{h},
     \\[2ex]
-        &\textcolor{blue}{\text{\footnotesize (1) 
-            Mapping to update gate (equ. \ref{eq:gru_update})}} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (2) 
-            Chain rule of differentiation;
+        &\textcolor{black}{\text{\footnotesize (1) 
+            Map to update gate (equ. \ref{eq:gru_update})}} \nonumber \\
+        &\textcolor{black}{\text{\footnotesize (2) 
+            Chain rule;
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize \qquad
-            Derivative of function applied element-wise on vector
+        &\textcolor{black}{\text{\footnotesize \qquad
+            Derivative of element-wise function
             (equ. \ref{eq:derivative_vector_elementwise_applied_function})
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (3) 
-            Derivative of sigmoid function (equ. \ref{eq:derivative_sigmoid})
+        &\textcolor{black}{\text{\footnotesize (3) 
+            Derivative of sigmoid (equ. \ref{eq:derivative_sigmoid})
         }} \nonumber
 \end{align}
-The in equation \ref{eq:gru_grad_inter} 
-required gradient of the current candidate state
-with respect to the previous hidden state is derived as 
+and
 \begin{align} \label{eq:gru_grad_candidate_2_previous_hidden}
     &\frac{\partial}{\partial \underline h_{t\text{-}1, i}}
     \mathcal{F}^\text{c}\left(\underline x_{t, i}, \underline h_{t\text -1, i}\right)
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(1)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(1)}}{=}
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}}
     \left\{
         \overset{\scriptscriptstyle \odot}{\tanh} \left[
@@ -1603,14 +1513,14 @@ with respect to the previous hidden state is derived as
             \right)}_{:=\chi^\text{c}}
         \right]
     \right\}
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(2)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(2)}}{=}
     \mathrm{diag} \left[
         \frac{\partial}{\partial \chi^\text{c}}
         \overset{\scriptscriptstyle \odot}{\tanh} \left(\chi^\text{c}\right)
     \right] 
     \cdot 
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}} \chi^\text{c}
-    \nonumber \\ & \quad \overset{\textcolor{blue}{(3)}}{=}
+    \nonumber \\ & \quad \overset{\textcolor{black}{(3)}}{=}
     \mathrm{diag} \left[
         1 - \overset{\scriptscriptstyle \odot}{\tanh}{}^2 \left(\chi^\text{c}\right)
     \right] 
@@ -1631,29 +1541,30 @@ with respect to the previous hidden state is derived as
         \underline{\underline A}^\text{c}_{h}
     \right\}.
     \\[2ex]
-        &\textcolor{blue}{\text{\footnotesize (1)
-            Mapping to candidate state (equ. \ref{eq:gru_candidate})
+        &\textcolor{black}{\text{\footnotesize (1)
+            Map to candidate state (equ. \ref{eq:gru_candidate})
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (2) 
+        &\textcolor{black}{\text{\footnotesize (2) 
             Chain rule of differentiation;  
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize \qquad 
+        &\textcolor{black}{\text{\footnotesize \qquad 
             Derivative of function applied element-wise on vector
             (equ. \ref{eq:derivative_vector_elementwise_applied_function})
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize (3) 
+        &\textcolor{black}{\text{\footnotesize (3) 
             Derivative of hyperbolic tangent (equ. \ref{eq:derivative_tanh}); 
         }} \nonumber \\
-        &\textcolor{blue}{\text{\footnotesize \qquad
-            Differentiation of Hadamard product of two vectors 
+        &\textcolor{black}{\text{\footnotesize \qquad
+            Differentiation of Hadamard product of 2 vectors 
             (equ. \ref{eq:differentiation_hadamard_product_two_vectors})
         }} \nonumber
 \end{align}
-The in equation \ref{eq:gru_grad_candidate_2_previous_hidden} 
-required gradient of the current reset gate
-with respect to the previous hidden state shares the same structure
-with the gradient of equation \ref{eq:gru_grad_update_2_previous_hidden} 
-and is hence derived as
+as well as (same structure as in equ. \ref{eq:gru_grad_update_2_previous_hidden})
+%The in equation \ref{eq:gru_grad_candidate_2_previous_hidden} 
+%required gradient of the current reset gate
+%with respect to the previous hidden state shares the same structure
+%with the gradient of equation \ref{eq:gru_grad_update_2_previous_hidden} 
+%and is hence derived as
 \begin{align}
     \frac{\partial}{\partial \underline h_{t\text{-}1, i}}
     \mathcal{F}^\text{r} \left(\underline x_{t, i}, \underline h_{t\text{-}1, i}\right)
@@ -1684,8 +1595,7 @@ yield the derivative of the hyperbolic tangent as
 \begin{equation} \label{eq:derivative_tanh}
     \frac{\text d}{\text d x} \tanh (x) = 1 - \tanh^2 (x).
 \end{equation}
-The derivative of the sigmoid function (e.g., \cite{Minai1993})
-is given by
+The derivative of the sigmoid function (e.g., \cite{Minai1993}) is
 \begin{equation} \label{eq:derivative_sigmoid}
     \frac{\text d}{\text d x} \sigma \left(x\right) 
     = 
@@ -1694,8 +1604,8 @@ is given by
         1 - \sigma \left(x\right)
     \right].
 \end{equation}
-The hadamard product of two vectors can be reformulated as the
-matrix product of a diagonal matrix and a vector \cite{Brookes2020}
+The Hadamard product of two vectors \cite{Brookes2020} equates to the 
+matrix product of a diagonal matrix and a vector 
 \begin{equation} \label{eq:hadamard_product_two_vectors}
     \underline x_1 \odot \underline x_2 
 = 
@@ -1703,8 +1613,8 @@ matrix product of a diagonal matrix and a vector \cite{Brookes2020}
 =   
     \mathrm{diag} \left(\underline x_2\right) \underline x_1.
 \end{equation}
-Together with the product rule of differentiation, the derivative of the Hadamard product of two vectors 
-is therewith identified as
+Applying the product rule of differentiation 
+yields the derivative of the Hadamard product of two vectors
 \begin{equation} \label{eq:differentiation_hadamard_product_two_vectors}
     \frac{\partial}{\partial t} \left(
         \underline x_1 \odot \underline x_2 
@@ -1717,7 +1627,7 @@ is therewith identified as
     \frac{\partial \underline x_2}{\partial t}.
 \end{equation}
 The derivative of a function
-$f:\mathbb{R}\rightarrow\mathbb{R}$, that is applied element-wise on a vector $\underline x$,
+$f:\mathbb{R}\rightarrow\mathbb{R}$ applied element-wise to a vector $\underline x$
 is the diagonal matrix built from the derivative of the function applied element-wise on the vector
 \begin{equation} \label{eq:derivative_vector_elementwise_applied_function}
         \frac{\partial}{\partial \underline x} 
@@ -1731,27 +1641,26 @@ is the diagonal matrix built from the derivative of the function applied element
             \right)
         \right].
 \end{equation}
-The above statement can be derived 
-from the calculation of the differential of the function
+The calculation of the differential of the function yields the above statement
 \begin{align}
     &\frac{\text d}{\text d \underline x}
     \overset{\scriptscriptstyle \odot}{f} \left(
         \underline x
     \right)
     \cdot \text d \underline x
-\overset{\textcolor{blue}{(1)}}{=}
+\overset{\textcolor{black}{(1)}}{=}
     \text d 
     \overset{\scriptscriptstyle \odot}{f} \left(
         \underline x
     \right)
-\overset{\textcolor{blue}{(2)}}{=}
+\overset{\textcolor{black}{(2)}}{=}
     \left[
         \overset{\scriptscriptstyle \odot}{f'}  \left(
             \underline x
         \right)
     \right]
     \odot \text d \underline x
-\overset{\textcolor{blue}{(3)}}{=}
+\overset{\textcolor{black}{(3)}}{=}
     \mathrm{diag} \left[
         \overset{\scriptscriptstyle \odot}{f'}  \left(
             \underline x
@@ -1759,7 +1668,7 @@ from the calculation of the differential of the function
     \right]\cdot
     \text d \underline x.
     \\[2ex]
-        &\quad\textcolor{blue}{\text{\footnotesize (1) Relation of differential and derivative}} \nonumber \\
-        &\quad\textcolor{blue}{\text{\footnotesize (2) Chain rule element-wise applied}} \nonumber \\
-        &\quad\textcolor{blue}{\text{\footnotesize (3) Hadamard product of two vectors (equ. \ref{eq:hadamard_product_two_vectors})}}
+        &\quad\textcolor{black}{\text{\footnotesize (1) Relation of differential and derivative}} \nonumber \\
+        &\quad\textcolor{black}{\text{\footnotesize (2) Chain rule element-wise applied}} \nonumber \\
+        &\quad\textcolor{black}{\text{\footnotesize (3) Hadamard product of 2 vectors (equ. \ref{eq:hadamard_product_two_vectors})}}
 \end{align}
