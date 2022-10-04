@@ -513,7 +513,7 @@
   year      = {2010},
   copyright = {arXiv.org perpetual, non-exclusive license},
   doi       = {10.48550/ARXIV.1011.0686},
-  keywords  = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  keywords  = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Machine Learning (stat.ML), FOS: Computer and information sciences},
   publisher = {arXiv},
 }
 
@@ -1803,6 +1803,49 @@
   month     = {sep},
   publisher = {{IEEE}},
   doi       = {10.1109/iros51168.2021.9636053},
+}
+
+@Article{RojasPerez2020,
+  author    = {Leticia Oyuki Rojas-Perez and Jose Martinez-Carranza},
+  journal   = {Sensors},
+  title     = {{DeepPilot}: A {CNN} for Autonomous Drone Racing},
+  year      = {2020},
+  month     = {aug},
+  number    = {16},
+  pages     = {4524},
+  volume    = {20},
+  doi       = {10.3390/s20164524},
+  publisher = {{MDPI} {AG}},
+}
+
+@InProceedings{Kaufmann2019,
+  author    = {Elia Kaufmann and Mathias Gehrig and Philipp Foehn and Rene Ranftl and Alexey Dosovitskiy and Vladlen Koltun and Davide Scaramuzza},
+  booktitle = {2019 International Conference on Robotics and Automation ({ICRA})},
+  title     = {Beauty and the Beast: Optimal Methods Meet Learning for Drone Racing},
+  year      = {2019},
+  month     = {may},
+  publisher = {{IEEE}},
+  doi       = {10.1109/icra.2019.8793631},
+}
+
+@InProceedings{Jung2018a,
+  author    = {Sunggoo Jung and Hanseob Lee and Sunyou Hwang and David Hyunchul Shim},
+  booktitle = {2018 {AIAA} Information Systems-{AIAA} Infotech @ Aerospace},
+  title     = {Real Time Embedded System Framework for Autonomous Drone Racing using Deep Learning Techniques},
+  year      = {2018},
+  month     = {jan},
+  publisher = {American Institute of Aeronautics and Astronautics},
+  doi       = {10.2514/6.2018-2138},
+}
+
+@InCollection{Chan2020,
+  author    = {Ka-Hou Chan and Wei Ke and Sio-Kei Im},
+  booktitle = {Neural Information Processing},
+  publisher = {Springer International Publishing},
+  title     = {{CARU}: A Content-Adaptive Recurrent Unit for the Transition of Hidden State in {NLP}},
+  year      = {2020},
+  pages     = {693--703},
+  doi       = {10.1007/978-3-030-63830-6_58},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

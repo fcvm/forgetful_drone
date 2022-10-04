@@ -45,6 +45,13 @@ Gino Brunner, Bence Szebedy, Simon Tanner, and Roger Wattenhofer.
 \newblock In {\em 2019 international conference on unmanned aircraft systems
   (icuas)}, pages 1005--1012. IEEE, 2019.
 
+\bibitem{Chan2020}
+Ka-Hou Chan, Wei Ke, and Sio-Kei Im.
+\newblock {CARU}: A content-adaptive recurrent unit for the transition of
+  hidden state in {NLP}.
+\newblock In {\em Neural Information Processing}, pages 693--703. Springer
+  International Publishing, 2020.
+
 \bibitem{Cho2014}
 Kyunghyun Cho, Bart van Merrienboer, Dzmitry Bahdanau, and Yoshua Bengio.
 \newblock On the properties of neural machine translation: Encoder-decoder
@@ -220,12 +227,7 @@ Antonio Loquercio and Davide Scaramuzza.
   Joint Semantic, Geometric, and Physical Understanding}, number CONF, 2018.
 
 \bibitem{Mazur2016a}
-Micha? Mazur, Adam Wi?niewski, Jeffery McMillan, Vicki Huff, Richard Abadie,
-  Julian Smith, Stefan Stroh, Piotr Romanowski, Adam Kraso?, Filip Orli?ski,
-  Agnieszka Babicz, Paulina Lulkowska, Ewa Boguszewska, Bartosz Czerkies, Adam
-  G??b, Rozalia Ho?oga, Jakub Jagie??o, Weronika Jankowska-Tofani, Arkadiusz
-  Kramza, Sandra Kuprijaniuk, Remigiusz Piwowarski, Jacek Sygutowski, Grzegorz
-  Urban, Marek Walczak, Marek Wolski, and Ewa Zdrojowy.
+Michal Mazur, Adam Wisniewski, and Jeffery McMillan.
 \newblock {\em Clarity from above}.
 \newblock PwC Poland, May 2016.
 

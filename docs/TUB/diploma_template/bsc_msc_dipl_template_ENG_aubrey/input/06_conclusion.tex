@@ -11,121 +11,52 @@
 %describe the corresponding 
 %results without reflecting on them.
 
+Chapter \ref{background} provided background information on imitation learning with dataset aggregation 
+and the gated recurrent unit (GRU). The first section presented a definition of the general imitation learning problem, 
+the most intuitive approach to it, named behavioral cloning, and the more advanced approach of dataset aggregation, 
+which is applied in the experiments of this thesis. The second section introduced the class of 
+recurrent neural networks (RNN) and the special RNN architecture of the GRU, including its state and gating mechanisms 
+at inference that allow for temporal comprehension and how it trains with backpropagation through time. 
 
+Chapter \ref{mainone} presented the autonomous navigation method of the baseline work, 
+which is used for the experiments of this thesis. The first section introduced the three reference systems and 
+their transformations applied by the modules of the method. The second section presented the ANN module, 
+which has the function of making navigation decisions based on the RGB images from the drone's onboard camera. 
+The ANN module, comprising the CNN, CAT, FC, GRU and HEAD submodules, is a modularized version of the ANN of 
+the baseline work. It additionally integrates the CAT submodule, which extends the decision-making basis with 
+the optional inputs, and the GRU submodule, which extends the decision-making capabilities with temporal comprehension. 
+The third section presented the planning module of the method, which has the function of computing local 
+trajectories based on the navigation decisions made by the ANN module or, possibly in the imitation learning process, 
+the expert system. The fourth section presented the control stack of the method, which has the function of computing 
+the drone's motor inputs to track the local trajectories computed by the planning module. The fifth section presented 
+the expert system, which in the rollouts of the imitation learning process, intervenes and generates a labeled training 
+sample whenever the ANN module makes a poor navigation decision. 
 
-Chapter \ref{background} provided background information 
-on imitation learning with dataset aggregation and the gated recurrent unit (GRU).
-The first section presented a definition of the general imitation learning problem
-as well as the most intuitive approach to the problem (i.e, behavioral cloning).
-Upon this, the more advanced approach of dataset aggregation is presented,
-which is applied in the experiments of this thesis.
-The second section introduced the class of recurrent neural networks (RNN)
-together with the special RNN architecture of the GRU.
-This included the state and gating mechanisms of the GRU that can infer from temporal connections in the input
-and backpropagation through time, which is used to train the GRU and other RNNs.
-Chapter \ref{mainone} presented the autonomous navigation method of the baseline work,
-which is used for the experiments of this thesis.
-The first section introduced the three reference systems 
-and their transformations applied by the modules of the method.
-The second section presented the ANN module of this thesis,
-which has the function to make navigation decisions based on the RGB images from the drone's onboard camera.
-The ANN module comprising the CNN, CAT, FC, GRU and HEAD submodules
-is a modularized version of the ANN of the baseline work
-that additionally integrates the CAT submodule,
-which extends the decision-making basis with the optional inputs
-(i.e., the time steps of the images and the estimates from the drone's onboard IMU)
-and the GRU submodule,
-which extends the decision-making capabilities with temporal comprehension.
-The third section presented the planning module of the method,
-which has the function to compute local trajectories based on the navigation decisions made by
-the ANN module or, in the imitation learning process, the expert system.
-The fourth section, presented the control stack of the method,
-which has the function to compute the drone's motor inputs 
-to track the local trajectories computed by the planning module.
-The fifth section presented the expert system of the method,
-which in the rollouts of the imitation learning process,
-intervenes, whenever the ANN module makes a poor navigation decision.
-For every expert intervention in the rollouts, a training sample 
-labeled with the expert navigation decision is generated and added to the dataset.
-Chapter \ref{maintwo} presented the four experiments of this thesis,
-which were all conducted in simulation and investigated different ANN module variants with respect to different aspects.
-The first section presented the implementation and the configuration options of the simulation.
-The second section presented the process and the configuration options of the imitation learning with dataset aggregation.
-The third section presented the process and the configuration options of the race tests.
-The following four sections presented the configurations of the four conducted experiments.
-Experiment 1 studied two feedforward and three recurrent ANN module variants,
-that trained with imitation learning
-on the randomized figure-8 racetrack in a single simulation environment
-and were tested in the same setting.
-Experiment 2 studied several recurrent ANN module variants which 
-are configured like the best performing recurrent variant of experiment 1
-but differ in their numbers of GRU layers. 
-The variants were trained on the dataset aggregated by the best performing variant of experiment 1
-and performed the same race tests as in experiment 1.
-Experiment 3 studies a feedforward and a recurrent ANN
-module variant
-that trained with imitation learning
-on the randomized gap racetrack in several simulation environments.
-The variants performed race tests in the same simulation environments
-as well as in simulation environments unseen in the learning process.
-Experiment 4 studied several recurrent ANN module variants which 
-are configured like the better performing recurrent variant of experiment 3
-but differ in the input sequence length of their training samples and 
-the input RGB image size.
-The variants were trained on the dataset aggregated by that better performing variant of experiment 3
-and performed the same race tests as in experiment 3.
-Chapter \ref{results} presented the following results of the four experiments,
-which were subsequently discussed and interpreted.
-In experiment 1, both feedforward variant stalled in the imitation learning process,
-while all three recurrent variants could complete it.
-The first feedforward variant, which represents the ANN used in the baseline work,
-performed by far the most rollouts and aggregated by far the most data.
-The second feedforward variant, which integrates a more complex CNN submodule than the first feedforward variant,
-performed the second most rollouts and aggregated the second most data.
-The first recurrent variant, which is the recurrent counterpart to the second feedforward variant,
-performed the least rollouts and aggregated the least data.
-The second recurrent variant, that differs from the first recurrent variant by using additional inputs,
-performed the second least rollouts and aggregated the second least data.
-The third recurrent variant, that differs from the first recurrent variant by the only partly trainable CNN submodule,
-performed the third least rollouts and aggregated the third least data.
-Both feedforward variant achieved roughly the same final training and validation losses,
-which are higher than the final losses of the three recurrent variants.
-In the experiment, the first recurrent variant has the fewest final validation loss,
-the second recurrent variant has the fewest final training loss
-and the highest final validation-training loss ratio,
-and the third recurrent variant has the fewest final validation-training loss ratio.
-In the race tests,
-the first feedforward variant performed by far the worst.
-The second feedforward variant performed substantially better.
-The first recurrent variant performed by far the best in experiment 1.
-Both, the second and the third recurrent variant
-perform worse than the first recurrent variant.
-In experiment 2, 
-the single-layer GRU variant achieves the lowest training
-and the highest validation loss.
-The ten-layer GRU variant achieves the highest training
-and the lowest validation loss.
-The variants in between with 2, 3 and 5 GRU layers 
-achieve roughly the same training and validation losses.
-All variants perform similarly well in the race tests
-with the exception of the ten-layer GRU variant,
-which performs significantly worse.
-In experiment 3, 
-the feedforward variant completed the imitation learning process
-with less rollouts, less aggregated data 
-and a fewer training loss than the recurrent variant.
-In environments seen in the imitation learning process,
-the recurrent variant clearly outperforms the feedforward variant in the race tests.
-In unseen environments, both variants failed the race tests.
-In experiment 4,
-the variants with the larger image size achieve fewer training losses
-than the variants with the smaller image size.
-Moreover, the variants with longer input sequence lengths achieve
-fewer training losses than the variants with shorter input sequence lengths.
-In seen environments,
-all variants perform roughly the same in the race tests.
-In unseen environments, the variants with the smaller image size performed slightly better
-than the variants with the larger image size.
+Chapter \ref{maintwo} presented the four simulated experiments of this thesis, 
+which studied different ANN module variants regarding different aspects. 
+The first section presented the implementation and the configuration options of the simulation. 
+The second section presented the process and the configuration options of the imitation learning 
+with dataset aggregation. The third section presented the process and the configuration options of the race tests. 
+The following four sections presented the configurations of the four conducted experiments. 
+Experiment 1 studied two feedforward and three recurrent ANN module variants that trained with imitation 
+learning on the randomized figure-8 racetrack in a single simulation environment and performed race tests 
+in the same setting. Experiment 2 studied several recurrent ANN module variants, which are configured like 
+the best performing recurrent variant of experiment 1 but differ in their numbers of GRU layers. 
+The variants trained on the dataset aggregated by that best performing variant and performed the same race 
+tests as in experiment 1. Experiment 3 studies a feedforward and a recurrent ANN module variant that trained 
+with imitation learning on the randomized gap racetrack in several simulation environments. 
+The variants performed race tests in the same simulation environments and in simulation environments unseen 
+in the learning process. Experiment 4 studied several recurrent ANN module variants, which are configured 
+like the better performing recurrent variant of experiment 3, but differ in the input sequence length of 
+the training samples and the input RGB image size. The variants trained on the dataset aggregated by that 
+better performing variant and performed the same race tests as in experiment 3.
+
+Chapter \ref{evaluation} presented and discussed the experimental results of this thesis. 
+In experiment 1, both feedforward variants stalled in the imitation learning process, while all three recurrent variants could complete it. The first feedforward variant, which represents the ANN used in the baseline work, performed by far the most rollouts and aggregated by far the most data. The second feedforward variant, which integrates a more complex CNN submodule than the first feedforward variant, performed the second most rollouts and aggregated the second most data. The first recurrent variant, which is the recurrent counterpart to the second feedforward variant, performed the least rollouts and aggregated the least data. The second recurrent variant, that differs from the first recurrent variant by using additional inputs, performed the second fewest rollouts and aggregated the second least data. The third recurrent variant, that differs from the first recurrent variant by the only partly trainable CNN submodule, performed the third fewest rollouts and aggregated the third least data. Both feedforward variants achieved roughly the same final training and validation losses, which are higher than the final losses of the three recurrent variants. The first recurrent variant has the fewest final validation loss, the second recurrent variant has the fewest final training loss and the highest final validation-training loss ratio, and the third recurrent variant has the fewest final validation-training loss ratio. In the race tests, the first feedforward variant performed by far the worst. The second feedforward variant performed substantially better. The first recurrent variant performed by far the best. Both the second and the third recurrent variant perform worse than the first recurrent variant.
+In experiment 2, the single-layer GRU variant achieves the lowest training and the highest validation loss. The ten-layer GRU variant achieves the highest training and the lowest validation loss. The variants in between with 2, 3 and 5 GRU layers achieve roughly the same training and validation losses. All variants perform similarly well in the race tests except for the ten-layer GRU variant, which performs significantly worse. 
+In experiment 3, the feedforward variant completed the imitation learning process with fewer rollouts, less aggregated data and a lower training loss than the recurrent variant. In environments seen in the imitation learning process, the recurrent variant clearly outperforms the feedforward variant in the race tests. In unseen environments, both variants failed the race tests. 
+In experiment 4, the variants with the larger image size achieve fewer training losses than the variants with the smaller image size. Moreover, the variants with longer input sequence lengths achieve fewer training losses than the variants with shorter input sequence lengths. In seen environments, all variants perform roughly the same in the race tests. In unseen environments, the variants with the smaller image size performed slightly better than the variants with the larger image size.
+
 
 
 
@@ -146,103 +77,79 @@ than the variants with the larger image size.
 %What are the good points about your results and work? 
 %What are the drawbacks? 
 \section{Conclusion}
-This thesis was motivated by the consideration that when
-approaching objects or avoiding obstacles in their immediate environment,
-humans rely primarily on their visual perception of their surroundings, 
-which is not limited to what is currently in their field of view, 
-but also extends to their memory of what they have already seen.
-They are able to link this memory to their often subconscious
-decisions of how to move to reach a goal,
-allowing them to incorporate, for example, 
-their own motion history or their estimation and anticipation of how objects move or are likely to move
-into their decision-making.
-State-of-the-art autonomous navigation methods for drones 
-employ CNNs to derive navigation decisions from visual sensor data,
-thereby basing decision-making on a high spatial understanding of the drone's current environment.
-The objective of this thesis was to investigate the hypothesis
-that the combined spatial and temporal comprehension of human navigation
-is beneficial for the simplified navigation task of autonomous drone racing.
-The approach to this goal was 
-to use the autonomous drone racing method of Kaufmann et al. \cite{Kaufmann2018} as a baseline,
-to extend the baseline's ANN module responsible for the navigation decision-making,
-which consists of a CNN and fully-connected layers,
-with the GRU architecture
-and finally to evaluate the performance 
-of the baseline method for different feedforward and recurrent ANN module variants delivered in simulated experiments.
+This thesis was motivated by the consideration that humans, 
+when approaching objects or avoiding obstacles in their immediate environment, 
+rely primarily on their visual perception of their surroundings. 
+Their visual perception is not limited to what is currently in their field of view, 
+but also extends to their memory of what they have already seen. 
+They can link this memory to their often subconscious decisions about how to move to reach a goal. 
+This allows them to incorporate, for example, their own motion history or their estimation and anticipation 
+of how objects move or are likely to move into their decision-making. 
+State-of-the-art autonomous navigation methods for drones employ CNNs to derive navigation decisions 
+from visual sensor data, thereby basing decision-making on a high spatial understanding of the environment 
+currently in the drone's field of view. The objective of this thesis was to investigate the hypothesis that 
+the combined spatial and temporal comprehension of human-like navigation is beneficial 
+for the simplified navigation task of autonomous drone racing. The approach to this goal was to use the 
+autonomous drone racing method of Kaufmann et al. \cite{Kaufmann2018} as a baseline, extend the baseline's ANN module 
+with the GRU architecture and conduct simulated experiments to compare the performance of feedforward and recurrent 
+ANN module variants.
 
 
-The experimental results largely support the investigated hypothesis.
-In experiment 1 and 3, the recurrent ANN module variant significantly outperformed its feedforward counterpart 
-in the race tests, which is especially remarkable for experiment 3
-where the recurrent variant has significantly less trainable parameters.
-In experiment 1, where the variants have comparable numbers of trainable parameters,
-the recurrent variants significantly outperformed the feedforward variants in the imitation learning process,
-which is accompanied by significantly fewer rollouts and aggregated data 
-as well as significantly lower training and validation losses.
-The lower training and validation losses combined with the better or equal race test performance of
-the recurrent variants of experiment 1 showed that, first, 
-the data aggregated by the recurrent variants, although less, is more comprehensive,
-suggesting that navigation decisions are indeed temporally connected 
-to past visual observations from the drone's onboard camera
-and second, that the recurrent variant can learn to leverage these 
-underlying temporal connections for a more accurate and more generalizing navigation decision-making.
-in contrast, the feedforward variant, which is by design unable to learn temporal connections,
-requires more data for a worse or equal race test performance,
-likely because the absence of temporal comprehension makes it 
-less robust against intermediate ambigueties of the racetrack 
-and outlying visual observations not represented by the aggregated data.
-Considering the fewer learning rollouts required,
-the recurrent variants are much more advantageous for real-world experiments
-where rollouts are more time-consuming, expensive and risky than in simulation.
-In experiment 3, a better performance of the recurrent variant on the gap racetrack type 
-in unseen environments could have explicitly substantiate the hypothesis.
-However, the simulation configuration of the experiment allowed both variants
-to evade by learning visual features in the environment.
-Experiments 2 and 4 where the variants trained with supervised learning due to time concerns
-showed that lower training and validation losses 
-do not automatically lead to better performance in race tests, 
-emphasizing how important it is for an imitation learning problem
-that the state distribution in the aggregated data matches the state distribution during rollout.
-The results from both experiments would probably substantially differ 
-if the variants were trained with imitation learning.
-However, the fact the variants could fit the precollected data more accurately,
-the longer the input sequence length of the data was,
-again emphasizes the existence of temporal connections in the navigation decision-making.
 
-None of the examined variants could keep up with the strong, experimental results of the baseline work.
-The reason for this is likely that the experiments in the baseline work 
-were conducted on another racetrack layout, 
-which is less challenging to the autonomous navigation method,
-in a non-photorealistic simulation,
-which due to less details and variations simplifies visual perception.
-A more stringent imitation learning configuration,
-resulting in more aggregated data,
-could possibly achieve comparable results,
-however, would also have made the imitation learning processes even more time-intensive.
-A disadvantage of the recurrent variants is that the training epochs on sequential data
-is much more time-consuming than on non-sequential data.
-Even if the training epochs of the recurrent variants are more effective
-and thus less epochs per rollout are required,
-the imitation learning process tends to be longer than for feedforward variants,
-if they do not stall as in experiment 1.
 
-The experiments were only conducted in simulation.
-It remains open, if the recurrent variants could outperform the feedforward variants also in the real world
-in the light of greater visual detailedness and stronger disturbances.
-Problems could arise with a too long inference time of the variants running
-on a drone with restricted computational power. However, the MAC numbers and the observations in simulation
-indicate that the feedforward and recurrent variants have roughly the same inference time.
-A drawback of this thesis is that the experimental design is somewhat unstructured,
-since the experiments naturally emerged in the debugging process of the
-implementation of the recurrent variants and its learning process.
-Many preliminary tests were conducted,
-in which it was yet unclear whether the baseline method and the ANN module
-were implemented correctly
-and whether the recurrent variants
-with the different operation modes of many-to-one at training 
-and one-to-one at rollouts is able to learn at all.
-Moreover, there were a variety of user-specifiable parameters to consider,
+The experimental results largely support the investigated hypothesis. 
+In experiment 1 and 3, the recurrent ANN module variant significantly outperformed 
+its feedforward counterpart in the race tests. This is especially remarkable for experiment 3, 
+where the recurrent variant has significantly less trainable parameters. 
+In experiment 1, where the variants have comparable numbers of trainable parameters, 
+the recurrent variants significantly outperformed the feedforward variants in the imitation learning process, 
+which is accompanied by significantly fewer rollouts and aggregated data as well as significantly lower training 
+and validation losses. The lower training and validation losses combined with the better or equal race test performance 
+of the recurrent variants of experiment 1 showed that, first, the data aggregated by the recurrent variants, 
+although less, is more comprehensive, suggesting that navigation decisions are indeed temporally connected to past 
+visual observations from the drone's onboard camera and second, that the recurrent variant can learn to 
+leverage these underlying temporal connections for a more accurate and more generalizing navigation decision-making. 
+In contrast, the feedforward variant, which is by design unable to learn temporal connections, 
+requires more data for a worse or equal race test performance, likely because the absence of temporal comprehension 
+makes it less robust against intermediate ambiguities of the racetrack and outlying visual observations not 
+represented by the aggregated data. Considering the fewer learning rollouts required, the recurrent variants 
+are much more advantageous for real-world experiments where rollouts are more time-consuming, expensive and 
+risky than in simulation. In experiment 3, a better performance of the recurrent variant on the gap racetrack 
+type in unseen environments could have explicitly substantiated the hypothesis. However, the simulation 
+configuration of the experiment allowed both variants to evade by learning visual clues in the environment. 
+Experiments 2 and 4, where the variants, due to time concerns, trained with supervised learning, showed that 
+lower training and validation losses do not automatically lead to better performance in race tests. 
+This emphasizes how important it is for an imitation learning problem that the state distribution in the 
+aggregated data resembles the state distribution at rollout. The results from both experiments would probably 
+substantially differ if they trained the variants in an imitation learning process. However, 
+the fact the variants could fit the pre-collected data more accurately, the longer the input sequence length 
+of the data, again emphasizes the usability of temporal connections in the navigation decision-making. 
+
+
+None of the examined variants could keep up with the strong experimental results of the baseline work. 
+The reason for this is likely that first, the experiments in the baseline work used another racetrack layout, 
+hich is less challenging to the autonomous navigation method, and second, the simulation was non-photorealistic, 
+which simplified the extraction of visual features from the less detailed images. 
+A more stringent imitation learning configuration, resulting in more aggregated data, could achieve more 
+comparable results. However, this would also have made the imitation learning processes even more time-intensive. 
+A disadvantage of the recurrent variants is that the training epochs on sequential data are much more time-consuming 
+than on non-sequential data. Even if the training epochs of the recurrent variants are more effective, 
+whereby the learning process requires fewer epochs per rollout, the imitation learning process is longer than for 
+feedforward variants. The experiments were only conducted in simulation. 
+It remains open if the recurrent variants could outperform the feedforward variants also in the real world in the 
+light of greater visual detailedness and stronger disturbances. 
+Moreover, problems could arise with a too long inference time of the variants running on a drone with 
+restricted computational power. However, the number of MAC operations and the observations in simulation 
+indicated that the feedforward and recurrent variants have roughly the same inference time. 
+A major drawback of this thesis is that the experimental design is somewhat unstructured, since the experiments 
+naturally emerged in the debugging process when implementing the baseline method, the recurrent 
+variants and the learning process. Many preliminary tests were conducted, in which it was yet unclear whether 
+the baseline method and the ANN module were implemented correctly. For example, for a long time, it was yet 
+unclear whether the recurrent variants with the different operation modes of many-to-one at training and 
+one-to-one at rollouts can learn at all. There were a variety of user-specifiable parameters to consider, 
 which complicated the design of the experiments.
+
+
 
 
 
@@ -272,51 +179,44 @@ which complicated the design of the experiments.
 %#############################################################
 \section{Future Work}
 The simulated experiments of this thesis were conducted under the restrictions of the COVID-19 pandemic 
-with the minimal resources of my student home office.
-They could show that the use of a CNN-GRU architecture
-significantly increases the performance of the baseline method 
-in the imitation learning process and in the race tests.
+with the minimal resources of my student home office. 
+They could show that the use of a CNN-GRU architecture significantly increases 
+the performance of the baseline method in the imitation learning process and in the race tests. 
 Embedded in a research environment that allows for more vibrant scientific discourse 
-and provides more computationally powerful hardware, 
-the following open questions could be investigated.
+and provides more computationally powerful hardware, the following open questions could be investigated.
 
+Experiment 1 considered only a single simulation environment and in experiment 3, 
+the variants learned in environments in only four different scenes and 
+failed the race tests in the environments of the fifth scene unseen in the learning process. 
+Further experiments where the variants learn in more numerous and diverse environments 
+could investigate whether the variants can generalize to environments unseen in the learning process and 
+whether the feedforward and the recurrent variant differ in their generalization abilities. 
+In experiment 3, the variants learned visual clues in the environments to navigate the gap of the racetracks. 
+More tailored experiments, where the variants learn in a monochrome environment absent of visual clues, 
+could investigate whether the recurrent variants can learn 
+to navigate the gap only with the help of their memory abilities. 
+In Experiment 2 and 4, the variants trained only with supervised learning. 
+Further experiments could conduct these two experiments with imitation learning, 
+which would produce more meaningful results regarding the impact of the GRU submodule's configuration and 
+memory time span induced by the input sequence length of the training samples. 
+The race test performances in the simulated experiments of the baseline work are much better 
+than in the experiments of this thesis, where the test conditions were more difficult. 
+Further experiments with more comparable test conditions could verify or falsify the results of the baseline work or 
+could identify reasons for the performance difference. 
+As all experiments of this thesis were simulated, the question remains open, 
+whether real-world experiments could reinforce the better results of the recurrent variants. 
 
-Experiment 1 considered only a single simulation environment
-and in experiment 3, the variants learned in environments in only four different scenes
-and failed the race tests in the environments of the fifth scene unseen in the learning process.
-Further experiments where the variants learn in more numerous and diverse environments
-could investigate whether the variants can generalize to environments unseen in the learning process
-and whether the feedforward and the recurrent variant differ in their generalization abilities.
-In experiment 3 the variants learned visual clues in the environments to navigate the gap of the racetracks.
-More tailored experiments, where the variants learn in a monochrome environment absent of visual clues,
-could investigate whether the recurrent variants can learn to navigate the gap only with the help of their memory abilities.
-In Experiment 2 and 4, the variants trained only with supervised learning.
-Further experiments could conduct these two experiments with imitation learning,
-which would produce more meaningful results regarding the impact of the
-GRU submodule's configuration and memory time span
-induced by the input sequence length of the training samples.
-The race test performances in the simulated experiments of the baseline work are much better than
-in the experiments of this thesis where the test conditions were more difficult.
-Further experiments with more comparable test conditions
-could verify or falsify the results of the baseline work 
-or could identify reasons for the performance difference.
-All experiments of this thesis were conducted in simulation.
-The question remains open, whether the results could be transfered to real-world experiments.
-
-In this thesis, temporal comprehension in the navigation decision-making
-was realized with the GRU architecture.
-The deployment of other recurrent architectures such as the
-more prevalent long short-term memory (LSTM) LINK or the more recent
-Content Adaptive Recurrent Unit (CARU)
-\url{https://link.springer.com/chapter/10.1007/978-3-030-63830-6_58}
-could be investigated.
-In this thesis, the imitation learning problem was solved with dataset aggregation,
-where the recurrent variants learned better than the feedforward variants.
-Further experiments where the imitation learning problem is solved with inverse reinforcement learning,
-could compare the learning performance of recurrent and feedforward variants for this type of imitation learning.
-Other autonomous drone racing methods or even more general autonomous navigation methods
-could be used as baselines to investigate whether temporal comprehension only improves the baseline method 
-of this thesis or is generally useful in autonomous navigation.
+In this thesis, the GRU architecture realized the temporal comprehension in the navigation decision-making. 
+Further experiments could investigate the deployment of other recurrent architectures, 
+such as the more prevalent long short-term memory (LSTM) \cite{Hochreiter1997}
+or the more recent Content Adaptive Recurrent Unit (CARU) \cite{Chan2020}. 
+In this thesis, dataset aggregation solved the imitation learning problem, 
+where the recurrent variants learned better than the feedforward variants. 
+Further experiments could compare the learning performance of recurrent and feedforward variants 
+for other types of imitation learning, such as inverse reinforcement learning. 
+In this thesis, a single autonomous drone racing constituted the baseline. 
+Further experiments could investigate whether extending other autonomous drone racing methods 
+or even more general autonomous navigation methods would also benefit from the extension with temporal comprehension.
 
 
 
@@ -325,8 +225,4 @@ of this thesis or is generally useful in autonomous navigation.
 %Which questions are still open? 
 %Which new questions arised? 
 %How should someone / would you continue working in your thesis field basing on your results?
----^
-\begin{itemize}
-    \item \url{https://en.wikipedia.org/wiki/Gated_recurrent_unit#Content-Adaptive_Recurrent_Unit}
-    \item \url{https://en.wikipedia.org/wiki/Gated_recurrent_unit#Architecture}
-\end{itemize}
+

@@ -21,7 +21,7 @@ is separated into physics modeling and image rendering.
 \end{figure}
 
 For a physics modeling of high accuracy,
-the Gazebo\footnote{\url{https://gazebosim.org/home}, visited on 18/08/2022} 
+the Gazebo\footnote{\url{https://gazebosim.org/home}, accessed on \today} 
 simulator
 with the RotorS \cite{Furrer2016} plugin is deployed.
 The modeling includes the dynamics of the drone under 
@@ -38,16 +38,17 @@ is deployed.
 Upon request, the Flightlib interface
 updates the drone pose 
 within the Unity\footnote{
-    \url{https://unity.com/}, visited on 20/08/2022
+    \url{https://unity.com/}, accessed on \today
 } Engine
 and fetches an RGB image from the drone's onboard camera.
 Before running the simulation,
 the Unity Engine is built from a Unity project
 that bases on the RPG Flightmare Unity Project\footnote{
-    \url{https://github.com/uzh-rpg/flightmare_unity}, visited on 20/08/2022
+    \url{https://github.com/uzh-rpg/flightmare_unity}, accessed on \today
 }.
 The Unity project of this thesis
-entails five scenes named
+entails five scenes
+named
 spaceship interior\footnote{
     based on "3D Free Modular Kit" from the Unity Asset Store
 },
@@ -64,6 +65,9 @@ and desert mountain\footnote{
     based on "Free Island Collection" from the Unity Asset Store
 }
 (see fig. \ref{fig:unity_scenes}).
+The scenes base on assets from the Unity Asset Store\footnote{
+    \url{https://assetstore.unity.com/}, accessed on \today
+}.
 Within each scene, there are three sites (A, B, C) to place a racetrack.
 For the racetrack, two different gate types are provided:
 the first with TU Berlin/DAI-Labor logos and 
@@ -152,7 +156,7 @@ racetrack type, the racetrack generation,
 the racetrack direction and the racetrack gates.
 Table \ref{tab:sim_config_opts} shows all available options for the simulation configuration.
 \begin{table}[h]
-    \caption{Available options for the simulation configuration
+    \caption{Simulation configuration options
     \label{tab:sim_config_opts}}
     \centering
     \begin{tabular}{|c|c|c|p{6cm}|} \hline
@@ -266,7 +270,6 @@ whenever the drone has passed the currently targeted race gate.
     \hline
     Racetrack & Gate & x & y & z & yaw\\ 
     \hline
-    \hline
     \multirow{14}{*}{Figure-8}   
     &0 &-20.45& -8.65&2.0& 1.13\\ \cline{2-6}
     &1 &-12.55&-11.15&2.0&-1.57\\ \cline{2-6}
@@ -282,7 +285,6 @@ whenever the drone has passed the currently targeted race gate.
     &11&-12.95&  9.65&2.0&-1.53\\ \cline{2-6}
     &12&-21.05&  6.65&2.0&-0.77\\ \cline{2-6}
     &13&-24.25& -1.00&2.0& 0.07\\
-    \hline
     \hline
     \multirow{14}{*}{Gap}   
     &0 &-20.45&-8.65         &2.0& 1.13\\ \cline{2-6}
@@ -308,7 +310,7 @@ whenever the drone has passed the currently targeted race gate.
 %\section{ANN Module Variants}
 %In the experiments, several
 %variants of the ANN module (see section \ref{sec:ann_module})
-%are examined for their racing performance.
+%are examined for their race performance.
 %Table \ref{tab:ann_module_variants} shows these variants
 %and their configurations.
 %The configuration of a variant
@@ -472,7 +474,7 @@ the batch size,
 the loss function,
 the optimizer type and the scheduling of the learning rate.
 \begin{table}[h]
-    \caption{Learning configuration
+    \caption{Learning configuration options
     \label{tab:learn_config}}
     \centering
     \begin{tabular}{|c|c|c|} 
@@ -574,13 +576,13 @@ In detail, the learning process proceeds in the following steps.
     is considered as sufficiently learned by the ANN module.
 \end{enumerate}
 
-\section{Racing Tests}
+\section{Race Tests}
 After an ANN module variant completed the imitation learning process,
-its racing performance is tested.
+its race performance is tested.
 To do this, the ANN module variant is rolled out
 with the expert system deactivated.
 From records made during the rollout,
-the variant's racing performance is evaluated.
+the variant's race performance is evaluated.
 
 
 The user specifies the testing configuration
@@ -589,13 +591,13 @@ which includes a set of simulation configurations,
 a set of maximum drone speeds,
 and the number $\num[\user]{\text{rep}}{}{}{}$ of rollout repetitions for a given
 combination of simulation configuration and maximum drone speed.
-In order to ensure comparability of the racing performance
+In order to ensure comparability of the race performance
 of different ANN module variants while also using randomized racetracks,
 $\num[\user]{\text{rep}}{}{}{}$ randomized racetracks are pre-computed 
 for every possible simulation configuration 
 (see table \ref{tab:sim_config_opts}).
 \begin{table}[h]
-    \caption{Testing configuration
+    \caption{Testing configuration options
     \label{tab:test_config}}
     \centering
     \begin{tabular}{|c|c|} 
@@ -610,7 +612,7 @@ for every possible simulation configuration
     \end{tabular}
 \end{table}
 
-In detail, the racing tests are conducted as follows.
+In detail, the race tests are conducted as follows.
 \begin{itemize}
     \item For every simulation configuration $S$ in $\mathcal{S}$
     \item For every maximum drone speed $V$ in $\mathcal{V}$
@@ -671,7 +673,7 @@ of the global and the local trajectory
 
 \section{Design of Experiment 1}
 Experiment 1 studies the
-racing performance of 
+race performance of 
 two feedforward and three recurrent ANN module variants 
 on the randomized figure-8 racetrack 
 in a single simulation environment.
@@ -687,14 +689,14 @@ multiply-accumulate (MAC) operations at a single inference.
 Table \ref{tab:exp1_nums} shows these
 numbers
 obtained with 
-torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, visited on 18/08/2022}
+torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, accessed on \today}
 for all variants examined.
 A variant's number of trainable parameters
 determines its degree of freedom to fit the aggregate training data
 and thus,
 can correlate with 
 how well the variant performs at training
-and eventually at racing.
+and eventually at race.
 For this reason, the numbers of trainable parameters 
 are taken into account
 when comparing the performance of the variants examined.
@@ -706,7 +708,7 @@ and, thus, has great impact on the inference time
 on a computing platform.
 As drones are limited in computing power,
 a variant's inference time 
-is critical at racing when 
+is critical at race when 
 navigation decisions
 must be made at a relatively high frequency.
 However, this experiment
@@ -1013,9 +1015,7 @@ could only be conducted in simulation on a desktop computer.
 \providecommand{\ncols}{}\renewcommand{\ncols}{7}
 \begin{table}[h]
     \caption[
-        Numbers of trainable parameters 
-        and multiply-accumulate operations
-        of the ANN module variants of experiment 1
+        Trainable parameters and MAC operations of experiment 1
     ]{
         Numbers (in the format $m\text{e}n = m\times 10^n$) of trainable parameters (TP)
         and multiply-accumulate operations (MAC)
@@ -1236,7 +1236,7 @@ only in the CNN submodule
 as it uses a 14-layer instead of a 8-layer Resnet.
 Preliminary experiments on Resnet
 implementations of different complexity
-\textbf{(not documented here)}
+(not documented)
 suggest that more complex Resnets 
 than the one used in the baseline work
 yield significantly better results.
@@ -1258,7 +1258,7 @@ F1 is the only variant using Resnet8
 and has thus by far the lowest MAC number.
 This experiment compares F1 and F2 
 to investigate whether the higher CNN complexity of F2 
-is reflected in the racing performance of the variant.
+is reflected in the race performance of the variant.
 
 
 The three recurrent variants
@@ -1281,12 +1281,12 @@ because of a higher number of trainable parameters.
 All three variants use the Resnet14 
 because F2 performs significantly stronger than F1
 (see results in section \ref{results}).
-\textbf{recurrent with resnet8 not converged}
+%\textbf{recurrent with resnet8 not converged}
 The first recurrent variant (R1)
 is the recurrent equivalent of F2.
 The comparison of F2 and R1, thus,
 aims to investigate the impact of the GRU submodule's 
-temporal comprehension on the racing performance of a variant.
+temporal comprehension on the race performance of a variant.
 The second recurrent variant (R2) differs 
 from R1 with respect to the CAT submodule.
 While the CAT submodule for R1 is deactivated,
@@ -1296,16 +1296,16 @@ The comparison of R1 and R2, thus,
 aims to investigate the impact of 
 using the optional inputs
 within a variant's navigation decision-making
-on the variant's racing performance.
+on the variant's race performance.
 The third recurrent variant (R3) differs 
 from R1 with respect to the CNN submodule.
 While the CNN submodule for R1 is trainable and not pretrained,
 for R2 it is pretrained and only partly trainable.
-\textbf{imagenet clasifier not converged}
+%\textbf{imagenet clasifier not converged}
 The pretraining of the CNN submodule
 was carried out with a preliminary final layer
 on training data from 
-preliminary experiments \textbf{(not documented here)}.
+preliminary experiments (not documented).
 The CNN is only trainable at the single trainings
 whenever a margin-threshold pair is completed in the learning process.
 As a result, R3 has by far the lowest number of trainable parameters
@@ -1315,7 +1315,7 @@ The comparison of R1 and R2, thus,
 aims to investigate 
 whether this shortcut
 has a tolerable impact on a
-variant's racing performance.
+variant's race performance.
 
 To summarize the relation of the ANN module configurations of the variants examined: 
 F1 represents the feedforward ANN of the baseline work.
@@ -1364,11 +1364,11 @@ With respect to the training configuration of the learning process,
 all variants share that they 
 determine loss with
 the standard 
-SmoothL1Loss\footnote{\url{https://pytorch.org/docs/stable/nn.html}, visited on 18/08/2022}
+SmoothL1Loss\footnote{\url{https://pytorch.org/docs/stable/nn.html}, accessed on \today}
 PyTorch implementation
 and update the variants' trainable parameters accordingly 
 with the standard 
-ADAM\footnote{\url{https://pytorch.org/docs/stable/optim.html}, visited on 18/08/2022}
+ADAM\footnote{\url{https://pytorch.org/docs/stable/optim.html}, accessed on \today}
 PyTorch implementation,
 whereby the learning rate is exponentially scheduled
 with the initial value of $10^{-4}$ for each training and a decay of 
@@ -1386,8 +1386,8 @@ they have a sequence length of 25.
 As a result, the training epochs of the
 recurrent variants consume significantly more time.
 However, preliminary experiments 
-\textbf{(not documented here)}
-suggest that these recurrent training epochs 
+(not documented here)
+suggested that these recurrent training epochs 
 also lower the loss more effectively.
 Therefore, the number of epochs per training
 is set to 10 and 3 for the feedforward
@@ -1395,7 +1395,7 @@ and the recurrent variants, respectively.
 
 After the learning process, the variants are tested.
 Table \ref{tab:e1_test_config} shows 
-the configuration of the racing test.
+the configuration of the race test.
 For testing, the variants roll out on the same 
 simulation configuration
 (environment and racetrack)
@@ -1451,11 +1451,9 @@ of experiment 1 (see table \ref{tab:e1_config})
 as a starting point
 to study the impact of the depth
 of the GRU submodule on a variant's
-racing performance.
-The starting point R1 exhibits the best racing performance
-among all variants examined in experiment 1,
-which can be attributed to the use of the recurrent 
-GRU submodule
+race performance.
+The starting point R1 exhibits the best race performance
+among all variants examined in experiment 1
 (see section \ref{results}).
 The following briefly recalls 
 the configuration of R1 in experiment 1.
@@ -1481,7 +1479,7 @@ for 3 epochs with supervised learning.
 
 
 
-Experiment 2 studies the racing performance
+Experiment 2 studies the race performance
 of five ANN module variants
 that are configured like R1
 (see table \ref{tab:e1_config})
@@ -1503,18 +1501,18 @@ is referred to as R1-$L$x$H$.
 The five variants are trained for
 200 epochs on 
 the final training dataset of R1
-which contains X samples collected from Y rollouts
+which contains 18k samples collected in 114 rollouts
 of the learning process.
 Thereafter, the variants perform
-racing tests with the same
-configuration as R1 (see table \ref{tab:test_config}).
+race tests with the same
+configuration as R1 (see table \ref{tab:e1_test_config}).
 
 
 
 
 
 \section{Design of Experiment 3}
-Experiment 3 studies the racing performance of a
+Experiment 3 studies the race performance of a
 feedforward and a recurrent ANN module variant
 on the randomized gap racetrack in several
 simulation environments.
@@ -1692,9 +1690,7 @@ and MAC operations for both examined variants.
 \providecommand{\ncols}{}\renewcommand{\ncols}{4}
 \begin{table}[h]
     \caption[
-        Numbers of trainable parameters 
-        and multiply-accumulate operations
-        of the ANN module variants of experiment 3
+        Trainable parameters and MAC operations of experiment 3
     ]{
         Numbers (in the format $m\text{e}n = m\times 10^n$) of trainable parameters (TP)
         and multiply-accumulate operations (MAC)
@@ -1813,7 +1809,7 @@ For the intervening expert system,
 there are two margin-threshold pairs.
 The first margin is wider than the second,
 while the threshold remains to be 6 \%.
-\textbf{compare with e1}
+%\textbf{compare with e1}
 
 
 The training configuration of the learning process 
@@ -1828,7 +1824,7 @@ E3F trains on samples with non-sequential input,
 while E3R trains on samples with an input sequence length
 of 3.
 
-Table \ref{tab:e3_test_config} shows the configuration for the racing tests.
+Table \ref{tab:e3_test_config} shows the configuration for the race tests.
 The variants roll out on the four scenes seen during learning
 as well as the desert mountain scene unseen during learning.
 Thereby, the maximum drone speed is set to 
@@ -1889,7 +1885,7 @@ as a starting point
 for studying the impact of the 
 input sequence length and the image size
 of the training data
-on the racing performance of a recurrent variant.
+on the race performance of a recurrent variant.
 
 The training dataset of E3R obtained in experiment 3
 contains 40k samples 
@@ -1926,7 +1922,7 @@ is adjusted with equation \ref{eq:single_dropout}.
 
 Finally,
 the variants perform
-racing tests with the same
+race tests with the same
 configuration as R1 (see table \ref{tab:test_config}).
 
 %A variant examined in this experiment 

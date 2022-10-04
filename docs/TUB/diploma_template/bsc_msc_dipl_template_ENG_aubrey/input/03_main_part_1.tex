@@ -13,20 +13,20 @@ and their transformations applied by the modules of the method.
 The second section presents the ANN module of this thesis,
 which has the function of making navigation decisions 
 based on the RGB images from the drone's onboard camera.
-The ANN module comprising the CNN, CAT, FC, GRU and HEAD submodules
-is a modularized version of the ANN of the baseline work
-that additionally integrates the CAT submodule,
+The ANN module, comprising the CNN, CAT, FC, GRU and HEAD submodules,
+is a modularized version of the ANN of the baseline work.
+It additionally integrates the CAT submodule,
 which extends the decision-making basis with the optional inputs
 (i.e., the time steps of the images and 
-the estimates from the drone's onboard IMU)
+the estimates from the drone's onboard IMU),
 and the GRU submodule,
 which extends the decision-making capabilities with temporal comprehension.
 The third section presents the planning module of the method,
 which has the function of computing local trajectories 
 based on the navigation decisions made by
-the ANN module or, in the imitation learning process, the expert system.
+the ANN module or, possibly in the imitation learning process, the expert system.
 The fourth section presents the control stack of the method,
-which has the function to compute the drone's motor inputs 
+which has the function of computing the drone's motor inputs 
 to track the local trajectories computed by the planning module.
 The fifth section presents the expert system of the method,
 which in the rollouts of the imitation learning process,
@@ -156,15 +156,14 @@ border of the image plane.
         \includegraphics[width=0.5\textwidth]{own/image_reference_system.pdf}
     }
     \caption[
-        Local and image reference system
+        Local and image reference systems
     ]{
-        The local and the image reference system. 
-        The local reference system (red) is aligned with the drone's onboard camera. 
-        The image reference system (blue) is superimposed on the images from the onboard camera.
+        The local reference system (red), which is aligned with the drone's onboard camera,
+        and the image reference system (blue), which is superimposed on the images from the onboard camera.
         The pictured, exemplary waypoint
         $\pos[]{\wayp}{}{\irs}{} = \begin{bmatrix} -0.428 & 0.136 \end{bmatrix}^T$
-        (orange) with respect to the image reference system
-        is part of the label for the underlying image.
+        (orange)
+        is part of the expert navigation decision labeling the underlying image.
         \label{fig:local_and_image_reference_system}
     }
 \end{figure}
@@ -288,7 +287,7 @@ In the above equations, the operator $\circ$ denotes the composition of two func
 
 
 
-\paragraph*{Local-image Transformation} $\ $\\
+\paragraph*{Local-image Transformations} $\ $\\
 The horizontal
 $\ang[\user]{\camera}{\text h}{}{}$
 and the vertical
@@ -421,7 +420,7 @@ it is assumed that the transformations approximately invert each other
 
 
 
-\paragraph*{Global-image Transformation} $\ $\\
+\paragraph*{Global-image Transformations} $\ $\\
 The bidirectional transformations of points between the global and the image reference frame
 are the compositions of the transformations via the intermittent local reference system
 \begin{align} \label{eq:global_image_transformations}
@@ -660,7 +659,7 @@ In this sense,
 the GRU submodule is mandatory in case the user specifies
 $\seqLen > 1$ for the samples of the training dataset.
 
-At racing,
+At race,
 when the autonomous navigation method flies the drone through the racetrack,
 the ANN module makes navigation decisions 
 in real-time at the user-specified frequency
@@ -768,7 +767,7 @@ extracts visual features of images.
 This submodule is implemented with the backbone
 of any user-selected TorchVision
 classification model\footnote{
-    \url{https://pytorch.org/vision/stable/models.html}, visited on 23/08/2022
+    \url{https://pytorch.org/vision/stable/models.html}, accessed on \today
 },
 which is obtained by removing the last layer of the model.
 In addition, the user specifies whether the backbone
@@ -892,7 +891,7 @@ Either way, the CAT submodule has zero trainable parameters
 The GRU (gated recurrent unit) submodule
 is implemented using the PyTorch
 multi-layer GRU\footnote{
-    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 24/08/2022
+    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, accessed on \today
 },
 which integrates the GRU \cite{Cho2014} 
 introduced in section \ref{sec:gru} on each layer.
@@ -987,7 +986,7 @@ with a user-specified probability
     P \left( \delta_i = \frac{1}{1-\GRUDropoutP} \right) = 1 - \GRUDropoutP
     .
 \end{equation}
-At racing, the dropout probability is null
+At race, the dropout probability is null
 whereby the dropout is deactivated.
 
 As the $l$-th GRU layer has $3\GRUHiddenSize (\GRUInp{l} + \GRUHiddenSize + 2)$
@@ -1092,7 +1091,7 @@ the user specifies:
     \item the width $\fcOut$, i.e., output dimensionality shared by all layers
     \item the activation function $\fcAct : \R{} \rightarrow \R{}$
     from the non-linear activations implemented in PyTorch\footnote{
-        \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
+        \url{https://pytorch.org/docs/stable/nn.html}, accessed on \today
     },
     which applies element-wise on the input feature vector (denoted with the overset ${}^\odot$)
     \item the dropout probability $\fcDropoutProb \in \setR{0,1}$,
@@ -1201,9 +1200,7 @@ input feature vector
 \end{align}
 For the HEAD submodule, the user selects
 the activation function $\fcAct : \R{} \rightarrow \R{}$
-from the non-linear activations implemented in PyTorch\footnote{
-        \url{https://pytorch.org/docs/stable/nn.html}, visited on 03/07/2022
-    },
+from the non-linear activations implemented in PyTorch
 which applies element-wise on the input feature vector (denoted with the overset ${}^\odot$).
 The input dimensionality adapts to the
 number of features of the given input vector
@@ -1434,7 +1431,7 @@ to re-compute its local trajectory.
     $\pos[]{\wayp}{}{\grs}{}$
     with unconstrained velocity and acceleration.
     The implementation\footnote{
-            \url{https://github.com/markwmuller/RapidQuadrocopterTrajectories}, visited on 17/08/2022
+            \url{https://github.com/markwmuller/RapidQuadrocopterTrajectories}, accessed on \today
     } 
     of the algorithm of Mueller et. al. \cite{Mueller2013}
     is deployed to find the polynomial trajectory with minimum jerk
@@ -1537,8 +1534,8 @@ which consequently track the latest reference state
 (equ. \ref{eq:ref_state})
 from the planning module.
 In the simulations of this thesis,
-the control stack is realized with the RPG Quadrotor Control \footnote{
-        \url{https://github.com/uzh-rpg/rpg_quadrotor_control}, visited on 17/08/2022
+the control stack is realized with the RPG Quadrotor Control\footnote{
+        \url{https://github.com/uzh-rpg/rpg_quadrotor_control}, accessed on \today
 } implementation
 (see fig. \ref{fig:control_module}).
 Since this thesis centers on the reasoning aspect of autonomous navigation, 
@@ -1550,9 +1547,9 @@ on the control.
     \centering
     \includegraphics[width=0.7\textwidth]{own/control_module.drawio.pdf}
     \caption[
-        The control stack in simulation.
+        Control stack in simulation
     ]{
-        The control stack in simulation.
+        Control stack in simulation
         \label{fig:control_module}}
 \end{figure}
 
@@ -1576,8 +1573,8 @@ as well as the fed back drone state and motor speed estimates,
 the body-rate controller generates low-level motor speed commands.
 These commands are forwarded to RotorS for execution.
 RotorS, developed by Furrer et al. \cite{Furrer2016},
-is plugged into the Gazebo \footnote{
-    \url{https://gazebosim.org/home}, visited on 18/08/2022
+is plugged into the Gazebo\footnote{
+    \url{https://gazebosim.org/home}, accessed on \today
 }
 simulator to model the drone's physics 
 and to provide the controllers with
@@ -1623,10 +1620,9 @@ inference engine, which infers new facts
 by applying the rules to the known facts \cite{osti_5675197}.
 
 \paragraph*{Problem} $\ $\\
-This thesis implements the expert system 
-by Kaufmann et al. \cite{Kaufmann2018}
-in order to solve the problem of automated navigation decision-making
-during the generation of training data for the ANN module.
+The interactive expert system 
+demonstrates the desired navigation decision-making
+in the dataset aggregation imitation learning process of the ANN module.
 The training dataset is extended with new samples 
 while the drone runs the autonomous navigation method to fly through a racetrack.
 The expert system checks the latest navigation decision 
@@ -1758,7 +1754,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     to increase numeric stability and 
     reformulated as quadratic program,
     which is solved with the Gurobi\footnote{
-        \url{https://www.gurobi.com/}, visited on 20/08/2022
+        \url{https://www.gurobi.com/}, accessed on \today
     } optimizer.
 
     Second, the polynomial coefficients of the spline pieces 
@@ -1959,8 +1955,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
         \caption[
             Update of the projection state index
         ]{
-            Schematic example
-            of the update of the projection state index (\textbf{R4}).
+            Update of the projection state index (\textbf{R4}).
             Known are: the positions (blue points) 
             sampled from the global trajectory (blue dotted line),
             the last index to the projection state (green circle)

@@ -374,7 +374,7 @@ of the training dataset.
 
 
 \paragraph*{Dataset Aggregation}$\ $\\
-Dataset aggregation (originally proposed as DAgger\cite{Ross2010}) 
+Dataset aggregation (originally proposed as DAgger \cite{Ross2010}) 
 extends behavioral cloning iteratively.
 It reduces the imitation learning problem 
 to a sequence of convex supervised learning problems.
@@ -433,10 +433,7 @@ optimal values for the general imitation learning problem.
 \section{Gated Recurrent Unit} \label{sec:gru}
 In this thesis,
 the ANN module of the autonomous navigation method (see section \ref{mainone})
-integrates the PyTorch implementation\footnote{
-    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 09/07/2022
-}
-of the gated recurrent unit (GRU), 
+is extended with the gated recurrent unit (GRU), 
 which is a special recurrent neural network (RNN) architecture
 proposed by Cho et al. \cite{Cho2014},
 with the aim to involve temporal comprehension in
@@ -445,7 +442,7 @@ This section introduces the class of RNNs
 and relates the GRU to standard RNNs
 and the more prevalent long short-term memory (LSTM).
 Moreover, it provides information regarding first,
-the state and gating mechanisms that make the GRU able to comprehend temporally
+the state and gating mechanisms that make the GRU able to comprehend temporally at inference
 and second, how the GRU learns with backpropagation through time.
 
 \paragraph*{Recurrent Neural Networks} ${}$\\
@@ -496,13 +493,12 @@ learning to connect to information deep in the past \cite{Bengio1994}.
         \includegraphics[height=0.35\textwidth]{own/rnn_unfolded.drawio.pdf}
     }
     \caption[
-        Folded and unfolded representation of an RNN
+        Folded and unfolded RNN
     ]{
-        Folded representation of a 
-        schematic RNN with a single hidden layer 
-        inferring from the current input $x_t$
-        and the previous hidden state $h_{t-1}$
-        and its time-unfolded representation
+        Folded representation of an RNN with a single hidden layer 
+        inferring $y_t = \mathcal{F}\left(x_t, h_{t-1}\right)$ from the current input
+        and the previous hidden state
+        and the time-unfolded representation
         when processing the input sequence
         $\left(x_i\right)_{i\in\{1, 2, 3\}}$.
         \label{fig:rnn_folded_unfolded}
@@ -515,9 +511,7 @@ learning to connect to information deep in the past \cite{Bengio1994}.
 In 1997, Hochreiter and Schmidhuber \cite{Hochreiter1997} 
 introduced the long short-term memory (LSTM), 
 which is today's predominant RNN architecture \cite{schmidhuber_2021}. 
-A standard LSTM layer (e.g., the PyTorch implementation\footnote{
-    \url{https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html}, visited on 03/07/2022
-}) 
+A standard LSTM layer
 recurrently maintains a cell state and a hidden state. 
 This means that, besides the current data point of the input sequence, 
 the layer re-inputs the fed back cell state and hidden state 
@@ -577,7 +571,7 @@ The following presents the mathematics
 of the inference
 of a single GRU layer
 in accordance with the PyTorch implementation\footnote{
-    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, visited on 09/07/2022
+    \url{https://pytorch.org/docs/stable/generated/torch.nn.GRU.html}, accessed on \today
 }.
 This includes the layer's two gating mechanisms
 and its computations of the candidate state and the hidden state.
@@ -898,9 +892,9 @@ are also in that interval).
     \centering
     \includegraphics[width=0.9\textwidth]{own/sigmoid_tanh.pdf}
     \caption[
-        The non-linear activation functions in the GRU
+        Activation functions of the GRU
     ]{
-        The non-linear activation functions in the GRU.
+        Activation functions of the GRU.
         The standard sigmoid function
         (see equ. \ref{eq:sigmoid})
         normalizes the values
@@ -1049,7 +1043,7 @@ of the integrated GRU layer for a single batch element.
     \centering
     \includegraphics[width=0.9\textwidth]{own/gru_unfolded_intra_inter_paths.drawio.pdf}
     \caption[
-        Time-unfolded computation graph of a GRU layer in many-to-one mode.
+        Unfolded GRU in many-to-one mode
     ]{
         Time-unfolded computation graph of a GRU layer in many-to-one mode,
         which maps
@@ -1060,7 +1054,7 @@ of the integrated GRU layer for a single batch element.
         $\mathcal{F}^\text{u}$
         and $\mathcal{F}^\text{c}$
         (see equ. \ref{eq:gru_reset}, \ref{eq:gru_update} and \ref{eq:gru_candidate})
-        are the maps to
+        are the maps to the
         reset gate, update gate and candidate state, respectively.
         The map 
         $\mathcal{F}^\text{h}$ 
@@ -1068,16 +1062,15 @@ of the integrated GRU layer for a single batch element.
         yields the hidden states 
         $\left(h_t\right)_{t\in\{1,\dots N\}}$,
         whereas $\underline h_0$ is initialized.
-        The trainable parameters 
+        The trainable objects
         $\underline{\underline{A}}^\square_\square, \underline{b}^\square_\square$
         of the GRU layer
         are shared across all unfolded time steps.
-
         The backpropagation path of the intra-gradient with respect to 
         $\underline{\underline{A}}^\text{r}_x$
         (see equ. \ref{eq:gru_grad_intra_hidden_2_Arx}) 
         is highlighted in red for $t=1$.
-        The backpropagation paths of the inter-gradient 
+        The backpropagation path of the inter-gradient 
         (see equ. \ref{eq:gru_grad_inter}) 
         is highlighted in green
         for $t$.
@@ -1154,7 +1147,7 @@ in the set of trainable objects (see equ. \ref{eq:gru_params})
 \end{align}
 In the above formula,
 the gradient
-$\widehat{\partial \underline h_{j, i} / \partial \theta}$,
+$\widehat{\partial \underline h_{j, i} / \partial \theta}$
 (hereinafter referred to as intra-gradient) 
 treats all previous hidden states 
 $\underline h_{\tilde j,\dots, i}, \ \tilde j \in \{0, j-1\}$ as constants.

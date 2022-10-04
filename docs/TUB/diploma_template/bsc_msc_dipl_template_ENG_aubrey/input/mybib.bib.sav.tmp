@@ -704,7 +704,7 @@
 }
 
 @Book{Mazur2016a,
-  author    = {Micha? Mazur and Adam Wi?niewski and Jeffery McMillan and Vicki Huff and Richard Abadie and Julian Smith and Stefan Stroh and Piotr Romanowski and Adam Kraso? and Filip Orli?ski and Agnieszka Babicz and Paulina Lulkowska and Ewa Boguszewska and Bartosz Czerkies and Adam G??b and Rozalia Ho?oga and Jakub Jagie??o and Weronika Jankowska-Tofani and Arkadiusz Kramza and Sandra Kuprijaniuk and Remigiusz Piwowarski and Jacek Sygutowski and Grzegorz Urban and Marek Walczak and Marek Wolski and Ewa Zdrojowy},
+  author    = {Michal Mazur and Adam Wisniewski and Jeffery McMillan},
   publisher = {PwC Poland},
   title     = {Clarity from above},
   year      = {2016},
@@ -1689,4 +1689,5 @@
 
 
 @Misc{Abadi2015,
-  author = {Mart\'{\i}n~Abadi and Ashish~Agarwal and Paul~Barham and Eugene~Brevdo and Zhifeng~Chen and Craig~Citro and Greg~S.~Corrado and Andy~Davis and Jeffrey~Dean and Matthieu~Devin and Sanjay~Ghemawat and Ian~Goodfellow and Andrew~Harp and Geoffrey~Irving and Michael~Isard and Yangqing Jia and Rafal~Jozefowicz and Lukasz~Kaiser and 
+  author = {Mart\'{\i}n~Abadi and Ashish~Agarwal and Paul~Barham and Eugene~Brevdo and Zhifeng~Chen and Craig~Citro and Greg~S.~Corrado and Andy~Davis and Jeffrey~Dean and Matthieu~Devin and Sanjay~Ghemawat and Ian~Goodfellow and Andrew~Harp and Geoffrey~Irving and Michael~Isard and Yangqing Jia and Rafal~Jozefowicz and Lukasz~Kaiser and Manjunath~Kudlur and Josh~Levenberg and Dandelion~Man\'{e} and Rajat~Monga and Sherry~Moore and Derek~Murray and Chris~Olah and Mike~Schuster and Jonathon~Shlens and Benoit~Steiner and Ilya~Sutskever and Kunal~Talwar and Paul~Tucker and Vincent~Vanhoucke and Vijay~Vasudevan and Fernanda~Vi\'{e}gas and Oriol~Vinyals and Pete~Warden and Martin~Wattenberg and Martin~Wicke and Yuan~Yu and Xiaoqiang~Zheng},
+  note   = {Software available from tensorflo

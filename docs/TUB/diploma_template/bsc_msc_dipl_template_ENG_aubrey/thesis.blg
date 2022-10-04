@@ -17,45 +17,45 @@ Warning--empty booktitle in Mueller2013
 Warning--empty year in Parent
 Warning--empty journal in Sadeghi2016
 Warning--empty journal in Song2020
-You've used 63 entries,
+You've used 64 entries,
             2118 wiz_defined-function locations,
-            875 strings with 16964 characters,
-and the built_in function-call counts, 23013 in all, are:
-= -- 2147
-> -- 1447
-< -- 10
-+ -- 583
-- -- 510
-* -- 1744
-:= -- 3901
-add.period$ -- 204
-call.type$ -- 63
-change.case$ -- 441
+            881 strings with 16688 characters,
+and the built_in function-call counts, 22797 in all, are:
+= -- 2155
+> -- 1350
+< -- 11
++ -- 544
+- -- 470
+* -- 1682
+:= -- 3834
+add.period$ -- 208
+call.type$ -- 64
+change.case$ -- 424
 chr.to.int$ -- 0
-cite$ -- 77
-duplicate$ -- 770
-empty$ -- 1593
-format.name$ -- 510
-if$ -- 4673
+cite$ -- 78
+duplicate$ -- 794
+empty$ -- 1634
+format.name$ -- 470
+if$ -- 4674
 int.to.chr$ -- 0
-int.to.str$ -- 63
-missing$ -- 57
-newline$ -- 319
-num.names$ -- 122
-pop$ -- 531
+int.to.str$ -- 64
+missing$ -- 58
+newline$ -- 324
+num.names$ -- 124
+pop$ -- 517
 preamble$ -- 1
-purify$ -- 381
+purify$ -- 363
 quote$ -- 0
-skip$ -- 529
+skip$ -- 547
 stack$ -- 0
-substring$ -- 1016
-swap$ -- 141
-text.length$ -- 10
+substring$ -- 1053
+swap$ -- 151
+text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 246
+type$ -- 250
 warning$ -- 14
-while$ -- 181
-width$ -- 65
-write$ -- 664
+while$ -- 186
+width$ -- 66
+write$ -- 676
 (There were 14 warnings)

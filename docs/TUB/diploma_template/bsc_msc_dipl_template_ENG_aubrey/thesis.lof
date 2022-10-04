@@ -1,16 +1,16 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded representation of an RNN }}{9}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Folded and unfolded RNN }}{9}{figure.caption.11}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Folded }}}{9}{subfigure.1.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Unfolded }}}{9}{subfigure.1.2}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces The non-linear activation functions in the GRU }}{13}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Time-unfolded computation graph of a GRU layer in many-to-one mode. }}{14}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Activation functions of the GRU }}{13}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Unfolded GRU in many-to-one mode }}{14}{figure.caption.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Local and image reference system }}{22}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Local and image reference systems }}{22}{figure.caption.16}%
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { Local reference system }}}{22}{subfigure.1.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Image reference system }}}{22}{subfigure.1.2}%
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Information flow of the navigation decision-making }}{25}{figure.caption.20}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces The control stack in simulation. }}{34}{figure.caption.27}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Control stack in simulation }}{34}{figure.caption.27}%
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Update of the projection state index }}{39}{figure.caption.30}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Implementation concept of the simulation }}{42}{figure.caption.32}%
@@ -29,7 +29,7 @@
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { Recurrent variants }}}{62}{subfigure.1.2}%
 \contentsline {figure}{\numberline {5.2}{\ignorespaces Racetrack completion shares of experiment 1 }}{63}{figure.caption.47}%
 \contentsline {figure}{\numberline {5.3}{\ignorespaces Training and validation losses of experiment 2 }}{64}{figure.caption.48}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Racing test performances of experiment 2 }}{64}{figure.caption.49}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Racetrack completion shares of experiment 2 }}{64}{figure.caption.49}%
 \contentsline {figure}{\numberline {5.5}{\ignorespaces Training losses of experiment 3 }}{66}{figure.caption.51}%
 \contentsline {figure}{\numberline {5.6}{\ignorespaces Racetrack completion shares of experiment 3 }}{66}{figure.caption.52}%
 \contentsline {figure}{\numberline {5.7}{\ignorespaces Training losses of experiment 4 }}{67}{figure.caption.53}%
@@ -39,4 +39,4 @@
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces { RGB image size of 360x240 }}}{69}{subfigure.8.1}%
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces { RGB image size of 240x160 }}}{69}{subfigure.8.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Racetrack randomization and redirection }}{91}{figure.caption.58}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Racetrack randomization and redirection }}{89}{figure.caption.58}%

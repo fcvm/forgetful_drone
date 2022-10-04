@@ -16,7 +16,7 @@
 \contentsline {chapter}{\numberline {4}Experiments in Simulation}{42}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Simulation Setup}{42}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Imitation Learning Process}{46}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Racing Tests}{48}{section.4.3}%
+\contentsline {section}{\numberline {4.3}Race Tests}{48}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Design of Experiment 1}{49}{section.4.4}%
 \contentsline {section}{\numberline {4.5}Design of Experiment 2}{52}{section.4.5}%
 \contentsline {section}{\numberline {4.6}Design of Experiment 3}{53}{section.4.6}%
@@ -24,10 +24,10 @@
 \contentsline {chapter}{\numberline {5}Evaluation}{60}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Results}{60}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Discussions}{68}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{77}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Summary}{77}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Conclusion}{79}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Future Work}{81}{section.6.3}%
-\contentsline {chapter}{Bibliography}{83}{section.6.3}%
-\contentsline {chapter}{Appendices}{89}{chapter*.55}%
-\contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{91}{chapter*.56}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{76}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Summary}{76}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Conclusion}{78}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{80}{section.6.3}%
+\contentsline {chapter}{Bibliography}{82}{section.6.3}%
+\contentsline {chapter}{Appendices}{87}{chapter*.55}%
+\contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{89}{chapter*.56}%
