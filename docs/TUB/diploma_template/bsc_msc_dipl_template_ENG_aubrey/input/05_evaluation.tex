@@ -127,7 +127,7 @@ for the variants of experiment 1.
     }
 \end{figure}
 The training or the validation loss of a variant is calculated with the SmoothL1Loss\footnote{
-    \url{https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html}, visited on ??
+    \url{https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html}, visited on 04/10/2022
 }
 function on the training or validation dataset aggregated by that variant.
 The figure displays the feedforward and the recurrent variants separately,
@@ -217,7 +217,7 @@ of approximately $2.3\times 10^{-5}$ and $6.5\times 10^{-5}$.
 The variants in between (R1-2x64, R1-3x64 and R1-5x64)
 achieve roughly the same final training and the same final validation loss
 of approximately $1.3\times 10^{-5}$ and $1.0\times 10^{-4}$.
-Consequently from lowest to highest, the approximate
+Consequently, from lowest to highest, the approximate
 ratios of validation to training losses are 2.8 for R1-10x64, 7.7 for R1-2x64, R1-3x64 and R1-5x64
 and 24.1 for R1-1x64.
 The validation loss of R1-10x64
@@ -299,9 +299,9 @@ training losses over the epochs of the imitation learning process for the varian
     \centering
     \includegraphics[width=\gfxwidth]{own/results_e3_learning.pdf}
     \caption[
-        Training losses of of experiment 3
+        Training losses of experiment 3
     ]{
-        Training losses of of experiment 3
+        Training losses of experiment 3
     \label{fig:e3_learn}}
 \end{figure}
 The training loss of a variant is calculated with the SmoothL1Loss function
@@ -478,7 +478,7 @@ the autonomous navigation method must be able to
 fly the drone through both, left and right, turns as well as across intersections.
 Intersections are especially difficult,
 because multiple gates appear in the FOV of the drone's onboard camera, 
-which can lead to ambiguities in the navigation decision making of the variant.
+which can lead to ambiguities in the navigation decision-making of the variant.
 
 The first feedforward variant of experiment 1 (F1),
 which basically is the ANN used in the baseline work,
@@ -501,7 +501,7 @@ and at about 85, 65 and 30 \%
 for the maximum drone speeds of 10, 11 and 12 m/s, respectively.
 The much worse race test performance of F1
 could be attributed to the more difficult learning and testing conditions in experiment 1.
-While the baseline method rolls out on the same, determinstic racetrack,
+While the baseline method rolls out on the same, deterministic racetrack,
 F1 faces a slightly different, randomized racetracks at each rollout during 
 the imitation learning process and the race tests.
 However, considering the baseline results on the dynamic racetrack, 
@@ -540,12 +540,12 @@ There is another distinguishing factor in experiment 1 from the baseline experim
 F1 inputs RGB images with the size of 240x160, whereas the baseline ANN of 300x200.
 However, the results of experiment 4, which examined variants of both image sizes, 
 suggest that the image size has, if at all, only a marginal effect,
-which could not explain the the substantial performance drop of F1.
+which could not explain the substantial performance drop of F1.
 
 The second feedforward variant of experiment 1 (F2),
 which differs from F1 only in integrating the more complex Resnet14 instead of the Resnet8,
 also stalled in the imitation learning process but 
-performes much better than F1 in the race tests.
+performs much better than F1 in the race tests.
 However, F2 is not yet nearly as good as the results of the baseline work indicate.
 At maximum speeds $\le 8$ m/s, F2 can complete the racetrack from about 60 to 80 \%,
 whereas at maximum speeds beyond, it fails for almost 100 \%.
@@ -581,7 +581,7 @@ F1 completed the imitation learning process,
 whereby R1 aggregated 18k training samples (i.e., 62.8 \% of F2)
 in 114 learning rollouts (i.e., 54.8 \% of F2).
 This shows that R1 needs substantially less training samples
-to learn a more accurate navigation decision making than F2.
+to learn a more accurate navigation decision-making than F2.
 The fact that much less rollouts are needed,
 makes R1 much more feasible for real-world imitation learning than F2,
 where rollouts can be costly and dangerous.
@@ -608,10 +608,10 @@ that a navigation decision is indeed temporally related
 to past visual observations from the drone's onboard camera
 and that R1, as it is recurrent, 
 learns to leverage these underlying temporal connections
-for a better navigation decision making.
+for a better navigation decision-making.
 The lower validation-training loss ratio of R1 
 suggests that using these temporal connections
-abstracts the navigation decision making more and therewith
+abstracts the navigation decision-making more and therewith
 enhances the generalization ability of R1.
 R1 was able to transfer its overall better learning performance to a better race test performance.
 R1 completed the racetrack, for maximum speeds from 5 to 8 m/s, at about 20 percentage points more than F2
@@ -629,7 +629,7 @@ In other words, R1 learns to make navigation decisions on 0.5 s videos instead o
 Unlike a single frame, a video encodes the drone's latest motion sequence 
 relative to the racetrack and the environment.
 This information can, for example, resolve the ambiguities of the intersections of the figure-8 racetrack
-or make the decision making more robust against single frames that as outliers 
+or make the decision-making more robust against single frames that as outliers 
 differ significantly from the samples of the aggregated training dataset.
 
 
@@ -649,7 +649,7 @@ are somehow related to the navigation decisions and R2 learns to use these relat
 For example, R2 could have learned an anticipation mechanism,
 which weights the incoming images with their time step information,
 or some kind of drone state estimation based on the incoming IMU data,
-which could be useful in the navigation decision making.
+which could be useful in the navigation decision-making.
 However, the by far larger validation-training loss ratio 
 indicates that R2 heavily overfits its aggregated training data.
 R2 transfers this overfitting to the race tests,
@@ -691,7 +691,7 @@ Looking at the loss trends of R3,
 one can see that the trainings with the CNN submodule trainable
 drastically reduce the losses but also increase the validation-training loss ratio,
 while the trainings with the CNN module not trainable
-slightly reduce the the losses and also the validation-training loss ratio.
+slightly reduce the losses and also the validation-training loss ratio.
 This could mean that the overfitting of the other variants of experiment 1
 mainly stem from the CNN submodule.
 Further experiments could be conducted 
@@ -703,12 +703,12 @@ and whether a thereby reduced overfitting would reflect in the race test perform
 
 At a maximum speed of 9 m/s, all three recurrent variants perform better than the feedforward variants.
 It is therefore likely that the higher the speed, the more beneficial the memory capabilities become for
-the navigation decision making.
+the navigation decision-making.
 One explanation could be that higher speeds require higher accelerations,
 which in turn require the drone to lean more into turns.
-Thereby, the drone's onboard camera could produces more outlier images.
+Thereby, the drone's onboard camera could produce more outlier images.
 The ability to recall past images to compensate for outlier images would thus be even more valuable.
-Another explaination could be that the memory time span is fixed at 0.5 s for the recurrent variants.
+Another explanation could be that the memory time span is fixed at 0.5 s for the recurrent variants.
 The higher the speed, the further the memory expands spatially.
 This could make the memory more meaningful in terms of the drone's motion sequence in the race track.
 All in all, experiment 1 suggests the use of a recurrent variant for the autonomous navigation method.
@@ -759,7 +759,7 @@ the further training of a variant, after it completed the imitation learning pro
 can enhance the race test performance.
 While experiment 2 cannot make clear statements,
 whether more GRU layers are generally more capable in the autonomous navigation method,
-it suggest the use of R1-3x64 and R1-5x64 over R1-1x64 and R1-2x64.
+it suggests the use of R1-3x64 and R1-5x64 over R1-1x64 and R1-2x64.
 Further experiments could investigate
 whether R1-10x64 in the imitation learning process
 could leverage its greater depth on its self-aggregated data
@@ -781,7 +781,7 @@ by recalling past sensor data from its memory.
 Before the drone enters the gap, both gates surrounding the gap
 appear in the FOV of the drone's onboard camera.
 As soon as the drone enters the gap and the FOV becomes gate-free,
-the ANN module could implicitely localize the next gate relative to the drone
+the ANN module could implicitly localize the next gate relative to the drone
 from its memory in order to make meaningful navigation decisions towards that gate.
 Even if the memory time span is too short to cover the entire time span in which the FOV is gate-free,
 after initializing the left or right turn in the covered time span,
@@ -829,7 +829,7 @@ and the input RGB image size at training and rollout
 in order to investigate their effects on performance.
 The variants of experiment 4 
 share the same learning capabilities, because their ANN modules are configured the same,
-but are provided with different ressources to learn from.
+but are provided with different resources to learn from.
 Due to the high time expenditure of the imitation learning process, 
 the variants of experiment 4 trained with supervised learning.
 Each variant trained on its own training dataset,
@@ -848,7 +848,7 @@ the more the variant can learn.
 For variants of the same sequence length,
 the larger the image size, the lower the training loss.
 This shows that a more detailed, visual observation 
-is a stronger ressource to learn the navigation decision making.
+is a stronger resource to learn the navigation decision-making.
 The race test performances of the variants are roughly the same,
 whereby lower training losses do not reflect in higher performances.
 The variants with the smaller image size perform 

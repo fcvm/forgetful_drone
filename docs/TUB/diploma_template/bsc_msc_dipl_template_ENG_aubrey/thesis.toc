@@ -8,14 +8,14 @@
 \contentsline {section}{\numberline {2.1}Imitation Learning with Dataset Aggregation}{4}{section.2.1}%
 \contentsline {section}{\numberline {2.2}Gated Recurrent Unit}{8}{section.2.2}%
 \contentsline {chapter}{\numberline {3}Autonomous Navigation Method}{20}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Reference systems}{20}{section.3.1}%
-\contentsline {section}{\numberline {3.2}ANN module}{24}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Planning module}{31}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Control stack}{34}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Expert system}{35}{section.3.5}%
+\contentsline {section}{\numberline {3.1}Reference Systems}{20}{section.3.1}%
+\contentsline {section}{\numberline {3.2}ANN Module}{24}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Planning Module}{31}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Control Stack}{34}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Expert System}{35}{section.3.5}%
 \contentsline {chapter}{\numberline {4}Experiments in Simulation}{42}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Simulation Setup}{42}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Imitation learning process of the ANN Module}{46}{section.4.2}%
+\contentsline {section}{\numberline {4.2}Imitation Learning Process}{46}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Racing Tests}{48}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Design of Experiment 1}{49}{section.4.4}%
 \contentsline {section}{\numberline {4.5}Design of Experiment 2}{52}{section.4.5}%
@@ -29,7 +29,5 @@
 \contentsline {section}{\numberline {6.2}Conclusion}{79}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Future Work}{81}{section.6.3}%
 \contentsline {chapter}{Bibliography}{83}{section.6.3}%
-\contentsline {chapter}{Appendices}{89}{chapter*.56}%
-\contentsline {section}{Appendix A: Abbreviations}{90}{chapter*.57}%
-\contentsline {section}{Appendix B: {\LaTeX } Help}{91}{section*.58}%
-\contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{98}{table.caption.75}%
+\contentsline {chapter}{Appendices}{89}{chapter*.55}%
+\contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{91}{chapter*.56}%

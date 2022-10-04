@@ -7,7 +7,7 @@ are conducted in a drone racing simulation,
 which includes the environment, 
 the racetrack consisting of race gates 
 and the drone.
-The implementation of the simulation (see figure \ref{fig:simulation_setup})
+The implementation of the simulation (see fig. \ref{fig:simulation_setup})
 is separated into physics modeling and image rendering.
 \begin{figure}%[h]
     \centering
@@ -63,12 +63,12 @@ polygon city\footnote{
 and desert mountain\footnote{
     based on "Free Island Collection" from the Unity Asset Store
 }
-(see figure \ref{fig:unity_scenes}).
+(see fig. \ref{fig:unity_scenes}).
 Within each scene, there are three sites (A, B, C) to place a racetrack.
 For the racetrack, two different gate types are provided:
 the first with TU Berlin/DAI-Labor logos and 
 the second with Tsinghua University/DME logos
-(see figure \ref{fig:unity_gates}).
+(see fig. \ref{fig:unity_gates}).
 \begin{figure}
     \centering
     \subfloat[
@@ -137,7 +137,7 @@ First, it synchronizes the
 drone state in the Flightmare simulator with the
 ground-truth state in the Gazebo simulator and 
 provides the RGB images fetched from the Flightmare simulator
-as as output.
+as output.
 Second, the node sets up the simulation
 according to the inputted 
 simulation configuration.
@@ -199,7 +199,7 @@ includes the following steps.
     of the gates \#3-6 from the uniform real distribution
     over the intervals specified in table \ref{tab:gate_pos}.
     This step only applies to the gap racetrack type
-    as it explicitely randomizes the gap distance.
+    as it explicitly randomizes the gap distance.
     \item Shift the gate positions along the $x$-, $y$- and $z$-axis
     by a value, which is sampled
     independently for each gate and axis
@@ -418,13 +418,13 @@ whenever the drone has passed the currently targeted race gate.
 %    \end{tabular}
 %\end{table}
 
-\section{Imitation learning process of the ANN Module} \label{sec:training}
+\section{Imitation Learning Process} \label{sec:training}
 The ANN module of the autonomous navigation method 
 must first learn to make meaningful navigation decisions.
 In this thesis as well as in the baseline work,
 this task is viewed as an imitation learning problem.
 The goal is that the ANN module learns to mimic
-the navigation decision making demonstrated by the expert system
+the navigation decision-making demonstrated by the expert system
 of section \ref{sec:expert_system}.
 The problem is addressed with dataset aggregation,
 which is a type of interactive direct policy learning
@@ -551,7 +551,7 @@ In detail, the learning process proceeds in the following steps.
     A sample comprises an expert navigation decision as a label
     and the corresponding sequence of inputs
     for the individual ANN module variant.
-    The sequence starts $\seqLen$ timesteps 
+    The sequence starts $\seqLen$ time steps 
     of duration $1/\freq[\user]{\main}{}{}{}$ 
     back in time and
     ends at the time step where
@@ -649,13 +649,13 @@ on a set of simulation configurations
 depending on the maximum drone speed
 can be calculated.
 The racetrack completion share quantifies
-the robustness of a variant's navigation decision making 
+the robustness of a variant's navigation decision-making 
 for a given setup.
 The time-stamped drone position records of the rollouts
 reproduce the flight trajectories induced by a variant.
 The optimality with respect to jerk and snap
 of these trajectories and therewith the 
-variant's navigation decision making 
+variant's navigation decision-making 
 can be quantified
 with the loss functions of the optimization problem formulations
 of the global and the local trajectory
@@ -1295,14 +1295,14 @@ all optional inputs available.
 The comparison of R1 and R2, thus,
 aims to investigate the impact of 
 using the optional inputs
-within a variant's navigation decision making
+within a variant's navigation decision-making
 on the variant's racing performance.
 The third recurrent variant (R3) differs 
 from R1 with respect to the CNN submodule.
 While the CNN submodule for R1 is trainable and not pretrained,
 for R2 it is pretrained and only partly trainable.
 \textbf{imagenet clasifier not converged}
-The pre-training of the CNN submodule
+The pretraining of the CNN submodule
 was carried out with a preliminary final layer
 on training data from 
 preliminary experiments \textbf{(not documented here)}.
@@ -1389,7 +1389,7 @@ However, preliminary experiments
 \textbf{(not documented here)}
 suggest that these recurrent training epochs 
 also lower the loss more effectively.
-Therefore, the number or epochs per training
+Therefore, the number of epochs per training
 is set to 10 and 3 for the feedforward
 and the recurrent variants, respectively.
 
@@ -1772,7 +1772,7 @@ and the ReLU activated HEAD submodule
 to output navigation decisions.
 Moreover, both variants process a training sample 
 input with a resultant dropout probability of 
-50 \% (see equation \ref{eq:single_dropout}).
+50 \% (see equ. \ref{eq:single_dropout}).
 
 The feedforward variant (E3F)
 is characterized by the deactivated GRU submodule
@@ -1892,9 +1892,9 @@ of the training data
 on the racing performance of a recurrent variant.
 
 The training dataset of E3R obtained in experiment 3
-contains ?? samples 
+contains 40k samples 
 whose input is a sequence of 
-three pairs of an 360x240 RGB image 
+three pairs of a 360x240 RGB image 
 and an optional input vector.
 In experiment 4, 
 the training dataset is rebuilt from the raw data

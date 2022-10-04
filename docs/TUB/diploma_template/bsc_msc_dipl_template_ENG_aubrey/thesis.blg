@@ -3,8 +3,6 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: thesis.aux
 The style file: plain.bst
 Database file #1: input/mybib.bib
-Warning--I didn't find a database entry for "oberheide:2008:cloudav"
-Warning--I didn't find a database entry for "latexcookbook2007"
 Warning--to sort, need author or key in Equinox
 Warning--to sort, need author or key in RobotAutonomy2
 Warning--empty author in RobotAutonomy2
@@ -21,7 +19,7 @@ Warning--empty journal in Sadeghi2016
 Warning--empty journal in Song2020
 You've used 63 entries,
             2118 wiz_defined-function locations,
-            877 strings with 17003 characters,
+            875 strings with 16964 characters,
 and the built_in function-call counts, 23013 in all, are:
 = -- 2147
 > -- 1447
@@ -60,4 +58,4 @@ warning$ -- 14
 while$ -- 181
 width$ -- 65
 write$ -- 664
-(There were 16 warnings)
+(There were 14 warnings)

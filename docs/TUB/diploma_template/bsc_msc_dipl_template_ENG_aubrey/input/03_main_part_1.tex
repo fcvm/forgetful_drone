@@ -1,20 +1,41 @@
 \chapter{Autonomous Navigation Method}
 \label{mainone}
-\textit{
-DELETEME: In this chapter you start addressing your actual problem. Therefore, it makes often sense to make a detailed problem analysis first (if not done in introduction). You should be sure about what to do and how. As writtin in the background part, it might also make sense to include complex background information or papers you are basing on in this analysis. If you are solving a software problem, you should follow the state of the art of software development which basically includes: problem analysis, design, implementation, testing, and deployment. Maintenance is often also described but I believe this will not be required for most theses. Code should be placed in the appendix unless it is solving an essential aspect of your work.
-}
+%\textit{
+%DELETEME: In this chapter you start addressing your actual problem. Therefore, it makes often sense to make a detailed problem analysis first (if not done in introduction). You should be sure about what to do and how. As writtin in the background part, it might also make sense to include complex background information or papers you are basing on in this analysis. If you are solving a software problem, you should follow the state of the art of software development which basically includes: problem analysis, design, implementation, testing, and deployment. Maintenance is often also described but I believe this will not be required for most theses. Code should be placed in the appendix unless it is solving an essential aspect of your work.
+%}
+
+
+This chapter presents 
+the autonomous drone racing method of Kaufmann et al. \cite{Kaufmann2018},
+which is used as a baseline for the experiments of this thesis.
+The first section introduces the three reference systems 
+and their transformations applied by the modules of the method.
+The second section presents the ANN module of this thesis,
+which has the function of making navigation decisions 
+based on the RGB images from the drone's onboard camera.
+The ANN module comprising the CNN, CAT, FC, GRU and HEAD submodules
+is a modularized version of the ANN of the baseline work
+that additionally integrates the CAT submodule,
+which extends the decision-making basis with the optional inputs
+(i.e., the time steps of the images and 
+the estimates from the drone's onboard IMU)
+and the GRU submodule,
+which extends the decision-making capabilities with temporal comprehension.
+The third section presents the planning module of the method,
+which has the function of computing local trajectories 
+based on the navigation decisions made by
+the ANN module or, in the imitation learning process, the expert system.
+The fourth section presents the control stack of the method,
+which has the function to compute the drone's motor inputs 
+to track the local trajectories computed by the planning module.
+The fifth section presents the expert system of the method,
+which in the rollouts of the imitation learning process,
+intervenes and generates a training sample
+whenever the ANN module makes a poor navigation decision.
 
 
 
-
-
-In order to investigate the effect of temporal comprehension in machine-learning-based, autonomous navigation of drones,
-this master thesis extends the navigation method of Kaufmann, Loquercio et. al [?] is minimally adjusted and extended with a recurrent convolutional neural network.
-This chapter \dots
-
-
-
-\section{Reference systems}
+\section{Reference Systems}
 In this thesis, the coordinates of a point 
 $\pos[]{}{}{}{}$
 relate to either the global, the local or the image reference system
@@ -36,7 +57,7 @@ relate to either the global, the local or the image reference system
 The 3D global reference system
 is fixed to an arbitrary point on earth
 and is hence quasi inertial.
-It is spanned by the orthonormal basis
+It is spanned by the orthonormal basis,
 which, related to the global reference system,
 equates to the standard basis of $\mathbb{R}^3$
 \begin{equation}
@@ -52,9 +73,9 @@ equates to the standard basis of $\mathbb{R}^3$
 \end{equation}
 
 
-The local reference system (see figure \ref{fig:local_reference_system}) is fixed to the moving drone.
+The local reference system (see fig. \ref{fig:local_reference_system}) is fixed on the moving drone.
 It is spanned by the orthonormal basis,
-whose origin is located at the optical center of the drone's onboard camera,
+whose origin is located at the optical center of the drone's onboard camera
 \begin{equation}
     \left\{
         \unitvec[]{\text L}{x}{}{},
@@ -84,7 +105,7 @@ and parallels the horizontal axis of the image plane.
 
 
 
-The image reference system (see figure \ref{fig:image_reference_system}) 
+The image reference system (see fig. \ref{fig:image_reference_system}) 
 is superimposed on the images of the drone's onboard camera.
 This 2-dimensional system is spanned by the orthonormal basis
 \begin{equation}
@@ -135,7 +156,7 @@ border of the image plane.
         \includegraphics[width=0.5\textwidth]{own/image_reference_system.pdf}
     }
     \caption[
-        The local and the image reference system
+        Local and image reference system
     ]{
         The local and the image reference system. 
         The local reference system (red) is aligned with the drone's onboard camera. 
@@ -153,7 +174,7 @@ border of the image plane.
 
 
 
-\paragraph*{Transformation between the global and the local reference system} $\ $\\
+\paragraph*{Global-local Transformations} $\ $\\
 The drone's position
 $\pos[]{\drone}{}{\grs}{}$
 and quaternion orientation
@@ -203,7 +224,7 @@ with the transformation
             \mathcal{Q} \left( \pos[]{}{}{\lrs}{} \right)
             *
             \mathrm{inv} \left( \quat[]{\drone}{}{\grs}{} \right)
-        \right] + \pos[]{\drone}{}{\grs}{}, 
+        \right] + \pos[]{\drone}{}{\grs}{}. 
         %& \text{if } \quat[]{\drone}{}{\grs}{} \ne \underline 0 \\
         %\pos[]{}{}{\lrs}{} + \pos[]{\drone}{}{\grs}{}, 
         %& \text{else}.
@@ -233,7 +254,7 @@ are given by
     \mapsto
     \pos[]{}{}{}{} = \begin{bmatrix} \x[]{}{}{}{} \\ \y[]{}{}{}{} \\ \z[]{}{}{}{} \end{bmatrix}.
 \end{align}
-Moreover, the operator $*$ denotes the multiplication of two quaternions which is given by
+Moreover, the operator $*$ denotes the multiplication of two quaternions, which is given by
 \begin{align}
     \quat[]{}{1}{}{} * \quat[]{}{2}{}{}
     = 
@@ -267,7 +288,7 @@ In the above equations, the operator $\circ$ denotes the composition of two func
 
 
 
-\paragraph*{Transformation between the local and the image reference system} $\ $\\
+\paragraph*{Local-image Transformation} $\ $\\
 The horizontal
 $\ang[\user]{\camera}{\text h}{}{}$
 and the vertical
@@ -306,7 +327,7 @@ is expressed in the coordinates of the image reference system with the transform
 The above transformation
 can be interpreted as the projection of a point onto the image plane 
 of the drone's onboard camera.
-It can be devided into three steps.
+It can be divided into three steps.
 First, the vector from the optical center of the camera 
 to the point to be transformed
 is mapped to its yaw
@@ -322,7 +343,7 @@ $\ang[\user]{\camera}{\text v}{}{}$
 angle of view of the camera, respectively.
 Third, these normalized angles are bounded to be in the interval from minus to plus one.
 This boundary takes into account 
-that an artifical neural network, which inputs images, 
+that an artificial neural network, which inputs images, 
 has no basis for predictions 
 that relate to objects that are not within the camera's field of view.
 As a projection from 3D to 2D, the above transformation is accompanied by information loss
@@ -363,7 +384,7 @@ denotes the Hadamard product,
 i.e., the element-wise product of two equally dimensioned matrices.
 Because the 2D coordinates of the image reference system
 can only contain information about the direction of a point,
-the above transformation to 3D requires the additional input of a backprojection length $d$.
+the above transformation to 3D requires the additional input of a back-projection length $d$.
 
 In contrast to the transformations 
 $\trafo[]{}{\lrs\grs}{}{}$
@@ -378,7 +399,7 @@ between the local and the image reference system
 are not invertible.
 However, for relevant points
 located within the camera's field of view
-and a well chosen backprojection length,
+and a well chosen back-projection length,
 it is assumed that the transformations approximately invert each other
 \begin{equation}
     \trafo[]{}{\lrs\irs}{}{} \left[
@@ -400,7 +421,7 @@ it is assumed that the transformations approximately invert each other
 
 
 
-\paragraph*{Transformation between the global and the image reference system} $\ $\\
+\paragraph*{Global-image Transformation} $\ $\\
 The bidirectional transformations of points between the global and the image reference frame
 are the compositions of the transformations via the intermittent local reference system
 \begin{align} \label{eq:global_image_transformations}
@@ -529,7 +550,7 @@ the above compositions are expected to also approximately invert each other with
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ANN module}\label{sec:ann_module}
+\section{ANN Module}\label{sec:ann_module}
 %
 %
 \newcommand{\R}[1]{\mathbb{R}^{#1}}
@@ -572,7 +593,7 @@ the above compositions are expected to also approximately invert each other with
 The ANN module performs the function of making navigation decisions
 within the autonomous navigation method.
 Figure \ref{fig:perception_and_reasoning} shows the 
-information flow of this decision making process.
+information flow of this decision-making process.
 The ANN module infers its decisions exclusively 
 on the basis of preprocessed data from sensors onboard the drone.
 It comprises the five submodules named CNN, CAT, GRU, FC and HEAD.
@@ -600,9 +621,9 @@ and increasing the general complexity of the ANN module (FC).
     \centering
     \includegraphics[width=1.0\textwidth]{own/ann_module.drawio.pdf}
     \caption[
-        Information flow of the navigation decision making
+        Information flow of the navigation decision-making
     ]{
-        Information flow of the navigation decision making
+        Information flow of the navigation decision-making
     \label{fig:perception_and_reasoning}
     }
 \end{figure}
@@ -613,7 +634,7 @@ imitation with dataset aggregation
 (see section \ref{sec:imitation_learning} for background).
 Thereby, the dataset is aggregated from samples demonstrated by the expert
 system (see section \ref{sec:expert_system}).
-Each sample is a pair of an input sequence and a single lable.
+Each sample is a pair of an input sequence and a single label.
 For the individual ANN variant,
 the user specifies the sequence length of the samples
 \begin{equation} \label{eq:seq_len}
@@ -665,7 +686,7 @@ influence the current navigation decision.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph*{Input preprocessing} ${}$\\
+\paragraph*{Input Preprocessing} ${}$\\
 The drone's onboard camera 
 outputs raw RGB images
 \begin{equation}
@@ -741,7 +762,7 @@ For example, the fully activated optional input vector is
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\paragraph*{CNN} ${}$\\
+\paragraph*{CNN Submodule} ${}$\\
 The CNN (convolutional neural network) submodule 
 extracts visual features of images.
 This submodule is implemented with the backbone
@@ -769,7 +790,7 @@ regarded as a black box
     .
 \end{align}
 The backbone implementation adapts to the inputted image
-in terms of the 
+in terms of 
 the number of channels $\CNNNumC$,
 height $\CNNHeight$
 and width $\CNNWidth$.
@@ -802,7 +823,7 @@ depends on the user-selected TorchVision model.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\paragraph*{CAT} ${}$\\
+\paragraph*{CAT Submodule} ${}$\\
 The CAT submodule concatenates
 two feature vectors
 \begin{align} \label{eq:cat}
@@ -834,7 +855,7 @@ and optional input feature vector
     i \in \setOfInts{1, \dots, \batchSize}.
 \end{equation}
 that correspond to the same position in batch and sequence.
-Hence the CAT submodule outputs a batch of sequences
+Hence, the CAT submodule outputs a batch of sequences
 of concatenated feature vectors
 \begin{equation} \label{eq:cat_output}
     \series{
@@ -847,7 +868,7 @@ of concatenated feature vectors
 \end{equation}
 If the user deactivates all optional inputs,
 the CAT submodule also deactivates and recedes to 
-the identity map of the the CNN submodule output.
+the identity map of the CNN submodule output.
 Either way, the CAT submodule has zero trainable parameters
 \begin{equation}
     \CATNumP = 0.
@@ -867,7 +888,7 @@ Either way, the CAT submodule has zero trainable parameters
 \newcommand{\GRUNumP}{\num[]{\gru}{\params}{}{}}
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\paragraph*{GRU} ${}$\\
+\paragraph*{GRU Submodule} ${}$\\
 The GRU (gated recurrent unit) submodule
 is implemented using the PyTorch
 multi-layer GRU\footnote{
@@ -952,7 +973,7 @@ At training,
 it randomly sets entries of a feature vector to zero 
 while maintaining the vector's signal strength on average
 in order to force the ANN to learn the extraction of stand-alone features 
-whose informative value is independent from the other extracted features \cite{Hinton2012}.
+whose informative value is independent of the other extracted features \cite{Hinton2012}.
 Mathematically, dropout applied on a hidden state (or feature vector)
 is calculated with the Hadamard product (denoted with $\odot$)
 of that hidden state and the vector $\GRUDropout$ of same dimensionality 
@@ -1024,7 +1045,7 @@ to a batch of last hidden states of the last layer
 \newcommand{\fcDropoutProb}{\prob[\user]{\fc}{}{}{}}
 \newcommand{\fcParam}{\num[]{\fc}{\params}{}{}}
 
-\subsection*{FC}
+\paragraph*{FC Submodule}$\ $\\
 The FC submodule performs the function
 of increasing the general complexity of the ANN module.
 It consists of multiple fully connected layers.
@@ -1081,7 +1102,7 @@ the user specifies:
     
 \end{itemize}
 The input dimensionality of a layer
-adapts to the nuber of features in the given input vector.
+adapts to the number of features in the given input vector.
 For the first layer, it adapts to the feature vector
 forwarded to the FC submodule
 $\fcIn{1} = \dim \left(\featvec[]{}{}{}{}\right)$.
@@ -1122,7 +1143,7 @@ to the batch of feature vectors
 
 
 
-\subsection*{HEAD}
+\paragraph*{HEAD Submodule}$\ $\\
 The mandatory HEAD submodule
 performs the function of mapping
 to the final output of the ANN module.
@@ -1225,7 +1246,6 @@ The total number of trainable parameters of the HEAD submodule is
 %GRAPH
 %
 %loss optimizer learnrate
-\subsection*{Output}
 
 
 
@@ -1236,7 +1256,8 @@ The total number of trainable parameters of the HEAD submodule is
 
 
 
-\section{Planning module}
+
+\section{Planning Module}
 The planning module performs the task of path planning
 within the autonomous navigation method.
 At the user-specified main frequency 
@@ -1255,9 +1276,8 @@ i.e., the latest navigation decision and the latest drone state estimate.
 
 The latest navigation decision
 stems from either the ANN module
-(see equ. \ref{eq:head_nav_dec}) 
 or, if it has intervened at training data generation,
-the expert system (see equ. \ref{eq:nav_dec_by_expert}).
+the expert system.
 A navigation decision comprises the normalized desired speed 
 and the waypoint in the image reference system
 \begin{equation}
@@ -1347,14 +1367,14 @@ to re-compute its local trajectory.
     The transformation
     $\trafo[]{}{\grs\irs}{}{}$
     (see equ. \ref{eq:global_image_transformations})
-    backprojects the waypoint
+    back-projects the waypoint
     $\pos[]{\wayp}{}{\irs}{}$ 
     of the navigation decision
     from the 2D image to the 3D global reference system.
     Thereby, the drone's distance 
     $\dist[]{\dronetowayp}{}{}{}$
     to the waypoint
-    constitutes the backprojection length.
+    constitutes the back-projection length.
     
     \item Set the starting time of the local trajectory to the current time
     \begin{equation}
@@ -1381,8 +1401,8 @@ to re-compute its local trajectory.
     \end{equation}
     The drone's distance 
     $\dist[]{\dronetowayp}{}{}{}$
-    to the waypoint is devided 
-    by the slower of either the desired speed
+    to the waypoint is divided 
+    by the slowest of either the desired speed
     $\speed[]{\drone}{\desired}{}{}$
     or the latest drone speed estimate
     $\left\|\vel[]{\drone}{}{\grs}{}\right\|_2$
@@ -1507,7 +1527,7 @@ a reference state from its local trajectory.
 
 
 
-\section{Control stack} \label{sec:control_stack}
+\section{Control Stack} \label{sec:control_stack}
 Within the autonomous navigation method, 
 the control stack takes on the task of 
 flying the drone as planned.
@@ -1520,7 +1540,7 @@ In the simulations of this thesis,
 the control stack is realized with the RPG Quadrotor Control \footnote{
         \url{https://github.com/uzh-rpg/rpg_quadrotor_control}, visited on 17/08/2022
 } implementation
-(see figure \ref{fig:control_module}).
+(see fig. \ref{fig:control_module}).
 Since this thesis centers on the reasoning aspect of autonomous navigation, 
 only an overview of the deployed control stack is presented here.
 The reader may consult the provided references for more details
@@ -1574,7 +1594,7 @@ motor commands based on the latest SBUS message from the SBUS bridge.
 
 
 
-\section{Expert system} \label{sec:expert_system}
+\section{Expert System} \label{sec:expert_system}
 %In contrast to the ANN module,
 %the expert system derives its navigation decisions 
 %not from onboard sensor data but from its knowledge base.
@@ -1605,7 +1625,7 @@ by applying the rules to the known facts \cite{osti_5675197}.
 \paragraph*{Problem} $\ $\\
 This thesis implements the expert system 
 by Kaufmann et al. \cite{Kaufmann2018}
-in order to solve the problem of automated navigation decision making
+in order to solve the problem of automated navigation decision-making
 during the generation of training data for the ANN module.
 The training dataset is extended with new samples 
 while the drone runs the autonomous navigation method to fly through a racetrack.
@@ -1732,9 +1752,9 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     $\pos[]{\gate}{\num[]{\gate}{}{}{}}{\grs}{} = \pos[]{\gate}{0}{\grs}{}$.
     Morover, the gate times of the very first iteration are 
     approximated with the distances between the gate center points
-    devided by the user-specified maximum speed $\speed[\user]{\glotraj}{\mxm}{}{}$ of the trajectory.
+    divided by the user-specified maximum speed $\speed[\user]{\glotraj}{\mxm}{}{}$ of the trajectory.
     The above optimization problem
-    is temporally and spatially dedimensionalized 
+    is temporally and spatially de-dimensionalized 
     to increase numeric stability and 
     reformulated as quadratic program,
     which is solved with the Gurobi\footnote{
@@ -1768,7 +1788,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     
     The two optimization steps are executed iteratively until the cost
     of the first optimization problem converges. 
-    Then, the trajectory is temporally and spatially redimensionalized
+    Then, the trajectory is temporally and spatially re-dimensionalized
     and temporally scaled to adhere to 
     the user-specified maximum values in terms of 
     speed
@@ -1824,7 +1844,7 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
     planning module's waypoint (\textbf{F1}) computed based on the
     ANN module's latest navigation decision,
     is more distant from the global trajectory (\textbf{R1}) than
-    a user-specified margin scaled by the 
+    a user-specified margin scaled by
     the user-specified drone's maximum speed, i.e.,
     \begin{equation}
         \argmin{i \in \{0, ..., \num[]{\glotraj}{}{}{} - 1\}}
@@ -2119,15 +2139,15 @@ which includes the following known facts (\textbf{F*}) and rules (\textbf{R*}).
 
 \paragraph*{Inference Engine} $\ $\\
 The inference engine of the expert system is only activated 
-during training data generation.
-Figure ?? shows the related interaction of the inference engine 
-within the autnomous navigation method.
-Internally, the inference engine runs the following schedule.
+during training data generation and runs as follows.
+%Figure ?? shows the related interaction of the inference engine 
+%within the autnomous navigation method.
+%Internally, the inference engine runs the following schedule.
 
 Before the drone starts to fly,
 the inference engine pre-computes the global trajectory (\textbf{R1})
 and samples the position and speeds.
-During the flight, it constantly update the currently targeted
+During the flight, it constantly updates the currently targeted
 gate index (\textbf{R2}).
 Whenever the planning module has computed a global waypoint on the basis
 of the latest ANN navigation decision,
@@ -2135,7 +2155,7 @@ the inference engine checks whether it must intervene (\textbf{R3}).
 If so, the engine updates its indices to relevant states of the global trajectory
 (\textbf{R4-6})
 and makes its own navigation decision (\textbf{R7-8}).
-Finally the engine sends its navigation decision to the planning module for processing.
+Finally, the engine sends its navigation decision to the planning module for processing.
 
 
 
