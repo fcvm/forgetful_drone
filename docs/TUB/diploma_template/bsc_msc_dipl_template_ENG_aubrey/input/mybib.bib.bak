@@ -704,7 +704,7 @@
 }
 
 @Book{Mazur2016a,
-  author    = {Micha? Mazur and Adam Wi?niewski and Jeffery McMillan and Vicki Huff and Richard Abadie and Julian Smith and Stefan Stroh and Piotr Romanowski and Adam Kraso? and Filip Orli?ski and Agnieszka Babicz and Paulina Lulkowska and Ewa Boguszewska and Bartosz Czerkies and Adam G??b and Rozalia Ho?oga and Jakub Jagie??o and Weronika Jankowska-Tofani and Arkadiusz Kramza and Sandra Kuprijaniuk and Remigiusz Piwowarski and Jacek Sygutowski and Grzegorz Urban and Marek Walczak and Marek Wolski and Ewa Zdrojowy},
+  author    = {Michal Mazur and Adam Wisniewski and Jeffery McMillan},
   publisher = {PwC Poland},
   title     = {Clarity from above},
   year      = {2016},

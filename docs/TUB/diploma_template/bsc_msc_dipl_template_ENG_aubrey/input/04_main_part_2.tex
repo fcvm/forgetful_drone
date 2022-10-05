@@ -43,7 +43,7 @@ within the Unity\footnote{
 and fetches an RGB image from the drone's onboard camera.
 Before running the simulation,
 the Unity Engine is built from a Unity project
-that bases on the RPG Flightmare Unity Project\footnote{
+based on the RPG Flightmare Unity Project\footnote{
     \url{https://github.com/uzh-rpg/flightmare_unity}, accessed on \today
 }.
 The Unity project of this thesis
@@ -202,7 +202,7 @@ includes the following steps.
     \item Sample the y-position values 
     of the gates \#3-6 from the uniform real distribution
     over the intervals specified in table \ref{tab:gate_pos}.
-    This step only applies to the gap racetrack type
+    This step only applies to the gap racetrack type,
     as it explicitly randomizes the gap distance.
     \item Shift the gate positions along the $x$-, $y$- and $z$-axis
     by a value, which is sampled
@@ -239,13 +239,13 @@ and
 spawns the drone model 
 and the race gate models of the specified type
 at the computed poses
-in both, the Flightmare and the Gazebo simulator.
+in both the Flightmare and the Gazebo simulator.
 Finally, the node
 outputs the computed gate poses.
 This information is required 
 to compute the global trajectory of the expert system
 (see section \ref{sec:expert_system})
-and to automatically update the drone's progress on the racetrack
+and to update the drone's progress on the racetrack automatically
 whenever the drone has passed the currently targeted race gate.
 
 
@@ -423,7 +423,7 @@ whenever the drone has passed the currently targeted race gate.
 \section{Imitation Learning Process} \label{sec:training}
 The ANN module of the autonomous navigation method 
 must first learn to make meaningful navigation decisions.
-In this thesis as well as in the baseline work,
+In this thesis, as well as in the baseline work,
 this task is viewed as an imitation learning problem.
 The goal is that the ANN module learns to mimic
 the navigation decision-making demonstrated by the expert system
@@ -448,7 +448,7 @@ so that, during training, the ANN module can learn from the mistakes made
 during rollout.
 
 
-The user specifies the learning configuration
+The user specifies the learning configuration (see table \ref{tab:learn_config})
 for the individual ANN module variant, 
 which includes the rollout and the training configuration.
 The rollout configuration comprises 
@@ -646,7 +646,7 @@ In detail, the race tests are conducted as follows.
 The recordings allow the race performance 
 of an ANN module variant to be evaluated.
 On the basis of the racetrack completion records,
-a variant's racetrack completion share,
+a variant's racetrack completion share
 on a set of simulation configurations 
 depending on the maximum drone speed
 can be calculated.
@@ -693,7 +693,7 @@ torchinfo\footnote{\url{https://github.com/TylerYep/torchinfo}, accessed on \tod
 for all variants examined.
 A variant's number of trainable parameters
 determines its degree of freedom to fit the aggregate training data
-and thus,
+and, thus,
 can correlate with 
 how well the variant performs at training
 and eventually at race.
@@ -704,7 +704,7 @@ Furthermore, it has a great impact on
 how memory- and time-consuming the variant's training is.
 A variant's number of MAC operations 
 measures the computing effort of a single inference
-and, thus, has great impact on the inference time
+and, thus, has a great impact on the inference time
 on a computing platform.
 As drones are limited in computing power,
 a variant's inference time 
@@ -947,7 +947,7 @@ could only be conducted in simulation on a desktop computer.
         \\\cline{3-9}
         &
         &\multicolumn{2}{c|}{Margin-threshold}
-        &\multicolumn{5}{c|}{(0.5, 10), (0.75, 5), (1.0 m, 1 \%)}
+        &\multicolumn{5}{c|}{(0.5, 10), (0.75, 5), (1.0 m, 1\%)}
         \\\cline{2-9}        
         &
         \multirow{6}{*}{\rotcell{Training}}
@@ -1214,17 +1214,17 @@ deactivated GRU submodule and an activated FC submodule,
 which consists of three
 ReLU-activated, dropout-subjected, fully-connected layers
 with a width of 256 neurons.
-For a resultant dropout probability of 50 \%
+For a resultant dropout probability of 50\%
 when processing input sequences of length 1,
 equation \ref{eq:single_dropout} yields the dropout probability 
-at single application of approximately 20.63 \%.
+at a single application of approximately 20.63\%.
 The first feedforward variant (F1)
 is a slightly extended version of the ANN 
 deployed in the baseline autonomous navigation method 
-of Kaufmann et. al. \cite{Kaufmann2018}.
+of Kaufmann et al. \cite{Kaufmann2018}.
 The CNN submodule of F1 is,
 like the baseline, 
-implemented with an 8-layer Resnet.
+implemented with an 8-layer Resnet \cite{He2015}.
 Unlike the baseline, its FC submodule 
 has three instead of one layer.
 This extension adjusts F1
@@ -1233,7 +1233,7 @@ the number of trainable parameters of the FC/GRU submodule
 in order to increase the variants' comparability.
 The second feedforward variant (F2) differs from F1
 only in the CNN submodule
-as it uses a 14-layer instead of a 8-layer Resnet.
+as it uses a 14-layer instead of an 8-layer Resnet.
 Preliminary experiments on Resnet
 implementations of different complexity
 (not documented)
@@ -1248,7 +1248,7 @@ memory occupation
 and training duration within tolerable limits.
 Nonetheless, using the 8-layer or the 14-layer Resnet
 has by far the largest impact on the 
-total number of both, parameters and MAC operations, of a variant.
+total number of both parameters and MAC operations of a variant.
 Compared to Resnet8, 
 Resnet14 has approximately 
 9 times more parameters and 
@@ -1264,14 +1264,14 @@ is reflected in the race performance of the variant.
 The three recurrent variants
 are characterized by a deactivated FC submodule and 
 an activated GRU submodule,
-which consist of three layers
+which consists of three layers
 with a hidden size of 64,
 of which the second and the third layer
 are subjected to dropout.
-For a resultant dropout probability of 50 \%
+For a resultant dropout probability of 50\%
 when processing input sequences of length 25,
 equation \ref{eq:single_dropout} yields the dropout probability 
-at single application of approximately 1.38 \%.
+at a single application of approximately 1.38\%.
 Care was taken to ensure that the GRU submodule 
 of the three recurrent variants has fewer trainable parameters
 than the FC submodule of the two feedforward variants,
@@ -1290,8 +1290,8 @@ temporal comprehension on the race performance of a variant.
 The second recurrent variant (R2) differs 
 from R1 with respect to the CAT submodule.
 While the CAT submodule for R1 is deactivated,
-for R2 it inputs
-all optional inputs available.
+for R2, it inputs
+all available optional inputs.
 The comparison of R1 and R2, thus,
 aims to investigate the impact of 
 using the optional inputs
@@ -1300,7 +1300,7 @@ on the variant's race performance.
 The third recurrent variant (R3) differs 
 from R1 with respect to the CNN submodule.
 While the CNN submodule for R1 is trainable and not pretrained,
-for R2 it is pretrained and only partly trainable.
+for R2, it is pretrained and only partly trainable.
 %\textbf{imagenet clasifier not converged}
 The pretraining of the CNN submodule
 was carried out with a preliminary final layer
@@ -1355,7 +1355,7 @@ with the margins becoming wider
 and the thresholds becoming more stringent.
 To complete the learning on a rollout configuration,
 the variant must perform a rollout 
-with less than 10/5/1 \% expert interventions
+with less than 10/5/1\% expert interventions
 that are triggered whenever the variant
 would navigate the drone further than 0.5/0.75/1.0 m
 from the expert's global trajectory.
@@ -1372,7 +1372,7 @@ ADAM\footnote{\url{https://pytorch.org/docs/stable/optim.html}, accessed on \tod
 PyTorch implementation,
 whereby the learning rate is exponentially scheduled
 with the initial value of $10^{-4}$ for each training and a decay of 
-95 \% per epoch.
+95\% per epoch.
 Moreover, all variants share that the batch size 
 is set to the maximum value containable by
 the GPU memory of my desktop computer.
@@ -1461,7 +1461,7 @@ the configuration of R1 in experiment 1.
 R1 integrates
 a trainable, not pretrained 14-layer Resnet, 
 a three-layer GRU with a hidden size of 64
-and a resultant dropout probability of 50 \%
+and a resultant dropout probability of 50\%
 and a final, ReLU-activated, fully-connected layer 
 in order to map 240x160 preprocessed RGB images
 from the drone's onboard camera
@@ -1488,10 +1488,10 @@ except that the GRU submodule has
 and the dropout at a single application
 has a probability of approximately
 none (by design, the first layer applies no dropout), 
-2.73, 1.38, 0.69 or 0.31 \%
+2.73, 1.38, 0.69 or 0.31\%
 , respectively,
 in order to maintain
-a resultant dropout probability of 50 \%
+a resultant dropout probability of 50\%
 (see equ. \ref{eq:single_dropout}).
 A variant examined in this experiment 
 with $L$ GRU layers
@@ -1516,7 +1516,7 @@ Experiment 3 studies the race performance of a
 feedforward and a recurrent ANN module variant
 on the randomized gap racetrack in several
 simulation environments.
-Table \ref{tab:e3_config} shows the configuration of experiment 3
+Table \ref{tab:e3_config} shows the configuration of experiment 3,
 including the ANN module configuration
 and the learning configuration.
 Table \ref{tab:exp3_nums} shows the number of trainable parameters
@@ -1653,7 +1653,7 @@ and MAC operations for both examined variants.
         \\\cline{3-\ncols}
         &
         &\multicolumn{2}{c|}{Margin-threshold}
-        &\multicolumn{2}{c|}{(0.7, 6), (0.5 m, 6 \%)}
+        &\multicolumn{2}{c|}{(0.7, 6), (0.5 m, 6\%)}
         \\\cline{2-\ncols}        
         &
         \multirow{6}{*}{\rotcell{Training}}
@@ -1768,7 +1768,7 @@ and the ReLU activated HEAD submodule
 to output navigation decisions.
 Moreover, both variants process a training sample 
 input with a resultant dropout probability of 
-50 \% (see equ. \ref{eq:single_dropout}).
+50\% (see equ. \ref{eq:single_dropout}).
 
 The feedforward variant (E3F)
 is characterized by the deactivated GRU submodule
@@ -1781,7 +1781,7 @@ with the Resnet8 extended to a Resnet18.
 The recurrent variant (E3R)
 is characterized by the deactivated FC submodule
 and the activated GRU submodule,
-which consist of three layers with a hidden size of 16, of
+which consists of three layers with a hidden size of 16, of
 which the second and the third layer are subjected to dropout.
 
 The Resnet18 dominates the numbers of trainable parameters
@@ -1808,7 +1808,7 @@ industrial site and polygon city.
 For the intervening expert system,
 there are two margin-threshold pairs.
 The first margin is wider than the second,
-while the threshold remains to be 6 \%.
+while the threshold remains to be 6\%.
 %\textbf{compare with e1}
 
 
@@ -1825,10 +1825,10 @@ while E3R trains on samples with an input sequence length
 of 3.
 
 Table \ref{tab:e3_test_config} shows the configuration for the race tests.
-The variants roll out on the four scenes seen during learning
+The variants roll out in the four scenes seen during learning
 as well as the desert mountain scene unseen during learning.
 Thereby, the maximum drone speed is set to 
-4, 5, ..., 10 m/s  of which only 4, 6 and 8 m/s
+4, 5, ..., 10 m/s, of which only 4, 6 and 8 m/s
 were experienced during learning.
 For every combination in the testing configuration,
 each variant rolls out only once
@@ -1913,17 +1913,17 @@ E3R-5*360x240
 and
 E3R-10*360x240
 train on these datasets.
-The ANN module of these eight variants
+The ANN modules of these eight variants
 are configured like the starting point.
 However, for a resultant dropout probability
-of 50 \%, the dropout probability
+of 50\%, the dropout probability
 for a single dropout application of the GRU submodule
-is adjusted with equation \ref{eq:single_dropout}.
+is adjusted by equation \ref{eq:single_dropout}.
 
 Finally,
 the variants perform
 race tests with the same
-configuration as R1 (see table \ref{tab:test_config}).
+configuration as E3R (see table \ref{tab:e3_test_config}).
 
 %A variant examined in this experiment 
 %with $L$ GRU layers

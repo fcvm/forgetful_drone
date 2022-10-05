@@ -8,6 +8,7 @@ Warning--to sort, need author or key in RobotAutonomy2
 Warning--empty author in RobotAutonomy2
 Warning--empty journal in Brookes2020
 Warning--empty journal in Cho2014
+Warning--empty journal in He2015
 Warning--empty journal in Hinton2012
 Warning--empty journal in osti_5675197
 Warning--empty journal in Kaufmann2018
@@ -17,45 +18,45 @@ Warning--empty booktitle in Mueller2013
 Warning--empty year in Parent
 Warning--empty journal in Sadeghi2016
 Warning--empty journal in Song2020
-You've used 64 entries,
+You've used 65 entries,
             2118 wiz_defined-function locations,
-            881 strings with 16688 characters,
-and the built_in function-call counts, 22797 in all, are:
-= -- 2155
-> -- 1350
+            885 strings with 16802 characters,
+and the built_in function-call counts, 23100 in all, are:
+= -- 2181
+> -- 1373
 < -- 11
-+ -- 544
-- -- 470
-* -- 1682
-:= -- 3834
-add.period$ -- 208
-call.type$ -- 64
-change.case$ -- 424
++ -- 553
+- -- 478
+* -- 1705
+:= -- 3890
+add.period$ -- 211
+call.type$ -- 65
+change.case$ -- 431
 chr.to.int$ -- 0
-cite$ -- 78
-duplicate$ -- 794
-empty$ -- 1634
-format.name$ -- 470
-if$ -- 4674
+cite$ -- 80
+duplicate$ -- 804
+empty$ -- 1651
+format.name$ -- 478
+if$ -- 4731
 int.to.chr$ -- 0
-int.to.str$ -- 64
-missing$ -- 58
-newline$ -- 324
-num.names$ -- 124
-pop$ -- 517
+int.to.str$ -- 65
+missing$ -- 59
+newline$ -- 329
+num.names$ -- 126
+pop$ -- 526
 preamble$ -- 1
-purify$ -- 363
+purify$ -- 369
 quote$ -- 0
-skip$ -- 547
+skip$ -- 554
 stack$ -- 0
-substring$ -- 1053
+substring$ -- 1058
 swap$ -- 151
 text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 250
-warning$ -- 14
-while$ -- 186
-width$ -- 66
-write$ -- 676
-(There were 14 warnings)
+type$ -- 254
+warning$ -- 15
+while$ -- 188
+width$ -- 67
+write$ -- 685
+(There were 15 warnings)

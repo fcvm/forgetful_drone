@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.7.16)  4 OCT 2022 23:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.7.16)  5 OCT 2022 02:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -565,12 +565,12 @@ LaTeX Font Info:    Trying to load font information for U+wasy on input line 26.
  (/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
-<gfx/template/TUBerlin_Logo_rot_hell.pdf, id=135, 4741.715pt x 3529.185pt>
+<gfx/template/TUBerlin_Logo_rot_hell.pdf, id=139, 4741.715pt x 3529.185pt>
 File: gfx/template/TUBerlin_Logo_rot_hell.pdf Graphic file (type pdf)
 <use gfx/template/TUBerlin_Logo_rot_hell.pdf>
 Package pdftex.def Info: gfx/template/TUBerlin_Logo_rot_hell.pdf  used on input line 27.
 (pdftex.def)             Requested size: 62.73549pt x 46.68877pt.
-<gfx/template/aot_logo.pdf, id=136, 838.2025pt x 535.86098pt>
+<gfx/template/aot_logo.pdf, id=140, 838.2025pt x 535.86098pt>
 File: gfx/template/aot_logo.pdf Graphic file (type pdf)
 <use gfx/template/aot_logo.pdf>
 Package pdftex.def Info: gfx/template/aot_logo.pdf  used on input line 27.
@@ -590,11 +590,7 @@ Overfull \hbox (17.62482pt too wide) in paragraph at lines 74--75
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/template/TUBerlin_Logo_rot_hell.pdf> </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/template/aot_logo.pdf>]) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/00b_abstract_ack.tex [2
 
 
-]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 27.
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [3
+] [3
 
 ]) [4
 
@@ -634,7 +630,7 @@ Chapter 2.
 ] [5] [6] [7]
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_folded.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/rnn_folded.drawio.pdf, id=434, 152.57pt x 216.81pt>
+<gfx/own/rnn_folded.drawio.pdf, id=441, 152.57pt x 216.81pt>
 File: gfx/own/rnn_folded.drawio.pdf Graphic file (type pdf)
 <use gfx/own/rnn_folded.drawio.pdf>
 Package pdftex.def Info: gfx/own/rnn_folded.drawio.pdf  used on input line 487.
@@ -642,7 +638,7 @@ Package pdftex.def Info: gfx/own/rnn_folded.drawio.pdf  used on input line 487.
 
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/rnn_unfolded.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/rnn_unfolded.drawio.pdf, id=435, 260.975pt x 232.87pt>
+<gfx/own/rnn_unfolded.drawio.pdf, id=442, 260.975pt x 232.87pt>
 File: gfx/own/rnn_unfolded.drawio.pdf Graphic file (type pdf)
 <use gfx/own/rnn_unfolded.drawio.pdf>
 Package pdftex.def Info: gfx/own/rnn_unfolded.drawio.pdf  used on input line 494.
@@ -660,7 +656,7 @@ Underfull \hbox (badness 3735) in paragraph at lines 575--575
  []
 
 [10] [11]
-<gfx/own/sigmoid_tanh.pdf, id=529, 406.73225pt x 139.445pt>
+<gfx/own/sigmoid_tanh.pdf, id=536, 406.73225pt x 139.445pt>
 File: gfx/own/sigmoid_tanh.pdf Graphic file (type pdf)
 <use gfx/own/sigmoid_tanh.pdf>
 Package pdftex.def Info: gfx/own/sigmoid_tanh.pdf  used on input line 893.
@@ -668,7 +664,7 @@ Package pdftex.def Info: gfx/own/sigmoid_tanh.pdf  used on input line 893.
  [12]
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf, id=556, 959.50468pt x 613.33138pt>
+<gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf, id=563, 959.50468pt x 613.33138pt>
 File: gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf Graphic file (type pdf)
 <use gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf>
 Package pdftex.def Info: gfx/own/gru_unfolded_intra_inter_paths.drawio.pdf  used on input line 1044.
@@ -678,12 +674,12 @@ Chapter 3.
 [20
 
 ]
-<gfx/own/local_reference_system.pdf, id=864, 372.9132pt x 281.56392pt>
+<gfx/own/local_reference_system.pdf, id=871, 372.9132pt x 281.56392pt>
 File: gfx/own/local_reference_system.pdf Graphic file (type pdf)
 <use gfx/own/local_reference_system.pdf>
 Package pdftex.def Info: gfx/own/local_reference_system.pdf  used on input line 151.
 (pdftex.def)             Requested size: 184.44746pt x 139.265pt.
-<gfx/own/image_reference_system.pdf, id=865, 371.76302pt x 246.16672pt>
+<gfx/own/image_reference_system.pdf, id=872, 371.76302pt x 246.16672pt>
 File: gfx/own/image_reference_system.pdf Graphic file (type pdf)
 <use gfx/own/image_reference_system.pdf>
 Package pdftex.def Info: gfx/own/image_reference_system.pdf  used on input line 157.
@@ -698,31 +694,35 @@ pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful
 >] [23]
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/ann_module.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/ann_module.drawio.pdf, id=936, 624.41275pt x 356.29109pt>
+<gfx/own/ann_module.drawio.pdf, id=943, 624.41275pt x 356.29109pt>
 File: gfx/own/ann_module.drawio.pdf Graphic file (type pdf)
 <use gfx/own/ann_module.drawio.pdf>
 Package pdftex.def Info: gfx/own/ann_module.drawio.pdf  used on input line 621.
 (pdftex.def)             Requested size: 418.25368pt x 238.65398pt.
-[24] [25 </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/ann_module.drawio.pdf>] [26] [27]
+[24] [25 </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/ann_module.drawio.pdf>]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 727.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [26] [27]
 Underfull \hbox (badness 3735) in paragraph at lines 895--895
 [][][][]$\OT1/pcr/m/n/10 https : / / pytorch . org / docs / stable / generated / torch . nn . GRU . html$[]\OT1/ptm/m/n/10 , ac-cessed
  []
 
 [28] [29] [30] [31] [32]
 Underfull \hbox (badness 1189) in paragraph at lines 1539--1539
-[][][][]$\OT1/pcr/m/n/10 https : / / github . com / uzh-[]rpg / rpg _ quadrotor _ control$[]\OT1/ptm/m/n/10 , ac-cessed on Oc-to-ber 4,
+[][][][]$\OT1/pcr/m/n/10 https : / / github . com / uzh-[]rpg / rpg _ quadrotor _ control$[]\OT1/ptm/m/n/10 , ac-cessed on Oc-to-ber 5,
  []
 
 [33]
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/control_module.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/control_module.drawio.pdf, id=1088, 385.44pt x 390.49887pt>
+<gfx/own/control_module.drawio.pdf, id=1095, 385.44pt x 390.49887pt>
 File: gfx/own/control_module.drawio.pdf Graphic file (type pdf)
 <use gfx/own/control_module.drawio.pdf>
 Package pdftex.def Info: gfx/own/control_module.drawio.pdf  used on input line 1548.
 (pdftex.def)             Requested size: 292.77629pt x 296.61537pt.
 [34 </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/control_module.drawio.pdf>] [35] [36] [37]
-<gfx/own/expert_state_projection_3d.pdf, id=1154, 372.9132pt x 281.56392pt>
+<gfx/own/expert_state_projection_3d.pdf, id=1161, 372.9132pt x 281.56392pt>
 File: gfx/own/expert_state_projection_3d.pdf Graphic file (type pdf)
 <use gfx/own/expert_state_projection_3d.pdf>
 Package pdftex.def Info: gfx/own/expert_state_projection_3d.pdf  used on input line 1954.
@@ -732,32 +732,32 @@ Chapter 4.
 
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/simulation_setup.drawio.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<gfx/own/simulation_setup.drawio.pdf, id=1239, 703.62875pt x 245.91875pt>
+<gfx/own/simulation_setup.drawio.pdf, id=1246, 703.62875pt x 245.91875pt>
 File: gfx/own/simulation_setup.drawio.pdf Graphic file (type pdf)
 <use gfx/own/simulation_setup.drawio.pdf>
 Package pdftex.def Info: gfx/own/simulation_setup.drawio.pdf  used on input line 14.
 (pdftex.def)             Requested size: 418.25368pt x 146.17899pt.
-<gfx/own/jpg/spaceship_interior.jpg, id=1257, 722.7pt x 481.8pt>
+<gfx/own/jpg/spaceship_interior.jpg, id=1264, 722.7pt x 481.8pt>
 File: gfx/own/jpg/spaceship_interior.jpg Graphic file (type jpg)
 <use gfx/own/jpg/spaceship_interior.jpg>
 Package pdftex.def Info: gfx/own/jpg/spaceship_interior.jpg  used on input line 83.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/destroyed_city.jpg, id=1258, 722.7pt x 481.8pt>
+<gfx/own/jpg/destroyed_city.jpg, id=1265, 722.7pt x 481.8pt>
 File: gfx/own/jpg/destroyed_city.jpg Graphic file (type jpg)
 <use gfx/own/jpg/destroyed_city.jpg>
 Package pdftex.def Info: gfx/own/jpg/destroyed_city.jpg  used on input line 90.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/industrial_site.jpg, id=1259, 722.7pt x 481.8pt>
+<gfx/own/jpg/industrial_site.jpg, id=1266, 722.7pt x 481.8pt>
 File: gfx/own/jpg/industrial_site.jpg Graphic file (type jpg)
 <use gfx/own/jpg/industrial_site.jpg>
 Package pdftex.def Info: gfx/own/jpg/industrial_site.jpg  used on input line 97.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/polygon_city.jpg, id=1260, 722.7pt x 481.8pt>
+<gfx/own/jpg/polygon_city.jpg, id=1267, 722.7pt x 481.8pt>
 File: gfx/own/jpg/polygon_city.jpg Graphic file (type jpg)
 <use gfx/own/jpg/polygon_city.jpg>
 Package pdftex.def Info: gfx/own/jpg/polygon_city.jpg  used on input line 103.
 (pdftex.def)             Requested size: 138.02448pt x 92.01344pt.
-<gfx/own/jpg/desert_mountain.jpg, id=1261, 722.7pt x 481.8pt>
+<gfx/own/jpg/desert_mountain.jpg, id=1268, 722.7pt x 481.8pt>
 File: gfx/own/jpg/desert_mountain.jpg Graphic file (type jpg)
 <use gfx/own/jpg/desert_mountain.jpg>
 Package pdftex.def Info: gfx/own/jpg/desert_mountain.jpg  used on input line 109.
@@ -767,12 +767,12 @@ Overfull \hbox (13.81975pt too wide) in paragraph at lines 97--115
  [][][][][][] 
  []
 
-<gfx/own/jpg/tub_dai_gate.png, id=1262, 1003.75pt x 1003.75pt>
+<gfx/own/jpg/tub_dai_gate.png, id=1269, 1003.75pt x 1003.75pt>
 File: gfx/own/jpg/tub_dai_gate.png Graphic file (type png)
 <use gfx/own/jpg/tub_dai_gate.png>
 Package pdftex.def Info: gfx/own/jpg/tub_dai_gate.png  used on input line 124.
 (pdftex.def)             Requested size: 138.02448pt x 138.01222pt.
-<gfx/own/jpg/thu_dme_gate.png, id=1264, 1003.75pt x 1003.75pt>
+<gfx/own/jpg/thu_dme_gate.png, id=1271, 1003.75pt x 1003.75pt>
 File: gfx/own/jpg/thu_dme_gate.png Graphic file (type png)
 <use gfx/own/jpg/thu_dme_gate.png>
 Package pdftex.def Info: gfx/own/jpg/thu_dme_gate.png  used on input line 130.
@@ -814,12 +814,12 @@ Chapter 5.
 [60
 
 ]
-<gfx/own/results_e1_learning_feedforward.pdf, id=1453, 417.75258pt x 312.02145pt>
+<gfx/own/results_e1_learning_feedforward.pdf, id=1463, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e1_learning_feedforward.pdf Graphic file (type pdf)
 <use gfx/own/results_e1_learning_feedforward.pdf>
 Package pdftex.def Info: gfx/own/results_e1_learning_feedforward.pdf  used on input line 108.
 (pdftex.def)             Requested size: 334.60422pt x 249.91743pt.
-<gfx/own/results_e1_learning_recurrent.pdf, id=1454, 417.75258pt x 312.02145pt>
+<gfx/own/results_e1_learning_recurrent.pdf, id=1464, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e1_learning_recurrent.pdf Graphic file (type pdf)
 <use gfx/own/results_e1_learning_recurrent.pdf>
 Package pdftex.def Info: gfx/own/results_e1_learning_recurrent.pdf  used on input line 116.
@@ -829,7 +829,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 126--126
 [][][][]$\OT1/pcr/m/n/10 https : / / pytorch . org / docs / stable / generated / torch . nn . SmoothL1Loss .
  []
 
-<gfx/own/results_e1_racing.pdf, id=1458, 406.42903pt x 312.02145pt>
+<gfx/own/results_e1_racing.pdf, id=1468, 406.42903pt x 312.02145pt>
 File: gfx/own/results_e1_racing.pdf Graphic file (type pdf)
 <use gfx/own/results_e1_racing.pdf>
 Package pdftex.def Info: gfx/own/results_e1_racing.pdf  used on input line 159.
@@ -838,12 +838,12 @@ Package pdftex.def Info: gfx/own/results_e1_racing.pdf  used on input line 159.
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/results_e1_learning_recurrent.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-<gfx/own/results_e2_learning.pdf, id=1520, 417.75258pt x 312.02145pt>
+<gfx/own/results_e2_learning.pdf, id=1530, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e2_learning.pdf Graphic file (type pdf)
 <use gfx/own/results_e2_learning.pdf>
 Package pdftex.def Info: gfx/own/results_e2_learning.pdf  used on input line 195.
 (pdftex.def)             Requested size: 334.60422pt x 249.91743pt.
-<gfx/own/results_e2_racing.pdf, id=1522, 412.81226pt x 312.02145pt>
+<gfx/own/results_e2_racing.pdf, id=1532, 412.81226pt x 312.02145pt>
 File: gfx/own/results_e2_racing.pdf Graphic file (type pdf)
 <use gfx/own/results_e2_racing.pdf>
 Package pdftex.def Info: gfx/own/results_e2_racing.pdf  used on input line 226.
@@ -852,22 +852,22 @@ Package pdftex.def Info: gfx/own/results_e2_racing.pdf  used on input line 226.
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/results_e2_racing.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-<gfx/own/results_e3_learning.pdf, id=1644, 417.75258pt x 312.02145pt>
+<gfx/own/results_e3_learning.pdf, id=1654, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e3_learning.pdf Graphic file (type pdf)
 <use gfx/own/results_e3_learning.pdf>
 Package pdftex.def Info: gfx/own/results_e3_learning.pdf  used on input line 295.
 (pdftex.def)             Requested size: 334.60422pt x 249.91743pt.
-<gfx/own/results_e3_racing.pdf, id=1647, 406.42903pt x 312.02145pt>
+<gfx/own/results_e3_racing.pdf, id=1657, 406.42903pt x 312.02145pt>
 File: gfx/own/results_e3_racing.pdf Graphic file (type pdf)
 <use gfx/own/results_e3_racing.pdf>
 Package pdftex.def Info: gfx/own/results_e3_racing.pdf  used on input line 325.
 (pdftex.def)             Requested size: 334.60422pt x 256.89238pt.
-<gfx/own/results_e4_learning_360x240.pdf, id=1649, 417.75258pt x 312.02145pt>
+<gfx/own/results_e4_learning_360x240.pdf, id=1659, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e4_learning_360x240.pdf Graphic file (type pdf)
 <use gfx/own/results_e4_learning_360x240.pdf>
 Package pdftex.def Info: gfx/own/results_e4_learning_360x240.pdf  used on input line 359.
 (pdftex.def)             Requested size: 334.60422pt x 249.91743pt.
-<gfx/own/results_e4_learning_240x160.pdf, id=1650, 417.75258pt x 312.02145pt>
+<gfx/own/results_e4_learning_240x160.pdf, id=1660, 417.75258pt x 312.02145pt>
 File: gfx/own/results_e4_learning_240x160.pdf Graphic file (type pdf)
 <use gfx/own/results_e4_learning_240x160.pdf>
 Package pdftex.def Info: gfx/own/results_e4_learning_240x160.pdf  used on input line 367.
@@ -879,12 +879,12 @@ pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful
 
 pdfTeX warning: pdflatex (file /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/results_e4_learning_240x160.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-<gfx/own/results_e4_racing_360x240.pdf, id=1790, 406.42903pt x 312.02145pt>
+<gfx/own/results_e4_racing_360x240.pdf, id=1800, 406.42903pt x 312.02145pt>
 File: gfx/own/results_e4_racing_360x240.pdf Graphic file (type pdf)
 <use gfx/own/results_e4_racing_360x240.pdf>
 Package pdftex.def Info: gfx/own/results_e4_racing_360x240.pdf  used on input line 411.
 (pdftex.def)             Requested size: 334.60422pt x 256.89238pt.
-<gfx/own/results_e4_racing_240x160.pdf, id=1791, 406.42903pt x 312.02145pt>
+<gfx/own/results_e4_racing_240x160.pdf, id=1801, 406.42903pt x 312.02145pt>
 File: gfx/own/results_e4_racing_240x160.pdf Graphic file (type pdf)
 <use gfx/own/results_e4_racing_240x160.pdf>
 Package pdftex.def Info: gfx/own/results_e4_racing_240x160.pdf  used on input line 419.
@@ -965,86 +965,86 @@ Underfull \hbox (badness 7064) in paragraph at lines 81--86
  []
 
 [83]
-Underfull \hbox (badness 10000) in paragraph at lines 150--155
+Underfull \hbox (badness 10000) in paragraph at lines 155--160
 []\OT1/ptm/m/n/12 IBM Cloud Ed-u-ca-tion.  Re-cur-rent neu-ral net-works.  \OT1/ptm/m/it/12 IBM Cloud
  []
 
 
-Underfull \hbox (badness 4726) in paragraph at lines 150--155
+Underfull \hbox (badness 4726) in paragraph at lines 155--160
 \OT1/ptm/m/it/12 Learn Hub\OT1/ptm/m/n/12 , 2020.  URL: []$\OT1/pcr/m/n/12 https : / / www . ibm . com / cloud / learn /
  []
 
 [84] [85]
-Underfull \hbox (badness 2418) in paragraph at lines 330--340
+Underfull \hbox (badness 2418) in paragraph at lines 335--345
 []\OT1/ptm/m/n/12 Davide Scara-muzza, Michael C. Achte-lik, Lef-t-eris Doit-sidis, Fraun-dor-fer
  []
 
-[86]) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/07_appendix.tex [87] [88
+[86] [87]) (/home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/input/07_appendix.tex [88] [89
 
 ]
-<gfx/own/computeRacetrack_fig8_shift.pdf, id=1997, 456.29109pt x 251.27815pt>
+<gfx/own/computeRacetrack_fig8_shift.pdf, id=2012, 456.29109pt x 251.27815pt>
 File: gfx/own/computeRacetrack_fig8_shift.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_shift.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_shift.pdf  used on input line 75.
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_shift.pdf  used on input line 78.
 (pdftex.def)             Requested size: 196.57973pt x 108.25453pt.
-<gfx/own/computeRacetrack_gap_shift.pdf, id=1998, 456.51523pt x 255.3226pt>
+<gfx/own/computeRacetrack_gap_shift.pdf, id=2013, 456.51523pt x 255.3226pt>
 File: gfx/own/computeRacetrack_gap_shift.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_shift.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_shift.pdf  used on input line 81.
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_shift.pdf  used on input line 84.
 (pdftex.def)             Requested size: 196.57973pt x 109.9463pt.
 
-Overfull \hbox (7.81973pt too wide) in paragraph at lines 75--82
+Overfull \hbox (7.81973pt too wide) in paragraph at lines 78--85
  [][][][][][] 
  []
 
-<gfx/own/computeRacetrack_fig8_scale.pdf, id=1999, 455.30101pt x 241.7467pt>
+<gfx/own/computeRacetrack_fig8_scale.pdf, id=2014, 455.30101pt x 241.7467pt>
 File: gfx/own/computeRacetrack_fig8_scale.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_scale.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_scale.pdf  used on input line 89.
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_scale.pdf  used on input line 92.
 (pdftex.def)             Requested size: 196.57973pt x 104.37326pt.
-<gfx/own/computeRacetrack_gap_scale.pdf, id=2000, 455.30101pt x 248.58095pt>
+<gfx/own/computeRacetrack_gap_scale.pdf, id=2015, 455.30101pt x 248.58095pt>
 File: gfx/own/computeRacetrack_gap_scale.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_scale.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_scale.pdf  used on input line 95.
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_scale.pdf  used on input line 98.
 (pdftex.def)             Requested size: 196.57973pt x 107.32391pt.
 
-Overfull \hbox (7.81973pt too wide) in paragraph at lines 89--96
+Overfull \hbox (7.81973pt too wide) in paragraph at lines 92--99
  [][][][][][] 
  []
 
-<gfx/own/computeRacetrack_fig8_twist.pdf, id=2001, 455.30101pt x 241.7467pt>
+<gfx/own/computeRacetrack_fig8_twist.pdf, id=2016, 455.30101pt x 241.7467pt>
 File: gfx/own/computeRacetrack_fig8_twist.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_twist.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_twist.pdf  used on input line 103.
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_twist.pdf  used on input line 106.
 (pdftex.def)             Requested size: 196.57973pt x 104.37326pt.
-<gfx/own/computeRacetrack_gap_twist.pdf, id=2002, 455.30101pt x 248.58095pt>
+<gfx/own/computeRacetrack_gap_twist.pdf, id=2017, 455.30101pt x 248.58095pt>
 File: gfx/own/computeRacetrack_gap_twist.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_twist.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_twist.pdf  used on input line 109.
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_twist.pdf  used on input line 112.
 (pdftex.def)             Requested size: 196.57973pt x 107.32391pt.
 
-Overfull \hbox (7.81973pt too wide) in paragraph at lines 103--110
+Overfull \hbox (7.81973pt too wide) in paragraph at lines 106--113
  [][][][][][] 
  []
 
-<gfx/own/computeRacetrack_fig8_redir.pdf, id=2003, 455.30101pt x 241.7467pt>
+<gfx/own/computeRacetrack_fig8_redir.pdf, id=2018, 455.30101pt x 241.7467pt>
 File: gfx/own/computeRacetrack_fig8_redir.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_fig8_redir.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_fig8_redir.pdf  used on input line 117.
+Package pdftex.def Info: gfx/own/computeRacetrack_fig8_redir.pdf  used on input line 120.
 (pdftex.def)             Requested size: 196.57973pt x 104.37326pt.
-<gfx/own/computeRacetrack_gap_redir.pdf, id=2004, 455.30101pt x 248.58095pt>
+<gfx/own/computeRacetrack_gap_redir.pdf, id=2019, 455.30101pt x 248.58095pt>
 File: gfx/own/computeRacetrack_gap_redir.pdf Graphic file (type pdf)
 <use gfx/own/computeRacetrack_gap_redir.pdf>
-Package pdftex.def Info: gfx/own/computeRacetrack_gap_redir.pdf  used on input line 123.
+Package pdftex.def Info: gfx/own/computeRacetrack_gap_redir.pdf  used on input line 126.
 (pdftex.def)             Requested size: 196.57973pt x 107.32391pt.
 
-Overfull \hbox (7.81973pt too wide) in paragraph at lines 117--136
+Overfull \hbox (7.81973pt too wide) in paragraph at lines 120--139
  [][][][][][] 
  []
 
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 247.
- [89
+ [90
 
  </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_fig8_shift.pdf> </home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/gfx/own/computeRacetrack_gap_shift.pdf
 
@@ -1073,22 +1073,22 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 247.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 247.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 247.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 6A240AD0ADBED369AD9FBD0187CE73E7;2021.
+(rerunfilecheck)             Checksum: 20414DFBBC7395F035ECD8CCE52D8B73;2095.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 247.
  ) 
 Here is how much of TeX's memory you used:
- 13560 strings out of 481239
- 216262 string characters out of 5920377
- 538052 words of memory out of 5000000
- 27988 multiletter control sequences out of 15000+600000
+ 13565 strings out of 481239
+ 216312 string characters out of 5920377
+ 538081 words of memory out of 5000000
+ 27990 multiletter control sequences out of 15000+600000
  564649 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  50i,21n,51p,1889b,482s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.pdf (97 pages, 2643019 bytes).
+Output written on /home/fm/drone_racing_ws/catkin_ddr/src/forgetful_drones/docs/TUB/diploma_template/bsc_msc_dipl_template_ENG_aubrey/thesis.pdf (98 pages, 2648282 bytes).
 PDF statistics:
- 2231 PDF objects out of 2487 (max. 8388607)
- 1543 compressed objects within 16 object streams
- 486 named destinations out of 1000 (max. 500000)
- 455 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2246 PDF objects out of 2487 (max. 8388607)
+ 1557 compressed objects within 16 object streams
+ 489 named destinations out of 1000 (max. 500000)
+ 463 words of extra memory for PDF output out of 10000 (max. 10000000)
 

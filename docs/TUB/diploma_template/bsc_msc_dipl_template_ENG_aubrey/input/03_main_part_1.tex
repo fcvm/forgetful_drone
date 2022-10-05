@@ -1002,7 +1002,7 @@ the total number of trainable parameters of the GRU submodule is
 \end{align}
 
 The GRU submodule operates in many-to-one mode at training or 
-one-to-one mode at racing where the length of the input sequences is one.
+one-to-one mode at race where the length of the input sequences is one.
 Either way, the GRU submodule maps its input batch
 (see equ. \ref{eq:cat_output})
 to a batch of last hidden states of the last layer
@@ -1433,7 +1433,7 @@ to re-compute its local trajectory.
     The implementation\footnote{
             \url{https://github.com/markwmuller/RapidQuadrocopterTrajectories}, accessed on \today
     } 
-    of the algorithm of Mueller et. al. \cite{Mueller2013}
+    of the algorithm of Mueller et al. \cite{Mueller2013}
     is deployed to find the polynomial trajectory with minimum jerk
     (third time derivative of position)
     by solving the optimization problem

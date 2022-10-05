@@ -1690,4 +1690,167 @@
 
 @Misc{Abadi2015,
   author = {Mart\'{\i}n~Abadi and Ashish~Agarwal and Paul~Barham and Eugene~Brevdo and Zhifeng~Chen and Craig~Citro and Greg~S.~Corrado and Andy~Davis and Jeffrey~Dean and Matthieu~Devin and Sanjay~Ghemawat and Ian~Goodfellow and Andrew~Harp and Geoffrey~Irving and Michael~Isard and Yangqing Jia and Rafal~Jozefowicz and Lukasz~Kaiser and Manjunath~Kudlur and Josh~Levenberg and Dandelion~Man\'{e} and Rajat~Monga and Sherry~Moore and Derek~Murray and Chris~Olah and Mike~Schuster and Jonathon~Shlens and Benoit~Steiner and Ilya~Sutskever and Kunal~Talwar and Paul~Tucker and Vincent~Vanhoucke and Vijay~Vasudevan and Fernanda~Vi\'{e}gas and Oriol~Vinyals and Pete~Warden and Martin~Wattenberg and Martin~Wicke and Yuan~Yu and Xiaoqiang~Zheng},
-  note   = {Software available from tensorflo
+  note   = {Software available from tensorflow.org},
+  title  = {{TensorFlow}: Large-Scale Machine Learning on Heterogeneous Systems},
+  year   = {2015},
+  url    = {https://www.tensorflow.org/},
+}
+
+
+
+
+@inproceedings{Koenig2004,
+  added-at = {2020-05-24T20:36:48.000+0200},
+  author = {Koenig, N. and Howard, A.},
+  biburl = {https://www.bibsonomy.org/bibtex/2e7fb6723d0fa2967afb631d9112470c5/marcondg},
+  booktitle = {{IEEE}/{RSJ} International Conference on Intelligent Robots and Systems ({IROS}) ({IEEE} Cat. No.04{CH}37566)},
+  interhash = {91dd5e35de0ae769be8bbde8ce2e2c4c},
+  intrahash = {e7fb6723d0fa2967afb631d9112470c5},
+  keywords = {sea},
+  pages = {2149--2154},
+  timestamp = {2020-05-24T20:36:48.000+0200},
+  title = {{Design and use paradigms for Gazebo, an open-source multi-robot simulator}},
+  volume = 3,
+  year = 2004
+}
+
+@Article{BenMoshe2021,
+  author         = {Ben-Moshe, Boaz},
+  journal        = {Drones},
+  title          = {Power Line Charging Mechanism for Drones},
+  year           = {2021},
+  issn           = {2504-446X},
+  number         = {4},
+  volume         = {5},
+  abstract       = {The use of multirotor drones has increased dramatically in the last decade. These days, quadcopters and Vertical Takeoff and Landing (VTOL) drones can be found in many applications such as search and rescue, inspection, commercial photography, intelligence, sports, and recreation. One of the major drawbacks of electric multirotor drones is their limited flight time. Commercial drones commonly have about 20?40 min of flight time. The short flight time limits the overall usability of drones in homeland security applications where long-duration performance is required. In this paper, we present a new concept of a ?power-line-charging drone?, the idea being to equip existing drones with a robotic mechanism and an onboard charger in order to allow them to land safely on power lines and then charge from the existing 100?250 V AC (50?60 Hz). This research presents several possible conceptual models for power line charging. All suggested solutions were constructed and submitted to a field experiment. Finally, the paper focuses on the optimal solution and presents the performance and possible future development of such power-line-charging drones.},
+  article-number = {108},
+  doi            = {10.3390/drones5040108},
+  url            = {https://www.mdpi.com/2504-446X/5/4/108},
+}
+
+
+
+@Article{Kellermann2020,
+  author    = {Kellermann, Robin and Biehle, Tobias and Fischer, Liliann},
+  journal   = {Transportation Research Interdisciplinary Perspectives},
+  title     = {Drones for parcel and passenger transportation: A literature review},
+  year      = {2020},
+  pages     = {100088},
+  volume    = {4},
+  publisher = {Elsevier},
+}
+
+
+
+@Software{SAIL2018,
+  author  = {{Stanford Artificial Intelligence Laboratory et al.}},
+  month   = may,
+  title   = {Robotic Operating System},
+  url     = {https://www.ros.org},
+  version = {ROS Melodic Morenia},
+  year    = {2018},
+}
+
+
+@InProceedings{Loquercio2021,
+  author    = {Loquercio, Antonio and Kaufmann, Elia and Ranftl, Ren{\'e} and M{\"u}ller, Matthias and Koltun, Vladlen and Scaramuzza, Davide},
+  booktitle = {Science Robotics},
+  title     = {Learning High-Speed Flight in the Wild},
+  year      = {2021},
+  month     = {October},
+}
+
+@InProceedings{brunner2019urban,
+  author       = {Brunner, Gino and Szebedy, Bence and Tanner, Simon and Wattenhofer, Roger},
+  booktitle    = {2019 international conference on unmanned aircraft systems (icuas)},
+  title        = {The urban last mile problem: Autonomous drone delivery to your balcony},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {1005--1012},
+}
+
+@Article{Moon2019,
+  author    = {Hyungpil Moon and Jose Martinez-Carranza and Titus Cieslewski and Matthias Faessler and Davide Falanga and Alessandro Simovic and Davide Scaramuzza and Shuo Li and Michael Ozo and Christophe De Wagter and Guido de Croon and Sunyou Hwang and Sunggoo Jung and Hyunchul Shim and Haeryang Kim and Minhyuk Park and Tsz-Chiu Au and Si Jung Kim},
+  journal   = {Intelligent Service Robotics},
+  title     = {Challenges and implemented technologies used in autonomous drone racing},
+  year      = {2019},
+  month     = {jan},
+  number    = {2},
+  pages     = {137--148},
+  volume    = {12},
+  doi       = {10.1007/s11370-018-00271-6},
+  publisher = {Springer Science and Business Media {LLC}},
+}
+
+@Article{Jung2018,
+  author    = {Sunggoo Jung and Sunyou Hwang and Heemin Shin and David Hyunchul Shim},
+  journal   = {{IEEE} Robotics and Automation Letters},
+  title     = {Perception, Guidance, and Navigation for Indoor Autonomous Drone Racing Using Deep Learning},
+  year      = {2018},
+  month     = {jul},
+  number    = {3},
+  pages     = {2539--2544},
+  volume    = {3},
+  doi       = {10.1109/lra.2018.2808368},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@InProceedings{Song2021,
+  author    = {Yunlong Song and Mats Steinweg and Elia Kaufmann and Davide Scaramuzza},
+  booktitle = {2021 {IEEE}/{RSJ} International Conference on Intelligent Robots and Systems ({IROS})},
+  title     = {Autonomous Drone Racing with Deep Reinforcement Learning},
+  year      = {2021},
+  month     = {sep},
+  publisher = {{IEEE}},
+  doi       = {10.1109/iros51168.2021.9636053},
+}
+
+@Article{RojasPerez2020,
+  author    = {Leticia Oyuki Rojas-Perez and Jose Martinez-Carranza},
+  journal   = {Sensors},
+  title     = {{DeepPilot}: A {CNN} for Autonomous Drone Racing},
+  year      = {2020},
+  month     = {aug},
+  number    = {16},
+  pages     = {4524},
+  volume    = {20},
+  doi       = {10.3390/s20164524},
+  publisher = {{MDPI} {AG}},
+}
+
+@InProceedings{Kaufmann2019,
+  author    = {Elia Kaufmann and Mathias Gehrig and Philipp Foehn and Rene Ranftl and Alexey Dosovitskiy and Vladlen Koltun and Davide Scaramuzza},
+  booktitle = {2019 International Conference on Robotics and Automation ({ICRA})},
+  title     = {Beauty and the Beast: Optimal Methods Meet Learning for Drone Racing},
+  year      = {2019},
+  month     = {may},
+  publisher = {{IEEE}},
+  doi       = {10.1109/icra.2019.8793631},
+}
+
+@InProceedings{Jung2018a,
+  author    = {Sunggoo Jung and Hanseob Lee and Sunyou Hwang and David Hyunchul Shim},
+  booktitle = {2018 {AIAA} Information Systems-{AIAA} Infotech @ Aerospace},
+  title     = {Real Time Embedded System Framework for Autonomous Drone Racing using Deep Learning Techniques},
+  year      = {2018},
+  month     = {jan},
+  publisher = {American Institute of Aeronautics and Astronautics},
+  doi       = {10.2514/6.2018-2138},
+}
+
+@InCollection{Chan2020,
+  author    = {Ka-Hou Chan and Wei Ke and Sio-Kei Im},
+  booktitle = {Neural Information Processing},
+  publisher = {Springer International Publishing},
+  title     = {{CARU}: A Content-Adaptive Recurrent Unit for the Transition of Hidden State in {NLP}},
+  year      = {2020},
+  pages     = {693--703},
+  doi       = {10.1007/978-3-030-63830-6_58},
+}
+
+@Article{He2015,
+  author        = {Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
+  title         = {Deep Residual Learning for Image Recognition},
+  year          = {2015},
+  month         = dec,
+  abstract      = {Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity. An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our extremely deep representations, we obtain a 28% relative 

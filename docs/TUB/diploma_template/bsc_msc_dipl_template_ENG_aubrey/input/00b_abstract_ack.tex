@@ -22,20 +22,106 @@ Ort, Datum \hfill Unterschrift
 %#############################################################
 \newpage
 \chapter*{Abstract}
-DELETEME: An abstract is a teaser for your work. You try to convince a reader that it is worth reading your work. Normally, it makes to structure you abstract in this way: 
-\begin{itemize}
-\item one paragraph on the motivation to your topic
-\item one paragraph on what approach you have chosen
-\item and one paragraph on your results which may be presented in comparison to other approaches that try to solve the same or a similar problem.
-\end{itemize}
-Abstract should not exceed one page (aubrey's opinion)
+%DELETEME: An abstract is a teaser for your work. You try to convince a reader that it is worth reading your work. Normally, it makes to structure you abstract in this way: 
+%\begin{itemize}
+%\item one paragraph on the motivation to your topic
+%\item one paragraph on what approach you have chosen
+%\item and one paragraph on your results which may be presented in comparison to other approaches that try to solve the same or a similar problem.
+%\end{itemize}
+%Abstract should not exceed one page (aubrey's opinion)
+Autonomous drones in the middle of our daily lives are 
+the much-awaited dream of tech enthusiasts and visionary entrepreneurs, 
+but also the absolute horror for many who fear for their peace of mind, privacy or safety. 
+In fact, technological development is not yet advanced enough to safely deploy autonomous 
+drones in the uncontrolled environments of everyday life. 
+However, advances in machine learning, which can endow machines with 
+human-like capabilities, offer hope. 
+Autonomous navigation methods already achieve 
+remarkable results using CNNs with their keen spatial comprehension 
+of visual sensor data. 
+Humans also rely primarily on their visual perception and spatial comprehension to move through their surroundings. 
+However, unlike CNNs, their spatial comprehension 
+is not limited to what is currently in their field of view, 
+but extends to their memory of what they have already seen. 
+They can link this memory to their often unconscious decisions 
+about how to move to reach a goal. 
+For example, they may incorporate their own motion history 
+or their estimation/anticipation of moving objects into their decisions.
+So how about trying to achieve this human-like combined, 
+spatial and temporal motion competence in autonomous drone navigation?
+
+Like much research in this area, 
+this thesis draws on autonomous drone racing as a research playground. 
+It takes the agile, high-performance drone racing method of Kaufmann et al. \cite{Kaufmann2018}
+as a baseline and extends the feedforward CNN of the method
+with a recurrent GRU to incorporate temporal comprehension 
+into the navigation decision-making of the method. 
+The thesis conducts experiments in simulation 
+to evaluate the performance of several feedforward and recurrent variants 
+in the imitation learning process of the method and in drone race tests.
+
+Admittedly, none of the variants investigated in this work 
+comes close to the exceedingly good results of the baseline work, 
+mainly because of much more difficult learning/testing conditions. 
+Yet, the comparison between the recurrent and feedforward variants 
+studied under the same conditions shows that the recurrent variants 
+perform much better in the race test, especially at higher speeds. 
+At the same time, the recurrent variants are more effective in the imitation learning process, 
+which manifests in significantly fewer rollouts and aggregated training samples, 
+but comes at the price of significantly longer training times.
+
 
 %#############################################################
 %###################### German Abstract ######################
 %#############################################################
 \newpage
 \chapter*{Zusammenfassung}
-DELETEME: translate to German to Englisch or vice-versa.
+%DELETEME: translate to German to Englisch or vice-versa.
+
+%Autonome Drohnen mitten in unserem Alltag sind der lang ersehnte Traum 
+%von Technikbegeisterten und vision{\"a}ren Unternehmern, 
+%aber auch der absolute Horror f{\"u}r viele, die um ihren Seelenfrieden, 
+%ihre Privatsph{\"a}re oder ihre Sicherheit f{\"u}rchten. 
+%Tats{\"a}chlich ist die technologische Entwicklung noch nicht weit genug fortgeschritten, 
+%um autonome Drohnen in den unkontrollierten Umgebungen des t{\"a}glichen Lebens sicher einzusetzen. 
+%Die Fortschritte beim maschinellen Lernen, 
+%das Maschinen mit menschen{\"a}hnlichen F{\"a}higkeiten ausstatten kann, 
+%geben jedoch Anlass zur Hoffnung.
+Autonome Navigationsmethoden f{\"u}r Drohnen erzielen bereits bemerkenswerte Ergebnisse, 
+indem sie CNNs mit ihrem scharfen r{\"a}umlichen Verst{\"a}ndnis auf visuelle Sensordaten anwenden. 
+Auch Menschen verlassen sich in erster Linie auf ihre visuelle Wahrnehmung 
+und ihr r{\"a}umliches Vorstellungsverm{\"o}gen, um sich in einer Umgebung zu bewegen. 
+Im Gegensatz zu CNNs ist ihr r{\"a}umliches Verst{\"a}ndnis jedoch nicht auf das beschr{\"a}nkt, 
+was sich gerade in ihrem Blickfeld befindet, sondern erstreckt sich auch auf ihre Erinnerung 
+an das, was sie bereits gesehen haben. Sie k{\"o}nnen diese Erinnerung 
+mit ihren oft unbewussten aber zielf{\"u}hrenden Bewegungsentscheidungen verkn{\"u}pfen. 
+So k{\"o}nnen sie beispielsweise ihre eigene Bewegungsgeschichte 
+oder ihre Einsch{\"a}tzung/Antizipation
+von sich bewegenden Objekten in ihre Entscheidungen einbeziehen. 
+Wie w{\"a}re es also, diese dem Menschen {\"a}hnliche 
+kombinierte r{\"a}umliche und zeitliche Bewegungskompetenz 
+bei der autonomen Navigation von Drohnen zu verwenden?
+
+Wie viele andere Arbeiten in diesem Bereich nimmt auch diese Arbeit 
+autonomes Drohnenrennen als Forschungsspielfeld. 
+Sie nimmt die agile, hochleistungsf{\"a}hige Methode f{\"u}r Drohnenrennen
+von Kaufmann et al. \cite{Kaufmann2018} als Grundlage und erweitert das 
+vorw{\"a}rtsgerichtete CNN der Methode mit einer rekurrenten GRU, 
+um zeitliches Verst{\"a}ndnis in die Navigationsentscheidungen 
+der Methode einzubeziehen. In dieser Arbeit werden Simulationsexperimente durchgef{\"u}hrt, 
+um die Leistung mehrerer vorw{\"a}rtsgerichteter und rekurrenter Varianten im 
+Imitationslernprozess der Methode und in Testrennen zu bewerten.
+
+Zwar kommt keine der hier untersuchten Varianten an die au{\ss}erordentlich 
+guten Ergebnisse der Grundlagenarbeit heran, 
+was vor allem an den wesentlich schwierigeren Lern-/Testbedingungen liegt. 
+Der Vergleich zwischen den unter gleichen Bedingungen untersuchten rekurrenten und 
+vorw{\"a}rtsgerichteten Varianten zeigt jedoch, 
+dass die rekurrenten Varianten im Renntest deutlich besser abschneiden, 
+insbesondere bei h{\"o}heren Geschwindigkeiten. 
+Gleichzeitig sind die rekurrenten Varianten beim Imitationslernen effektiver, 
+was sich in deutlich weniger Ausrollvorg{\"a}ngen und aggregierten Trainingsbeispielen {\"a}u{\ss}ert, 
+aber mit deutlich l{\"a}ngeren Trainingszeiten erkauft wird.
 
 %#############################################################
 %###################### Acknowledgements #####################
@@ -46,5 +132,5 @@ DELETEME: translate to German to Englisch or vice-versa.
 %
 %Yacine Zahidi: Paris Pytorch
 %Lukas Kilian: Computer Unity Administratives
-%HU: Rücken freigehalten, immer unterstützt
+%HU: R{\"u}cken freigehalten, immer unterst{\"u}tzt
 
