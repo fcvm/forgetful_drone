@@ -30,5 +30,5 @@
 \contentsline {section}{\numberline {6.3}Future Work}{80}{section.6.3}%
 \contentsline {chapter}{Bibliography}{82}{section.6.3}%
 \contentsline {chapter}{Appendices}{88}{chapter*.55}%
-\contentsline {section}{Appendix A: Abbreviations}{89}{chapter*.56}%
+\contentsline {section}{Appendix A: Thesis Implementation}{89}{chapter*.56}%
 \contentsline {section}{Appendix B: Racetrack Randomization and Redirection}{90}{section*.57}%
